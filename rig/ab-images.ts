@@ -27,6 +27,8 @@ const rounds = Number(flag("rounds") ?? 3);
 const outName = flag("out") ?? "ab-images";
 const family = (flag("family") ?? "postgis") as Family;
 const withWalk = args.includes("--walk");
+// --gzip asks for gzip the way a browser does, so the engine's CPU includes compressing the tile
+const headers = { ...REQUEST_HEADERS[family], ...(args.includes("--gzip") ? { "Accept-Encoding": "gzip" } : {}) };
 // the archive family measures Martin on PMTiles, the archive it answers fastest from
 const ids = family === "postgis" ? { two: "martin-2", one: "martin-1" } : { two: "martin-2-pmtiles", one: "martin-1-pmtiles" };
 
@@ -83,7 +85,7 @@ for (let round = 0; round < rounds; round++) {
     const entry = (out[label] ??= { tiles: {}, db: {}, engine: {}, walkRps: [], walkUs: [] });
     if (round === 0 && family === "postgis") entry.backends = backends(tileUrl(c, roads.layer, roads.tile), label);
     for (const spec of tiles) {
-      const r = await singleTile(c, spec, plan, { ...REQUEST_HEADERS[family] }, variant);
+      const r = await singleTile(c, spec, plan, headers, variant);
       (entry.tiles[spec.id] ??= []).push(r.meanMs);
       (entry.db[spec.id] ??= []).push(r.cpu?.dbUs ?? Number.NaN);
       (entry.engine[spec.id] ??= []).push(r.cpu?.engineUs ?? Number.NaN);
