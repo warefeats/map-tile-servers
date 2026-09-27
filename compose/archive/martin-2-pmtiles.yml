@@ -1,6 +1,6 @@
 services:
   engine:
-    image: wf-martin:2.0.0-055d4ea
+    image: ${WF_MARTIN_2_IMAGE:-wf-martin:2.0.0-055d4ea}
     command: ["--config", "/config/config.yaml"]
     volumes:
       - ../../configs/archive/martin-pmtiles:/config:ro

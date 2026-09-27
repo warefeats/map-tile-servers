@@ -28,7 +28,7 @@ export interface Candidate {
   tilePath: (layer: string, tile: TileCoord) => string;
 }
 
-export const MARTIN_2 = { version: "2.0.0", image: "wf-martin:2.0.0-055d4ea" } as const;
+export const MARTIN_2 = { version: "2.0.0", image: process.env.WF_MARTIN_2_IMAGE ?? "wf-martin:2.0.0-055d4ea" } as const;
 export const MARTIN_2_PROVENANCE =
   "maplibre/martin release PR #3343 at 055d4eaa (not yet released): the release PR's own CI build of aarch64-unknown-linux-gnu, packaged with Martin's .github/files/multi-platform.Dockerfile";
 export const MARTIN_1 = { version: "1.16.1", image: "ghcr.io/maplibre/martin:1.16.1" } as const;
