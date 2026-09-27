@@ -23,4 +23,4 @@ Cold start is timed in one clock: the poller is already polling on the engine ne
 
 - Absolute numbers are not comparable with the September pages; every candidate in this run is measured the same way, and the version comparison (2.0.0 against 1.16.1) is within the run.
 - Latency now excludes the macOS port forwarder, so single-tile times are lower for everyone.
-- The client shares the VM's CPUs with the engine; its budget is capped so it cannot starve the engine, and its ceiling (above) is several times the fastest engine measured.
+- The client shares the VM's CPUs with the engine; its budget is capped so it cannot starve the engine. Its ceiling (above) sits several times above every engine but one: Martin 2.0.0 on PMTiles reached it in the throughput tests while using about 2.5 of its 4 cores, so those tiles-per-second numbers are floors and CPU per tile is the fair comparison there.
