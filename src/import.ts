@@ -61,8 +61,8 @@ function siteCandidate(c: Candidate, samples: number[], metrics: Record<string, 
 
 function fmt(value: number, unit: string): string {
   if (unit === "tiles/s") return `${Math.round(value).toLocaleString("en-US")} tiles/s`;
-  if (unit === "ms" || unit === "ms per view") return value >= 1000 ? `${(value / 1000).toFixed(2)} s` : `${value < 10 ? value.toFixed(2) : value < 100 ? value.toFixed(1) : Math.round(value)} ms`;
-  if (unit === "µs CPU") return value >= 1000 ? `${(value / 1000).toFixed(1)} ms CPU` : `${Math.round(value)} µs CPU`;
+  if (unit === "ms" || unit === "ms per view") return value >= 1000 ? `${(value / 1000).toFixed(2)} s` : `${value < 1 ? value.toPrecision(2) : value < 10 ? value.toFixed(2) : value < 100 ? value.toFixed(1) : Math.round(value)} ms`;
+  if (unit === "µs CPU") return value >= 1000 ? `${(value / 1000).toFixed(2)} ms CPU` : `${Math.round(value)} µs CPU`;
   if (unit === "MiB") return `${value.toFixed(1)} MiB`;
   return `${round(value, 2)} ${unit}`;
 }
@@ -245,13 +245,33 @@ function fill(text: string, f: Record<string, string>): string {
 
 type Row = { label: string; value: number; color?: string; best?: boolean; muted?: boolean; group?: string };
 
+const SHORT: Record<string, string> = {
+  single: "Single tile",
+  burst: "Four-tile burst",
+  c10: "10 clients",
+  c100: "100 clients",
+  walk: "Random walk",
+  coldStart: "Start",
+  memory: "Memory",
+  cpu: "CPU per tile",
+  capacity: "Capacity in SLO",
+  session: "Busy map",
+  catalog: "1,000 sources",
+};
+
+/** Round to what a chart can show: whole tiles per second and microseconds, three significant digits otherwise. */
+function tidy(value: number, unit: string): number {
+  if (unit === "tiles/s" || unit === "µs" || unit === "µs CPU") return Math.round(value);
+  return Number(value.toPrecision(4));
+}
+
 function barsFrom(l: Loaded, category: string, opts: { group?: string; top?: number } = {}): Row[] {
   const v = l.verdicts.find((x) => x.id === category);
   if (!v) return [];
   const sorted = [...v.cells].sort((a, b) => (v.higherIsBetter ? b.mean - a.mean : a.mean - b.mean));
   return sorted.slice(0, opts.top ?? sorted.length).map((cell) => {
     const c = byId(cell.candidateId);
-    return { label: c.name, value: round(cell.mean, 3), color: c.color, best: cell.candidateId === v.winnerId, ...(opts.group ? { group: opts.group } : {}) };
+    return { label: c.name, value: tidy(cell.mean, v.unit), color: c.color, best: cell.candidateId === v.winnerId, ...(opts.group ? { group: opts.group } : {}) };
   });
 }
 
@@ -285,19 +305,36 @@ export function figures(a: Loaded, p: Loaded): Record<string, object> {
         const c = byId(id);
         return { label: c.name, color: c.color, best: id === l.verdicts.find((v) => v.id === "capacity")?.winnerId, points: ladder!.steps.filter((s) => s.p99Ms !== null).map((s) => [s.offeredRps, s.p99Ms!] as [number, number]) };
       });
-  const topCapacity = (l: Loaded, n: number) => [...(l.verdicts.find((v) => v.id === "capacity")?.cells ?? [])].sort((x, y) => y.mean - x.mean).map((c) => c.candidateId);
-  const archiveLadderIds = [...new Set(["martin-2-pmtiles", "martin-1-pmtiles", ...topCapacity(a, 8).filter((id) => byId(id).server !== "martin").slice(0, 3)])];
+  // The best candidate of each competing server, highest capacity first: one line per server keeps
+  // the chart to five hues that stay apart for colour-blind readers.
+  const topCapacity = (l: Loaded) => {
+    const seen = new Set<string>();
+    return [...(l.verdicts.find((v) => v.id === "capacity")?.cells ?? [])]
+      .sort((x, y) => y.mean - x.mean)
+      .map((c) => c.candidateId)
+      .filter((id) => {
+        const server = byId(id).server;
+        if (server === "martin" || seen.has(server)) return false;
+        seen.add(server);
+        return true;
+      });
+  };
+  const archiveLadderIds = ["martin-2-pmtiles", "martin-1-pmtiles", ...topCapacity(a).slice(0, 3)];
   out.archiveLadder = { kind: "lines", caption: "p99 latency against offered load, open loop over the walk", x: { label: "offered load", unit: "tiles/s", log: true }, y: { label: "p99", unit: "ms", log: true }, limit: { value: LADDER.archive.sloMs, label: `SLO ${LADDER.archive.sloMs} ms` }, series: ladderSeries(a, archiveLadderIds) };
-  const postgisLadderIds = [...new Set(["martin-2", "martin-1", ...topCapacity(p, 8).filter((id) => byId(id).server !== "martin").slice(0, 3)])];
+  const postgisLadderIds = ["martin-2", "martin-1", ...topCapacity(p).slice(0, 3)];
   out.postgisLadder = { kind: "lines", caption: "p99 latency against offered load, open loop over the walk", x: { label: "offered load", unit: "tiles/s", log: true }, y: { label: "p99", unit: "ms", log: true }, limit: { value: LADDER.postgis.sloMs, label: `SLO ${LADDER.postgis.sloMs} ms` }, series: ladderSeries(p, postgisLadderIds) };
   // 2.0.0 over 1.16.1, every category that has both.
-  const ratioRows = [p, a].flatMap((l) =>
-    l.verdicts.flatMap((v) => v.versus1.filter((x) => Number.isFinite(x.speedup)).map((x) => ({ label: v.title, group: x.format, value: x.speedup, lo: x.lo, hi: x.hi }))),
+  const ratioRows = ["PostGIS", "PMTiles"].flatMap((format) =>
+    [p, a].flatMap((l) =>
+      l.verdicts.flatMap((v) =>
+        v.versus1.filter((x) => x.format === format && Number.isFinite(x.speedup)).map((x) => ({ label: SHORT[v.id] ?? v.title, group: format === "PostGIS" ? "From PostGIS" : "From PMTiles", value: Number(x.speedup.toFixed(3)), lo: Number(x.lo.toFixed(3)), hi: Number(x.hi.toFixed(3)) })),
+      ),
+    ),
   );
   out.versus = { kind: "ratio", caption: "Martin 2.0.0 against 1.16.1 per category (right of 1× is better)", unit: "×", reference: 1, log: true, rows: ratioRows };
-  out.session = { kind: "bars", caption: "Time to finish a view, 10 users flying and panning at once", unit: "ms", lowerIsBetter: true, scale: "log", rows: [...barsFrom(a, "session", { group: "From an archive" }), ...barsFrom(p, "session", { group: "From PostGIS" })] };
-  out.catalog = { kind: "bars", caption: "Time to first tile with 1,000 extra sources configured", unit: "ms", lowerIsBetter: true, scale: "log", rows: [...barsFrom(a, "catalog", { group: "Archive servers" }), ...barsFrom(p, "catalog", { group: "PostGIS servers" })] };
-  out.coldStart = { kind: "bars", caption: "Process start to first tile", unit: "ms", lowerIsBetter: true, rows: [...barsFrom(a, "coldStart", { group: "Archive servers" }), ...barsFrom(p, "coldStart", { group: "PostGIS servers" })] };
+  out.session = { kind: "bars", caption: "Time to finish a view from PostGIS, 10 users flying and panning at once (log scale)", unit: "ms", lowerIsBetter: true, scale: "log", rows: barsFrom(p, "session") };
+  out.catalog = { kind: "bars", caption: "Time to first tile with 1,000 extra sources configured (log scale)", unit: "ms", lowerIsBetter: true, scale: "log", rows: [...barsFrom(a, "catalog", { group: "Archive servers" }), ...barsFrom(p, "catalog", { group: "PostGIS servers" })] };
+  out.coldStart = { kind: "bars", caption: "Archive servers: process start to first tile, mean of five", unit: "ms", lowerIsBetter: true, rows: barsFrom(a, "coldStart") };
   out.memory = { kind: "bars", caption: "Anonymous memory after the load passes", unit: "MiB", lowerIsBetter: true, scale: "log", rows: [...barsFrom(a, "memory", { group: "Archive servers" }), ...barsFrom(p, "memory", { group: "PostGIS servers" })] };
   return out;
 }
@@ -327,6 +364,7 @@ function verdictTable(a: Loaded, p: Loaded): object {
   return {
     caption: "Every category, both families. Handily means best of every candidate, at least 10% ahead of the best competitor, with 95% intervals that do not overlap (docs/adr/0001, written before the first measured pass).",
     columns: ["Category", "Best", "Martin 2.0.0", "Best competitor", "Handily?", "2.0.0 vs 1.16.1"],
+    markColumn: 4,
     rows,
   };
 }

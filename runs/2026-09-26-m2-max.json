@@ -2988,7 +2988,7 @@
       "lowerIsBetter": true,
       "verdict": {
         "winnerId": "martin-2",
-        "headline": "Martin 2.0.0: 6.3 ms CPU. Martin 2.0.0 wins it handily.",
+        "headline": "Martin 2.0.0: 6.32 ms CPU. Martin 2.0.0 wins it handily.",
         "summary": ""
       },
       "candidates": [
@@ -6288,7 +6288,7 @@
       "lowerIsBetter": true,
       "verdict": {
         "winnerId": "versatiles-pmtiles",
-        "headline": "VersaTiles (PMTiles): 0.06 ms. Martin 2.0.0 does not win it handily: VersaTiles (PMTiles) is best.",
+        "headline": "VersaTiles (PMTiles): 0.058 ms. Martin 2.0.0 does not win it handily: VersaTiles (PMTiles) is best.",
         "summary": ""
       },
       "candidates": [
@@ -6831,7 +6831,7 @@
           "id": "versatiles-pmtiles",
           "name": "VersaTiles (PMTiles)",
           "version": "4.14.0",
-          "color": "#DB2777",
+          "color": "#0D9488",
           "homepage": "https://versatiles.org",
           "statistics": {
             "medianMs": 0.051,
@@ -6938,7 +6938,7 @@
           "id": "versatiles-mbtiles",
           "name": "VersaTiles (MBTiles)",
           "version": "4.14.0",
-          "color": "#F472B6",
+          "color": "#5EEAD4",
           "homepage": "https://versatiles.org",
           "statistics": {
             "medianMs": 0.093,
@@ -7259,7 +7259,7 @@
           "id": "mbtileserver",
           "name": "mbtileserver",
           "version": "0.11.0",
-          "color": "#0E7490",
+          "color": "#64748B",
           "homepage": "https://github.com/consbio/mbtileserver",
           "statistics": {
             "medianMs": 0.116,
@@ -7777,7 +7777,7 @@
           "id": "versatiles-pmtiles",
           "name": "VersaTiles (PMTiles)",
           "version": "4.14.0",
-          "color": "#DB2777",
+          "color": "#0D9488",
           "homepage": "https://versatiles.org",
           "statistics": {
             "medianMs": 1.345,
@@ -7824,7 +7824,7 @@
           "id": "versatiles-mbtiles",
           "name": "VersaTiles (MBTiles)",
           "version": "4.14.0",
-          "color": "#F472B6",
+          "color": "#5EEAD4",
           "homepage": "https://versatiles.org",
           "statistics": {
             "medianMs": 1.502,
@@ -7965,7 +7965,7 @@
           "id": "mbtileserver",
           "name": "mbtileserver",
           "version": "0.11.0",
-          "color": "#0E7490",
+          "color": "#64748B",
           "homepage": "https://github.com/consbio/mbtileserver",
           "statistics": {
             "medianMs": 1.56,
@@ -8303,7 +8303,7 @@
           "id": "versatiles-pmtiles",
           "name": "VersaTiles (PMTiles)",
           "version": "4.14.0",
-          "color": "#DB2777",
+          "color": "#0D9488",
           "homepage": "https://versatiles.org",
           "statistics": {
             "medianMs": 23991.5,
@@ -8338,7 +8338,7 @@
           "id": "versatiles-mbtiles",
           "name": "VersaTiles (MBTiles)",
           "version": "4.14.0",
-          "color": "#F472B6",
+          "color": "#5EEAD4",
           "homepage": "https://versatiles.org",
           "statistics": {
             "medianMs": 14540.17,
@@ -8443,7 +8443,7 @@
           "id": "mbtileserver",
           "name": "mbtileserver",
           "version": "0.11.0",
-          "color": "#0E7490",
+          "color": "#64748B",
           "homepage": "https://github.com/consbio/mbtileserver",
           "statistics": {
             "medianMs": 10389.83,
@@ -8757,7 +8757,7 @@
           "id": "versatiles-pmtiles",
           "name": "VersaTiles (PMTiles)",
           "version": "4.14.0",
-          "color": "#DB2777",
+          "color": "#0D9488",
           "homepage": "https://versatiles.org",
           "statistics": {
             "medianMs": 20909.585,
@@ -8792,7 +8792,7 @@
           "id": "versatiles-mbtiles",
           "name": "VersaTiles (MBTiles)",
           "version": "4.14.0",
-          "color": "#F472B6",
+          "color": "#5EEAD4",
           "homepage": "https://versatiles.org",
           "statistics": {
             "medianMs": 13573.835,
@@ -8897,7 +8897,7 @@
           "id": "mbtileserver",
           "name": "mbtileserver",
           "version": "0.11.0",
-          "color": "#0E7490",
+          "color": "#64748B",
           "homepage": "https://github.com/consbio/mbtileserver",
           "statistics": {
             "medianMs": 10235,
@@ -9211,7 +9211,7 @@
           "id": "versatiles-pmtiles",
           "name": "VersaTiles (PMTiles)",
           "version": "4.14.0",
-          "color": "#DB2777",
+          "color": "#0D9488",
           "homepage": "https://versatiles.org",
           "statistics": {
             "medianMs": 29210,
@@ -9246,7 +9246,7 @@
           "id": "versatiles-mbtiles",
           "name": "VersaTiles (MBTiles)",
           "version": "4.14.0",
-          "color": "#F472B6",
+          "color": "#5EEAD4",
           "homepage": "https://versatiles.org",
           "statistics": {
             "medianMs": 21176.54,
@@ -9351,7 +9351,7 @@
           "id": "mbtileserver",
           "name": "mbtileserver",
           "version": "0.11.0",
-          "color": "#0E7490",
+          "color": "#64748B",
           "homepage": "https://github.com/consbio/mbtileserver",
           "statistics": {
             "medianMs": 11892.42,
@@ -9650,7 +9650,7 @@
           "id": "versatiles-pmtiles",
           "name": "VersaTiles (PMTiles)",
           "version": "4.14.0",
-          "color": "#DB2777",
+          "color": "#0D9488",
           "homepage": "https://versatiles.org",
           "statistics": {
             "medianMs": 63.06,
@@ -9682,7 +9682,7 @@
           "id": "versatiles-mbtiles",
           "name": "VersaTiles (MBTiles)",
           "version": "4.14.0",
-          "color": "#F472B6",
+          "color": "#5EEAD4",
           "homepage": "https://versatiles.org",
           "statistics": {
             "medianMs": 67.9,
@@ -9778,7 +9778,7 @@
           "id": "mbtileserver",
           "name": "mbtileserver",
           "version": "0.11.0",
-          "color": "#0E7490",
+          "color": "#64748B",
           "homepage": "https://github.com/consbio/mbtileserver",
           "statistics": {
             "medianMs": 70.99,
@@ -10056,7 +10056,7 @@
           "id": "versatiles-pmtiles",
           "name": "VersaTiles (PMTiles)",
           "version": "4.14.0",
-          "color": "#DB2777",
+          "color": "#0D9488",
           "homepage": "https://versatiles.org",
           "statistics": {
             "medianMs": 2.405,
@@ -10085,7 +10085,7 @@
           "id": "versatiles-mbtiles",
           "name": "VersaTiles (MBTiles)",
           "version": "4.14.0",
-          "color": "#F472B6",
+          "color": "#5EEAD4",
           "homepage": "https://versatiles.org",
           "statistics": {
             "medianMs": 6.86,
@@ -10172,7 +10172,7 @@
           "id": "mbtileserver",
           "name": "mbtileserver",
           "version": "0.11.0",
-          "color": "#0E7490",
+          "color": "#64748B",
           "homepage": "https://github.com/consbio/mbtileserver",
           "statistics": {
             "medianMs": 58.945,
@@ -10474,7 +10474,7 @@
           "id": "versatiles-pmtiles",
           "name": "VersaTiles (PMTiles)",
           "version": "4.14.0",
-          "color": "#DB2777",
+          "color": "#0D9488",
           "homepage": "https://versatiles.org",
           "statistics": {
             "medianMs": 71,
@@ -10509,7 +10509,7 @@
           "id": "versatiles-mbtiles",
           "name": "VersaTiles (MBTiles)",
           "version": "4.14.0",
-          "color": "#F472B6",
+          "color": "#5EEAD4",
           "homepage": "https://versatiles.org",
           "statistics": {
             "medianMs": 102.345,
@@ -10614,7 +10614,7 @@
           "id": "mbtileserver",
           "name": "mbtileserver",
           "version": "0.11.0",
-          "color": "#0E7490",
+          "color": "#64748B",
           "homepage": "https://github.com/consbio/mbtileserver",
           "statistics": {
             "medianMs": 154.285,
@@ -10893,7 +10893,7 @@
           "id": "versatiles-pmtiles",
           "name": "VersaTiles (PMTiles)",
           "version": "4.14.0",
-          "color": "#DB2777",
+          "color": "#0D9488",
           "homepage": "https://versatiles.org",
           "statistics": {
             "medianMs": 24000,
@@ -10921,7 +10921,7 @@
           "id": "versatiles-mbtiles",
           "name": "VersaTiles (MBTiles)",
           "version": "4.14.0",
-          "color": "#F472B6",
+          "color": "#5EEAD4",
           "homepage": "https://versatiles.org",
           "statistics": {
             "medianMs": 16000,
@@ -11005,7 +11005,7 @@
           "id": "mbtileserver",
           "name": "mbtileserver",
           "version": "0.11.0",
-          "color": "#0E7490",
+          "color": "#64748B",
           "homepage": "https://github.com/consbio/mbtileserver",
           "statistics": {
             "medianMs": 1000,
@@ -13485,7 +13485,7 @@
           "id": "versatiles-pmtiles",
           "name": "VersaTiles (PMTiles)",
           "version": "4.14.0",
-          "color": "#DB2777",
+          "color": "#0D9488",
           "homepage": "https://versatiles.org",
           "statistics": {
             "medianMs": 9.165,
@@ -13956,7 +13956,7 @@
           "id": "versatiles-mbtiles",
           "name": "VersaTiles (MBTiles)",
           "version": "4.14.0",
-          "color": "#F472B6",
+          "color": "#5EEAD4",
           "homepage": "https://versatiles.org",
           "statistics": {
             "medianMs": 8.775,
@@ -15369,7 +15369,7 @@
           "id": "mbtileserver",
           "name": "mbtileserver",
           "version": "0.11.0",
-          "color": "#0E7490",
+          "color": "#64748B",
           "homepage": "https://github.com/consbio/mbtileserver",
           "statistics": {
             "medianMs": 12.4,
@@ -16530,7 +16530,7 @@
           "id": "versatiles-pmtiles",
           "name": "VersaTiles (PMTiles)",
           "version": "4.14.0",
-          "color": "#DB2777",
+          "color": "#0D9488",
           "homepage": "https://versatiles.org",
           "statistics": {
             "medianMs": 262.86,
@@ -16560,7 +16560,7 @@
           "id": "versatiles-mbtiles",
           "name": "VersaTiles (MBTiles)",
           "version": "4.14.0",
-          "color": "#F472B6",
+          "color": "#5EEAD4",
           "homepage": "https://versatiles.org",
           "statistics": {
             "medianMs": 798.88,
@@ -16620,7 +16620,7 @@
           "id": "mbtileserver",
           "name": "mbtileserver",
           "version": "0.11.0",
-          "color": "#0E7490",
+          "color": "#64748B",
           "homepage": "https://github.com/consbio/mbtileserver",
           "statistics": {
             "medianMs": 850.24,

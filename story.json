@@ -38,7 +38,7 @@
         {
           "id": "archive",
           "kicker": "Handing out an archive",
-          "title": "{pmWalk2} tiles a second from one PMTiles file",
+          "title": "{pmWalk2} tiles a second from one PMTiles file",
           "lede": "{pmWalkVsNext} the next server and {pmWalkSpeedup} Martin 1.16.1, from the same 40 MB file on the same four cores.",
           "figure": "archiveWalk",
           "note": "2.0 used {pmWalkCores} of its 4 cores here. The load generator ran out first, so that bar is a floor."
@@ -46,7 +46,7 @@
         {
           "id": "load",
           "kicker": "Under load",
-          "title": "1.16.1 missed a 50 ms p99 at {m1pmFail} tiles a second. 2.0 held {m2pmCap}.",
+          "title": "1.16.1 missed a 50 ms p99 at {m1pmFail} tiles a second. 2.0 held {m2pmCap}.",
           "lede": "Open loop: requests arrive on schedule whether or not the last one came back, and the rate climbs until p99 crosses the line.",
           "figure": "archiveLadder"
         },
@@ -61,30 +61,30 @@
         {
           "id": "map",
           "kicker": "A busy map",
-          "title": "Ten people panning Berlin wait {pgSession2} ms a view on Martin, {pgSessionNext} on {pgSessionNextServer}",
+          "title": "Ten people panning Berlin wait {pgSession2} ms a view on Martin, {pgSessionNext} on {pgSessionNextServer}",
           "lede": "Each simulated user zooms in and pans with six connections and no pause between views; from PostGIS every tile is three layers.",
           "figure": "session",
-          "note": "From an archive it's a tie: Martin {aSession2} ms, VersaTiles within half a percent."
+          "note": "From an archive it's a tie: Martin {aSession2} ms a view, VersaTiles within half a percent."
         },
         {
           "id": "versus",
           "kicker": "2.0.0 against 1.16.1",
           "title": "Faster wherever it touches the file, a step back where it talks to PostgreSQL",
-          "lede": "Every category that ran on both versions, with 95% intervals. Right of the line is 2.0.",
+          "lede": "Every category on both versions, with 95% intervals. Right of the line is 2.0.",
           "figure": "versus",
-          "note": "The three PostGIS steps back trace to one change: 2.0 types every table's columns at startup, and the extra pooled connections that leaves make light requests land on cold ones."
+          "note": "MBTiles moved the same way, smaller: 1.25 to 1.5× on throughput, cost and capacity, level on start and burst. The three PostGIS steps back trace to one change: 2.0 types every table's columns at startup, and the extra pooled connections that leaves make light requests land on cold ones."
         },
         {
           "id": "losses",
           "kicker": "Where it lost",
-          "title": "VersaTiles starts in {vtStart} ms and holds {vtMem} MiB",
+          "title": "VersaTiles starts in {vtStart} ms and holds {vtMem} MiB",
           "lede": "Martin 2.0 takes {m2Start} ms and holds {m2Mem} MiB after the same load. From PostGIS, {pColdBestServer} starts first ({pColdBest} ms to Martin's {pCold2}) and {pC10BestServer} edges it at ten clients, {pC10Best} tiles a second to {pC10m2}.",
           "figure": "coldStart"
         },
         {
           "id": "catalog",
           "kicker": "A thousand sources",
-          "title": "{aCatalogBestServer} opens a thousand archives in {aCatalogBest} ms by not opening them",
+          "title": "{aCatalogBestServer} opens a thousand archives in {aCatalogBest} ms by not opening them",
           "lede": "It reads each file on its first request. Martin 2.0 opens every one up front: {aCatalog2pm} ms for PMTiles, {aCatalog2mb} s and {aCatalog2mbMem} MiB of heap for MBTiles. With a thousand tables, {pCatalogBestServer} starts in {pCatalogBest} ms, Martin 2.0 in {pCatalog2}, 1.16.1 in {pCatalog1}.",
           "figure": "catalog",
           "note": "BBOX never answered with a thousand PMTiles archives configured, in two tries of ten minutes each."
