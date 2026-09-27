@@ -194,7 +194,9 @@ export function verdicts(family: Family, results: CandidateResult[], catalog: Ca
 if (import.meta.main) {
   const root = new URL("..", import.meta.url).pathname;
   const load = async (f: string) => (await Bun.file(`${root}${f}`).json().catch(() => undefined)) as { results: never[] } | undefined;
-  const suffix = process.argv.includes("--smoke") ? "-smoke" : "";
+  // --suffix=int scores results-<family>-int.json and results-<family>-catalog-int.json
+  const named = process.argv.find((a) => a.startsWith("--suffix="))?.slice("--suffix=".length);
+  const suffix = named ? `-${named}` : process.argv.includes("--smoke") ? "-smoke" : "";
   for (const family of ["postgis", "archive"] as Family[]) {
     const main = await load(`results-${family}${suffix}.json`);
     if (!main) continue;
