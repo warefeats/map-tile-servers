@@ -1,0 +1,95 @@
+{
+  "page": {
+    "schemaVersion": 1,
+    "id": "martin-2-tile-servers-2026-09",
+    "slug": "martin-2-tile-servers",
+    "category": "Tile servers",
+    "title": "Martin 2.0 vs 1.16.1 and nine competitors",
+    "deck": "Martin 2.0 isn't out yet, so I built the release PR and ran it against 1.16.1 and the newest stable release of nine servers it competes with, in both of Martin's jobs: handing tiles out of an archive and cutting them from PostGIS. Everything the September pages measured, plus CPU per tile, capacity under a latency SLO, a busy map, and a thousand sources. I've committed code to Martin. The runner's public; check my numbers.",
+    "unit": "ms",
+    "lowerIsBetter": true,
+    "verdict": {
+      "winnerId": "martin-2-pmtiles",
+      "headline": "Martin 2.0 is the fastest archive server here by a factor of three and carries a busy PostGIS map in two-thirds of anyone else's time; it won {wins} of {categories} categories handily and gave the rest up on startup, memory, single tiles and the database",
+      "summary": "Serving PMTiles, 2.0 is the release to wait for: {pmWalk2} tiles a second on the random walk to 1.16.1's {pmWalk1}, on {pmCpu2} µs of CPU a tile instead of {pmCpu1}, and {m2pmCap} tiles a second inside a 50 ms p99 where 1.16.1 gave out at {m1pmFail}. Most of that is one change: local PMTiles files are read in place now instead of through the object-store client, which also took 1.16.1's 150 MB of heap after load down to single digits. MBTiles got about {mbWalkSpeedup} faster. From PostGIS the database does 98% of the work, so 2.0 ties 1.16.1 on throughput and leads the field by 5 to 8% where it leads at all; {pC10BestServer} edges it at ten clients. 2.0 also went backwards in three PostGIS categories: single tiles on light layers, one ladder step of capacity, and startup with a thousand tables. All three trace to 2.0 typing every table's columns at startup, which costs a query per table and leaves extra pooled connections for light requests to rotate through. VersaTiles starts in {vtStart} ms to Martin's {m2Start} and holds {vtMem} MiB to its {m2Mem}; {aCatalogBestServer} opens a thousand archives in {aCatalogBest} ms by not opening them; {pCatalogBestServer} does the same with a thousand tables. None of that is a reason to skip 2.0. It's the to-do list."
+    },
+    "limitations": [
+      "One machine: an M2 Max running macOS, with every server in an OrbStack Linux VM (12 CPUs) and each server container held to 4 CPUs and 4 GB. The load generator shares that VM. Ratios on x86 or Graviton Linux servers will differ.",
+      "Martin 2.0.0 isn't released. It is a local build of the release PR at 055d4eaa with the release recipe, because the PR's own CI binaries are debug builds; a local 1.16.1 built the same way matched the official 1.16.1 image. If the published 2.0.0 image differs, this page gets re-run before it goes up.",
+      "Martin 2.0.0 on PMTiles ran into the load generator's ceiling in the throughput tests (it used about 2.5 of its 4 cores), so its tiles per second are floors. CPU per tile is the fair comparison there.",
+      "PostGIS numbers are mostly PostgreSQL: an eight-connection pool (BBOX hard-codes eight) and a 6-CPU database. They rank the SQL each server sends and how it queues, not the server's own code.",
+      "Berlin only. A planet archive has deeper PMTiles directories and colder caches, and every tile here was served from the page cache.",
+      "Tile caches are off everywhere, including Martin's in-memory cache, which is on by default. A deployment with it on serves repeated tiles faster than anything measured here.",
+      "The map session flies a fixed path. About 42% of its archive requests fall outside the Berlin extract at low zoom and come back empty: 204 from most servers, 404 from VersaTiles, 500 from BBOX. Time counts for all of them; the status codes are on record, not scored.",
+      "Behaviors are recorded, not ranked: the encoding each server picks for a browser's Accept-Encoding (VersaTiles recompresses to brotli, Martin gzips), what it sends a client that accepts no compression, and 204 against 404 for an empty tile.",
+      "Memory ranks anonymous memory, the heap a process holds. Mmapped archive pages and the executable are file-backed and on record in the run file.",
+      "Absolute numbers don't line up with the September pages: the load generator moved onto the Docker network, because the host's port forwarder capped a 242 KB tile at about 13,800 a second."
+    ],
+    "trademarks": [
+      "Martin, Tegola, BBOX, pg_tileserv, TiPg, ldproxy, go-pmtiles, VersaTiles, mbtileserver and tileserver-gl are shown by name and brand colour only; none of these projects publishes a trademark policy that licenses its mark for third-party use."
+    ],
+    "story": {
+      "lead": {
+        "value": "{pmWalkSpeedup}",
+        "label": "Martin 2.0 served PMTiles {pmWalkSpeedup} as fast as 1.16.1, on {pmCpuFraction} of the CPU per tile.",
+        "note": "Random walk over 256 street-level tiles of Berlin, 10 clients, 4 CPUs per server, same archive, same load generator."
+      },
+      "chapters": [
+        {
+          "id": "archive",
+          "kicker": "Handing out an archive",
+          "title": "{pmWalk2} tiles a second from one PMTiles file",
+          "lede": "{pmWalkVsNext} the next server and {pmWalkSpeedup} Martin 1.16.1, from the same 40 MB file on the same four cores.",
+          "figure": "archiveWalk",
+          "note": "2.0 used {pmWalkCores} of its 4 cores here. The load generator ran out first, so that bar is a floor."
+        },
+        {
+          "id": "load",
+          "kicker": "Under load",
+          "title": "1.16.1 missed a 50 ms p99 at {m1pmFail} tiles a second. 2.0 held {m2pmCap}.",
+          "lede": "Open loop: requests arrive on schedule whether or not the last one came back, and the rate climbs until p99 crosses the line.",
+          "figure": "archiveLadder"
+        },
+        {
+          "id": "postgis",
+          "kicker": "Cutting tiles from PostGIS",
+          "title": "Martin is {pgMartinShare} of a PostGIS tile",
+          "lede": "PostgreSQL burns {pgDbMs} ms of CPU on a tile Martin handles in {pgMartinUs} µs, so 2.0 and 1.16.1 tie on the walk, {pgWalk2} tiles a second to {pgWalk1}, and most of the field lands close.",
+          "figure": "postgisSplit",
+          "note": "Martin's total is still the smallest here: {pgCpuTotal2} ms a tile to {pgCpuNextServer}'s {pgCpuNext}."
+        },
+        {
+          "id": "map",
+          "kicker": "A busy map",
+          "title": "Ten people panning Berlin wait {pgSession2} ms a view on Martin, {pgSessionNext} on {pgSessionNextServer}",
+          "lede": "Each simulated user zooms in and pans with six connections and no pause between views; from PostGIS every tile is three layers.",
+          "figure": "session",
+          "note": "From an archive it's a tie: Martin {aSession2} ms, VersaTiles within half a percent."
+        },
+        {
+          "id": "versus",
+          "kicker": "2.0.0 against 1.16.1",
+          "title": "Faster wherever it touches the file, a step back where it talks to PostgreSQL",
+          "lede": "Every category that ran on both versions, with 95% intervals. Right of the line is 2.0.",
+          "figure": "versus",
+          "note": "The three PostGIS steps back trace to one change: 2.0 types every table's columns at startup, and the extra pooled connections that leaves make light requests land on cold ones."
+        },
+        {
+          "id": "losses",
+          "kicker": "Where it lost",
+          "title": "VersaTiles starts in {vtStart} ms and holds {vtMem} MiB",
+          "lede": "Martin 2.0 takes {m2Start} ms and holds {m2Mem} MiB after the same load. From PostGIS, {pColdBestServer} starts first ({pColdBest} ms to Martin's {pCold2}) and {pC10BestServer} edges it at ten clients, {pC10Best} tiles a second to {pC10m2}.",
+          "figure": "coldStart"
+        },
+        {
+          "id": "catalog",
+          "kicker": "A thousand sources",
+          "title": "{aCatalogBestServer} opens a thousand archives in {aCatalogBest} ms by not opening them",
+          "lede": "It reads each file on its first request. Martin 2.0 opens every one up front: {aCatalog2pm} ms for PMTiles, {aCatalog2mb} s and {aCatalog2mbMem} MiB of heap for MBTiles. With a thousand tables, {pCatalogBestServer} starts in {pCatalogBest} ms, Martin 2.0 in {pCatalog2}, 1.16.1 in {pCatalog1}.",
+          "figure": "catalog",
+          "note": "BBOX never answered with a thousand PMTiles archives configured, in two tries of ten minutes each."
+        }
+      ]
+    }
+  }
+}

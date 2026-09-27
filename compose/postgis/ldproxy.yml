@@ -1,0 +1,19 @@
+services:
+  engine:
+    image: iide/ldproxy:4.8.1
+    environment:
+      # The JVM defaults to a heap of 25% of container memory; let it use the same 4 GB the others get.
+      JAVA_TOOL_OPTIONS: "-XX:MaxRAMPercentage=75"
+    volumes:
+      - ../../configs/postgis/ldproxy/cfg.yml:/ldproxy/data/cfg.yml:ro
+      - ../../configs/postgis/ldproxy/entities:/ldproxy/data/entities:ro
+    deploy:
+      resources:
+        limits:
+          cpus: "4"
+          memory: 4G
+
+networks:
+  default:
+    name: m2
+    external: true

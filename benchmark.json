@@ -1,0 +1,1376 @@
+{
+  "schemaVersion": 1,
+  "id": "martin-2-tile-servers-2026-09",
+  "slug": "martin-2-tile-servers",
+  "category": "Tile servers",
+  "title": "Martin 2.0 vs 1.16.1 and nine competitors",
+  "deck": "Martin 2.0 isn't out yet, so I built the release PR and ran it against 1.16.1 and the newest stable release of nine servers it competes with, in both of Martin's jobs: handing tiles out of an archive and cutting them from PostGIS. Everything the September pages measured, plus CPU per tile, capacity under a latency SLO, a busy map, and a thousand sources. I've committed code to Martin. The runner's public; check my numbers.",
+  "unit": "ms",
+  "lowerIsBetter": true,
+  "verdict": {
+    "winnerId": "martin-2-pmtiles",
+    "headline": "Martin 2.0 is the fastest archive server here by a factor of three and carries a busy PostGIS map in two-thirds of anyone else's time; it won 8 of 22 categories handily and gave the rest up on startup, memory, single tiles and the database",
+    "summary": "Serving PMTiles, 2.0 is the release to wait for: 88,017 tiles a second on the random walk to 1.16.1's 21,245, on 28 µs of CPU a tile instead of 188, and 96,000 tiles a second inside a 50 ms p99 where 1.16.1 gave out at 8,000. Most of that is one change: local PMTiles files are read in place now instead of through the object-store client, which also took 1.16.1's 150 MB of heap after load down to single digits. MBTiles got about 1.5× faster. From PostGIS the database does 98% of the work, so 2.0 ties 1.16.1 on throughput and leads the field by 5 to 8% where it leads at all; BBOX edges it at ten clients. 2.0 also went backwards in three PostGIS categories: single tiles on light layers, one ladder step of capacity, and startup with a thousand tables. All three trace to 2.0 typing every table's columns at startup, which costs a query per table and leaves extra pooled connections for light requests to rotate through. VersaTiles starts in 65 ms to Martin's 76 and holds 2.4 MiB to its 10.6; go-pmtiles opens a thousand archives in 96 ms by not opening them; pg_tileserv does the same with a thousand tables. None of that is a reason to skip 2.0. It's the to-do list."
+  },
+  "limitations": [
+    "One machine: an M2 Max running macOS, with every server in an OrbStack Linux VM (12 CPUs) and each server container held to 4 CPUs and 4 GB. The load generator shares that VM. Ratios on x86 or Graviton Linux servers will differ.",
+    "Martin 2.0.0 isn't released. It is a local build of the release PR at 055d4eaa with the release recipe, because the PR's own CI binaries are debug builds; a local 1.16.1 built the same way matched the official 1.16.1 image. If the published 2.0.0 image differs, this page gets re-run before it goes up.",
+    "Martin 2.0.0 on PMTiles ran into the load generator's ceiling in the throughput tests (it used about 2.5 of its 4 cores), so its tiles per second are floors. CPU per tile is the fair comparison there.",
+    "PostGIS numbers are mostly PostgreSQL: an eight-connection pool (BBOX hard-codes eight) and a 6-CPU database. They rank the SQL each server sends and how it queues, not the server's own code.",
+    "Berlin only. A planet archive has deeper PMTiles directories and colder caches, and every tile here was served from the page cache.",
+    "Tile caches are off everywhere, including Martin's in-memory cache, which is on by default. A deployment with it on serves repeated tiles faster than anything measured here.",
+    "The map session flies a fixed path. About 42% of its archive requests fall outside the Berlin extract at low zoom and come back empty: 204 from most servers, 404 from VersaTiles, 500 from BBOX. Time counts for all of them; the status codes are on record, not scored.",
+    "Behaviors are recorded, not ranked: the encoding each server picks for a browser's Accept-Encoding (VersaTiles recompresses to brotli, Martin gzips), what it sends a client that accepts no compression, and 204 against 404 for an empty tile.",
+    "Memory ranks anonymous memory, the heap a process holds. Mmapped archive pages and the executable are file-backed and on record in the run file.",
+    "Absolute numbers don't line up with the September pages: the load generator moved onto the Docker network, because the host's port forwarder capped a 242 KB tile at about 13,800 a second."
+  ],
+  "trademarks": [
+    "Martin, Tegola, BBOX, pg_tileserv, TiPg, ldproxy, go-pmtiles, VersaTiles, mbtileserver and tileserver-gl are shown by name and brand colour only; none of these projects publishes a trademark policy that licenses its mark for third-party use."
+  ],
+  "story": {
+    "lead": {
+      "value": "4.1×",
+      "label": "Martin 2.0 served PMTiles 4.1× as fast as 1.16.1, on 15% of the CPU per tile.",
+      "note": "Random walk over 256 street-level tiles of Berlin, 10 clients, 4 CPUs per server, same archive, same load generator."
+    },
+    "chapters": [
+      {
+        "id": "archive",
+        "kicker": "Handing out an archive",
+        "title": "88,017 tiles a second from one PMTiles file",
+        "lede": "3.0× the next server and 4.1× Martin 1.16.1, from the same 40 MB file on the same four cores.",
+        "figure": {
+          "kind": "bars",
+          "caption": "Random walk over 256 street-level tiles, 10 clients",
+          "unit": "tiles/s",
+          "lowerIsBetter": false,
+          "rows": [
+            {
+              "label": "Martin 2.0.0 (PMTiles)",
+              "value": 88016.678,
+              "color": "#1D4ED8",
+              "best": true
+            },
+            {
+              "label": "Martin 2.0.0 (MBTiles)",
+              "value": 31978.99,
+              "color": "#3B82F6",
+              "best": false
+            },
+            {
+              "label": "VersaTiles (PMTiles)",
+              "value": 28985.595,
+              "color": "#DB2777",
+              "best": false
+            },
+            {
+              "label": "Martin 1.16.1 (MBTiles)",
+              "value": 21266.458,
+              "color": "#BFDBFE",
+              "best": false
+            },
+            {
+              "label": "Martin 1.16.1 (PMTiles)",
+              "value": 21245.128,
+              "color": "#93C5FD",
+              "best": false
+            },
+            {
+              "label": "VersaTiles (MBTiles)",
+              "value": 21195.624,
+              "color": "#F472B6",
+              "best": false
+            },
+            {
+              "label": "mbtileserver",
+              "value": 11856.698,
+              "color": "#0E7490",
+              "best": false
+            },
+            {
+              "label": "BBOX (PMTiles)",
+              "value": 9761.114,
+              "color": "#9333EA",
+              "best": false
+            },
+            {
+              "label": "BBOX (MBTiles)",
+              "value": 7814.926,
+              "color": "#C084FC",
+              "best": false
+            },
+            {
+              "label": "go-pmtiles",
+              "value": 5955.895,
+              "color": "#16A34A",
+              "best": false
+            },
+            {
+              "label": "tileserver-gl-light",
+              "value": 811.458,
+              "color": "#EA580C",
+              "best": false
+            }
+          ]
+        },
+        "note": "2.0 used 2.5 of its 4 cores here. The load generator ran out first, so that bar is a floor."
+      },
+      {
+        "id": "load",
+        "kicker": "Under load",
+        "title": "1.16.1 missed a 50 ms p99 at 8,000 tiles a second. 2.0 held 96,000.",
+        "lede": "Open loop: requests arrive on schedule whether or not the last one came back, and the rate climbs until p99 crosses the line.",
+        "figure": {
+          "kind": "lines",
+          "caption": "p99 latency against offered load, open loop over the walk",
+          "x": {
+            "label": "offered load",
+            "unit": "tiles/s",
+            "log": true
+          },
+          "y": {
+            "label": "p99",
+            "unit": "ms",
+            "log": true
+          },
+          "limit": {
+            "value": 50,
+            "label": "SLO 50 ms"
+          },
+          "series": [
+            {
+              "label": "Martin 2.0.0 (PMTiles)",
+              "color": "#1D4ED8",
+              "best": true,
+              "points": [
+                [
+                  1000,
+                  2.299
+                ],
+                [
+                  2000,
+                  2.581
+                ],
+                [
+                  4000,
+                  3.707
+                ],
+                [
+                  8000,
+                  4.214
+                ],
+                [
+                  16000,
+                  6.013
+                ],
+                [
+                  24000,
+                  5.873
+                ],
+                [
+                  32000,
+                  5.007
+                ],
+                [
+                  48000,
+                  4.329
+                ],
+                [
+                  64000,
+                  5.054
+                ],
+                [
+                  96000,
+                  21.425
+                ],
+                [
+                  128000,
+                  1067.433
+                ]
+              ]
+            },
+            {
+              "label": "Martin 1.16.1 (PMTiles)",
+              "color": "#93C5FD",
+              "best": false,
+              "points": [
+                [
+                  1000,
+                  4.085
+                ],
+                [
+                  2000,
+                  30.916
+                ],
+                [
+                  4000,
+                  6.382
+                ],
+                [
+                  8000,
+                  102.858
+                ]
+              ]
+            },
+            {
+              "label": "VersaTiles (PMTiles)",
+              "color": "#DB2777",
+              "best": false,
+              "points": [
+                [
+                  1000,
+                  2.453
+                ],
+                [
+                  2000,
+                  3.23
+                ],
+                [
+                  4000,
+                  4.303
+                ],
+                [
+                  8000,
+                  4.992
+                ],
+                [
+                  16000,
+                  3.735
+                ],
+                [
+                  24000,
+                  6.373
+                ],
+                [
+                  32000,
+                  1439.416
+                ]
+              ]
+            },
+            {
+              "label": "VersaTiles (MBTiles)",
+              "color": "#F472B6",
+              "best": false,
+              "points": [
+                [
+                  1000,
+                  2.906
+                ],
+                [
+                  2000,
+                  4.252
+                ],
+                [
+                  4000,
+                  5.545
+                ],
+                [
+                  8000,
+                  4.376
+                ],
+                [
+                  16000,
+                  5.802
+                ],
+                [
+                  24000,
+                  1935.359
+                ]
+              ]
+            },
+            {
+              "label": "BBOX (PMTiles)",
+              "color": "#9333EA",
+              "best": false,
+              "points": [
+                [
+                  1000,
+                  3.979
+                ],
+                [
+                  2000,
+                  3.412
+                ],
+                [
+                  4000,
+                  3.287
+                ],
+                [
+                  8000,
+                  3.852
+                ],
+                [
+                  16000,
+                  4912.693
+                ]
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "postgis",
+        "kicker": "Cutting tiles from PostGIS",
+        "title": "Martin is 1.8% of a PostGIS tile",
+        "lede": "PostgreSQL burns 6.2 ms of CPU on a tile Martin handles in 111 µs, so 2.0 and 1.16.1 tie on the walk, 969 tiles a second to 965, and most of the field lands close.",
+        "figure": {
+          "kind": "split",
+          "caption": "CPU per PostGIS tile during the random walk: the server against the database",
+          "unit": "ms",
+          "parts": [
+            {
+              "id": "server",
+              "label": "tile server",
+              "tone": "brand"
+            },
+            {
+              "id": "database",
+              "label": "PostgreSQL + PostGIS",
+              "tone": "neutral"
+            }
+          ],
+          "rows": [
+            {
+              "label": "Martin 2.0.0",
+              "color": "#1D4ED8",
+              "best": true,
+              "values": {
+                "server": 0.111,
+                "database": 6.206
+              }
+            },
+            {
+              "label": "Martin 1.16.1",
+              "color": "#93C5FD",
+              "best": false,
+              "values": {
+                "server": 0.111,
+                "database": 6.228
+              }
+            },
+            {
+              "label": "TiPg",
+              "color": "#EA580C",
+              "best": false,
+              "values": {
+                "server": 1.317,
+                "database": 6.723
+              }
+            },
+            {
+              "label": "BBOX",
+              "color": "#9333EA",
+              "best": false,
+              "values": {
+                "server": 2.139,
+                "database": 5.929
+              }
+            },
+            {
+              "label": "Tegola",
+              "color": "#16A34A",
+              "best": false,
+              "values": {
+                "server": 2.466,
+                "database": 8.414
+              }
+            },
+            {
+              "label": "pg_tileserv",
+              "color": "#0891B2",
+              "best": false,
+              "values": {
+                "server": 0.269,
+                "database": 14.157
+              }
+            },
+            {
+              "label": "ldproxy (PGIS_TILES)",
+              "color": "#A16207",
+              "best": false,
+              "values": {
+                "server": 1.293,
+                "database": 13.339
+              }
+            },
+            {
+              "label": "ldproxy",
+              "color": "#DC2626",
+              "best": false,
+              "values": {
+                "server": 52.059,
+                "database": 25.044
+              }
+            }
+          ]
+        },
+        "note": "Martin's total is still the smallest here: 6.3 ms a tile to TiPg's 8.0."
+      },
+      {
+        "id": "map",
+        "kicker": "A busy map",
+        "title": "Ten people panning Berlin wait 243 ms a view on Martin, 360 on TiPg",
+        "lede": "Each simulated user zooms in and pans with six connections and no pause between views; from PostGIS every tile is three layers.",
+        "figure": {
+          "kind": "bars",
+          "caption": "Time to finish a view, 10 users flying and panning at once",
+          "unit": "ms",
+          "lowerIsBetter": true,
+          "scale": "log",
+          "rows": [
+            {
+              "label": "Martin 2.0.0 (PMTiles)",
+              "value": 8.732,
+              "color": "#1D4ED8",
+              "best": true,
+              "group": "From an archive"
+            },
+            {
+              "label": "VersaTiles (MBTiles)",
+              "value": 8.769,
+              "color": "#F472B6",
+              "best": false,
+              "group": "From an archive"
+            },
+            {
+              "label": "Martin 2.0.0 (MBTiles)",
+              "value": 9.031,
+              "color": "#3B82F6",
+              "best": false,
+              "group": "From an archive"
+            },
+            {
+              "label": "VersaTiles (PMTiles)",
+              "value": 9.207,
+              "color": "#DB2777",
+              "best": false,
+              "group": "From an archive"
+            },
+            {
+              "label": "BBOX (PMTiles)",
+              "value": 10.424,
+              "color": "#9333EA",
+              "best": false,
+              "group": "From an archive"
+            },
+            {
+              "label": "Martin 1.16.1 (MBTiles)",
+              "value": 11.641,
+              "color": "#BFDBFE",
+              "best": false,
+              "group": "From an archive"
+            },
+            {
+              "label": "mbtileserver",
+              "value": 12.942,
+              "color": "#0E7490",
+              "best": false,
+              "group": "From an archive"
+            },
+            {
+              "label": "go-pmtiles",
+              "value": 15.641,
+              "color": "#16A34A",
+              "best": false,
+              "group": "From an archive"
+            },
+            {
+              "label": "BBOX (MBTiles)",
+              "value": 16.452,
+              "color": "#C084FC",
+              "best": false,
+              "group": "From an archive"
+            },
+            {
+              "label": "Martin 1.16.1 (PMTiles)",
+              "value": 19.075,
+              "color": "#93C5FD",
+              "best": false,
+              "group": "From an archive"
+            },
+            {
+              "label": "tileserver-gl-light",
+              "value": 78.048,
+              "color": "#EA580C",
+              "best": false,
+              "group": "From an archive"
+            },
+            {
+              "label": "Martin 2.0.0",
+              "value": 242.815,
+              "color": "#1D4ED8",
+              "best": true,
+              "group": "From PostGIS"
+            },
+            {
+              "label": "Martin 1.16.1",
+              "value": 243.482,
+              "color": "#93C5FD",
+              "best": false,
+              "group": "From PostGIS"
+            },
+            {
+              "label": "TiPg",
+              "value": 360.304,
+              "color": "#EA580C",
+              "best": false,
+              "group": "From PostGIS"
+            },
+            {
+              "label": "Tegola",
+              "value": 447.425,
+              "color": "#16A34A",
+              "best": false,
+              "group": "From PostGIS"
+            },
+            {
+              "label": "BBOX",
+              "value": 461.083,
+              "color": "#9333EA",
+              "best": false,
+              "group": "From PostGIS"
+            },
+            {
+              "label": "ldproxy (PGIS_TILES)",
+              "value": 649.395,
+              "color": "#A16207",
+              "best": false,
+              "group": "From PostGIS"
+            },
+            {
+              "label": "pg_tileserv",
+              "value": 707.88,
+              "color": "#0891B2",
+              "best": false,
+              "group": "From PostGIS"
+            },
+            {
+              "label": "ldproxy",
+              "value": 4766.186,
+              "color": "#DC2626",
+              "best": false,
+              "group": "From PostGIS"
+            }
+          ]
+        },
+        "note": "From an archive it's a tie: Martin 8.7 ms, VersaTiles within half a percent."
+      },
+      {
+        "id": "versus",
+        "kicker": "2.0.0 against 1.16.1",
+        "title": "Faster wherever it touches the file, a step back where it talks to PostgreSQL",
+        "lede": "Every category that ran on both versions, with 95% intervals. Right of the line is 2.0.",
+        "figure": {
+          "kind": "ratio",
+          "caption": "Martin 2.0.0 against 1.16.1 per category (right of 1× is better)",
+          "unit": "×",
+          "reference": 1,
+          "log": true,
+          "rows": [
+            {
+              "label": "Single tile, one client",
+              "group": "PostGIS",
+              "value": 0.965,
+              "lo": 0.938,
+              "hi": 0.984
+            },
+            {
+              "label": "Viewport burst, four tiles",
+              "group": "PostGIS",
+              "value": 1.012,
+              "lo": 0.888,
+              "hi": 1.149
+            },
+            {
+              "label": "Throughput, 10 clients, one tile",
+              "group": "PostGIS",
+              "value": 1.003,
+              "lo": 1,
+              "hi": 1.007
+            },
+            {
+              "label": "Throughput, 100 clients, one tile",
+              "group": "PostGIS",
+              "value": 1.003,
+              "lo": 1,
+              "hi": 1.005
+            },
+            {
+              "label": "Random walk, 10 clients, 256 tiles",
+              "group": "PostGIS",
+              "value": 1.004,
+              "lo": 0.999,
+              "hi": 1.009
+            },
+            {
+              "label": "Time to first tile",
+              "group": "PostGIS",
+              "value": 0.987,
+              "lo": 0.887,
+              "hi": 1.088
+            },
+            {
+              "label": "Memory after load",
+              "group": "PostGIS",
+              "value": 1.185,
+              "lo": 1.185,
+              "hi": 1.185
+            },
+            {
+              "label": "Cost per tile",
+              "group": "PostGIS",
+              "value": 1.004,
+              "lo": 0.999,
+              "hi": 1.009
+            },
+            {
+              "label": "Capacity within the SLO",
+              "group": "PostGIS",
+              "value": 0.8,
+              "lo": 0.8,
+              "hi": 0.8
+            },
+            {
+              "label": "Map session, 10 users",
+              "group": "PostGIS",
+              "value": 1.003,
+              "lo": 0.858,
+              "hi": 1.168
+            },
+            {
+              "label": "A thousand sources",
+              "group": "PostGIS",
+              "value": 0.859,
+              "lo": 0.825,
+              "hi": 0.895
+            },
+            {
+              "label": "Single tile, one client",
+              "group": "PMTiles",
+              "value": 2.969,
+              "lo": 2.724,
+              "hi": 3.214
+            },
+            {
+              "label": "Single tile, one client",
+              "group": "MBTiles",
+              "value": 1.453,
+              "lo": 1.394,
+              "hi": 1.514
+            },
+            {
+              "label": "Viewport burst, four tiles",
+              "group": "PMTiles",
+              "value": 0.986,
+              "lo": 0.78,
+              "hi": 1.269
+            },
+            {
+              "label": "Viewport burst, four tiles",
+              "group": "MBTiles",
+              "value": 0.973,
+              "lo": 0.794,
+              "hi": 1.202
+            },
+            {
+              "label": "Throughput, 10 clients, one tile",
+              "group": "PMTiles",
+              "value": 3.681,
+              "lo": 3.278,
+              "hi": 4.012
+            },
+            {
+              "label": "Throughput, 10 clients, one tile",
+              "group": "MBTiles",
+              "value": 1.245,
+              "lo": 1.236,
+              "hi": 1.253
+            },
+            {
+              "label": "Throughput, 100 clients, one tile",
+              "group": "PMTiles",
+              "value": 2.603,
+              "lo": 2.59,
+              "hi": 2.616
+            },
+            {
+              "label": "Throughput, 100 clients, one tile",
+              "group": "MBTiles",
+              "value": 1.348,
+              "lo": 1.326,
+              "hi": 1.372
+            },
+            {
+              "label": "Random walk, 10 clients, 256 tiles",
+              "group": "PMTiles",
+              "value": 4.143,
+              "lo": 4.043,
+              "hi": 4.251
+            },
+            {
+              "label": "Random walk, 10 clients, 256 tiles",
+              "group": "MBTiles",
+              "value": 1.504,
+              "lo": 1.482,
+              "hi": 1.522
+            },
+            {
+              "label": "Time to first tile",
+              "group": "PMTiles",
+              "value": 1.019,
+              "lo": 0.873,
+              "hi": 1.202
+            },
+            {
+              "label": "Time to first tile",
+              "group": "MBTiles",
+              "value": 0.975,
+              "lo": 0.813,
+              "hi": 1.186
+            },
+            {
+              "label": "Memory after load",
+              "group": "PMTiles",
+              "value": 14.349,
+              "lo": 14.349,
+              "hi": 14.349
+            },
+            {
+              "label": "Memory after load",
+              "group": "MBTiles",
+              "value": 1.545,
+              "lo": 1.545,
+              "hi": 1.545
+            },
+            {
+              "label": "Cost per tile",
+              "group": "PMTiles",
+              "value": 6.688,
+              "lo": 6.585,
+              "hi": 6.8
+            },
+            {
+              "label": "Cost per tile",
+              "group": "MBTiles",
+              "value": 1.519,
+              "lo": 1.493,
+              "hi": 1.543
+            },
+            {
+              "label": "Capacity within the SLO",
+              "group": "PMTiles",
+              "value": 24,
+              "lo": 24,
+              "hi": 24
+            },
+            {
+              "label": "Capacity within the SLO",
+              "group": "MBTiles",
+              "value": 1.5,
+              "lo": 1.5,
+              "hi": 1.5
+            },
+            {
+              "label": "Map session, 10 users",
+              "group": "PMTiles",
+              "value": 2.184,
+              "lo": 2.042,
+              "hi": 2.337
+            },
+            {
+              "label": "Map session, 10 users",
+              "group": "MBTiles",
+              "value": 1.289,
+              "lo": 1.205,
+              "hi": 1.379
+            },
+            {
+              "label": "A thousand sources",
+              "group": "PMTiles",
+              "value": 1.034,
+              "lo": 0.834,
+              "hi": 1.221
+            },
+            {
+              "label": "A thousand sources",
+              "group": "MBTiles",
+              "value": 1.022,
+              "lo": 0.985,
+              "hi": 1.056
+            }
+          ]
+        },
+        "note": "The three PostGIS steps back trace to one change: 2.0 types every table's columns at startup, and the extra pooled connections that leaves make light requests land on cold ones."
+      },
+      {
+        "id": "losses",
+        "kicker": "Where it lost",
+        "title": "VersaTiles starts in 65 ms and holds 2.4 MiB",
+        "lede": "Martin 2.0 takes 76 ms and holds 10.6 MiB after the same load. From PostGIS, Tegola starts first (98 ms to Martin's 107) and BBOX edges it at ten clients, 521 tiles a second to 500.",
+        "figure": {
+          "kind": "bars",
+          "caption": "Process start to first tile",
+          "unit": "ms",
+          "lowerIsBetter": true,
+          "rows": [
+            {
+              "label": "VersaTiles (MBTiles)",
+              "value": 65.098,
+              "color": "#F472B6",
+              "best": true,
+              "group": "Archive servers"
+            },
+            {
+              "label": "VersaTiles (PMTiles)",
+              "value": 65.584,
+              "color": "#DB2777",
+              "best": false,
+              "group": "Archive servers"
+            },
+            {
+              "label": "mbtileserver",
+              "value": 72.83,
+              "color": "#0E7490",
+              "best": false,
+              "group": "Archive servers"
+            },
+            {
+              "label": "BBOX (PMTiles)",
+              "value": 72.994,
+              "color": "#9333EA",
+              "best": false,
+              "group": "Archive servers"
+            },
+            {
+              "label": "BBOX (MBTiles)",
+              "value": 75.518,
+              "color": "#C084FC",
+              "best": false,
+              "group": "Archive servers"
+            },
+            {
+              "label": "Martin 1.16.1 (MBTiles)",
+              "value": 76.172,
+              "color": "#BFDBFE",
+              "best": false,
+              "group": "Archive servers"
+            },
+            {
+              "label": "Martin 2.0.0 (PMTiles)",
+              "value": 76.228,
+              "color": "#1D4ED8",
+              "best": false,
+              "group": "Archive servers"
+            },
+            {
+              "label": "Martin 1.16.1 (PMTiles)",
+              "value": 77.676,
+              "color": "#93C5FD",
+              "best": false,
+              "group": "Archive servers"
+            },
+            {
+              "label": "Martin 2.0.0 (MBTiles)",
+              "value": 78.104,
+              "color": "#3B82F6",
+              "best": false,
+              "group": "Archive servers"
+            },
+            {
+              "label": "go-pmtiles",
+              "value": 81.966,
+              "color": "#16A34A",
+              "best": false,
+              "group": "Archive servers"
+            },
+            {
+              "label": "tileserver-gl-light",
+              "value": 230.792,
+              "color": "#EA580C",
+              "best": false,
+              "group": "Archive servers"
+            },
+            {
+              "label": "Tegola",
+              "value": 98.394,
+              "color": "#16A34A",
+              "best": true,
+              "group": "PostGIS servers"
+            },
+            {
+              "label": "pg_tileserv",
+              "value": 102.096,
+              "color": "#0891B2",
+              "best": false,
+              "group": "PostGIS servers"
+            },
+            {
+              "label": "BBOX",
+              "value": 105.326,
+              "color": "#9333EA",
+              "best": false,
+              "group": "PostGIS servers"
+            },
+            {
+              "label": "Martin 1.16.1",
+              "value": 105.476,
+              "color": "#93C5FD",
+              "best": false,
+              "group": "PostGIS servers"
+            },
+            {
+              "label": "Martin 2.0.0",
+              "value": 106.86,
+              "color": "#1D4ED8",
+              "best": false,
+              "group": "PostGIS servers"
+            },
+            {
+              "label": "TiPg",
+              "value": 613.764,
+              "color": "#EA580C",
+              "best": false,
+              "group": "PostGIS servers"
+            },
+            {
+              "label": "ldproxy (PGIS_TILES)",
+              "value": 2318.102,
+              "color": "#A16207",
+              "best": false,
+              "group": "PostGIS servers"
+            },
+            {
+              "label": "ldproxy",
+              "value": 2772.592,
+              "color": "#DC2626",
+              "best": false,
+              "group": "PostGIS servers"
+            }
+          ]
+        }
+      },
+      {
+        "id": "catalog",
+        "kicker": "A thousand sources",
+        "title": "go-pmtiles opens a thousand archives in 96 ms by not opening them",
+        "lede": "It reads each file on its first request. Martin 2.0 opens every one up front: 196 ms for PMTiles, 1.1 s and 336 MiB of heap for MBTiles. With a thousand tables, pg_tileserv starts in 131 ms, Martin 2.0 in 232, 1.16.1 in 200.",
+        "figure": {
+          "kind": "bars",
+          "caption": "Time to first tile with 1,000 extra sources configured",
+          "unit": "ms",
+          "lowerIsBetter": true,
+          "scale": "log",
+          "rows": [
+            {
+              "label": "go-pmtiles",
+              "value": 96.057,
+              "color": "#16A34A",
+              "best": true,
+              "group": "Archive servers"
+            },
+            {
+              "label": "Martin 2.0.0 (PMTiles)",
+              "value": 196.253,
+              "color": "#1D4ED8",
+              "best": false,
+              "group": "Archive servers"
+            },
+            {
+              "label": "Martin 1.16.1 (PMTiles)",
+              "value": 202.97,
+              "color": "#93C5FD",
+              "best": false,
+              "group": "Archive servers"
+            },
+            {
+              "label": "VersaTiles (PMTiles)",
+              "value": 262.647,
+              "color": "#DB2777",
+              "best": false,
+              "group": "Archive servers"
+            },
+            {
+              "label": "tileserver-gl-light",
+              "value": 422.737,
+              "color": "#EA580C",
+              "best": false,
+              "group": "Archive servers"
+            },
+            {
+              "label": "VersaTiles (MBTiles)",
+              "value": 837.87,
+              "color": "#F472B6",
+              "best": false,
+              "group": "Archive servers"
+            },
+            {
+              "label": "mbtileserver",
+              "value": 866.56,
+              "color": "#0E7490",
+              "best": false,
+              "group": "Archive servers"
+            },
+            {
+              "label": "Martin 2.0.0 (MBTiles)",
+              "value": 1093.687,
+              "color": "#3B82F6",
+              "best": false,
+              "group": "Archive servers"
+            },
+            {
+              "label": "Martin 1.16.1 (MBTiles)",
+              "value": 1117.283,
+              "color": "#BFDBFE",
+              "best": false,
+              "group": "Archive servers"
+            },
+            {
+              "label": "BBOX (MBTiles)",
+              "value": 2619.107,
+              "color": "#C084FC",
+              "best": false,
+              "group": "Archive servers"
+            },
+            {
+              "label": "pg_tileserv",
+              "value": 130.677,
+              "color": "#0891B2",
+              "best": true,
+              "group": "PostGIS servers"
+            },
+            {
+              "label": "Martin 1.16.1",
+              "value": 199.597,
+              "color": "#93C5FD",
+              "best": false,
+              "group": "PostGIS servers"
+            },
+            {
+              "label": "Martin 2.0.0",
+              "value": 232.26,
+              "color": "#1D4ED8",
+              "best": false,
+              "group": "PostGIS servers"
+            },
+            {
+              "label": "Tegola",
+              "value": 232.603,
+              "color": "#16A34A",
+              "best": false,
+              "group": "PostGIS servers"
+            },
+            {
+              "label": "BBOX",
+              "value": 574.177,
+              "color": "#9333EA",
+              "best": false,
+              "group": "PostGIS servers"
+            },
+            {
+              "label": "TiPg",
+              "value": 865.32,
+              "color": "#EA580C",
+              "best": false,
+              "group": "PostGIS servers"
+            },
+            {
+              "label": "ldproxy (PGIS_TILES)",
+              "value": 5672.077,
+              "color": "#A16207",
+              "best": false,
+              "group": "PostGIS servers"
+            },
+            {
+              "label": "ldproxy",
+              "value": 5949.76,
+              "color": "#DC2626",
+              "best": false,
+              "group": "PostGIS servers"
+            }
+          ]
+        },
+        "note": "BBOX never answered with a thousand PMTiles archives configured, in two tries of ten minutes each."
+      }
+    ],
+    "verdict": {
+      "caption": "Every category, both families. Handily means best of every candidate, at least 10% ahead of the best competitor, with 95% intervals that do not overlap (docs/adr/0001, written before the first measured pass).",
+      "columns": [
+        "Category",
+        "Best",
+        "Martin 2.0.0",
+        "Best competitor",
+        "Handily?",
+        "2.0.0 vs 1.16.1"
+      ],
+      "rows": [
+        {
+          "group": "From PostGIS",
+          "cells": [
+            "Single tile, one client",
+            "Martin 1.16.1, 6.12 ms",
+            "6.34 ms",
+            "TiPg, 7.65 ms",
+            "no: Martin 1.16.1 is best",
+            "0.96×"
+          ],
+          "mark": "loss"
+        },
+        {
+          "group": "From PostGIS",
+          "cells": [
+            "Viewport burst, four tiles",
+            "Martin 2.0.0, 5.20 ms",
+            "5.20 ms",
+            "pg_tileserv, 5.63 ms",
+            "no: only 8.1% ahead of pg_tileserv (needs 10%)",
+            "1.01×"
+          ],
+          "mark": "loss"
+        },
+        {
+          "group": "From PostGIS",
+          "cells": [
+            "Throughput, 10 clients, one tile",
+            "BBOX, 521 tiles/s",
+            "500 tiles/s",
+            "BBOX, 521 tiles/s",
+            "no: BBOX is best",
+            "1.00×"
+          ],
+          "mark": "loss"
+        },
+        {
+          "group": "From PostGIS",
+          "cells": [
+            "Throughput, 100 clients, one tile",
+            "Martin 2.0.0, 496 tiles/s",
+            "496 tiles/s",
+            "BBOX, 470 tiles/s",
+            "no: only 5.5% ahead of BBOX (needs 10%)",
+            "1.00×"
+          ],
+          "mark": "loss"
+        },
+        {
+          "group": "From PostGIS",
+          "cells": [
+            "Random walk, 10 clients, 256 tiles",
+            "Martin 2.0.0, 969 tiles/s",
+            "969 tiles/s",
+            "BBOX, 911 tiles/s",
+            "no: only 6.3% ahead of BBOX (needs 10%)",
+            "1.00×"
+          ],
+          "mark": "loss"
+        },
+        {
+          "group": "From PostGIS",
+          "cells": [
+            "Time to first tile",
+            "Tegola, 98.4 ms",
+            "107 ms",
+            "Tegola, 98.4 ms",
+            "no: Tegola is best",
+            "0.99×"
+          ],
+          "mark": "loss"
+        },
+        {
+          "group": "From PostGIS",
+          "cells": [
+            "Memory after load",
+            "Martin 2.0.0, 30.9 MiB",
+            "30.9 MiB",
+            "BBOX, 45.1 MiB",
+            "yes, 46% ahead",
+            "1.19×"
+          ],
+          "mark": "win"
+        },
+        {
+          "group": "From PostGIS",
+          "cells": [
+            "Cost per tile",
+            "Martin 2.0.0, 6.3 ms CPU",
+            "6.3 ms CPU",
+            "TiPg, 8.0 ms CPU",
+            "yes, 27% ahead",
+            "1.00×"
+          ],
+          "mark": "win"
+        },
+        {
+          "group": "From PostGIS",
+          "cells": [
+            "Capacity within the SLO",
+            "Martin 1.16.1, 1,000 tiles/s",
+            "800 tiles/s",
+            "BBOX, 800 tiles/s",
+            "no: Martin 1.16.1 is best",
+            "0.80×"
+          ],
+          "mark": "loss"
+        },
+        {
+          "group": "From PostGIS",
+          "cells": [
+            "Map session, 10 users",
+            "Martin 2.0.0, 243 ms",
+            "243 ms",
+            "TiPg, 360 ms",
+            "yes, 48% ahead",
+            "1.00×"
+          ],
+          "mark": "win"
+        },
+        {
+          "group": "From PostGIS",
+          "cells": [
+            "A thousand sources",
+            "pg_tileserv, 131 ms",
+            "232 ms",
+            "pg_tileserv, 131 ms",
+            "no: pg_tileserv is best",
+            "0.86×"
+          ],
+          "mark": "loss"
+        },
+        {
+          "group": "From an archive",
+          "cells": [
+            "Single tile, one client",
+            "VersaTiles (PMTiles), 0.06 ms",
+            "0.06 ms",
+            "VersaTiles (PMTiles), 0.06 ms",
+            "no: VersaTiles (PMTiles) is best",
+            "PMTiles 2.97×, MBTiles 1.45×"
+          ],
+          "mark": "loss"
+        },
+        {
+          "group": "From an archive",
+          "cells": [
+            "Viewport burst, four tiles",
+            "VersaTiles (PMTiles), 1.41 ms",
+            "1.56 ms",
+            "VersaTiles (PMTiles), 1.41 ms",
+            "no: VersaTiles (PMTiles) is best",
+            "PMTiles 0.99×, MBTiles 0.97×"
+          ],
+          "mark": "loss"
+        },
+        {
+          "group": "From an archive",
+          "cells": [
+            "Throughput, 10 clients, one tile",
+            "Martin 2.0.0 (PMTiles), 64,556 tiles/s",
+            "64,556 tiles/s",
+            "VersaTiles (PMTiles), 23,614 tiles/s",
+            "yes, 173% ahead",
+            "PMTiles 3.68×, MBTiles 1.25×"
+          ],
+          "mark": "win"
+        },
+        {
+          "group": "From an archive",
+          "cells": [
+            "Throughput, 100 clients, one tile",
+            "Martin 2.0.0 (PMTiles), 44,676 tiles/s",
+            "44,676 tiles/s",
+            "VersaTiles (PMTiles), 20,792 tiles/s",
+            "yes, 115% ahead",
+            "PMTiles 2.60×, MBTiles 1.35×"
+          ],
+          "mark": "win"
+        },
+        {
+          "group": "From an archive",
+          "cells": [
+            "Random walk, 10 clients, 256 tiles",
+            "Martin 2.0.0 (PMTiles), 88,017 tiles/s",
+            "88,017 tiles/s",
+            "VersaTiles (PMTiles), 28,986 tiles/s",
+            "yes, 204% ahead",
+            "PMTiles 4.14×, MBTiles 1.50×"
+          ],
+          "mark": "win"
+        },
+        {
+          "group": "From an archive",
+          "cells": [
+            "Time to first tile",
+            "VersaTiles (MBTiles), 65.1 ms",
+            "76.2 ms",
+            "VersaTiles (MBTiles), 65.1 ms",
+            "no: VersaTiles (MBTiles) is best",
+            "PMTiles 1.02×, MBTiles 0.97×"
+          ],
+          "mark": "loss"
+        },
+        {
+          "group": "From an archive",
+          "cells": [
+            "Memory after load",
+            "VersaTiles (PMTiles), 2.4 MiB",
+            "10.6 MiB",
+            "VersaTiles (PMTiles), 2.4 MiB",
+            "no: VersaTiles (PMTiles) is best",
+            "PMTiles 14.35×, MBTiles 1.54×"
+          ],
+          "mark": "loss"
+        },
+        {
+          "group": "From an archive",
+          "cells": [
+            "Cost per tile",
+            "Martin 2.0.0 (PMTiles), 28 µs CPU",
+            "28 µs CPU",
+            "VersaTiles (PMTiles), 71 µs CPU",
+            "yes, 154% ahead",
+            "PMTiles 6.69×, MBTiles 1.52×"
+          ],
+          "mark": "win"
+        },
+        {
+          "group": "From an archive",
+          "cells": [
+            "Capacity within the SLO",
+            "Martin 2.0.0 (PMTiles), 96,000 tiles/s",
+            "96,000 tiles/s",
+            "VersaTiles (PMTiles), 24,000 tiles/s",
+            "yes, 300% ahead",
+            "PMTiles 24.00×, MBTiles 1.50×"
+          ],
+          "mark": "win"
+        },
+        {
+          "group": "From an archive",
+          "cells": [
+            "Map session, 10 users",
+            "Martin 2.0.0 (PMTiles), 8.73 ms",
+            "8.73 ms",
+            "VersaTiles (MBTiles), 8.77 ms",
+            "no: only 0.4% ahead of VersaTiles (MBTiles) (needs 10%)",
+            "PMTiles 2.18×, MBTiles 1.29×"
+          ],
+          "mark": "loss"
+        },
+        {
+          "group": "From an archive",
+          "cells": [
+            "A thousand sources",
+            "go-pmtiles, 96.1 ms",
+            "196 ms",
+            "go-pmtiles, 96.1 ms",
+            "no: go-pmtiles is best",
+            "PMTiles 1.03×, MBTiles 1.02×"
+          ],
+          "mark": "loss"
+        }
+      ]
+    }
+  },
+  "runs": [
+    "runs/2026-09-26-m2-max.json"
+  ]
+}

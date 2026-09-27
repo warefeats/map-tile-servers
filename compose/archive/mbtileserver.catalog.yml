@@ -1,0 +1,5 @@
+services:
+  engine:
+    command: ["--dir", "/catalog", "--port", "8000", "--tiles-only"]
+    volumes:
+      - ../../data/catalog/mbtiles-all:/catalog:ro

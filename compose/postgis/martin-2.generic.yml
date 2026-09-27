@@ -1,0 +1,4 @@
+services:
+  engine:
+    environment:
+      DATABASE_URL: "postgresql://tiles:tiles@db/bench?options=-c%20plan_cache_mode%3Dforce_generic_plan"

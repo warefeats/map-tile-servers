@@ -1,0 +1,15 @@
+# Martin (2.0.0 and 1.16.1 run this same file) serving one PMTiles archive.
+# The tile cache is off so every request reads the archive. The PMTiles directory cache stays on at
+# go-pmtiles' default size: it caches directory entries, not tiles, and is each server's normal
+# operating mode. (`cache: disable`, used by the September archive run, also zeroes this cache.)
+listen_addresses: '0.0.0.0:3000'
+worker_processes: 4
+keep_alive: 75
+cache:
+  size_mb: 256
+  tile_size_mb: 0
+pmtiles:
+  directory_cache:
+    size_mb: 64
+  sources:
+    berlin: /tiles/berlin.pmtiles

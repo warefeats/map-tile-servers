@@ -1,0 +1,5 @@
+services:
+  engine:
+    command: ["serve", "/catalog", "--port=8080", "--cache-size=64"]
+    volumes:
+      - ../../data/catalog/pmtiles-all:/catalog:ro

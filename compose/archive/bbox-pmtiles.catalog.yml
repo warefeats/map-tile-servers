@@ -1,0 +1,5 @@
+services:
+  engine:
+    volumes:
+      - ../../configs/catalog/archive/bbox-pmtiles:/config:ro
+      - ../../data/catalog/pmtiles:/catalog:ro

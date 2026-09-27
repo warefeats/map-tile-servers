@@ -1,0 +1,14 @@
+# Martin catalog run: berlin plus 1,000 small archives discovered from a directory.
+listen_addresses: '0.0.0.0:3000'
+worker_processes: 4
+keep_alive: 75
+cache:
+  size_mb: 256
+  tile_size_mb: 0
+pmtiles:
+  directory_cache:
+    size_mb: 64
+  paths:
+    - /catalog
+  sources:
+    berlin: /tiles/berlin.pmtiles

@@ -1,0 +1,17 @@
+services:
+  engine:
+    image: wf-martin:2.0.0-055d4ea
+    command: ["--config", "/config/config.yaml"]
+    volumes:
+      - ../../configs/archive/martin-pmtiles:/config:ro
+      - ../../data/cache:/tiles:ro
+    deploy:
+      resources:
+        limits:
+          cpus: "4"
+          memory: 4G
+
+networks:
+  default:
+    name: m2
+    external: true

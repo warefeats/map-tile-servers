@@ -1,0 +1,17 @@
+services:
+  engine:
+    image: wf-bbox:0.6.2
+    command: ["bbox-tile-server", "-c", "/config/bbox.toml", "serve"]
+    volumes:
+      - ../../configs/archive/bbox-pmtiles:/config:ro
+      - ../../data/cache:/tiles:ro
+    deploy:
+      resources:
+        limits:
+          cpus: "4"
+          memory: 4G
+
+networks:
+  default:
+    name: m2
+    external: true

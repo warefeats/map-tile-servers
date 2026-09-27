@@ -1,0 +1,21 @@
+node_modules/
+results*.json
+!runs/*.json
+data/cache/
+images/martin-2.0.0/target_releases/
+images/oha/oha
+*.log
+.DS_Store
+.env
+
+# Local Claude Code config
+CLAUDE.md
+CLAUDE.local.md
+.claude/
+images/client/oha
+images/martin-2.0.0-sym/
+.work/
+images/martin-1.16.1-local/target_releases/
+data/catalog/
+rig/ceiling/
+rig/smoke/

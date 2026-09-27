@@ -1,0 +1,45 @@
+# PostGIS backing store shared by every PostGIS-family engine. Same image and settings as the
+# published vector-tile-servers run; the data volume is a copy of that run's volume, so the
+# corpus is byte-for-byte the database those numbers came from.
+services:
+  db:
+    image: imresamu/postgis:18-3.6
+    container_name: m2-db
+    command:
+      - postgres
+      - -c
+      - shared_buffers=2GB
+      - -c
+      - work_mem=64MB
+      - -c
+      - effective_cache_size=8GB
+      - -c
+      - max_connections=100
+      - -c
+      - random_page_cost=1.1
+    environment:
+      POSTGRES_PASSWORD: bench
+      POSTGRES_DB: bench
+    shm_size: 2g
+    volumes:
+      - dbdata:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d bench"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+    deploy:
+      resources:
+        limits:
+          cpus: "6"
+          memory: 12G
+
+networks:
+  default:
+    name: m2
+    external: true
+
+volumes:
+  dbdata:
+    name: m2-dbdata
+    external: true

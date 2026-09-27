@@ -1,0 +1,5 @@
+services:
+  engine:
+    volumes:
+      - ../../configs/catalog/postgis/ldproxy/bench-plain.yml:/ldproxy/data/entities/instances/providers/bench.yml:ro
+      - ../../configs/catalog/postgis/ldproxy/bench-tiles.yml:/ldproxy/data/entities/instances/providers/bench-tiles.yml:ro

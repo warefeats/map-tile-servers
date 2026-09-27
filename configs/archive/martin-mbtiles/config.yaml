@@ -1,0 +1,11 @@
+# Martin (2.0.0 and 1.16.1 run this same file) serving one MBTiles archive. Tile cache off, so
+# every request reads the archive.
+listen_addresses: '0.0.0.0:3000'
+worker_processes: 4
+keep_alive: 75
+cache:
+  size_mb: 256
+  tile_size_mb: 0
+mbtiles:
+  sources:
+    berlin: /tiles/berlin.mbtiles

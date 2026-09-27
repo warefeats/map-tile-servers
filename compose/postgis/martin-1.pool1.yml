@@ -1,0 +1,4 @@
+services:
+  engine:
+    volumes:
+      - ../../configs/postgis/martin-pool1:/config:ro

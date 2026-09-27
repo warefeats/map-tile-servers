@@ -1,0 +1,5 @@
+services:
+  engine:
+    volumes:
+      - ../../configs/catalog/archive/tileserver-gl:/config:ro
+      - ../../data/catalog/mbtiles-all:/tiles:ro

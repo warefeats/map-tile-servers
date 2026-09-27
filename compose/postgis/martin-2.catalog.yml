@@ -1,0 +1,6 @@
+services:
+  engine:
+    environment:
+      DATABASE_URL: postgresql://tiles_many:tiles@db/bench
+    volumes:
+      - ../../configs/catalog/postgis/martin:/config:ro

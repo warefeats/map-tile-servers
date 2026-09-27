@@ -1,0 +1,4 @@
+services:
+  engine:
+    volumes:
+      - ../../configs/catalog/postgis/bbox:/config:ro
