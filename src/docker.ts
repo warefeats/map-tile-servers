@@ -81,6 +81,8 @@ export function parseDockerTimeUs(raw: string): number {
 
 export function run(args: string[], opts: { timeoutMs?: number; quiet?: boolean; input?: string } = {}): { exitCode: number; stdout: string; stderr: string } {
   const result = Bun.spawnSync(args, {
+    // runtime changes to process.env (WF_MARTIN_2_IMAGE) reach a child only when passed explicitly
+    env: process.env,
     stdout: "pipe",
     stderr: "pipe",
     stdin: opts.input !== undefined ? new TextEncoder().encode(opts.input) : "ignore",
