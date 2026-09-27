@@ -15,10 +15,12 @@ import { mean } from "../src/stats";
 
 const args = process.argv.slice(2);
 const flag = (name: string) => args.find((a) => a.startsWith(`--${name}=`))?.slice(name.length + 3);
+// label=tag, or label=tag@variant to run that build with a compose variant; label=1.16.1[@variant] runs 1.16.1
 const images = (flag("images") ?? "").split(",").filter(Boolean).map((pair) => {
-  const [label, image] = pair.split("=");
-  if (!label || !image) throw new Error(`--images wants label=tag pairs, got ${pair}`);
-  return { label, image };
+  const [label, rest] = pair.split("=");
+  if (!label || !rest) throw new Error(`--images wants label=tag pairs, got ${pair}`);
+  const [image, variant = ""] = rest.split("@");
+  return { label, image: image === "1.16.1" ? "" : image!, variant };
 });
 if (images.length === 0) throw new Error("--images=label=tag,... is required");
 const rounds = Number(flag("rounds") ?? 3);
@@ -37,7 +39,7 @@ clientUp(family === "postgis" ? 2 : 6);
 const plan = protocol(family, false);
 const tiles = TILES[family];
 const roads = TILES.postgis.find((t) => t.id === "roads-z14")!;
-const entries = [...images, { label: "1.16.1", image: "" }];
+const entries = images.some((e) => !e.image) ? images : [...images, { label: "1.16.1", image: "", variant: "" }];
 
 function get(url: string): string {
   try {
@@ -71,17 +73,17 @@ function backends(url: string, label: string): number {
 
 const out: Record<string, { tiles: Record<string, number[]>; db: Record<string, number[]>; engine: Record<string, number[]>; walkRps: number[]; walkUs: number[]; backends?: number }> = {};
 for (let round = 0; round < rounds; round++) {
-  for (const { label, image } of entries) {
+  for (const { label, image, variant } of entries) {
     if (image) process.env.WF_MARTIN_2_IMAGE = image;
     const c = candidate(image ? ids.two : ids.one);
     stopAllEngines();
-    engineUp(c);
+    engineUp(c, variant);
     const probe = tileUrl(c, tiles[0]!.layer, tiles[0]!.tile);
     await waitUp(family === "postgis" ? tileUrl(c, roads.layer, roads.tile) : probe);
     const entry = (out[label] ??= { tiles: {}, db: {}, engine: {}, walkRps: [], walkUs: [] });
     if (round === 0 && family === "postgis") entry.backends = backends(tileUrl(c, roads.layer, roads.tile), label);
     for (const spec of tiles) {
-      const r = await singleTile(c, spec, plan, { ...REQUEST_HEADERS[family] });
+      const r = await singleTile(c, spec, plan, { ...REQUEST_HEADERS[family] }, variant);
       (entry.tiles[spec.id] ??= []).push(r.meanMs);
       (entry.db[spec.id] ??= []).push(r.cpu?.dbUs ?? Number.NaN);
       (entry.engine[spec.id] ??= []).push(r.cpu?.engineUs ?? Number.NaN);
@@ -91,7 +93,7 @@ for (let round = 0; round < rounds; round++) {
       entry.walkRps.push(w.rps);
       entry.walkUs.push(w.cpu?.totalUs ?? Number.NaN);
     }
-    engineDown(c);
+    engineDown(c, variant);
     console.log(`round ${round + 1}/${rounds} ${label}: ${tiles.map((s) => `${s.id} ${entry.tiles[s.id]!.at(-1)!.toFixed(3)} ms`).join(", ")}${withWalk ? `, walk ${entry.walkRps.at(-1)} tiles/s at ${entry.walkUs.at(-1)} us/tile` : ""}`);
   }
 }

@@ -1,0 +1,17 @@
+# Martin diagnostic: the main config with the default auto_bounds (quick). Tile cache disabled so every request generates the tile from PostGIS.
+listen_addresses: '0.0.0.0:3000'
+worker_processes: 4
+keep_alive: 75
+cache: disable
+postgres:
+  connection_string: ${DATABASE_URL}
+  pool_size: 8
+  auto_publish:
+    from_schemas:
+      - bench
+    tables:
+      source_id_format: '{table}'
+      id_columns: fid
+      extent: 4096
+      buffer: 64
+      clip_geom: true
