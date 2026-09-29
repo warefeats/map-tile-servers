@@ -16,8 +16,13 @@ grep -q 'shutdown -h +' "$tmp" || { echo "user data lost its safety shutdown" >&
 grep -q 'martin-2-bench-ready' "$tmp" || { echo "user data lost its ready marker" >&2; exit 1; }
 jq -e '.Resources[] | select(.Type == "AWS::EC2::LaunchTemplate") | .Properties.LaunchTemplateData.InstanceInitiatedShutdownBehavior == "terminate"' infra/cdk.out/WarefeatsMartin2Bench.template.json >/dev/null || { echo "shutdown does not terminate" >&2; exit 1; }
 echo "3. the SSM command for a sample run"
-cmd="aws s3 cp s3://BUCKET/bundles/RUN/remote.sh /root/remote.sh --only-show-errors && bash /root/remote.sh BUCKET RUN wf-martin:2.0.0-int17 --smoke"
-jq -n --arg c "$cmd" '{commands: [$c], executionTimeout: ["36000"]}' | jq -e '.commands[0] | startswith("aws s3 cp")' >/dev/null
+# shellcheck source=scripts/rig-lib.sh
+. scripts/rig-lib.sh
+cmd=$(ssm_command BUCKET RUN wf-martin:2.0.0-int17 --smoke)
+# the command must wait for user data before its first aws call, and run under dash
+jq -n --arg c "$cmd" '{commands: [$c], executionTimeout: ["36000"]}' | jq -e '.commands[0] | (index("martin-2-bench-ready") < index("aws s3 cp")) and contains("bash /root/remote.sh BUCKET RUN wf-martin:2.0.0-int17 --smoke")' >/dev/null
+printf '%s\n' "$cmd" > "$tmp.cmd"
+if command -v dash >/dev/null; then dash -n "$tmp.cmd"; else sh -n "$tmp.cmd"; fi
 bash -n scripts/remote.sh
 echo "4. images a run needs"
 for image in wf-client:1 wf-bbox:0.6.2 wf-mbtileserver:0.11.0 "${WF_MARTIN_2_IMAGE:-wf-martin:2.0.0-int17}"; do
