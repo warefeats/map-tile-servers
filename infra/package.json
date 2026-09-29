@@ -1,0 +1,17 @@
+{
+  "name": "@warefeats/martin-2-bench-infra",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "aws-cdk-lib": "2.215.0",
+    "constructs": "10.4.2"
+  },
+  "devDependencies": {
+    "aws-cdk": "2.1029.2",
+    "@types/bun": "latest"
+  },
+  "scripts": {
+    "check": "tsc --noEmit"
+  }
+}

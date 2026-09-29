@@ -1,0 +1,77 @@
+import * as cdk from "aws-cdk-lib";
+import * as ec2 from "aws-cdk-lib/aws-ec2";
+import * as iam from "aws-cdk-lib/aws-iam";
+import * as s3 from "aws-cdk-lib/aws-s3";
+import type { Construct } from "constructs";
+
+/**
+ * One dedicated Graviton host that runs the whole harness (database, engines and client on one
+ * Docker network, as on the Mac), driven from the laptop over SSM. The bucket carries the bundle in
+ * (repo, images, database volume, archives) and the results out. No VPC lookup: the instance
+ * launches into the default VPC with its default security group, which only needs outbound traffic.
+ */
+export class Martin2BenchStack extends cdk.Stack {
+  constructor(scope: Construct, id: string, props?: cdk.StackProps) {
+    super(scope, id, props);
+
+    const instanceType = this.node.tryGetContext("instanceType") ?? "c7g.metal";
+
+    const bucket = new s3.Bucket(this, "RigBucket", {
+      lifecycleRules: [{ expiration: cdk.Duration.days(30) }],
+      autoDeleteObjects: true,
+      removalPolicy: cdk.RemovalPolicy.DESTROY,
+      enforceSSL: true,
+    });
+
+    const role = new iam.Role(this, "InstanceRole", {
+      assumedBy: new iam.ServicePrincipal("ec2.amazonaws.com"),
+      managedPolicies: [iam.ManagedPolicy.fromAwsManagedPolicyName("AmazonSSMManagedInstanceCore")],
+    });
+    bucket.grantReadWrite(role);
+
+    const userData = ec2.UserData.forLinux();
+    userData.addCommands(
+      "set -euxo pipefail",
+      // the harness never needs more than a few hours; a forgotten instance terminates itself
+      "shutdown -h +600",
+      "export DEBIAN_FRONTEND=noninteractive",
+      // unattended-upgrades runs at first boot and holds the dpkg lock for a while
+      "while fuser /var/lib/dpkg/lock-frontend /var/lib/apt/lists/lock >/dev/null 2>&1; do sleep 5; done",
+      "apt-get update -y",
+      "apt-get install -y docker.io docker-compose-v2 jq curl unzip zstd",
+      "systemctl enable docker && systemctl start docker",
+      // Ubuntu 24.04 has no awscli package; install v2 from Amazon
+      'curl -fsSL "https://awscli.amazonaws.com/awscli-exe-linux-aarch64.zip" -o /tmp/awscliv2.zip',
+      "unzip -q /tmp/awscliv2.zip -d /tmp",
+      "/tmp/aws/install",
+      "rm -rf /tmp/awscliv2.zip /tmp/aws",
+      // the same bun as the laptop that produced every earlier run
+      'curl -fsSL https://bun.sh/install | BUN_INSTALL=/usr/local bash -s "bun-v1.4.0"',
+      "touch /var/lib/martin-2-bench-ready",
+    );
+
+    const lt = new ec2.LaunchTemplate(this, "BenchLt", {
+      instanceType: new ec2.InstanceType(instanceType),
+      machineImage: ec2.MachineImage.fromSsmParameter(
+        "/aws/service/canonical/ubuntu/server/24.04/stable/current/arm64/hvm/ebs-gp3/ami-id",
+      ),
+      role,
+      userData,
+      blockDevices: [
+        {
+          deviceName: "/dev/sda1",
+          volume: ec2.BlockDeviceVolume.ebs(100, { volumeType: ec2.EbsDeviceVolumeType.GP3 }),
+        },
+      ],
+      requireImdsv2: true,
+    });
+    (lt.node.defaultChild as ec2.CfnLaunchTemplate).addPropertyOverride(
+      "LaunchTemplateData.InstanceInitiatedShutdownBehavior",
+      "terminate",
+    );
+
+    new cdk.CfnOutput(this, "LaunchTemplateId", { value: lt.launchTemplateId! });
+    new cdk.CfnOutput(this, "RigBucketName", { value: bucket.bucketName });
+    new cdk.CfnOutput(this, "InstanceType", { value: instanceType });
+  }
+}

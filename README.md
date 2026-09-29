@@ -2,7 +2,7 @@
 
 The runner behind a warefeats page (slug `martin-2-tile-servers`, unpublished) that measures [Martin](https://martin.maplibre.org) 2.0.0, not yet released, against its most recent stable release (1.16.1) and against the most recent stable release of every server it competes with, in both of the jobs Martin does: cutting vector tiles from PostGIS on every request, and handing tiles out of a pre-built MBTiles or PMTiles archive. It repeats everything the two September tile-server pages measured ([postgis-vector-tile-servers](https://warefeats.com/benchmarks/postgis-vector-tile-servers/), [pmtiles-mbtiles-tile-servers](https://warefeats.com/benchmarks/pmtiles-mbtiles-tile-servers/)) and adds four dimensions they did not: CPU paid per tile, capacity within a latency SLO under open-loop load, a simulated busy map, and startup with a thousand sources configured.
 
-Part of the [warefeats](https://warefeats.com) benchmark suite. Decisions are recorded in `docs/adr/`: the verdict rule was fixed before the first measured pass (0001), the load generator sits on the engine's Docker network because the host path has a ceiling of its own (0002), and Martin 2.0.0 is a local build with the release recipe because the release PR's CI artifacts are debug builds (0003).
+Part of the [warefeats](https://warefeats.com) benchmark suite. Decisions are recorded in `docs/adr/`: the verdict rule was fixed before the first measured pass (0001), the load generator sits on the engine's Docker network because the host path has a ceiling of its own (0002), Martin 2.0.0 is a local build with the release recipe because the release PR's CI artifacts are debug builds (0003), and measured runs move to a dedicated cloud host because the Mac is shared (0004, proposed).
 
 ## Candidates
 
@@ -73,6 +73,21 @@ just preview          # render the unpublished page on the site's dev server
 ```
 
 The runner waits before each candidate until the VM is quiet (under half a core busy over three seconds) and records host and VM load; never measure while anything compiles.
+
+## Cloud rig
+
+One c7g.metal host runs the whole protocol unchanged (docs/adr/0004). Deploy the stack once (`just rig-deploy`), then per run:
+
+```bash
+just rig-walk                                   # offline preflight: scripts, user data, the SSM command, images, corpus
+just rig-pack  <run> wf-martin:2.0.0-<tag>      # upload the committed tree, local images, the database volume, the archives
+just rig-run   <run> wf-martin:2.0.0-<tag>      # launch, start the run over SSM (--smoke, --families=...)
+just rig-log   <run>                            # the progress log, uploaded every minute
+just rig-fetch <run>                            # results-*-<run>.json and verdict-<run>.txt into the repo
+just rig-instances                              # anything still up
+```
+
+The instance terminates itself when the run ends and after ten hours at most.
 
 ## License
 

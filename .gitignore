@@ -19,3 +19,6 @@ images/martin-1.16.1-local/target_releases/
 data/catalog/
 rig/ceiling/
 rig/smoke/
+
+# CDK output of the cloud rig
+infra/cdk.out/
