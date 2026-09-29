@@ -89,6 +89,9 @@ rig-fetch RUN:
 
 # Instances of any run that are still up.
 rig-instances:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    . scripts/rig-lib.sh
     aws ec2 describe-instances --filters Name=tag:Project,Values=martin-2-bench Name=instance-state-name,Values=pending,running,stopping --query 'Reservations[].Instances[].[InstanceId,InstanceType,State.Name,Tags[?Key==`RunId`]|[0].Value,LaunchTime]' --output table
 
 rig-destroy:
