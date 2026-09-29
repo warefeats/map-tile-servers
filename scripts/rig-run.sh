@@ -17,7 +17,7 @@ err=$(mktemp)
 instance=""
 # metal capacity differs by zone, so try each default subnet until one launches
 for subnet in $(aws ec2 describe-subnets --filters Name=default-for-az,Values=true --query 'Subnets[].SubnetId' --output text); do
-  if instance=$(aws ec2 run-instances --launch-template "LaunchTemplateId=$lt,Version=\$Latest" "${type_args[@]}" --subnet-id "$subnet" --tag-specifications "$tags" --query 'Instances[0].InstanceId' --output text 2>"$err"); then
+  if instance=$(aws ec2 run-instances --launch-template "LaunchTemplateId=$lt,Version=\$Latest" ${type_args[@]+"${type_args[@]}"} --subnet-id "$subnet" --tag-specifications "$tags" --query 'Instances[0].InstanceId' --output text 2>"$err"); then
     break
   fi
   instance=""
