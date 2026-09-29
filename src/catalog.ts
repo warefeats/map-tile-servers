@@ -193,19 +193,20 @@ export function prepareArchiveFiles(): void {
     if (r.exitCode !== 0) throw new Error("pmtiles convert failed");
   }
   const count = (dir: string, ext: string) => readdirSync(dir).filter((f) => f.endsWith(ext)).length;
+  // The copies come first: the -all directories link to them, and a clean tree has none yet.
+  if (count(pmDir, ".pmtiles") !== CATALOG_SIZE || count(mbDir, ".mbtiles") !== CATALOG_SIZE) {
+    console.log(`catalog: writing ${CATALOG_SIZE} copies per format (distinct files, not links)`);
+    for (const name of CATALOG_NAMES) {
+      copyFileSync(smallPm, join(pmDir, `${name}.pmtiles`));
+      copyFileSync(smallMb, join(mbDir, `${name}.mbtiles`));
+    }
+  }
   for (const fmt of ["pmtiles", "mbtiles"] as const) {
     const all = join(CATALOG_DIR, `${fmt}-all`);
     mkdirSync(all, { recursive: true });
     if (count(all, `.${fmt}`) !== CATALOG_SIZE + 1) {
       for (const name of CATALOG_NAMES) linkIfMissing(join(CATALOG_DIR, fmt, `${name}.${fmt}`), join(all, `${name}.${fmt}`));
       linkIfMissing(join(ROOT, "data", "cache", `berlin.${fmt}`), join(all, `berlin.${fmt}`));
-    }
-  }
-  if (count(pmDir, ".pmtiles") !== CATALOG_SIZE || count(mbDir, ".mbtiles") !== CATALOG_SIZE) {
-    console.log(`catalog: writing ${CATALOG_SIZE} copies per format (distinct files, not links)`);
-    for (const name of CATALOG_NAMES) {
-      copyFileSync(smallPm, join(pmDir, `${name}.pmtiles`));
-      copyFileSync(smallMb, join(mbDir, `${name}.mbtiles`));
     }
   }
 }

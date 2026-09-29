@@ -20,9 +20,19 @@ log=/var/log/martin-2-bench.log
 s3=s3://$bucket
 exec > >(tee -a "$log") 2>&1
 
+# Every results file that exists reaches the bucket, so no later failure can take an earlier step's data with it.
+upload_results() {
+  local f
+  for f in /opt/m2/results-*-"$suffix".json /opt/m2/verdict-"$suffix".txt; do
+    if [ -e "$f" ]; then aws s3 cp "$f" "$s3/results/$run_id/$(basename "$f")" --only-show-errors || true; fi
+  done
+}
+
+# shellcheck disable=SC2329 # the EXIT trap calls it
 finish() {
   local status=$?
   echo "EXIT $status $(date -u +%FT%TZ)"
+  upload_results
   aws s3 cp "$log" "$s3/results/$run_id/run.log" --only-show-errors || true
   shutdown -h +1 || true
 }
@@ -60,18 +70,24 @@ cp /opt/bundle/berlin.mbtiles /opt/bundle/berlin.pmtiles data/cache/
 
 export WF_MARTIN_2_IMAGE=$image
 export WF_MACHINE="EC2 $instance_type"
+# One step's failure is recorded and the run goes on; each step's results upload as soon as it ends.
+failed=0
+step() {
+  local label=$1; shift
+  echo "== $label $(date -u +%T)"
+  if ! "$@"; then echo "STEP FAILED: $label"; failed=1; fi
+  upload_results
+}
 for family in $families; do
-  echo "== $family full $(date -u +%T)"
-  bun run src/run.ts --family="$family" $smoke --output="results-$family-$suffix.json"
-  echo "== $family catalog $(date -u +%T)"
-  bun run src/catalog.ts --family="$family" $smoke --output="results-$family-catalog-$suffix.json"
+  # shellcheck disable=SC2086 # $smoke is empty or one flag
+  step "$family full" bun run src/run.ts --family="$family" $smoke --output="results-$family-$suffix.json"
+  # shellcheck disable=SC2086
+  step "$family catalog" bun run src/catalog.ts --family="$family" $smoke --output="results-$family-catalog-$suffix.json"
 done
 if [ -z "$smoke" ] && [ "$families" = "postgis archive" ]; then
   echo "== verdict $(date -u +%T)"
   bun run src/analysis.ts --suffix="$suffix" > "verdict-$suffix.txt" 2>&1 || true
+  upload_results
 fi
-
-for f in results-*-"$suffix".json verdict-"$suffix".txt; do
-  [ -e "$f" ] && aws s3 cp "$f" "$s3/results/$run_id/$f" --only-show-errors
-done
-echo "DONE $(date -u +%FT%TZ)"
+echo "DONE $(date -u +%FT%TZ) failed=$failed"
+exit "$failed"
