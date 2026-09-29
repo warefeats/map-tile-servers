@@ -1,4 +1,4 @@
-import { mkdirSync } from "node:fs";
+import { mkdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { clientExec, clientUp, dbUp, ensureNetwork, engineDown, imageDigest, imageExists, psql, run, stopAllEngines, WORK_DIR } from "./docker";
 import { type Candidate, CANDIDATES, type Family, LADDER, protocol, REQUEST_HEADERS, TILES, tileUrl, VIEWPORT, WALK } from "./matrix";
@@ -54,7 +54,8 @@ if (candidates.length === 0) {
 }
 
 function hostLoad(): number[] {
-  return run(["sysctl", "-n", "vm.loadavg"], { quiet: true }).stdout.replace(/[{}]/g, "").trim().split(/\s+/).map(Number);
+  const raw = process.platform === "linux" ? readFileSync("/proc/loadavg", "utf8") : run(["sysctl", "-n", "vm.loadavg"], { quiet: true }).stdout;
+  return raw.replace(/[{}]/g, "").trim().split(/\s+/).slice(0, 3).map(Number);
 }
 
 function vmLoad(): number[] {
@@ -95,11 +96,34 @@ async function waitForQuiet(): Promise<{ before: number[]; vmBefore: number[]; v
 function environment(): Record<string, unknown> {
   const sys = (k: string) => run(["sysctl", "-n", k], { quiet: true }).stdout.trim();
   const docker = run(["docker", "version", "--format", "{{.Server.Version}}"], { quiet: true }).stdout.trim();
-  const orb = run(["orb", "version"], { quiet: true }).stdout.trim().split("\n")[0] ?? "";
   const vmCpus = run(["docker", "info", "--format", "{{.NCPU}}"], { quiet: true }).stdout.trim();
   const vmMem = run(["docker", "info", "--format", "{{.MemTotal}}"], { quiet: true }).stdout.trim();
   const kernel = run(["docker", "info", "--format", "{{.KernelVersion}}"], { quiet: true }).stdout.trim();
   const ohaVersion = clientExec(["oha", "--version"], 10_000).trim();
+  const measurement = {
+    loadGenerator: `${ohaVersion} in a container on the engine's Docker network`,
+    clientCpus: family === "archive" ? 6 : 2,
+    engineLimits: "4 CPUs, 4 GB per engine container",
+    database: family === "postgis" ? "PostgreSQL 18 + PostGIS 3.6 (imresamu/postgis:18-3.6), 6 CPUs, 12 GB, shared_buffers 2GB" : null,
+  };
+  // On Linux the containers run on the host itself, with no VM between them and the machine.
+  if (process.platform === "linux") {
+    const cpu = run(["lscpu"], { quiet: true }).stdout.match(/^Model name:\s*(.+)$/m)?.[1]?.trim() ?? "";
+    const memKb = Number(readFileSync("/proc/meminfo", "utf8").match(/^MemTotal:\s+(\d+)/m)?.[1] ?? 0);
+    const os = readFileSync("/etc/os-release", "utf8").match(/^PRETTY_NAME="?([^"\n]+)"?$/m)?.[1] ?? "Linux";
+    return {
+      machine: process.env.WF_MACHINE ?? "Linux host",
+      chip: cpu,
+      cores: Number(vmCpus),
+      memoryGb: Math.round((memKb * 1024) / 1024 ** 3),
+      os,
+      kernel,
+      docker: `Docker ${docker}`,
+      vm: null,
+      ...measurement,
+    };
+  }
+  const orb = run(["orb", "version"], { quiet: true }).stdout.trim().split("\n")[0] ?? "";
   return {
     machine: sys("hw.model"),
     chip: sys("machdep.cpu.brand_string"),
@@ -110,10 +134,7 @@ function environment(): Record<string, unknown> {
     os: `macOS ${run(["sw_vers", "-productVersion"], { quiet: true }).stdout.trim()}`,
     docker: `Docker ${docker} (${orb})`,
     vm: { cpus: Number(vmCpus), memoryGb: Math.round(Number(vmMem) / 1024 ** 3), kernel },
-    loadGenerator: `${ohaVersion} in a container on the engine's Docker network`,
-    clientCpus: family === "archive" ? 6 : 2,
-    engineLimits: "4 CPUs, 4 GB per engine container",
-    database: family === "postgis" ? "PostgreSQL 18 + PostGIS 3.6 (imresamu/postgis:18-3.6), 6 CPUs, 12 GB, shared_buffers 2GB" : null,
+    ...measurement,
   };
 }
 

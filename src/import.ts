@@ -376,22 +376,25 @@ if (import.meta.main) {
   const a = load("archive", suffix);
   const p = load("postgis", suffix);
   if (!a || !p) throw new Error("need results-archive and results-postgis");
-  const env = a.raw.environment as Record<string, unknown> & { vm: { cpus: number; memoryGb: number; kernel: string } };
+  const env = a.raw.environment as Record<string, unknown> & { vm: { cpus: number; memoryGb: number; kernel: string } | null };
   const generated = [a.raw.generatedAt, p.raw.generatedAt].sort().at(-1)!;
   const date = new Date(generated).toLocaleDateString("en-CA", { timeZone: "America/Chicago" });
-  const runId = `${date}-m2-max`;
+  // A Linux host runs the containers itself (vm is null); the Mac runs them in OrbStack's VM.
+  const vm = env.vm;
+  const rig = vm ? "m2-max" : String(env.machine).replace(/^EC2 /, "").replace(/\W+/g, "-").toLowerCase();
+  const runId = `${date}-${rig}`;
   const sections = [p, a].flatMap((l) => l.verdicts.map((v) => sectionFor(l, v)).filter(Boolean));
   const run = {
     schemaVersion: 1,
     id: runId,
-    label: `M2 Max / macOS (${env.os})`,
+    label: vm ? `M2 Max / macOS (${env.os})` : `${env.machine} / ${env.os}`,
     publishedAt: generated,
     environment: {
       machine: String(env.machine),
       chip: String(env.chip),
-      cores: `${env.cores} (${env.performanceCores}P + ${env.efficiencyCores}E); OrbStack VM ${env.vm.cpus} CPUs`,
-      memory: `${env.memoryGb} GB; VM ${env.vm.memoryGb} GB`,
-      os: `${env.os}; Linux ${env.vm.kernel} in the VM`,
+      cores: vm ? `${env.cores} (${env.performanceCores}P + ${env.efficiencyCores}E); OrbStack VM ${vm.cpus} CPUs` : `${env.cores}`,
+      memory: vm ? `${env.memoryGb} GB; VM ${vm.memoryGb} GB` : `${env.memoryGb} GB`,
+      os: vm ? `${env.os}; Linux ${vm.kernel} in the VM` : `${env.os}; Linux ${env.kernel}`,
       arch: "arm64",
       runtime: `${env.docker}; ${env.loadGenerator}`,
     },
