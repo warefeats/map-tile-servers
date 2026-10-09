@@ -1,0 +1,7 @@
+# Martin 2.0 for the UX runs: the benchmark's archive config with Martin's default tile cache.
+listen_addresses: '0.0.0.0:3000'
+worker_processes: 4
+keep_alive: 75
+mbtiles:
+  sources:
+    berlin: /tiles/berlin.mbtiles

@@ -1,0 +1,8 @@
+# Martin 2.0 for the UX runs: the benchmark's archive config with Martin's default caches (a
+# 256 MB tile cache, a 128 MB PMTiles directory cache), as a user who installs it gets them.
+listen_addresses: '0.0.0.0:3000'
+worker_processes: 4
+keep_alive: 75
+pmtiles:
+  sources:
+    berlin: /tiles/berlin.pmtiles

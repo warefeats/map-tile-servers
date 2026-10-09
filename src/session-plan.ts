@@ -34,7 +34,7 @@ export function viewTiles(view: View): TileCoord[] {
 }
 
 /** Offset a view by whole screen widths/heights (a pan), in degrees at that zoom. */
-function pan(view: View, dxScreens: number, dyScreens: number): View {
+export function pan(view: View, dxScreens: number, dyScreens: number): View {
   const world = TILE_PX * 2 ** view.zoom;
   const dLon = ((dxScreens * VIEWPORT_PX.width) / world) * 360;
   const latRad = (view.lat * Math.PI) / 180;
@@ -43,8 +43,8 @@ function pan(view: View, dxScreens: number, dyScreens: number): View {
   return { lon: view.lon + dLon, lat, zoom: view.zoom };
 }
 
-const BERLIN = { lon: 13.405, lat: 52.52 };
-const PRENZLAUER_BERG = { lon: 13.4185, lat: 52.5365 };
+export const BERLIN = { lon: 13.405, lat: 52.52 };
+export const PRENZLAUER_BERG = { lon: 13.4185, lat: 52.5365 };
 
 /** Half-screen pans in a loop: east, east, south, west, west, north (every pan reveals new tiles). */
 function panLoop(start: View): View[] {
