@@ -12,16 +12,6 @@ import { WORK_DIR } from "../docker";
 import { CANDIDATES, type Family, isMartin2 } from "../matrix";
 import type { VisitRecord } from "./record";
 
-const args = Object.fromEntries(
-  process.argv.slice(2).map((a) => {
-    const [k, v] = a.replace(/^--/, "").split("=");
-    return [k!, v ?? "true"];
-  }),
-);
-const tag = args.tag;
-if (!tag) throw new Error("--tag is required");
-const families: Family[] = args.family ? [args.family as Family] : (["archive", "postgis"] as Family[]).filter((f) => existsSync(join(WORK_DIR, "ux", tag, f)));
-const KEEP_FRAMES = args["keep-frames"] === "true";
 
 /** Thumbnails for the visual measure: 160 x 90 grey, compared pixel by pixel against the phase's last frame. */
 const THUMB = { w: 160, h: 90 } as const;
@@ -154,7 +144,7 @@ function encodeVideo(v: Visit, dir: string): string {
   return out;
 }
 
-function analyzeVisit(file: string): VisitMetrics {
+function analyzeVisit(file: string, keepFrames: boolean): VisitMetrics {
   const dir = dirname(file);
   const v = JSON.parse(readFileSync(file, "utf8")) as Visit;
   const base =
@@ -191,7 +181,7 @@ function analyzeVisit(file: string): VisitMetrics {
   const sum = (k: "vc95" | "idle") => (phases.every((p) => p[k] !== null) ? phases.reduce((s, p) => s + p[k]!, 0) : null);
   const headers = tiles.find((r) => r.status === 200)?.headers ?? {};
   const video = encodeVideo(v, dir);
-  if (!KEEP_FRAMES) rmSync(join(dir, "frames"), { recursive: true, force: true });
+  if (!keepFrames) rmSync(join(dir, "frames"), { recursive: true, force: true });
   return {
     candidate: v.candidate,
     scenario: v.scenario,
@@ -238,8 +228,21 @@ export interface Finding {
   noticeable: boolean;
 }
 
-for (const family of families) {
-  const root = join(WORK_DIR, "ux", tag, family);
+function main(): void {
+  const args = Object.fromEntries(
+    process.argv.slice(2).map((a) => {
+      const [k, v] = a.replace(/^--/, "").split("=");
+      return [k!, v ?? "true"];
+    }),
+  );
+  const tag = args.tag;
+  if (!tag) throw new Error("--tag is required");
+  const families: Family[] = args.family ? [args.family as Family] : (["archive", "postgis"] as Family[]).filter((f) => existsSync(join(WORK_DIR, "ux", tag, f)));
+  const keepFrames = args["keep-frames"] === "true";
+  for (const family of families) analyzeFamily(join(WORK_DIR, "ux", tag, family), family, keepFrames);
+}
+
+function analyzeFamily(root: string, family: Family, keepFrames: boolean): void {
   const files = walk(root);
   console.log(`${family}: ${files.length} visits`);
   const metrics: VisitMetrics[] = [];
@@ -250,7 +253,7 @@ for (const family of families) {
     const key = relative(root, dirname(f));
     let m = done.get(key);
     if (!m) {
-      m = analyzeVisit(f);
+      m = analyzeVisit(f, keepFrames);
       if (m.video) m.video = relative(root, m.video);
     }
     metrics.push(m);
@@ -295,3 +298,5 @@ for (const family of families) {
   console.log(`${family}: Martin noticeably slower in ${noticeable.length} of ${groups.size} scenario/profile/visit cells`);
   for (const f of noticeable) console.log(`  ${f.scenario} ${f.profile} ${f.visit}: Martin ${Math.round(f.martin)} ms vs ${f.rival} ${Math.round(f.rivalValue)} ms (+${Math.round(f.slowerMs)} ms, +${Math.round(f.slowerRatio * 100)}%)`);
 }
+
+if (import.meta.main) main();
