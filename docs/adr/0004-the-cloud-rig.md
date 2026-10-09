@@ -1,6 +1,6 @@
 # 0004 — Runs move to a dedicated cloud host
 
-Date: 2026-09-28. Status: proposed.
+Date: 2026-09-28. Status: not adopted. On 2026-09-29 John ruled out cloud runs for this benchmark; measured runs stay on the Mac, with ADR 0005 against its drift.
 
 ## Context
 
