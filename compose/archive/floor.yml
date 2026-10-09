@@ -1,0 +1,22 @@
+services:
+  engine:
+    # nginx 1.30.4 (nginx:stable of 2026-08-25), run directly, without the image's entrypoint scripts.
+    image: nginx@sha256:09cc2702709e6388d979d8030e3ab4eb1ceb699b2dced26d7543e872a822e823
+    entrypoint: ["nginx", "-g", "daemon off;"]
+    volumes:
+      - ../../configs/archive/floor/nginx.conf:/etc/nginx/nginx.conf:ro
+      - m2-floor-www:/www:ro
+    deploy:
+      resources:
+        limits:
+          cpus: "4"
+          memory: 4G
+
+networks:
+  default:
+    name: m2
+    external: true
+
+volumes:
+  m2-floor-www:
+    external: true

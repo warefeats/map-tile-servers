@@ -1,6 +1,7 @@
 import { mkdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { clientExec, clientUp, dbUp, ensureNetwork, engineDown, imageDigest, imageExists, psql, run, stopAllEngines, WORK_DIR } from "./docker";
+import { prepareFloor } from "./floor";
 import { type Candidate, CANDIDATES, type Family, LADDER, protocol, REQUEST_HEADERS, TILES, tileUrl, VIEWPORT, WALK } from "./matrix";
 import { alternateHeaders, burst, type BurstResult, type ColdStartResult, coldStart, concurrency, type LadderResult, ladder, type MemoryReading, memory, type ParityResult, parity, type SessionResult, session, type SingleTileResult, singleTile, type ThroughputResult, walk } from "./measure";
 import { flight } from "./session-plan";
@@ -31,6 +32,8 @@ export interface RawResults {
   family: Family;
   generatedAt: string;
   smoke: boolean;
+  /** Candidate order of this pass: the second pass of a run is the reverse of the first (docs/adr/0005). */
+  order?: "forward" | "reverse";
   environment: Record<string, unknown>;
   corpus: Record<string, unknown>;
   results: CandidateResult[];
@@ -42,12 +45,14 @@ const flag = (name: string) => args.find((a) => a.startsWith(`--${name}=`))?.spl
 const family = (flag("family") ?? "archive") as Family;
 const smoke = args.includes("--smoke");
 const resume = args.includes("--resume");
+const reverse = args.includes("--reverse");
 const only = flag("candidates")?.split(",");
 const skip = new Set(flag("skip-sections")?.split(",") ?? []);
 const outputPath = flag("output") ?? join(import.meta.dirname!, "..", `results-${family}${smoke ? "-smoke" : ""}.json`);
 const plan = protocol(family, smoke);
 
-const candidates = CANDIDATES.filter((c) => c.family === family && (!only || only.includes(c.id)));
+const inFamily = CANDIDATES.filter((c) => c.family === family && (!only || only.includes(c.id)));
+const candidates = reverse ? [...inFamily].reverse() : inFamily;
 if (candidates.length === 0) {
   console.error(`no candidate matches; known ${family} candidates: ${CANDIDATES.filter((c) => c.family === family).map((c) => c.id).join(", ")}`);
   process.exit(1);
@@ -157,7 +162,7 @@ async function measureCandidate(c: Candidate): Promise<CandidateResult> {
   const r: CandidateResult = { id: c.id, image: c.image, imageDigest: await imageDigest(c.image), startedAt: new Date(started).toISOString(), durationS: 0, hostLoad: load };
 
   console.log("  cold start");
-  r.coldStart = await coldStart(c, tileUrl(c, marquee.layer, marquee.tile), headers, plan.coldStart.reps, plan.coldStart.timeoutMs);
+  r.coldStart = await coldStart(c, tileUrl(c, marquee.layer, marquee.tile), headers, plan.coldStart.reps, plan.coldStart.timeoutMs, { warmups: plan.coldStart.warmups });
   console.log("  parity");
   r.parity = parity(c, tiles);
   if (!skip.has("single")) {
@@ -170,18 +175,19 @@ async function measureCandidate(c: Candidate): Promise<CandidateResult> {
     console.log("  viewport burst");
     r.burst = burst(c, plan);
   }
-  if (!skip.has("concurrency")) {
+  // The floor control runs only what a file server can be a floor for (docs/adr/0007).
+  if (!skip.has("concurrency") && !c.control) {
     console.log("  concurrency (marquee tile)");
     r.concurrency = {};
     for (const level of plan.concurrency.levels) r.concurrency[String(level)] = await concurrency(c, marquee, level, plan);
   }
-  if (!skip.has("walk")) {
+  if (!skip.has("walk") && !c.control) {
     console.log("  random walk");
     r.walk = await walk(c, plan);
   }
   r.memoryAfterLoad = await memory(c);
   console.log(`    memory after load: ${r.memoryAfterLoad.memMb.toFixed(1)} MiB (anon ${r.memoryAfterLoad.anonMb.toFixed(1)}, file ${r.memoryAfterLoad.fileMb.toFixed(1)})`);
-  if (!skip.has("ladder")) {
+  if (!skip.has("ladder") && !c.control) {
     console.log("  latency under offered load");
     r.ladder = await ladder(c, plan);
   }
@@ -215,6 +221,10 @@ if (family === "postgis") {
   console.log(`database: prewarmed ${warmed} blocks of schema bench`);
 }
 clientUp(family === "archive" ? 6 : 2);
+if (candidates.some((c) => c.control)) {
+  const floor = prepareFloor();
+  console.log(`floor control: ${floor.files} tiles (${floor.bytes} bytes) as files, ${floor.empty} empty`);
+}
 
 const existing = resume ? await loadExisting() : undefined;
 const results: CandidateResult[] = existing?.results ?? [];
@@ -228,6 +238,7 @@ async function save(): Promise<void> {
     family,
     generatedAt: new Date().toISOString(),
     smoke,
+    order: reverse ? "reverse" : "forward",
     environment: env,
     corpus: corp,
     protocol: { ...plan, ladder: { ...plan.ladder, ...LADDER[family] }, tiles: TILES[family], viewport: VIEWPORT[family], walk: WALK, flight: flight(family) },
@@ -237,7 +248,7 @@ async function save(): Promise<void> {
   await Bun.write(outputPath, JSON.stringify(out, null, 2) + "\n");
 }
 
-console.log(`martin-2 runner: ${family}, ${smoke ? "SMOKE" : "FULL"} protocol, ${candidates.length} candidate(s): ${candidates.map((c) => c.id).join(", ")}`);
+console.log(`martin-2 runner: ${family}, ${smoke ? "SMOKE" : "FULL"} protocol, ${reverse ? "reverse" : "forward"} order, ${candidates.length} candidate(s): ${candidates.map((c) => c.id).join(", ")}`);
 for (const c of candidates) {
   if (resume && results.some((r) => r.id === c.id)) {
     console.log(`\n> ${c.id}: already measured, skipping`);

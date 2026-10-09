@@ -82,13 +82,15 @@ export interface ColdStartResult {
 /**
  * Start the engine from stopped until it serves `url`. The poller is already running on the engine
  * network when the container starts, and both timestamps are the VM's clock. The engine is left
- * running after the last repetition; idle memory is read five seconds later.
+ * running after the last repetition; idle memory is read five seconds later. The first `warmups`
+ * starts run the same way and are not recorded (docs/adr/0005).
  */
-export async function coldStart(c: Candidate, url: string, headers: Record<string, string>, reps: number, timeoutMs: number, opts: { variant?: string; then?: string[] } = {}): Promise<ColdStartResult> {
+export async function coldStart(c: Candidate, url: string, headers: Record<string, string>, reps: number, timeoutMs: number, opts: { variant?: string; then?: string[]; warmups?: number } = {}): Promise<ColdStartResult> {
   const variant = opts.variant ?? "";
+  const warmups = opts.warmups ?? 0;
   const samplesMs: number[] = [];
   const followUpsMs: { url: string; status: number; msAfterStart: number }[][] = [];
-  for (let rep = 0; rep < reps; rep++) {
+  for (let rep = -warmups; rep < reps; rep++) {
     engineDown(c, variant);
     const poller = clientSpawn(["bun", "/app/src/client/coldpoll.ts", JSON.stringify({ url, headers, timeoutMs, intervalMs: 5, then: opts.then ?? [] })]);
     await Bun.sleep(400); // let bun start and begin polling before the engine exists
@@ -107,9 +109,15 @@ export async function coldStart(c: Candidate, url: string, headers: Record<strin
     }
     const startedUs = parseDockerTimeUs((await inspect(engineContainer(c, variant))).State.StartedAt);
     const ms = round((parsed.firstOkUs - startedUs) / 1000, 2);
+    const follow = parsed.followUps.map((f) => ({ url: f.url, status: f.status, msAfterStart: round((f.atUs - startedUs) / 1000, 2) }));
+    const followText = follow.length ? `; follow-ups ${follow.map((f) => `${f.status}@${f.msAfterStart}ms`).join(", ")}` : "";
+    if (rep < 0) {
+      console.log(`    warm-up start: ${ms} ms to first tile${followText} (not recorded)`);
+      continue;
+    }
     samplesMs.push(ms);
-    followUpsMs.push(parsed.followUps.map((f) => ({ url: f.url, status: f.status, msAfterStart: round((f.atUs - startedUs) / 1000, 2) })));
-    console.log(`    cold start ${rep + 1}/${reps}: ${ms} ms to first tile${parsed.followUps.length ? `; follow-ups ${followUpsMs.at(-1)!.map((f) => `${f.status}@${f.msAfterStart}ms`).join(", ")}` : ""}`);
+    followUpsMs.push(follow);
+    console.log(`    cold start ${rep + 1}/${reps}: ${ms} ms to first tile${followText}`);
   }
   await Bun.sleep(5_000);
   const idle = await memory(c, variant);

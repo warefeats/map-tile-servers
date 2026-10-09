@@ -7,7 +7,8 @@
 import { copyFileSync, existsSync, linkSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { clientUp, dbUp, ensureNetwork, engineDown, imageDigest, psql, run, stopAllEngines, WORK_DIR } from "./docker";
-import { type Candidate, CANDIDATES, type Family, REQUEST_HEADERS, TILES, tileUrl } from "./matrix";
+import { type Candidate, CANDIDATES, type Family, protocol, REQUEST_HEADERS, TILES, tileUrl } from "./matrix";
+import { prepareFloor } from "./floor";
 import { coldStart, type ColdStartResult } from "./measure";
 import { lonLatToTile, type TileCoord } from "./tiles";
 
@@ -257,6 +258,9 @@ ${dirCache}  paths:
   );
   writeFile(join(cmp, "tileserver-gl.catalog.yml"), `services:\n  engine:\n    volumes:\n      - ../../configs/catalog/archive/tileserver-gl:/config:ro\n${catalogMount("mbtiles-all", "/tiles")}`);
 
+  // The floor control has no sources to load: the same files and config as the main run (docs/adr/0007).
+  writeFile(join(cmp, "floor.catalog.yml"), `services:\n  engine:\n    labels:\n      wf.catalog: "nothing extra to load"\n`);
+
   // BBOX and VersaTiles: one entry per archive.
   for (const fmt of ["pmtiles", "mbtiles"] as const) {
     const sets = [`[[tileset]]\nname = "berlin"\n[tileset.${fmt}]\npath = "/tiles/berlin.${fmt}"\n`, ...CATALOG_NAMES.map((n) => `[[tileset]]\nname = "${n}"\n[tileset.${fmt}]\npath = "/catalog/${n}.${fmt}"\n`)];
@@ -286,6 +290,8 @@ function archiveCatalogPath(c: Candidate, tile: TileCoord): string {
       return `/services/${LAST}/tiles/${t.z}/${t.x}/${t.y}.pbf`;
     case "tileserver-gl":
       return `/data/${LAST}/${t.z}/${t.x}/${t.y}.pbf`;
+    case "floor":
+      return `/tiles/${LAST}/${t.z}/${t.x}/${t.y}`;
     default:
       throw new Error(`no catalog path for ${c.id}`);
   }
@@ -305,8 +311,8 @@ if (import.meta.main) {
   const family = (flag("family") ?? "archive") as Family;
   const only = flag("candidates")?.split(",");
   const smoke = args.includes("--smoke");
-  const reps = smoke ? 1 : 3;
-  const timeoutMs = 600_000;
+  const reverse = args.includes("--reverse");
+  const { warmups, reps, timeoutMs } = protocol(family, smoke).catalog;
   const outputPath = flag("output") ?? join(ROOT, `results-${family}-catalog${smoke ? "-smoke" : ""}.json`);
 
   mkdirSync(WORK_DIR, { recursive: true });
@@ -318,21 +324,24 @@ if (import.meta.main) {
   } else {
     prepareArchiveFiles();
     writeArchiveCatalogConfigs();
+    if (!only || only.includes("floor")) prepareFloor();
   }
   clientUp(family === "archive" ? 6 : 2);
 
-  const existing = args.includes("--resume") ? ((await Bun.file(outputPath).json().catch(() => undefined)) as { results: CatalogResult[] } | undefined) : undefined;
+  const existing = args.includes("--resume") ? ((await Bun.file(outputPath).json().catch(() => undefined)) as { results: CatalogResult[]; failures?: { id: string; error: string }[] } | undefined) : undefined;
   const results: CatalogResult[] = existing?.results ?? [];
-  const failures: { id: string; error: string }[] = [];
+  // A resumed run keeps earlier failures, except for the candidates it measures again.
+  const failures: { id: string; error: string }[] = (existing?.failures ?? []).filter((f) => !only || !only.includes(f.id));
   const marquee = TILES[family][0]!;
   const followTile = family === "postgis" ? marquee.tile : SMALL_TILE;
-  for (const c of CANDIDATES.filter((x) => x.family === family && (!only || only.includes(x.id)))) {
+  const inFamily = CANDIDATES.filter((x) => x.family === family && (!only || only.includes(x.id)));
+  for (const c of reverse ? [...inFamily].reverse() : inFamily) {
     if (results.some((r) => r.id === c.id)) continue;
     console.log(`\n> ${c.id} with ${CATALOG_SIZE} extra sources`);
     stopAllEngines();
     try {
       const follow = `http://engine:${c.port}${family === "postgis" ? postgisCatalogPath(c, followTile) : archiveCatalogPath(c, followTile)}`;
-      const cs = await coldStart(c, tileUrl(c, marquee.layer, marquee.tile), { ...REQUEST_HEADERS[family] }, reps, timeoutMs, { variant: "catalog", then: [follow] });
+      const cs = await coldStart(c, tileUrl(c, marquee.layer, marquee.tile), { ...REQUEST_HEADERS[family] }, reps, timeoutMs, { variant: "catalog", then: [follow], warmups });
       results.push({ id: c.id, imageDigest: await imageDigest(c.image), coldStart: cs });
     } catch (error) {
       const message = error instanceof Error ? error.message : String(error);
@@ -340,7 +349,7 @@ if (import.meta.main) {
       failures.push({ id: c.id, error: message });
     } finally {
       engineDown(c, "catalog");
-      await Bun.write(outputPath, JSON.stringify({ family, generatedAt: new Date().toISOString(), smoke, catalogSize: CATALOG_SIZE, followTile, results, failures }, null, 2) + "\n");
+      await Bun.write(outputPath, JSON.stringify({ family, generatedAt: new Date().toISOString(), smoke, order: reverse ? "reverse" : "forward", catalogSize: CATALOG_SIZE, followTile, results, failures }, null, 2) + "\n");
     }
   }
   console.log(`\nDone: ${results.length} measured, ${failures.length} failed.`);

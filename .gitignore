@@ -3,6 +3,7 @@ results*.json
 !runs/*.json
 data/cache/
 images/martin-2.0.0/target_releases/
+images/martin-2.0.0-beta.3/target_releases/
 images/oha/oha
 *.log
 .DS_Store

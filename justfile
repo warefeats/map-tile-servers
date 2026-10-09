@@ -23,6 +23,10 @@ smoke FAMILY *ARGS:
 catalog FAMILY *ARGS:
     bun run src/catalog.ts --family={{FAMILY}} {{ARGS}}
 
+# A measured run: both families and catalogs, each candidate behind a quiet-host gate, twice (docs/adr/0005).
+gated RUN:
+    bash scripts/run-gated.sh {{RUN}}
+
 # docs/adr/0001 applied to whatever results exist.
 verdict *ARGS:
     bun run src/analysis.ts {{ARGS}}
@@ -37,10 +41,10 @@ preview:
 unpreview:
     bun run src/preview.ts --remove
 
-# Build or tag every image a run needs. Martin 2.0.0 is built from source (docs/adr/0003); see images/.
+# Build or tag every image a run needs. Martin 2.0 is built from source first (docs/adr/0006, scripts/build-martin.sh).
 images:
     docker build -q -t wf-client:1 images/client
-    docker build -q --platform linux/arm64 -t wf-martin:2.0.0-055d4ea images/martin-2.0.0
+    docker build -q --platform linux/arm64 -t wf-martin:2.0.0-beta.3-81a4e44 images/martin-2.0.0-beta.3
     docker build -q -f images/Dockerfile.bbox -t wf-bbox:0.6.2 images
     docker build -q -f images/Dockerfile.mbtileserver -t wf-mbtileserver:0.11.0 images
     docker pull ghcr.io/maplibre/martin:1.16.1

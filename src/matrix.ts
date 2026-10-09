@@ -26,19 +26,24 @@ export interface Candidate {
   port: number;
   /** Tile path for `layer` at z/x/y (archive servers ignore the layer: one tileset, every layer). */
   tilePath: (layer: string, tile: TileCoord) => string;
+  /** A reference measurement, not a server (docs/adr/0007): measured like a candidate, never ranked or shown as one. */
+  control?: boolean;
 }
 
-export const MARTIN_2 = { version: "2.0.0", image: process.env.WF_MARTIN_2_IMAGE ?? "wf-martin:2.0.0-055d4ea" } as const;
+export const MARTIN_2 = { version: "2.0.0-beta.3", image: process.env.WF_MARTIN_2_IMAGE ?? "wf-martin:2.0.0-beta.3-81a4e44" } as const;
 export const MARTIN_2_PROVENANCE =
-  "maplibre/martin release PR #3343 at 055d4eaa (not yet released): the release PR's own CI build of aarch64-unknown-linux-gnu, packaged with Martin's .github/files/multi-platform.Dockerfile";
+  "maplibre/martin release PR #3525 at 81a4e444 (2.0.0-beta.3, not yet released), built with Martin's release recipe on rustc 1.99.0 and packaged with that commit's .github/files/multi-platform.Dockerfile (docs/adr/0006)";
 export const MARTIN_1 = { version: "1.16.1", image: "ghcr.io/maplibre/martin:1.16.1" } as const;
+
+/** nginx 1.30.4, `nginx:stable` of 2026-08-25, pinned by digest: the archive family's floor control (docs/adr/0007). */
+export const FLOOR_IMAGE = "nginx@sha256:09cc2702709e6388d979d8030e3ab4eb1ceb699b2dced26d7543e872a822e823";
 
 const martinPath = (layer: string, t: TileCoord) => `/${layer}/${t.z}/${t.x}/${t.y}`;
 const archiveTileset = "berlin";
 
 export const CANDIDATES: readonly Candidate[] = [
   // PostGIS family. Martin 2.0.0 first and 1.16.1 second, so the version pair runs back to back.
-  { id: "martin-2", family: "postgis", server: "martin", name: "Martin 2.0.0", ...MARTIN_2, provenance: MARTIN_2_PROVENANCE, homepage: "https://martin.maplibre.org", color: "#1D4ED8", port: 3000, tilePath: martinPath },
+  { id: "martin-2", family: "postgis", server: "martin", name: `Martin ${MARTIN_2.version}`, ...MARTIN_2, provenance: MARTIN_2_PROVENANCE, homepage: "https://martin.maplibre.org", color: "#1D4ED8", port: 3000, tilePath: martinPath },
   { id: "martin-1", family: "postgis", server: "martin", name: "Martin 1.16.1", ...MARTIN_1, homepage: "https://martin.maplibre.org", color: "#93C5FD", port: 3000, tilePath: martinPath },
   { id: "tegola", family: "postgis", server: "tegola", name: "Tegola", version: "0.21.2", image: "gospatial/tegola:v0.21.2", homepage: "https://tegola.io", color: "#16A34A", port: 8080, tilePath: (l, t) => `/maps/bench/${l}/${t.z}/${t.x}/${t.y}.pbf` },
   { id: "bbox", family: "postgis", server: "bbox", name: "BBOX", version: "0.6.2", image: "wf-bbox:0.6.2", provenance: "built from bbox-services/bbox@v0.6.2 (the published image is amd64-only)", homepage: "https://www.bbox.earth", color: "#9333EA", port: 8080, tilePath: (l, t) => `/xyz/${l}/${t.z}/${t.x}/${t.y}.mvt` },
@@ -48,10 +53,11 @@ export const CANDIDATES: readonly Candidate[] = [
   { id: "ldproxy", family: "postgis", server: "ldproxy", name: "ldproxy", version: "4.8.1", image: "iide/ldproxy:4.8.1", homepage: "https://www.ldproxy.net", color: "#DC2626", port: 7080, tilePath: (l, t) => `/bench/collections/${l}/tiles/WebMercatorQuad/${t.z}/${t.y}/${t.x}` },
   { id: "ldproxy-pgis", family: "postgis", server: "ldproxy", name: "ldproxy (PGIS_TILES)", version: "4.8.1", image: "iide/ldproxy:4.8.1", homepage: "https://www.ldproxy.net", color: "#A16207", port: 7080, tilePath: (l, t) => `/bench/collections/${l}/tiles/WebMercatorQuad/${t.z}/${t.y}/${t.x}` },
 
-  // Archive family.
-  { id: "martin-2-pmtiles", family: "archive", server: "martin", name: "Martin 2.0.0 (PMTiles)", ...MARTIN_2, provenance: MARTIN_2_PROVENANCE, homepage: "https://martin.maplibre.org", color: "#1D4ED8", archive: "pmtiles", port: 3000, tilePath: (_, t) => `/${archiveTileset}/${t.z}/${t.x}/${t.y}` },
+  // Archive family. The floor control comes first, so the reverse pass measures it last (docs/adr/0005, 0007).
+  { id: "floor", family: "archive", server: "floor", name: "Floor (nginx serving the tiles as files)", version: "1.30.4", image: FLOOR_IMAGE, provenance: "nginx:stable of 2026-08-25 (nginx 1.30.4) run directly, serving the archive's stored tile bytes as files from a Docker volume", homepage: "https://nginx.org", color: "#94A3B8", port: 8080, tilePath: (_, t) => `/tiles/${archiveTileset}/${t.z}/${t.x}/${t.y}`, control: true },
+  { id: "martin-2-pmtiles", family: "archive", server: "martin", name: `Martin ${MARTIN_2.version} (PMTiles)`, ...MARTIN_2, provenance: MARTIN_2_PROVENANCE, homepage: "https://martin.maplibre.org", color: "#1D4ED8", archive: "pmtiles", port: 3000, tilePath: (_, t) => `/${archiveTileset}/${t.z}/${t.x}/${t.y}` },
   { id: "martin-1-pmtiles", family: "archive", server: "martin", name: "Martin 1.16.1 (PMTiles)", ...MARTIN_1, homepage: "https://martin.maplibre.org", color: "#93C5FD", archive: "pmtiles", port: 3000, tilePath: (_, t) => `/${archiveTileset}/${t.z}/${t.x}/${t.y}` },
-  { id: "martin-2-mbtiles", family: "archive", server: "martin", name: "Martin 2.0.0 (MBTiles)", ...MARTIN_2, provenance: MARTIN_2_PROVENANCE, homepage: "https://martin.maplibre.org", color: "#3B82F6", archive: "mbtiles", port: 3000, tilePath: (_, t) => `/${archiveTileset}/${t.z}/${t.x}/${t.y}` },
+  { id: "martin-2-mbtiles", family: "archive", server: "martin", name: `Martin ${MARTIN_2.version} (MBTiles)`, ...MARTIN_2, provenance: MARTIN_2_PROVENANCE, homepage: "https://martin.maplibre.org", color: "#3B82F6", archive: "mbtiles", port: 3000, tilePath: (_, t) => `/${archiveTileset}/${t.z}/${t.x}/${t.y}` },
   { id: "martin-1-mbtiles", family: "archive", server: "martin", name: "Martin 1.16.1 (MBTiles)", ...MARTIN_1, homepage: "https://martin.maplibre.org", color: "#BFDBFE", archive: "mbtiles", port: 3000, tilePath: (_, t) => `/${archiveTileset}/${t.z}/${t.x}/${t.y}` },
   { id: "go-pmtiles", family: "archive", server: "go-pmtiles", name: "go-pmtiles", version: "1.31.2", image: "protomaps/go-pmtiles:v1.31.2", homepage: "https://docs.protomaps.com/deploy/server", color: "#16A34A", archive: "pmtiles", port: 8080, tilePath: (_, t) => `/${archiveTileset}/${t.z}/${t.x}/${t.y}.mvt` },
   { id: "versatiles-pmtiles", family: "archive", server: "versatiles", name: "VersaTiles (PMTiles)", version: "4.14.0", image: "versatiles/versatiles:v4.14.0", homepage: "https://versatiles.org", color: "#0D9488", archive: "pmtiles", port: 8080, tilePath: (_, t) => `/tiles/${archiveTileset}/${t.z}/${t.x}/${t.y}` },
@@ -70,6 +76,11 @@ export function candidate(id: string): Candidate {
 
 export function isMartin2(c: Candidate): boolean {
   return c.server === "martin" && c.version === MARTIN_2.version;
+}
+
+/** A rival is any ranked candidate that is not Martin (docs/adr/0008). */
+export function isRival(c: Candidate): boolean {
+  return c.server !== "martin" && !c.control;
 }
 
 /**
@@ -162,41 +173,45 @@ export function ladderConnections(family: Family, rate: number): number {
 }
 
 export interface Protocol {
-  coldStart: { reps: number; timeoutMs: number };
+  /** `warmups` starts run first and are not recorded (docs/adr/0005). */
+  coldStart: { warmups: number; reps: number; timeoutMs: number };
   single: { warmupPasses: number; passes: number; requestsPerPass: number };
   burst: { warmups: number; reps: number };
   concurrency: { levels: readonly number[]; warmupSeconds: number; passes: number; passSeconds: number };
   walk: { connections: number; warmupSeconds: number; passes: number; passSeconds: number };
   ladder: { warmupSeconds: number; stepSeconds: number };
   session: { users: readonly number[]; rounds: number };
-  catalog: { reps: number; timeoutMs: number };
+  catalog: { warmups: number; reps: number; timeoutMs: number };
   requestTimeoutSeconds: number;
 }
 
-/** The previously published protocol, unchanged, plus the new sections. PostGIS single-tile passes were 5 requests, archive 20. */
+/**
+ * The previously published protocol plus the new sections. PostGIS single-tile passes were 5 requests,
+ * archive 20. Cold starts: one unrecorded warm-up, then ten recorded (docs/adr/0005).
+ */
 export function protocol(family: Family, smoke: boolean): Protocol {
   if (smoke) {
     return {
-      coldStart: { reps: 1, timeoutMs: 300_000 },
+      coldStart: { warmups: 0, reps: 1, timeoutMs: 300_000 },
       single: { warmupPasses: 1, passes: 3, requestsPerPass: 3 },
       burst: { warmups: 1, reps: 3 },
       concurrency: { levels: [10], warmupSeconds: 2, passes: 2, passSeconds: 3 },
       walk: { connections: 10, warmupSeconds: 2, passes: 2, passSeconds: 3 },
       ladder: { warmupSeconds: 1, stepSeconds: 3 },
       session: { users: [1, 10], rounds: 1 },
-      catalog: { reps: 1, timeoutMs: 600_000 },
+      catalog: { warmups: 0, reps: 1, timeoutMs: 600_000 },
       requestTimeoutSeconds: 60,
     };
   }
   return {
-    coldStart: { reps: 5, timeoutMs: 300_000 },
+    coldStart: { warmups: 1, reps: 10, timeoutMs: 300_000 },
     single: { warmupPasses: 3, passes: 20, requestsPerPass: family === "postgis" ? 5 : 20 },
     burst: { warmups: 3, reps: 20 },
     concurrency: { levels: [10, 100], warmupSeconds: 10, passes: 8, passSeconds: 12 },
     walk: { connections: 10, warmupSeconds: 10, passes: 8, passSeconds: 12 },
     ladder: { warmupSeconds: 3, stepSeconds: 12 },
     session: { users: [1, 10], rounds: 3 },
-    catalog: { reps: 3, timeoutMs: 600_000 },
+    catalog: { warmups: 1, reps: 10, timeoutMs: 600_000 },
     requestTimeoutSeconds: 60,
   };
 }
