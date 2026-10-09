@@ -1,6 +1,6 @@
 import { writeFileSync } from "node:fs";
 import { join } from "node:path";
-import { clientExec, clientSpawn, DB_CONTAINER, engineContainer, engineDown, engineLogs, engineUp, inspect, parseDockerTimeUs, sample, WORK_DIR, type ContainerSample } from "./docker";
+import { assertEngineImage, clientExec, clientSpawn, DB_CONTAINER, engineContainer, engineDown, engineLogs, engineUp, inspect, parseDockerTimeUs, sample, WORK_DIR, type ContainerSample } from "./docker";
 import { BROWSER_ACCEPT_ENCODING, type Candidate, engineOrigin, LADDER, ladderConnections, type Protocol, REQUEST_HEADERS, type TileSpec, tileUrl, VIEWPORT, walkPaths } from "./matrix";
 import { type OhaPass, oha, OHA_DEADLINE_ABORT } from "./oha";
 import { mean, percentile, round } from "./stats";
@@ -107,7 +107,9 @@ export async function coldStart(c: Candidate, url: string, headers: Record<strin
       console.error(engineLogs(c, variant));
       throw new Error(`no 200 from ${url} within ${timeoutMs} ms (${parsed.attempts} attempts, last: ${parsed.lastError})`);
     }
-    const startedUs = parseDockerTimeUs((await inspect(engineContainer(c, variant))).State.StartedAt);
+    const engine = await inspect(engineContainer(c, variant));
+    await assertEngineImage(c, engine);
+    const startedUs = parseDockerTimeUs(engine.State.StartedAt);
     const ms = round((parsed.firstOkUs - startedUs) / 1000, 2);
     const follow = parsed.followUps.map((f) => ({ url: f.url, status: f.status, msAfterStart: round((f.atUs - startedUs) / 1000, 2) }));
     const followText = follow.length ? `; follow-ups ${follow.map((f) => `${f.status}@${f.msAfterStart}ms`).join(", ")}` : "";

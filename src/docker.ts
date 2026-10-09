@@ -1,7 +1,7 @@
 import { existsSync } from "node:fs";
 import { homedir } from "node:os";
 import { join } from "node:path";
-import type { Candidate } from "./matrix";
+import { type Candidate, MARTIN_2 } from "./matrix";
 
 const ROOT = join(import.meta.dirname!, "..");
 const COMPOSE_DIR = join(ROOT, "compose");
@@ -65,6 +65,12 @@ export async function inspect(container: string): Promise<InspectJson> {
   return api<InspectJson>(`/containers/${container}/json`);
 }
 
+/** Throws unless the engine container runs `image`: a compose default once swapped in another build unnoticed. */
+export async function assertEngineImage(c: Candidate, container: { Image: string; Config: { Image: string } }): Promise<void> {
+  const want = await api<{ Id: string }>(`/images/${encodeURIComponent(c.image)}/json`);
+  if (container.Image !== want.Id) throw new Error(`${c.id} ran ${container.Config.Image} (${container.Image}), not ${c.image} (${want.Id})`);
+}
+
 export async function imageDigest(image: string): Promise<string> {
   const img = await api<{ Id: string; RepoDigests?: string[] }>(`/images/${encodeURIComponent(image)}/json`);
   return img.RepoDigests?.[0] ?? img.Id;
@@ -81,8 +87,9 @@ export function parseDockerTimeUs(raw: string): number {
 
 export function run(args: string[], opts: { timeoutMs?: number; quiet?: boolean; input?: string } = {}): { exitCode: number; stdout: string; stderr: string } {
   const result = Bun.spawnSync(args, {
-    // runtime changes to process.env (WF_MARTIN_2_IMAGE) reach a child only when passed explicitly
-    env: process.env,
+    // runtime changes to process.env (WF_MARTIN_2_IMAGE) reach a child only when passed explicitly; without
+    // the variable, compose would have no Martin 2.0 image, so it always carries the one the matrix measures
+    env: { ...process.env, WF_MARTIN_2_IMAGE: process.env.WF_MARTIN_2_IMAGE ?? MARTIN_2.image },
     stdout: "pipe",
     stderr: "pipe",
     stdin: opts.input !== undefined ? new TextEncoder().encode(opts.input) : "ignore",
