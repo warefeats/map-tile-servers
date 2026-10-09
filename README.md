@@ -2,7 +2,7 @@
 
 The runner behind a warefeats page (slug `martin-2-tile-servers`, unpublished) that measures [Martin](https://martin.maplibre.org) 2.0, not yet released (the head of its release PR, 2.0.0-beta.3), against its most recent stable release (1.16.1) and against the most recent stable release of every server it competes with, in both of the jobs Martin does: cutting vector tiles from PostGIS on every request, and handing tiles out of a pre-built MBTiles or PMTiles archive. It repeats everything the two September tile-server pages measured ([postgis-vector-tile-servers](https://warefeats.com/benchmarks/postgis-vector-tile-servers/), [pmtiles-mbtiles-tile-servers](https://warefeats.com/benchmarks/pmtiles-mbtiles-tile-servers/)) and adds four dimensions they did not: CPU paid per tile, capacity within a latency SLO under open-loop load, a simulated busy map, and startup with a thousand sources configured.
 
-Part of the [warefeats](https://warefeats.com) benchmark suite. Decisions are recorded in `docs/adr/`: the verdict rule was fixed before the first measured pass (0001), the load generator sits on the engine's Docker network because the host path has a ceiling of its own (0002), Martin 2.0 is a local build with the release recipe because the release PR's CI artifacts are debug builds (0003), a dedicated cloud host was proposed and not adopted (0004), cold starts get a warm-up and ten repetitions and every run has a second pass in reverse order (0005), the measured build is the release PR's head (0006), archive times are ranked above the harness floor (0007), and each category ends as won, tied or lost, with database-bound ties and archive memory allowed when the page is published (0008).
+Part of the [warefeats](https://warefeats.com) benchmark suite. Decisions are recorded in `docs/adr/`: the verdict rule was fixed before the first measured pass (0001), the load generator sits on the engine's Docker network because the host path has a ceiling of its own (0002), Martin 2.0 is a local build with the release recipe because the release PR's CI artifacts are debug builds (0003), a dedicated cloud host was proposed and not adopted (0004), cold starts get a warm-up and ten repetitions and every run has a second pass in reverse order (0005), the measured build is the release PR's head (0006), archive times are ranked above the harness floor (0007), and each category ends as won, tied or lost, with database-bound ties and archive memory allowed when the page is published (0008), and the four PostGIS categories that sit at the database's own cap are shown as context rather than ranked (0009).
 
 ## Candidates
 
@@ -67,7 +67,7 @@ bun install
 orb -m martin-linux bash scripts/build-martin.sh <commit> 1.99.0 images/martin-2.0.0-beta.3   # Martin 2.0 from source (ADR 0006)
 just images           # build/tag the images the runner never pulls during a run
 just gated rc81a4e44  # a measured run: both families and catalogs, twice, each candidate behind a quiet-host gate
-just verdict --run=rc81a4e44   # docs/adr/0001 as amended by 0005, 0007 and 0008, pooled over both passes
+just verdict --run=rc81a4e44   # docs/adr/0001 as amended by 0005, 0007, 0008 and 0009, pooled over both passes
 just bench archive    # one pass of the archive protocol → results-archive.json (diagnostics; --reverse for mirror order)
 just catalog archive  # one pass of the 1,000-source cold starts → results-archive-catalog.json
 just import           # runs/<date>-m2-max.json + benchmark.json (story words from story.json)

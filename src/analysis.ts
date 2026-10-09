@@ -163,6 +163,8 @@ export interface CategoryVerdict {
   databaseBound: boolean;
   /** Archive memory: reported, never decides publication (docs/adr/0008). */
   reportedOnly: boolean;
+  /** A PostGIS category the database decides: shown as context, never ranked, counted or blocking (docs/adr/0009). */
+  context: boolean;
   /** Whether this category stops the page from being published, and why. */
   blocks: boolean;
   why: string;
@@ -181,6 +183,9 @@ export function databaseShare(passes: Pass[]): number | null {
 }
 
 const DATABASE_BOUND = 0.9;
+
+/** PostGIS categories at the database's cap, where the leading servers sit inside its noise (docs/adr/0009). */
+const POSTGIS_CONTEXT = new Set(["burst", "c10", "c100", "capacity"]);
 
 export function verdictFor(family: Family, def: CategoryDef, passes: Pass[]): CategoryVerdict {
   const cands = CANDIDATES.filter((c) => c.family === family);
@@ -221,6 +226,7 @@ export function verdictFor(family: Family, def: CategoryDef, passes: Pass[]): Ca
   const share = family === "postgis" ? databaseShare(passes) : null;
   const databaseBound = family === "postgis" && !!def.serving && share !== null && share >= DATABASE_BOUND;
   const reportedOnly = family === "archive" && def.id === "memory";
+  const context = family === "postgis" && POSTGIS_CONTEXT.has(def.id);
 
   let margin: number | null = null;
   let outcome: Outcome | null = null;
@@ -264,7 +270,11 @@ export function verdictFor(family: Family, def: CategoryDef, passes: Pass[]): Ca
 
   const slower = versus1.some((v) => v.call === "slower");
   const outcomeBlocks = outcome !== "won" && !(outcome === "tie" && databaseBound) && !reportedOnly;
-  const blocks = slower || outcomeBlocks;
+  const blocks = !context && (slower || outcomeBlocks);
+  if (context) {
+    why = `context, not ranked (docs/adr/0009): ${why}`;
+    outcome = null;
+  }
   return {
     id: def.id,
     title: def.title,
@@ -282,6 +292,7 @@ export function verdictFor(family: Family, def: CategoryDef, passes: Pass[]): Ca
     handily: outcome === "won",
     databaseBound,
     reportedOnly,
+    context,
     blocks,
     why,
     versus1,
@@ -312,8 +323,8 @@ export function report(family: Family, vs: CategoryVerdict[], passes: Pass[]): s
     lines.push(`database share of Martin 2.0's CPU per tile in the walk: ${share === null ? "n/a" : `${(share * 100).toFixed(1)}%`} (database-bound at 90% or more)`);
   }
   for (const v of vs) {
-    const tag = v.outcome === "won" ? "WON " : v.outcome === "lost" ? "LOST" : v.outcome === "tie" ? "TIE " : "----";
-    const gate = v.blocks ? "blocks" : v.reportedOnly ? "reported" : v.databaseBound && v.outcome === "tie" ? "db-bound tie" : "ok";
+    const tag = v.context ? "CTX " : v.outcome === "won" ? "WON " : v.outcome === "lost" ? "LOST" : v.outcome === "tie" ? "TIE " : "----";
+    const gate = v.blocks ? "blocks" : v.context ? "context" : v.reportedOnly ? "reported" : v.databaseBound && v.outcome === "tie" ? "db-bound tie" : "ok";
     const m2 = v.martin2 ? `${name(v.martin2.candidateId)} ${fmt(v.martin2.mean, v.unit)} [${fmt(v.martin2.lo, "").trim()}-${fmt(v.martin2.hi, "").trim()}]` : "Martin 2.0 n/a";
     const rival = v.bestCompetitor ? `${name(v.bestCompetitor.candidateId)} ${fmt(v.bestCompetitor.mean, v.unit)} [${fmt(v.bestCompetitor.lo, "").trim()}-${fmt(v.bestCompetitor.hi, "").trim()}]` : "no rival";
     const floor = v.floor ? `; floor ${fmt(v.floor.mean, v.unit)}` : "";
@@ -350,7 +361,8 @@ if (import.meta.main) {
     console.log(`\n${report(family, vs, passes)}  (${passes.length} pass${passes.length > 1 ? "es" : ""})`);
   }
   const flat = Object.values(all).flat();
-  const count = (o: Outcome) => flat.filter((v) => v.outcome === o).length;
-  console.log(`\n${count("won")} won, ${count("tie")} tied, ${count("lost")} lost of ${flat.length}; ${flat.filter((v) => v.blocks).length} block publication: ${publishable && flat.length ? "PUBLISHABLE under docs/adr/0008" : "not publishable under docs/adr/0008"}`);
+  const ranked = flat.filter((v) => !v.context);
+  const count = (o: Outcome) => ranked.filter((v) => v.outcome === o).length;
+  console.log(`\n${count("won")} won, ${count("tie")} tied, ${count("lost")} lost of ${ranked.length} (${flat.length - ranked.length} PostGIS categories shown as context, docs/adr/0009); ${flat.filter((v) => v.blocks).length} block publication: ${publishable && flat.length ? "PUBLISHABLE under docs/adr/0008-0009" : "not publishable under docs/adr/0008-0009"}`);
   if (runName) await Bun.write(`${root}verdict-${runName}.json`, JSON.stringify({ generatedAt: new Date().toISOString(), run: runName, publishable: publishable && flat.length > 0, verdicts: all }, null, 2) + "\n");
 }

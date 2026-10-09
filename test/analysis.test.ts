@@ -118,21 +118,19 @@ describe("the harness floor (docs/adr/0007)", () => {
 });
 
 describe("database-bound ties (docs/adr/0008)", () => {
+  // The random walk: a database-bound serving category that ADR 0009 keeps ranked.
   const pg = (share: number) =>
-    pass(
-      result("martin-2", { ...c10(around(470, 0.03)), ...walk([400], [1], { engineUs: 1000 * (1 - share), dbUs: 1000 * share }) }),
-      result("pg-tileserv", c10(around(480, 0.03))),
-    );
+    pass(result("martin-2", walk(around(470, 0.03), [1], { engineUs: 1000 * (1 - share), dbUs: 1000 * share })), result("pg-tileserv", walk(around(480, 0.03))));
 
   test("a PostGIS serving category within 10% is a tie that does not block when the database does 90% of the work", () => {
-    const v = verdictFor("postgis", def("c10"), pg(0.975));
+    const v = verdictFor("postgis", def("walk"), pg(0.975));
     expect(v.databaseBound).toBe(true);
     expect(v.outcome).toBe("tie");
     expect(v.blocks).toBe(false);
   });
 
   test("below 90% the same tie blocks", () => {
-    const v = verdictFor("postgis", def("c10"), pg(0.8));
+    const v = verdictFor("postgis", def("walk"), pg(0.8));
     expect(v.databaseBound).toBe(false);
     expect(v.blocks).toBe(true);
   });
@@ -141,6 +139,29 @@ describe("database-bound ties (docs/adr/0008)", () => {
     expect(def("coldStart").serving).toBeFalsy();
     expect(def("catalog").serving).toBeFalsy();
     expect(def("memory").serving).toBeFalsy();
+  });
+});
+
+describe("PostGIS categories the database decides (docs/adr/0009)", () => {
+  const behind = pass(result("martin-2", { ...c10(around(450, 0.01)), ...walk([400], [1], { engineUs: 25, dbUs: 975 }) }), result("bbox", c10(around(520, 0.01))));
+
+  test("PostGIS 10 clients is context: no outcome, never blocks, even with a rival clearly ahead", () => {
+    const v = verdictFor("postgis", def("c10"), behind);
+    expect(v.context).toBe(true);
+    expect(v.outcome).toBeNull();
+    expect(v.blocks).toBe(false);
+    expect(v.bestCompetitor?.candidateId).toBe("bbox");
+  });
+
+  test("the archive family keeps 10 clients ranked", () => {
+    const v = verdictFor("archive", def("c10"), pass(result("martin-2-pmtiles", c10(around(450, 0.01))), result("versatiles-pmtiles", c10(around(520, 0.01)))));
+    expect(v.context).toBe(false);
+    expect(v.outcome).toBe("lost");
+    expect(v.blocks).toBe(true);
+  });
+
+  test("PostGIS walk stays ranked", () => {
+    expect(verdictFor("postgis", def("walk"), behind).context).toBe(false);
   });
 });
 
