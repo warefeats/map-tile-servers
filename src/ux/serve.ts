@@ -6,6 +6,8 @@ const PAGE_DIR = join(ROOT, "ux", "page");
 const STYLE_DIR = join(ROOT, "ux", "style");
 const GLYPHS_DIR = join(ROOT, "data", "ux", "glyphs");
 const VENDOR_DIR = join(ROOT, "node_modules", "maplibre-gl", "dist");
+/** The current major, for checks against gl-js 6 (`/index6.html`); the runs themselves load 5.24.0. */
+const VENDOR6_DIR = join(ROOT, "node_modules", "maplibre-gl-6", "dist");
 
 const CONTENT_TYPES: Record<string, string> = {
   ".html": "text/html; charset=utf-8",
@@ -54,7 +56,9 @@ export function startPageServer(): PageServer {
     fetch(req) {
       const path = decodeURIComponent(new URL(req.url).pathname);
       if (path === "/" || path === "/index.html") return file(join(PAGE_DIR, "index.html"));
+      if (path === "/index6.html") return file(join(PAGE_DIR, "index6.html"));
       if (path === "/ux.js") return file(join(PAGE_DIR, "ux.js"));
+      if (path === "/vendor6/maplibre-gl.js" || path === "/vendor6/maplibre-gl.css") return file(join(VENDOR6_DIR, path.slice("/vendor6/".length)));
       if (path === "/vendor/maplibre-gl.js" || path === "/vendor/maplibre-gl.css") return file(join(VENDOR_DIR, path.slice("/vendor/".length)));
       const style = path.match(/^\/style\/([\w.-]+)\.json$/);
       if (style) {
