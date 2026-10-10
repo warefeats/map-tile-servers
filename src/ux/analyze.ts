@@ -43,6 +43,8 @@ export interface PhaseMetrics {
   vc95: number | null;
   vc99: number | null;
   speedIndex: number | null;
+  /** Visual progress per frame: [ms from the anchor, 0..1]. */
+  series: [number, number][];
   /** The map's own idle: every tile in view loaded and drawn. */
   idle: number | null;
   /** For actions: from the user's input to the camera stopping. */
@@ -77,7 +79,7 @@ export interface VisitMetrics {
 
 function decodeThumbs(framesDir: string, count: number): Uint8Array[] {
   if (count === 0) return [];
-  const r = Bun.spawnSync(["ffmpeg", "-v", "error", "-start_number", "0", "-f", "image2", "-i", join(framesDir, "%05d.jpg"), "-vf", `scale=${THUMB.w}:${THUMB.h}:flags=area,format=gray`, "-f", "rawvideo", "pipe:1"], { stdout: "pipe", stderr: "pipe" });
+  const r = Bun.spawnSync(["ffmpeg", "-v", "error", "-threads", "1", "-start_number", "0", "-f", "image2", "-i", join(framesDir, "%05d.jpg"), "-vf", `scale=${THUMB.w}:${THUMB.h}:flags=area,format=gray`, "-f", "rawvideo", "pipe:1"], { stdout: "pipe", stderr: "pipe" });
   if (r.exitCode !== 0) throw new Error(`ffmpeg decode failed in ${framesDir}: ${r.stderr.toString().slice(-300)}`);
   const size = THUMB.w * THUMB.h;
   const out: Uint8Array[] = [];
@@ -102,7 +104,7 @@ function visual(frames: { t: number; thumb: Uint8Array }[], anchor: number, end:
   const inside = frames.filter((f) => f.t > anchor && f.t < end);
   const start = from ? { t: anchor, thumb: from } : (before.at(-1) ?? inside[0]);
   const final = inside.at(-1) ?? start;
-  if (!start || !final) return { firstChange: null, vc50: null, vc85: null, vc95: null, vc99: null, speedIndex: null };
+  if (!start || !final) return { firstChange: null, vc50: null, vc85: null, vc95: null, vc99: null, speedIndex: null, series: [] as [number, number][] };
   const d0 = meanAbsDiff(start.thumb, final.thumb);
   const series = [{ t: anchor, p: d0 < 0.5 ? 1 : 0 }, ...inside.map((f) => ({ t: f.t, p: d0 < 0.5 ? 1 : Math.max(0, 1 - meanAbsDiff(f.thumb, final.thumb) / d0) }))];
   const settled = (threshold: number): number | null => {
@@ -114,7 +116,9 @@ function visual(frames: { t: number; thumb: Uint8Array }[], anchor: number, end:
   const firstChange = series.find((s) => s.p > 0.02);
   let speedIndex = 0;
   for (let i = 0; i < series.length - 1; i++) speedIndex += (1 - series[i]!.p) * (series[i + 1]!.t - series[i]!.t);
-  return { firstChange: firstChange ? firstChange.t - anchor : null, vc50: settled(0.5), vc85: settled(0.85), vc95: settled(0.95), vc99: settled(0.99), speedIndex };
+  // The progress curve, kept so thresholds can be recomputed after the frames are deleted.
+  const curve = series.map((s) => [Math.round(s.t - anchor), Math.round(s.p * 1000) / 1000] as [number, number]);
+  return { firstChange: firstChange ? firstChange.t - anchor : null, vc50: settled(0.5), vc85: settled(0.85), vc95: settled(0.95), vc99: settled(0.99), speedIndex, series: curve };
 }
 
 function median(xs: number[]): number | null {
@@ -138,7 +142,7 @@ function encodeVideo(v: Visit, dir: string): string {
   lines.push(`file '${frames.at(-1)!.file}'`);
   const list = join(dir, "frames.ffconcat");
   writeFileSync(list, lines.join("\n") + "\n");
-  const r = Bun.spawnSync(["ffmpeg", "-v", "error", "-y", "-f", "concat", "-safe", "0", "-i", list, "-vf", "fps=30,format=yuv420p", "-c:v", "libx264", "-preset", "veryfast", "-crf", "30", "-movflags", "+faststart", out], { stderr: "pipe" });
+  const r = Bun.spawnSync(["ffmpeg", "-v", "error", "-threads", "1", "-y", "-f", "concat", "-safe", "0", "-i", list, "-vf", "fps=30,format=yuv420p", "-c:v", "libx264", "-x264-params", "threads=1", "-preset", "veryfast", "-crf", "30", "-movflags", "+faststart", out], { stderr: "pipe" });
   if (r.exitCode !== 0) throw new Error(`ffmpeg encode failed in ${dir}: ${r.stderr.toString().slice(-300)}`);
   rmSync(list);
   return out;
