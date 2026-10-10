@@ -57,11 +57,21 @@ for (let i = 1; i <= tries; i++) {
     console.log(`try ${i}: idle`);
   } else {
     hung++;
-    // Every tile the map still waits on, from whichever tile cache this version keeps.
+    // What the map reports through its public API, then every tile it still waits on, from whichever internal tile cache this version keeps.
     const stuck = await session.page.evaluate(() => {
-      const map = (window as unknown as { ux: { map: { style: Record<string, unknown> } } }).ux.map;
-      const managers = (map.style["tileManagers"] ?? map.style["sourceCaches"]) as Record<string, { _tiles: Record<string, { state: string; tileID: { canonical: { z: number; x: number; y: number } } }>; loaded(): boolean }>;
-      return Object.entries(managers).map(([id, m]) => ({ id, loaded: m.loaded(), pending: Object.values(m._tiles).filter((t) => t.state !== "loaded" && t.state !== "errored").map((t) => `${t.tileID.canonical.z}/${t.tileID.canonical.x}/${t.tileID.canonical.y}:${t.state}`) }));
+      type Tile = { state: string; tileID: { canonical: { z: number; x: number; y: number } } };
+      const map = (window as unknown as { ux: { map: { loaded(): boolean; areTilesLoaded(): boolean; isStyleLoaded(): boolean; isSourceLoaded(id: string): boolean; style: Record<string, unknown> & { stylesheet?: { sources: Record<string, unknown> } } } } }).ux.map;
+      const sources = Object.keys(map.style.stylesheet?.sources ?? {});
+      const managers: { key: string; id: string; pending: string[] }[] = [];
+      for (const [key, value] of Object.entries(map.style)) {
+        if (!value || typeof value !== "object") continue;
+        for (const [id, m] of Object.entries(value as Record<string, unknown>)) {
+          const tiles = (m as { _tiles?: Record<string, Tile> } | null)?._tiles;
+          if (!tiles || typeof tiles !== "object") continue;
+          managers.push({ key, id, pending: Object.values(tiles).filter((t) => t.state !== "loaded" && t.state !== "errored").map((t) => `${t.tileID.canonical.z}/${t.tileID.canonical.x}/${t.tileID.canonical.y}:${t.state}`) });
+        }
+      }
+      return { loaded: map.loaded(), tilesLoaded: map.areTilesLoaded(), styleLoaded: map.isStyleLoaded(), sources: Object.fromEntries(sources.map((id) => [id, map.isSourceLoaded(id)])), managers };
     });
     console.log(`try ${i}: NO IDLE in 20 s`, JSON.stringify(stuck));
   }

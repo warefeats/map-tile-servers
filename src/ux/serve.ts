@@ -12,6 +12,7 @@ const VENDOR6_DIR = join(ROOT, "node_modules", "maplibre-gl-6", "dist");
 const CONTENT_TYPES: Record<string, string> = {
   ".html": "text/html; charset=utf-8",
   ".js": "text/javascript; charset=utf-8",
+  ".mjs": "text/javascript; charset=utf-8",
   ".css": "text/css; charset=utf-8",
   ".json": "application/json; charset=utf-8",
   ".png": "image/png",
@@ -58,7 +59,8 @@ export function startPageServer(): PageServer {
       if (path === "/" || path === "/index.html") return file(join(PAGE_DIR, "index.html"));
       if (path === "/index6.html") return file(join(PAGE_DIR, "index6.html"));
       if (path === "/ux.js") return file(join(PAGE_DIR, "ux.js"));
-      if (path === "/vendor6/maplibre-gl.js" || path === "/vendor6/maplibre-gl.css") return file(join(VENDOR6_DIR, path.slice("/vendor6/".length)));
+      // gl-js 6 is ES modules only: the main module loads its worker and shared chunk from beside itself.
+      if (path.startsWith("/vendor6/")) return file(safeJoin(VENDOR6_DIR, path.slice("/vendor6/".length)));
       if (path === "/vendor/maplibre-gl.js" || path === "/vendor/maplibre-gl.css") return file(join(VENDOR_DIR, path.slice("/vendor/".length)));
       const style = path.match(/^\/style\/([\w.-]+)\.json$/);
       if (style) {

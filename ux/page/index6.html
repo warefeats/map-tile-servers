@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>martin-2 ux</title>
+<title>martin-2 ux (gl-js 6)</title>
 <link rel="stylesheet" href="/vendor6/maplibre-gl.css">
 <style>
   html, body { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; background: #fff; }
@@ -11,7 +11,12 @@
 </head>
 <body>
 <div id="map"></div>
-<script src="/vendor6/maplibre-gl.js"></script>
-<script src="/ux.js"></script>
+<script type="module">
+  // gl-js 6 has only named exports; ux.js expects the global the 5.x bundle sets.
+  window.maplibregl = await import("/vendor6/maplibre-gl.mjs");
+  const harness = document.createElement("script");
+  harness.src = "/ux.js";
+  document.body.appendChild(harness);
+</script>
 </body>
 </html>
