@@ -5,7 +5,7 @@
  * visitor after a restart, the next visitor, and a returning one. Every frame, request and map
  * mark is kept; src/ux/analyze.ts turns them into videos and timings.
  *
- *   bun run src/ux/run.ts --family=archive --tag=ux1 [--rounds=3] [--candidates=a,b] [--scenarios=a,b] [--profiles=local,4g]
+ *   bun run src/ux/run.ts --family=archive --tag=ux1 [--rounds=3 | --round=2] [--candidates=a,b] [--scenarios=a,b] [--profiles=local,4g] [--martin-variant=ux-maxage]
  */
 import { mkdirSync, writeFileSync } from "node:fs";
 import { loadavg } from "node:os";
@@ -28,6 +28,8 @@ const args = Object.fromEntries(
 const family = (args.family ?? "archive") as Family;
 const tag = args.tag ?? new Date().toISOString().slice(0, 16).replace(/[:T]/g, "");
 const rounds = Number(args.rounds ?? 3);
+/** `--round=n` runs only round n, so several invocations can alternate configurations round by round. */
+const onlyRound = args.round ? Number(args.round) : null;
 const list = (v: string | undefined) => (v ? v.split(",").filter(Boolean) : null);
 
 /** Martin 2.0 and every rival of the family, plus the archive floor; Martin 1.16.1 is not part of these runs. */
@@ -40,8 +42,8 @@ const scenarios: Scenario[] = scenariosFor(family).filter((s) => !list(args.scen
 const profiles = PROFILES.filter((p) => !list(args.profiles) || list(args.profiles)!.includes(p.id));
 const OUT = join(WORK_DIR, "ux", tag, family);
 
-/** Martin 2.0 runs its defaults here (compose/*.ux.yml); everyone else runs the benchmark's config. */
-const variantOf = (c: Candidate) => (isMartin2(c) ? "ux" : "");
+/** Martin 2.0 runs its defaults here (compose/*.ux.yml, or `--martin-variant`); everyone else runs the benchmark's config. */
+const variantOf = (c: Candidate) => (isMartin2(c) ? (args["martin-variant"] ?? "ux") : "");
 
 /** A placeholder tile so a candidate's tile path becomes a URL template. */
 const TEMPLATE = { z: "{z}", x: "{x}", y: "{y}" } as unknown as TileCoord;
@@ -158,7 +160,7 @@ async function main(): Promise<void> {
     JSON.stringify({ tag, family, started: new Date().toISOString(), chromium: browser.version(), renderer, rounds, candidates: candidates.map((c) => ({ id: c.id, image: c.image, variant: variantOf(c) })), scenarios: scenarios.map((s) => s.id), profiles: profiles.map((p) => p.id) }, null, 1),
   );
 
-  for (let round = 1; round <= rounds; round++) {
+  for (let round = onlyRound ?? 1; round <= (onlyRound ?? rounds); round++) {
     const order = round % 2 === 1 ? candidates : [...candidates].reverse();
     for (const c of order) {
       for (const scenario of scenarios) {

@@ -1,0 +1,5 @@
+services:
+  engine:
+    volumes:
+      - ../../configs/ux/martin-pmtiles-swr:/config:ro
+      - ../../data/cache:/tiles:ro

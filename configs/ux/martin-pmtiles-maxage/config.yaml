@@ -1,0 +1,9 @@
+# Martin 2.0 with its default caches (configs/ux/martin-pmtiles) and one change under test:
+# every tile carries Cache-Control: public, max-age=86400
+listen_addresses: '0.0.0.0:3000'
+worker_processes: 4
+keep_alive: 75
+cache_control: 'public, max-age=86400'
+pmtiles:
+  sources:
+    berlin: /tiles/berlin.pmtiles

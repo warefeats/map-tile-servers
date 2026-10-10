@@ -1,0 +1,19 @@
+# Martin 2.0 with its default tile cache (configs/ux/martin) and one change under test:
+# every tile carries Cache-Control: public, max-age=86400
+listen_addresses: '0.0.0.0:3000'
+worker_processes: 4
+keep_alive: 75
+cache_control: 'public, max-age=86400'
+postgres:
+  connection_string: ${DATABASE_URL}
+  pool_size: 8
+  auto_bounds: skip
+  auto_publish:
+    from_schemas:
+      - bench
+    tables:
+      source_id_format: '{table}'
+      id_columns: fid
+      extent: 4096
+      buffer: 64
+      clip_geom: true
