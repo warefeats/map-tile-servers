@@ -18,7 +18,10 @@ const THUMB = { w: 160, h: 90 } as const;
 
 const WHITE = new Uint8Array(THUMB.w * THUMB.h).fill(255);
 
-/** A difference users notice: at least 100 ms and at least 10% slower, in every round. */
+/**
+ * A difference users notice, and not one rival winning by chance: Martin's best round is at least
+ * 100 ms and 10% slower than that rival's worst round.
+ */
 export const NOTICEABLE = { ms: 100, ratio: 0.1 } as const;
 
 interface Visit extends VisitRecord {
@@ -228,7 +231,8 @@ export interface Finding {
   rivalValue: number;
   slowerMs: number;
   slowerRatio: number;
-  everyRound: boolean;
+  /** Martin's best round minus the rival's worst round, milliseconds. */
+  separationMs: number;
   noticeable: boolean;
 }
 
@@ -288,18 +292,18 @@ function analyzeFamily(root: string, family: Family, keepFrames: boolean): void 
         if (r.waitVc95 === null || r.waitVc95 >= m.waitVc95) continue;
         const slowerMs = m.waitVc95 - r.waitVc95;
         const slowerRatio = slowerMs / Math.max(r.waitVc95, 1);
-        const everyRound = m.rounds.every((mr) => {
-          const rr = r.rounds.find((x) => x.round === mr.round);
-          return rr && mr.waitVc95 !== null && rr.waitVc95 !== null && mr.waitVc95 > rr.waitVc95;
-        });
-        findings.push({ family, scenario, profile, visit, martin: m.waitVc95, rival: r.candidate, rivalValue: r.waitVc95, slowerMs, slowerRatio, everyRound, noticeable: everyRound && slowerMs >= NOTICEABLE.ms && slowerRatio >= NOTICEABLE.ratio });
+        const best = Math.min(...m.rounds.map((x) => x.waitVc95!).filter((x) => x !== null));
+        const worst = Math.max(...r.rounds.map((x) => x.waitVc95!).filter((x) => x !== null));
+        const separationMs = best - worst;
+        findings.push({ family, scenario, profile, visit, martin: m.waitVc95, rival: r.candidate, rivalValue: r.waitVc95, slowerMs, slowerRatio, separationMs, noticeable: m.rounds.length >= 2 && r.rounds.length >= 2 && separationMs >= NOTICEABLE.ms && separationMs / Math.max(worst, 1) >= NOTICEABLE.ratio });
       }
     }
   }
   findings.sort((a, b) => b.slowerMs - a.slowerMs);
   writeFileSync(join(root, "findings.json"), JSON.stringify(findings, null, 1));
   const noticeable = findings.filter((f) => f.noticeable);
-  console.log(`${family}: Martin noticeably slower in ${noticeable.length} of ${groups.size} scenario/profile/visit cells`);
+  const cells = new Set(noticeable.map((f) => `${f.scenario} ${f.profile} ${f.visit}`));
+  console.log(`${family}: Martin noticeably slower in ${cells.size} of ${groups.size} scenario/profile/visit cells (${noticeable.length} Martin-rival pairs)`);
   for (const f of noticeable) console.log(`  ${f.scenario} ${f.profile} ${f.visit}: Martin ${Math.round(f.martin)} ms vs ${f.rival} ${Math.round(f.rivalValue)} ms (+${Math.round(f.slowerMs)} ms, +${Math.round(f.slowerRatio * 100)}%)`);
 }
 

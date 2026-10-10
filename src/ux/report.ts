@@ -56,7 +56,7 @@ for (const family of ["archive", "postgis"] as Family[]) {
   body += `<h2>${family === "archive" ? "Archive servers (OSM Bright over the Berlin OpenMapTiles archive)" : "PostGIS servers (four bench layers, cut per request)"}</h2>`;
   const noticeable = findings.filter((f) => f.noticeable);
   body += `<h3>Where Martin is noticeably slower</h3>`;
-  if (!noticeable.length) body += `<p>Nowhere: in no scenario, connection or visit is Martin 2.0 at least ${NOTICEABLE.ms} ms and ${NOTICEABLE.ratio * 100}% behind a rival in every round.</p>`;
+  if (!noticeable.length) body += `<p>Nowhere: in no scenario, connection or visit is Martin 2.0's best round at least ${NOTICEABLE.ms} ms and ${NOTICEABLE.ratio * 100}% behind a rival's worst round.</p>`;
   noticeable.forEach((f, i) => {
     const scen = SCENARIOS.find((s) => s.id === f.scenario && s.family === family)!;
     const martin = CANDIDATES.find((c) => c.family === family && isMartin2(c) && metrics.some((m) => m.candidate === c.id && m.scenario === f.scenario))!;
@@ -132,7 +132,7 @@ td.best { color: var(--best); font-weight: 700; }
 .muted { color: var(--muted); }
 </style></head><body>
 <h1>Martin UX runs: ${esc(tag)}</h1>
-<p class="muted">A real browser (headless Chromium on the M2 Max GPU) opens a MapLibre map on each server and does what a user does. "95% drawn" is when the screen stops changing by more than 5% against its final frame. A noticeable difference is at least ${NOTICEABLE.ms} ms and ${NOTICEABLE.ratio * 100}% in every round.</p>
+<p class="muted">A real browser (headless Chromium on the M2 Max GPU) opens a MapLibre map on each server and does what a user does. "95% drawn" is when the screen stops changing by more than 5% against its final frame. A noticeable difference is Martin's best round at least ${NOTICEABLE.ms} ms and ${NOTICEABLE.ratio * 100}% behind the rival's worst round.</p>
 <pre class="muted">${esc(JSON.stringify(meta, null, 1))}</pre>
 ${body}
 <script>
