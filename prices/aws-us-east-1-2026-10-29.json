@@ -1,0 +1,30 @@
+{
+  "date": "2026-10-29",
+  "region": "us-east-1",
+  "sources": {
+    "ec2PerHour": "https://b0.p.awsstatic.com/pricing/2.0/meteredUnitMaps/ec2/USD/current/ec2-ondemand-without-sec-sel/US%20East%20(N.%20Virginia)/Linux/index.json, published 2026-10-28T18:03:52Z (the EC2 On-Demand pricing page's own file)",
+    "gp3PerGbMonth": "https://b0.p.awsstatic.com/pricing/2.0/meteredUnitMaps/ec2/USD/current/ebs.json, published 2026-10-28T18:03:52Z",
+    "egressPerGb": "AWS Price List AWSDataTransfer us-east-1, version 20260916132208, SKU HQEH3ZWJVT46JHRG: first 10 TB a month to the internet; the 100 GB monthly free allowance is not applied. EC2 to CloudFront is $0 (SKU TZPJVS2GCV8M5FXM)",
+    "cloudfrontPerGb": "AWS Price List AmazonCloudFront, version 20261019150500 (effective 2026-10-01): United States, Mexico and Canada, first 10 TB; the 1 TB monthly free allowance is not applied",
+    "cloudfrontHttpsPerMillion": "AWS Price List AmazonCloudFront, version 20261019150500: HTTPS requests, $0.0100 per 10,000; the 10 million monthly free requests are not applied",
+    "lambdaPerGbSecond": "AWS Price List AWSLambda, version 20261022183959: first tier, arm64 and x86; the monthly free tier is not applied",
+    "lambdaPerMillionRequests": "AWS Price List AWSLambda, version 20261022183959",
+    "s3GetPerMillion": "AWS Price List AmazonS3, version 20261015173540: Standard GET, $0.0004 per 1,000. S3 to CloudFront is $0 (SKU QP7TRQVACWFWF76K)"
+  },
+  "ec2PerHour": {
+    "c8g.xlarge": 0.15952,
+    "c8i.xlarge": 0.18742,
+    "c7g.xlarge": 0.145,
+    "c7i.xlarge": 0.1785,
+    "c7gn.xlarge": 0.2496,
+    "c7gn.2xlarge": 0.4992,
+    "c8gn.xlarge": 0.237
+  },
+  "gp3PerGbMonth": 0.08,
+  "egressPerGb": 0.09,
+  "cloudfrontPerGb": 0.085,
+  "cloudfrontHttpsPerMillion": 1.0,
+  "lambdaPerGbSecond": { "arm64": 0.0000133334, "x86": 0.0000166667 },
+  "lambdaPerMillionRequests": 0.2,
+  "s3GetPerMillion": 0.4
+}

@@ -49,8 +49,8 @@ export class Martin2BenchStack extends cdk.Stack {
       "systemctl enable docker && systemctl start docker",
       // nothing but the benchmark runs on the host: no package updates in the middle of a measurement
       "systemctl disable --now unattended-upgrades.service apt-daily.timer apt-daily-upgrade.timer || true",
-      // Ubuntu 24.04 has no awscli package; install v2 from Amazon
-      'curl -fsSL "https://awscli.amazonaws.com/awscli-exe-linux-aarch64.zip" -o /tmp/awscliv2.zip',
+      // Ubuntu 24.04 has no awscli package; install v2 from Amazon, for this machine's architecture
+      'curl -fsSL "https://awscli.amazonaws.com/awscli-exe-linux-$(uname -m).zip" -o /tmp/awscliv2.zip',
       "unzip -q /tmp/awscliv2.zip -d /tmp",
       "/tmp/aws/install",
       "rm -rf /tmp/awscliv2.zip /tmp/aws",
@@ -78,6 +78,31 @@ export class Martin2BenchStack extends cdk.Stack {
       "LaunchTemplateData.InstanceInitiatedShutdownBehavior",
       "terminate",
     );
+
+    // The archive lane of docs/adr/0011: each server alone on a 4-vCPU instance of either architecture,
+    // the load generator on a network-optimized one, all in one cluster placement group, gp3 at its defaults.
+    const lane = new ec2.CfnPlacementGroup(this, "LanePlacement", { strategy: "cluster" });
+    const ubuntu = (arch: "arm64" | "amd64") =>
+      ec2.MachineImage.fromSsmParameter(`/aws/service/canonical/ubuntu/server/24.04/stable/current/${arch}/hvm/ebs-gp3/ami-id`);
+    const laneTemplate = (id: string, type: string, arch: "arm64" | "amd64", gb: number) => {
+      const t = new ec2.LaunchTemplate(this, id, {
+        instanceType: new ec2.InstanceType(type),
+        machineImage: ubuntu(arch),
+        role,
+        userData,
+        blockDevices: [{ deviceName: "/dev/sda1", volume: ec2.BlockDeviceVolume.ebs(gb, { volumeType: ec2.EbsDeviceVolumeType.GP3 }) }],
+        requireImdsv2: true,
+      });
+      const cfn = t.node.defaultChild as ec2.CfnLaunchTemplate;
+      cfn.addPropertyOverride("LaunchTemplateData.InstanceInitiatedShutdownBehavior", "terminate");
+      cfn.addPropertyOverride("LaunchTemplateData.Placement.GroupName", lane.ref);
+      new cdk.CfnOutput(this, `${id}Id`, { value: t.launchTemplateId! });
+    };
+    // a planet archive (MBTiles 103 GB, PMTiles 87 GB) and the system fit in 200 GB
+    laneTemplate("LaneServerArm", "c8g.xlarge", "arm64", 200);
+    laneTemplate("LaneServerX86", "c8i.xlarge", "amd64", 200);
+    laneTemplate("LaneClient", "c8gn.xlarge", "arm64", 30);
+    new cdk.CfnOutput(this, "LanePlacementGroup", { value: lane.ref });
 
     new cdk.CfnOutput(this, "LaunchTemplateId", { value: lt.launchTemplateId! });
     new cdk.CfnOutput(this, "RigBucketName", { value: bucket.bucketName });
