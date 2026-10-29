@@ -41,6 +41,12 @@ grep -rhoE '^\s+image: *[^ ]+' compose | awk '{ print $2 }' | sort -u | while re
   esac
 done
 grep -qxF "$(bun -e "import { FLOOR_IMAGE } from './src/matrix'; console.log(FLOOR_IMAGE)")" <<< "$pulls" || { echo "the floor image is not pulled" >&2; exit 1; }
+# pinned cores, never a CPU quota (docs/adr/0011): engines 0-3, the database 4-9
+! grep -rqE '^\s+cpus:' compose || { echo "a compose file sets a CPU quota: $(grep -rlE '^\s+cpus:' compose | tr '\n' ' ')" >&2; exit 1; }
+while read -r f; do
+  want='"0-3"'; [ "$(basename "$f")" = db.yml ] && want='"4-9"'
+  grep -qE "^\s+cpuset: $want\s*$" "$f" || { echo "$f does not pin cores $want" >&2; exit 1; }
+done < <(grep -rl 'deploy:' compose)
 echo "5. inputs"
 [ "$(awk '{ print $1 }' scripts/rig-inputs.txt | sort | tr '\n' ' ')" = "berlin.mbtiles berlin.pmtiles dbdata.tar.zst images.tar.zst " ] || { echo "scripts/rig-inputs.txt must name the four inputs remote.sh reads" >&2; exit 1; }
 images=${IMAGES:-.work/rig/c17/images.tar.zst}

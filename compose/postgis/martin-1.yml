@@ -6,10 +6,10 @@ services:
       DATABASE_URL: postgresql://tiles:tiles@db/bench
     volumes:
       - ../../configs/postgis/martin:/config:ro
+    cpuset: "0-3"
     deploy:
       resources:
         limits:
-          cpus: "4"
           memory: 4G
 
 networks:

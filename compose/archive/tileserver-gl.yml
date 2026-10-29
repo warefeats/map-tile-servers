@@ -1,14 +1,14 @@
 services:
   engine:
     image: maptiler/tileserver-gl-light:v5.7.0
-    command: ["--config", "/config/config.json", "--port", "8080"]
+    command: ["--config", "/config/config.json", "--silent"]
     volumes:
       - ../../configs/archive/tileserver-gl:/config:ro
       - ../../data/cache:/tiles:ro
+    cpuset: "0-3"
     deploy:
       resources:
         limits:
-          cpus: "4"
           memory: 4G
 
 networks:

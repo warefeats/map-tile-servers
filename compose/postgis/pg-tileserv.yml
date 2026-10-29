@@ -1,16 +1,19 @@
 services:
   engine:
     image: pramsey/pg_tileserv:20250131
+    # pg_tileserv logs every request at Info and has no switch for it; Docker discards its output instead
+    logging:
+      driver: none
     command: ["--config", "/config/pg_tileserv.toml"]
     environment:
       DATABASE_URL: postgresql://tiles:tiles@db/bench
       GOMAXPROCS: "4"
     volumes:
       - ../../configs/postgis/pg_tileserv:/config:ro
+    cpuset: "0-3"
     deploy:
       resources:
         limits:
-          cpus: "4"
           memory: 4G
 
 networks:

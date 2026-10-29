@@ -1,5 +1,5 @@
-# mbtileserver v0.11.0 from the project's release binary: the published Docker image is amd64-only
-# and would run under emulation on arm64. The release binary links glibc, hence Debian rather than Alpine.
+# mbtileserver v0.11.0 from the project's release binary on Debian. The binary links glibc, hence Debian.
+# Since 2024-10-03 the project's ghcr.io/consbio/mbtileserver:0.11.0 image also has an arm64 build, on Alpine.
 FROM debian:bookworm-slim AS fetch
 ARG MBTILESERVER_VERSION=v0.11.0
 ARG TARGETARCH

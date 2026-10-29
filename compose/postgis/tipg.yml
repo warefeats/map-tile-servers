@@ -3,10 +3,10 @@ services:
     image: ghcr.io/developmentseed/tipg:1.6.1
     env_file:
       - ../../configs/postgis/tipg/tipg.env
+    cpuset: "0-3"
     deploy:
       resources:
         limits:
-          cpus: "4"
           memory: 4G
 
 networks:

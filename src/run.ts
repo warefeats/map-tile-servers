@@ -2,7 +2,7 @@ import { mkdirSync, readFileSync, statSync } from "node:fs";
 import { join } from "node:path";
 import { clientExec, clientUp, DB_IMAGE, dbUp, ensureNetwork, engineDown, imageDigest, imageExists, psql, run, stopAllEngines, WORK_DIR } from "./docker";
 import { prepareFloor } from "./floor";
-import { type Candidate, CANDIDATES, type Family, LADDER, protocol, REQUEST_HEADERS, TILES, tileUrl, VIEWPORT, WALK } from "./matrix";
+import { type Candidate, CANDIDATES, CLIENT_CORES, type Family, LADDER, protocol, REQUEST_HEADERS, TILES, tileUrl, VIEWPORT, WALK } from "./matrix";
 import { alternateHeaders, burst, type BurstResult, type ColdStartResult, coldStart, concurrency, type LadderResult, ladder, type MemoryReading, memory, type ParityResult, parity, type SessionResult, session, type SingleTileResult, singleTile, type ThroughputResult, walk } from "./measure";
 import { flight } from "./session-plan";
 
@@ -108,8 +108,9 @@ function environment(): Record<string, unknown> {
   const measurement = {
     loadGenerator: `${ohaVersion} in a container on the engine's Docker network`,
     clientCpus: family === "archive" ? 6 : 2,
-    engineLimits: "4 CPUs, 4 GB per engine container",
-    database: family === "postgis" ? `PostgreSQL 18 + PostGIS 3.6 (${DB_IMAGE}), 6 CPUs, 12 GB, shared_buffers 2GB` : null,
+    pinnedCores: { engine: "0-3", database: family === "postgis" ? "4-9" : null, client: CLIENT_CORES[family] },
+    engineLimits: "4 pinned cores, 4 GB per engine container",
+    database: family === "postgis" ? `PostgreSQL 18 + PostGIS 3.6 (${DB_IMAGE}), 6 pinned cores, 12 GB, shared_buffers 2GB` : null,
   };
   // On Linux the containers run on the host itself, with no VM between them and the machine.
   if (process.platform === "linux") {
@@ -220,7 +221,7 @@ if (family === "postgis") {
   );
   console.log(`database: prewarmed ${warmed} blocks of schema bench`);
 }
-clientUp(family === "archive" ? 6 : 2);
+clientUp(CLIENT_CORES[family]);
 if (candidates.some((c) => c.control)) {
   const floor = prepareFloor();
   console.log(`floor control: ${floor.files} tiles (${floor.bytes} bytes) as files, ${floor.empty} empty`);
