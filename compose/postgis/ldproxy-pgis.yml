@@ -1,7 +1,7 @@
 # ldproxy with the opt-in PGIS_TILES extension (ST_AsMVT in PostGIS, ldproxy >= 4.4).
 services:
   engine:
-    image: iide/ldproxy:4.8.1
+    image: iide/ldproxy:4.8.2
     environment:
       JAVA_TOOL_OPTIONS: "-XX:MaxRAMPercentage=75"
     volumes:

@@ -1,6 +1,6 @@
 services:
   engine:
-    image: versatiles/versatiles:v4.14.0
+    image: versatiles/versatiles:v5.4.1
     command: ["serve", "--port", "8080", "[berlin]/tiles/berlin.mbtiles"]
     volumes:
       - ../../data/cache:/tiles:ro

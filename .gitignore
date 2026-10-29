@@ -1,5 +1,6 @@
 node_modules/
 results*.json
+verdict-*
 !runs/*.json
 data/cache/
 images/martin-2.0.0/target_releases/

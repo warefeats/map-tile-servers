@@ -3,7 +3,8 @@
 # corpus is byte-for-byte the database those numbers came from.
 services:
   db:
-    image: imresamu/postgis:18-3.6
+    # the tag every run so far pulled (last pushed 2026-02-09: PostgreSQL 18, PostGIS 3.6.1), pinned to that push
+    image: imresamu/postgis:18-3.6@sha256:b5766ee720aca09c61b9a868abefbf273348a4b90ad4cf146b4f8c9ac85d48e4
     container_name: m2-db
     command:
       - postgres

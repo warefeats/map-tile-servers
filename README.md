@@ -1,8 +1,8 @@
 # Martin 2.0 against 1.16.1 and every competitor
 
-The runner behind a warefeats page (slug `martin-2-tile-servers`, unpublished) that measures [Martin](https://martin.maplibre.org) 2.0, not yet released (the head of its release PR, 2.0.0-beta.3), against its most recent stable release (1.16.1) and against the most recent stable release of every server it competes with, in both of the jobs Martin does: cutting vector tiles from PostGIS on every request, and handing tiles out of a pre-built MBTiles or PMTiles archive. It repeats everything the two September tile-server pages measured ([postgis-vector-tile-servers](https://warefeats.com/benchmarks/postgis-vector-tile-servers/), [pmtiles-mbtiles-tile-servers](https://warefeats.com/benchmarks/pmtiles-mbtiles-tile-servers/)) and adds four dimensions they did not: CPU paid per tile, capacity within a latency SLO under open-loop load, a simulated busy map, and startup with a thousand sources configured.
+The runner behind a warefeats page (slug `martin-2-tile-servers`, unpublished) that measures [Martin](https://martin.maplibre.org) 2.0, not yet released (the head of its release PR, 2.0.0-beta.5), against its most recent stable release (1.16.1) and against the most recent stable release of every server it competes with, in both of the jobs Martin does: cutting vector tiles from PostGIS on every request, and handing tiles out of a pre-built MBTiles or PMTiles archive. It repeats everything the two September tile-server pages measured ([postgis-vector-tile-servers](https://warefeats.com/benchmarks/postgis-vector-tile-servers/), [pmtiles-mbtiles-tile-servers](https://warefeats.com/benchmarks/pmtiles-mbtiles-tile-servers/)) and adds four dimensions they did not: CPU paid per tile, capacity within a latency SLO under open-loop load, a simulated busy map, and startup with a thousand sources configured.
 
-Part of the [warefeats](https://warefeats.com) benchmark suite. Decisions are recorded in `docs/adr/`: the verdict rule was fixed before the first measured pass (0001), the load generator sits on the engine's Docker network because the host path has a ceiling of its own (0002), Martin 2.0 is a local build with the release recipe because the release PR's CI artifacts are debug builds (0003), a dedicated cloud host was proposed and not adopted (0004), cold starts get a warm-up and ten repetitions and every run has a second pass in reverse order (0005), the measured build is the release PR's head (0006), archive times are ranked above the harness floor (0007), and each category ends as won, tied or lost, with database-bound ties and archive memory allowed when the page is published (0008), and the four PostGIS categories that sit at the database's own cap are shown as context rather than ranked (0009).
+Part of the [warefeats](https://warefeats.com) benchmark suite. Decisions are recorded in `docs/adr/`: the verdict rule was fixed before the first measured pass (0001), the load generator sits on the engine's Docker network because the host path has a ceiling of its own (0002), Martin 2.0 is a local build with the release recipe because the release PR's CI artifacts are debug builds (0003), a dedicated cloud host was proposed and not adopted (0004), cold starts get a warm-up and ten repetitions and every run has a second pass in reverse order (0005), the measured build is the release PR's head (0006), archive times are ranked above the harness floor (0007), and each category ends as won, tied or lost, with database-bound ties and archive memory allowed when the page is published (0008), and the four PostGIS categories that sit at the database's own cap are shown as context rather than ranked (0009). Since the Mac was sold, runs happen on dedicated c7g.metal hosts, one per family, with Martin 2.0 built the way its release builds the arm64 image, profile-guided (0010).
 
 ## Candidates
 
@@ -10,26 +10,26 @@ PostGIS family, all reading the same four tables through the same read-only role
 
 | Candidate | Version | Image |
 |-----------|---------|-------|
-| Martin | 2.0.0-beta.3 (release PR maplibre/martin#3525 at `81a4e444`) | `wf-martin:2.0.0-beta.3-81a4e44`, built with the release recipe (ADR 0006) |
+| Martin | 2.0.0-beta.5 (release PR maplibre/martin#3776 at `722fb6d1`) | `wf-martin:2.0.0-beta.5-722fb6d`, built on the rig with the release's profile-guided recipe (ADR 0010) |
 | Martin | 1.16.1 | `ghcr.io/maplibre/martin:1.16.1` |
 | Tegola | 0.21.2 | `gospatial/tegola:v0.21.2` |
 | BBOX | 0.6.2 | `wf-bbox:0.6.2`, built from `bbox-services/bbox@v0.6.2` (the published image is amd64-only) |
 | pg_tileserv | 2025-01-31 build | `pramsey/pg_tileserv:20250131` (no image exists for v1.0.11) |
 | TiPg | 1.6.1 | `ghcr.io/developmentseed/tipg:1.6.1` |
-| ldproxy | 4.8.1, as shipped and with `PGIS_TILES` | `iide/ldproxy:4.8.1` |
+| ldproxy | 4.8.2, as shipped and with `PGIS_TILES` | `iide/ldproxy:4.8.2` |
 
 Archive family, one Planetiler build of Berlin stored as MBTiles and, converted losslessly, as PMTiles:
 
 | Candidate | Version | Archive | Image |
 |-----------|---------|---------|-------|
-| Martin | 2.0.0-beta.3 and 1.16.1 | PMTiles and MBTiles | as above |
+| Martin | 2.0.0-beta.5 and 1.16.1 | PMTiles and MBTiles | as above |
 | go-pmtiles | 1.31.2 | PMTiles | `protomaps/go-pmtiles:v1.31.2` |
-| VersaTiles | 4.14.0 | PMTiles and MBTiles | `versatiles/versatiles:v4.14.0` |
+| VersaTiles | 5.4.1 | PMTiles and MBTiles | `versatiles/versatiles:v5.4.1` |
 | BBOX | 0.6.2 | PMTiles and MBTiles | `wf-bbox:0.6.2` |
 | mbtileserver | 0.11.0 | MBTiles | `wf-mbtileserver:0.11.0`, the release binary on Debian (no arm64 image) |
-| tileserver-gl-light | 5.6.0 | MBTiles | `maptiler/tileserver-gl-light:v5.6.0` |
+| tileserver-gl-light | 5.7.0 | MBTiles | `maptiler/tileserver-gl-light:v5.7.0` |
 
-VersaTiles is new since the September archive page. Every other competitor's most recent stable release is the one those pages ran, except TiPg (1.5.0 then, 1.6.1 now).
+VersaTiles is new since the September archive page. Every other competitor's most recent stable release is the one those pages ran, except TiPg (1.5.0 then, 1.6.1 now), ldproxy (4.8.1 then, 4.8.2 now) and tileserver-gl-light (5.6.0 then, 5.7.0 now).
 
 ## Corpus
 
@@ -59,14 +59,14 @@ A measured run does all of that twice, the second time in reverse candidate orde
 - PostGIS servers keep the September page's settings unchanged (same files, same eight-connection pool; BBOX hard-codes eight).
 - PostGIS requests send no `Accept-Encoding` (as the 2024 thesis and the September page did); archive requests send `Accept-Encoding: gzip` (as every map client does).
 - The PostgreSQL buffer cache is prewarmed before the first candidate.
+- Every engine is limited to 4 CPUs and sizes its threads to match: Martin and the floor are configured for 4 workers, Tegola, pg_tileserv and mbtileserver run with `GOMAXPROCS=4` (their Go runtimes predate CPU-limit awareness), and the rest size their thread pools from the container's limit or serve from a single event loop.
 
 ## Running
 
 ```bash
 bun install
-orb -m martin-linux bash scripts/build-martin.sh <commit> 1.99.0 images/martin-2.0.0-beta.3   # Martin 2.0 from source (ADR 0006)
-just images           # build/tag the images the runner never pulls during a run
-just gated rc81a4e44  # a measured run: both families and catalogs, twice, each candidate behind a quiet-host gate
+just images           # build/tag the images the runner never pulls during a run (Martin 2.0: scripts/build-martin-pgo.sh, ADR 0010)
+just gated rc81a4e44  # a measured run on the Mac: both families and catalogs, twice, each candidate behind a quiet-host gate
 just verdict --run=rc81a4e44   # docs/adr/0001 as amended by 0005, 0007, 0008 and 0009, pooled over both passes
 just bench archive    # one pass of the archive protocol → results-archive.json (diagnostics; --reverse for mirror order)
 just catalog archive  # one pass of the 1,000-source cold starts → results-archive-catalog.json
@@ -78,18 +78,20 @@ The runner waits before each candidate until the VM is quiet (under half a core 
 
 ## Cloud rig
 
-Built and not adopted (ADR 0004): measured runs stay on the Mac. What follows is a record of how it worked. One c7g.metal host runs the whole protocol unchanged. Deploy the stack once (`just rig-deploy`), then per run:
+Measured runs happen on dedicated c7g.metal hosts in us-east-1 (ADR 0010; ADR 0004 built the rig), one per family at the same time, each running its family's protocol unchanged: both passes, catalog included. The PostGIS host builds Martin 2.0 with the release's profile-guided recipe (`scripts/build-martin-pgo.sh`) and uploads the image; the archive host waits for it, so both families measure one binary. Each host smokes its family first and measures only if the smoke recorded no failure. Deploy the stack once (`just rig-deploy`), then per run:
 
 ```bash
-just rig-walk                                   # offline preflight: scripts, user data, the SSM command, images, corpus
-just rig-pack  <run> wf-martin:2.0.0-<tag>      # upload the committed tree, local images, the database volume, the archives
-just rig-run   <run> wf-martin:2.0.0-<tag>      # launch, start the run over SSM (--smoke, --families=...)
-just rig-log   <run>                            # the progress log, uploaded every minute
-just rig-fetch <run>                            # results-*-<run>.json and verdict-<run>.txt into the repo
-just rig-instances                              # anything still up
+just rig-walk                     # offline preflight: scripts, user data, the SSM command, images, inputs
+just rig-pack  <run>              # upload the committed tree and the inputs (each input once, by hash)
+just rig-run   <run> --families=postgis --build=<commit>:<rustc> --smoke-first   # the PostGIS host, which builds Martin 2.0
+just rig-run   <run> --families=archive --smoke-first                           # the archive host, which loads that build
+just rig-log   <run> postgis      # a host's progress log, uploaded every minute
+just rig-fetch <run>              # results-*-<run>*.json into the repo, logs and the build record into .work/rig/<run>/
+just verdict --run=<run>          # pooled over both passes, once both hosts are done
+just rig-instances                # anything still up
 ```
 
-The instance terminates itself when the run ends and after ten hours at most.
+Without Docker on the laptop, `IMAGES` and `DBDATA` name saved copies of the helper images and the database volume for `rig-walk` and `rig-pack`. Each instance terminates itself when its run ends and after ten hours at most; `--keep` leaves it up for a look.
 
 ## License
 

@@ -149,6 +149,8 @@ export function stopAllEngines(): void {
 // ---- the shared database and the measurement client ---------------------------------------
 
 export const NETWORK = "m2";
+/** compose/db.yml's image: the tag every run so far pulled (last pushed 2026-02-09), pinned to that push. */
+export const DB_IMAGE = "imresamu/postgis:18-3.6@sha256:b5766ee720aca09c61b9a868abefbf273348a4b90ad4cf146b4f8c9ac85d48e4";
 export const DB_CONTAINER = "m2-db";
 export const CLIENT_CONTAINER = "m2-client";
 export const CLIENT_IMAGE = "wf-client:1";

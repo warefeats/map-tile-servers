@@ -1,6 +1,6 @@
 # 0004 — Runs move to a dedicated cloud host
 
-Date: 2026-09-28. Status: not adopted. On 2026-09-29 John ruled out cloud runs for this benchmark; measured runs stay on the Mac, with ADR 0005 against its drift.
+Date: 2026-09-28. Status: not adopted, then superseded by 0010. On 2026-09-29 John ruled out cloud runs for this benchmark; measured runs stayed on the Mac, with ADR 0005 against its drift. The Mac was sold on 2026-10-27, and on 2026-10-29 John asked for the next run on this rig (ADR 0010).
 
 ## Context
 

@@ -41,21 +41,21 @@ preview:
 unpreview:
     bun run src/preview.ts --remove
 
-# Build or tag every image a run needs. Martin 2.0 is built from source first (docs/adr/0006, scripts/build-martin.sh).
+# Build or tag every image a run needs but Martin 2.0, which is built from source (docs/adr/0010: on the rig, scripts/build-martin-pgo.sh).
 images:
     docker build -q -t wf-client:1 images/client
-    docker build -q --platform linux/arm64 -t wf-martin:2.0.0-beta.3-81a4e44 images/martin-2.0.0-beta.3
     docker build -q -f images/Dockerfile.bbox -t wf-bbox:0.6.2 images
     docker build -q -f images/Dockerfile.mbtileserver -t wf-mbtileserver:0.11.0 images
     docker pull ghcr.io/maplibre/martin:1.16.1
     docker pull gospatial/tegola:v0.21.2
     docker pull pramsey/pg_tileserv:20250131
     docker pull ghcr.io/developmentseed/tipg:1.6.1
-    docker pull iide/ldproxy:4.8.1
+    docker pull iide/ldproxy:4.8.2
     docker pull protomaps/go-pmtiles:v1.31.2
-    docker pull versatiles/versatiles:v4.14.0
-    docker pull maptiler/tileserver-gl-light:v5.6.0
-    docker pull imresamu/postgis:18-3.6
+    docker pull versatiles/versatiles:v5.4.1
+    docker pull maptiler/tileserver-gl-light:v5.7.0
+    docker pull imresamu/postgis:18-3.6@sha256:b5766ee720aca09c61b9a868abefbf273348a4b90ad4cf146b4f8c9ac85d48e4
+    docker pull nginx@sha256:09cc2702709e6388d979d8030e3ab4eb1ceb699b2dced26d7543e872a822e823
 
 # Stop every container this runner starts (the database volume is kept).
 clean:
@@ -64,7 +64,7 @@ clean:
     docker ps -a --format '{{"{{"}}.Names{{"}}"}}' | grep -E '^m2-' | xargs -r docker rm -f >/dev/null || true
     echo "removed m2-* containers (volume m2-dbdata kept)"
 
-# The cloud rig (docs/adr/0004): one dedicated Graviton host runs the whole protocol.
+# The cloud rig (docs/adr/0010): dedicated c7g.metal hosts, each running whole families of the protocol.
 rig-deploy:
     cd infra && bun x cdk deploy --require-approval never
 
@@ -72,20 +72,20 @@ rig-deploy:
 rig-walk:
     bash scripts/rig-walk.sh
 
-# Upload one run's inputs: the committed tree, local images, the database volume, the archives.
-rig-pack RUN IMAGE:
-    bash scripts/rig-pack.sh {{RUN}} {{IMAGE}}
+# Upload one run's bundle: the committed tree and the inputs (local images, the database volume, the archives).
+rig-pack RUN:
+    bash scripts/rig-pack.sh {{RUN}}
 
-# Launch the instance and start the run (extra args: --smoke, --families=postgis,archive).
-rig-run RUN IMAGE *ARGS:
-    bash scripts/rig-run.sh {{RUN}} {{IMAGE}} {{ARGS}}
+# Launch a host and start the run on it (args: --families=postgis|archive, --build=<commit>:<rustc>, --smoke-first, --smoke, --keep).
+rig-run RUN *ARGS:
+    bash scripts/rig-run.sh {{RUN}} "$(bun -e "import { MARTIN_2 } from './src/matrix'; console.log(MARTIN_2.image)")" {{ARGS}}
 
-# The last lines of a run's progress log.
-rig-log RUN:
+# The last lines of one host's progress log (LABEL: postgis, archive, or postgis-archive).
+rig-log RUN LABEL:
     #!/usr/bin/env bash
     set -euo pipefail
     . scripts/rig-lib.sh
-    aws s3 cp "s3://$(stack_output RigBucketName)/results/{{RUN}}/run.log" - | tail -n 40
+    aws s3 cp "s3://$(stack_output RigBucketName)/results/{{RUN}}/run-{{LABEL}}.log" - | tail -n 40
 
 # Copy a run's results into the repo.
 rig-fetch RUN:

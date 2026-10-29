@@ -30,9 +30,9 @@ export interface Candidate {
   control?: boolean;
 }
 
-export const MARTIN_2 = { version: "2.0.0-beta.3", image: process.env.WF_MARTIN_2_IMAGE ?? "wf-martin:2.0.0-beta.3-81a4e44" } as const;
+export const MARTIN_2 = { version: "2.0.0-beta.5", image: process.env.WF_MARTIN_2_IMAGE ?? "wf-martin:2.0.0-beta.5-722fb6d" } as const;
 export const MARTIN_2_PROVENANCE =
-  "maplibre/martin release PR #3525 at 81a4e444 (2.0.0-beta.3, not yet released), built with Martin's release recipe on rustc 1.99.0 and packaged with that commit's .github/files/multi-platform.Dockerfile (docs/adr/0006)";
+  "maplibre/martin release PR #3776 at 722fb6d1 (2.0.0-beta.5, not yet released), built the way Martin's release builds its arm64 Docker binary (profile-guided, trained by the recipe's own bench-http run) on rustc 1.99.1 and packaged with that commit's .github/files/multi-platform.Dockerfile (docs/adr/0010)";
 export const MARTIN_1 = { version: "1.16.1", image: "ghcr.io/maplibre/martin:1.16.1" } as const;
 
 /** nginx 1.30.4, `nginx:stable` of 2026-08-25, pinned by digest: the archive family's floor control (docs/adr/0007). */
@@ -50,8 +50,8 @@ export const CANDIDATES: readonly Candidate[] = [
   { id: "pg-tileserv", family: "postgis", server: "pg-tileserv", name: "pg_tileserv", version: "20250131", image: "pramsey/pg_tileserv:20250131", homepage: "https://github.com/CrunchyData/pg_tileserv", color: "#0891B2", port: 7800, tilePath: (l, t) => `/bench.${l}/${t.z}/${t.x}/${t.y}.pbf` },
   { id: "tipg", family: "postgis", server: "tipg", name: "TiPg", version: "1.6.1", image: "ghcr.io/developmentseed/tipg:1.6.1", homepage: "https://developmentseed.org/tipg/", color: "#EA580C", port: 8080, tilePath: (l, t) => `/collections/bench.${l}/tiles/WebMercatorQuad/${t.z}/${t.x}/${t.y}` },
   // OGC API Tiles addresses tiles as tileMatrix/tileRow/tileCol, i.e. z/y/x.
-  { id: "ldproxy", family: "postgis", server: "ldproxy", name: "ldproxy", version: "4.8.1", image: "iide/ldproxy:4.8.1", homepage: "https://www.ldproxy.net", color: "#DC2626", port: 7080, tilePath: (l, t) => `/bench/collections/${l}/tiles/WebMercatorQuad/${t.z}/${t.y}/${t.x}` },
-  { id: "ldproxy-pgis", family: "postgis", server: "ldproxy", name: "ldproxy (PGIS_TILES)", version: "4.8.1", image: "iide/ldproxy:4.8.1", homepage: "https://www.ldproxy.net", color: "#A16207", port: 7080, tilePath: (l, t) => `/bench/collections/${l}/tiles/WebMercatorQuad/${t.z}/${t.y}/${t.x}` },
+  { id: "ldproxy", family: "postgis", server: "ldproxy", name: "ldproxy", version: "4.8.2", image: "iide/ldproxy:4.8.2", homepage: "https://www.ldproxy.net", color: "#DC2626", port: 7080, tilePath: (l, t) => `/bench/collections/${l}/tiles/WebMercatorQuad/${t.z}/${t.y}/${t.x}` },
+  { id: "ldproxy-pgis", family: "postgis", server: "ldproxy", name: "ldproxy (PGIS_TILES)", version: "4.8.2", image: "iide/ldproxy:4.8.2", homepage: "https://www.ldproxy.net", color: "#A16207", port: 7080, tilePath: (l, t) => `/bench/collections/${l}/tiles/WebMercatorQuad/${t.z}/${t.y}/${t.x}` },
 
   // Archive family. The floor control comes first, so the reverse pass measures it last (docs/adr/0005, 0007).
   { id: "floor", family: "archive", server: "floor", name: "Floor (nginx serving the tiles as files)", version: "1.30.4", image: FLOOR_IMAGE, provenance: "nginx:stable of 2026-08-25 (nginx 1.30.4) run directly, serving the archive's stored tile bytes as files from a Docker volume", homepage: "https://nginx.org", color: "#94A3B8", port: 8080, tilePath: (_, t) => `/tiles/${archiveTileset}/${t.z}/${t.x}/${t.y}`, control: true },
@@ -60,12 +60,12 @@ export const CANDIDATES: readonly Candidate[] = [
   { id: "martin-2-mbtiles", family: "archive", server: "martin", name: `Martin ${MARTIN_2.version} (MBTiles)`, ...MARTIN_2, provenance: MARTIN_2_PROVENANCE, homepage: "https://martin.maplibre.org", color: "#3B82F6", archive: "mbtiles", port: 3000, tilePath: (_, t) => `/${archiveTileset}/${t.z}/${t.x}/${t.y}` },
   { id: "martin-1-mbtiles", family: "archive", server: "martin", name: "Martin 1.16.1 (MBTiles)", ...MARTIN_1, homepage: "https://martin.maplibre.org", color: "#BFDBFE", archive: "mbtiles", port: 3000, tilePath: (_, t) => `/${archiveTileset}/${t.z}/${t.x}/${t.y}` },
   { id: "go-pmtiles", family: "archive", server: "go-pmtiles", name: "go-pmtiles", version: "1.31.2", image: "protomaps/go-pmtiles:v1.31.2", homepage: "https://docs.protomaps.com/deploy/server", color: "#16A34A", archive: "pmtiles", port: 8080, tilePath: (_, t) => `/${archiveTileset}/${t.z}/${t.x}/${t.y}.mvt` },
-  { id: "versatiles-pmtiles", family: "archive", server: "versatiles", name: "VersaTiles (PMTiles)", version: "4.14.0", image: "versatiles/versatiles:v4.14.0", homepage: "https://versatiles.org", color: "#0D9488", archive: "pmtiles", port: 8080, tilePath: (_, t) => `/tiles/${archiveTileset}/${t.z}/${t.x}/${t.y}` },
-  { id: "versatiles-mbtiles", family: "archive", server: "versatiles", name: "VersaTiles (MBTiles)", version: "4.14.0", image: "versatiles/versatiles:v4.14.0", homepage: "https://versatiles.org", color: "#5EEAD4", archive: "mbtiles", port: 8080, tilePath: (_, t) => `/tiles/${archiveTileset}/${t.z}/${t.x}/${t.y}` },
+  { id: "versatiles-pmtiles", family: "archive", server: "versatiles", name: "VersaTiles (PMTiles)", version: "5.4.1", image: "versatiles/versatiles:v5.4.1", homepage: "https://versatiles.org", color: "#0D9488", archive: "pmtiles", port: 8080, tilePath: (_, t) => `/tiles/${archiveTileset}/${t.z}/${t.x}/${t.y}` },
+  { id: "versatiles-mbtiles", family: "archive", server: "versatiles", name: "VersaTiles (MBTiles)", version: "5.4.1", image: "versatiles/versatiles:v5.4.1", homepage: "https://versatiles.org", color: "#5EEAD4", archive: "mbtiles", port: 8080, tilePath: (_, t) => `/tiles/${archiveTileset}/${t.z}/${t.x}/${t.y}` },
   { id: "bbox-pmtiles", family: "archive", server: "bbox", name: "BBOX (PMTiles)", version: "0.6.2", image: "wf-bbox:0.6.2", provenance: "built from bbox-services/bbox@v0.6.2 (the published image is amd64-only)", homepage: "https://www.bbox.earth", color: "#9333EA", archive: "pmtiles", port: 8080, tilePath: (_, t) => `/xyz/${archiveTileset}/${t.z}/${t.x}/${t.y}.mvt` },
   { id: "bbox-mbtiles", family: "archive", server: "bbox", name: "BBOX (MBTiles)", version: "0.6.2", image: "wf-bbox:0.6.2", provenance: "built from bbox-services/bbox@v0.6.2 (the published image is amd64-only)", homepage: "https://www.bbox.earth", color: "#C084FC", archive: "mbtiles", port: 8080, tilePath: (_, t) => `/xyz/${archiveTileset}/${t.z}/${t.x}/${t.y}.mvt` },
   { id: "mbtileserver", family: "archive", server: "mbtileserver", name: "mbtileserver", version: "0.11.0", image: "wf-mbtileserver:0.11.0", provenance: "the consbio/mbtileserver v0.11.0 linux_arm64 release binary on debian:bookworm-slim (no arm64 image is published)", homepage: "https://github.com/consbio/mbtileserver", color: "#64748B", archive: "mbtiles", port: 8000, tilePath: (_, t) => `/services/${archiveTileset}/tiles/${t.z}/${t.x}/${t.y}.pbf` },
-  { id: "tileserver-gl", family: "archive", server: "tileserver-gl", name: "tileserver-gl-light", version: "5.6.0", image: "maptiler/tileserver-gl-light:v5.6.0", homepage: "https://tileserver.readthedocs.io", color: "#EA580C", archive: "mbtiles", port: 8080, tilePath: (_, t) => `/data/${archiveTileset}/${t.z}/${t.x}/${t.y}.pbf` },
+  { id: "tileserver-gl", family: "archive", server: "tileserver-gl", name: "tileserver-gl-light", version: "5.7.0", image: "maptiler/tileserver-gl-light:v5.7.0", homepage: "https://tileserver.readthedocs.io", color: "#EA580C", archive: "mbtiles", port: 8080, tilePath: (_, t) => `/data/${archiveTileset}/${t.z}/${t.x}/${t.y}.pbf` },
 ];
 
 export function candidate(id: string): Candidate {

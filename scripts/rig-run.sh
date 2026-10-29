@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Launches one rig instance and starts remote.sh on it over SSM.
-#   rig-run.sh <run id> <martin 2.0.0 image> [--smoke] [--families=postgis,archive]
+#   rig-run.sh <run id> <martin 2.0 image> [--families=postgis|archive] [--build=<commit>:<rustc>] [--smoke-first|--smoke] [--keep]
 # INSTANCE_TYPE overrides the launch template's type; INSTANCE reuses a running instance instead of launching one.
 set -euo pipefail
 run_id=$1; image=$2; shift 2
@@ -14,7 +14,9 @@ instance=${INSTANCE:-}
 if [ -z "$instance" ]; then
   type_args=()
   [ -n "${INSTANCE_TYPE:-}" ] && type_args=(--instance-type "$INSTANCE_TYPE")
-  tags="ResourceType=instance,Tags=[{Key=Project,Value=martin-2-bench},{Key=RunId,Value=$run_id}]"
+  families=postgis-archive
+  for arg in "$@"; do case "$arg" in --families=*) families=$(echo "${arg#--families=}" | tr ',' '-') ;; esac; done
+  tags="ResourceType=instance,Tags=[{Key=Project,Value=martin-2-bench},{Key=RunId,Value=$run_id},{Key=Families,Value=$families}]"
   err=$(mktemp)
   instance=""
   # metal capacity differs by zone, so try each default subnet until one launches
@@ -29,6 +31,8 @@ if [ -z "$instance" ]; then
   [ -n "$instance" ] || { echo "no zone had capacity" >&2; exit 1; }
 fi
 echo "instance $instance"
+mkdir -p "$root/.work/rig/$run_id"
+echo "$instance $(date -u +%FT%TZ) $*" >> "$root/.work/rig/$run_id/instances.txt"
 # SSM comes up before user data finishes; remote.sh waits for user data itself
 for _ in $(seq 1 120); do
   ping=$(aws ssm describe-instance-information --filters "Key=InstanceIds,Values=$instance" --query 'InstanceInformationList[0].PingStatus' --output text 2>/dev/null || true)

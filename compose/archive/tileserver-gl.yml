@@ -1,6 +1,6 @@
 services:
   engine:
-    image: maptiler/tileserver-gl-light:v5.6.0
+    image: maptiler/tileserver-gl-light:v5.7.0
     command: ["--config", "/config/config.json", "--port", "8080"]
     volumes:
       - ../../configs/archive/tileserver-gl:/config:ro

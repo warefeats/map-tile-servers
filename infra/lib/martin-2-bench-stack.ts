@@ -5,10 +5,11 @@ import * as s3 from "aws-cdk-lib/aws-s3";
 import type { Construct } from "constructs";
 
 /**
- * One dedicated Graviton host that runs the whole harness (database, engines and client on one
- * Docker network, as on the Mac), driven from the laptop over SSM. The bucket carries the bundle in
- * (repo, images, database volume, archives) and the results out. No VPC lookup: the instance
- * launches into the default VPC with its default security group, which only needs outbound traffic.
+ * Dedicated Graviton hosts that each run whole families of the harness (database, engines and client on
+ * one Docker network, as on the Mac), driven from the laptop over SSM. The bucket carries the bundle in
+ * (repo, images, database volume, archives), the Martin image from the host that builds it to the
+ * others, and the results out. No VPC lookup: the instances launch into the default VPC with its
+ * default security group, which only needs outbound traffic.
  */
 export class Martin2BenchStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
@@ -38,8 +39,11 @@ export class Martin2BenchStack extends cdk.Stack {
       // unattended-upgrades runs at first boot and holds the dpkg lock for a while
       "while fuser /var/lib/dpkg/lock-frontend /var/lib/apt/lists/lock >/dev/null 2>&1; do sleep 5; done",
       "apt-get update -y",
-      "apt-get install -y docker.io docker-compose-v2 jq curl unzip zstd",
+      // buildx: the Martin image build needs BuildKit, which sets TARGETPLATFORM for its Dockerfile
+      "apt-get install -y docker.io docker-compose-v2 docker-buildx git jq curl unzip zstd",
       "systemctl enable docker && systemctl start docker",
+      // nothing but the benchmark runs on the host: no package updates in the middle of a measurement
+      "systemctl disable --now unattended-upgrades.service apt-daily.timer apt-daily-upgrade.timer || true",
       // Ubuntu 24.04 has no awscli package; install v2 from Amazon
       'curl -fsSL "https://awscli.amazonaws.com/awscli-exe-linux-aarch64.zip" -o /tmp/awscliv2.zip',
       "unzip -q /tmp/awscliv2.zip -d /tmp",

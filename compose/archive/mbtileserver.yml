@@ -2,6 +2,9 @@ services:
   engine:
     image: wf-mbtileserver:0.11.0
     command: ["--dir", "/tiles", "--port", "8000", "--tiles-only"]
+    environment:
+      # Built with Go 1.23, whose runtime ignores the container's CPU limit (docs/adr/0010), as Tegola and pg_tileserv get.
+      GOMAXPROCS: "4"
     volumes:
       - ../../data/cache:/tiles:ro
     deploy:

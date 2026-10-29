@@ -1,6 +1,6 @@
-import { mkdirSync, readFileSync } from "node:fs";
+import { mkdirSync, readFileSync, statSync } from "node:fs";
 import { join } from "node:path";
-import { clientExec, clientUp, dbUp, ensureNetwork, engineDown, imageDigest, imageExists, psql, run, stopAllEngines, WORK_DIR } from "./docker";
+import { clientExec, clientUp, DB_IMAGE, dbUp, ensureNetwork, engineDown, imageDigest, imageExists, psql, run, stopAllEngines, WORK_DIR } from "./docker";
 import { prepareFloor } from "./floor";
 import { type Candidate, CANDIDATES, type Family, LADDER, protocol, REQUEST_HEADERS, TILES, tileUrl, VIEWPORT, WALK } from "./matrix";
 import { alternateHeaders, burst, type BurstResult, type ColdStartResult, coldStart, concurrency, type LadderResult, ladder, type MemoryReading, memory, type ParityResult, parity, type SessionResult, session, type SingleTileResult, singleTile, type ThroughputResult, walk } from "./measure";
@@ -109,7 +109,7 @@ function environment(): Record<string, unknown> {
     loadGenerator: `${ohaVersion} in a container on the engine's Docker network`,
     clientCpus: family === "archive" ? 6 : 2,
     engineLimits: "4 CPUs, 4 GB per engine container",
-    database: family === "postgis" ? "PostgreSQL 18 + PostGIS 3.6 (imresamu/postgis:18-3.6), 6 CPUs, 12 GB, shared_buffers 2GB" : null,
+    database: family === "postgis" ? `PostgreSQL 18 + PostGIS 3.6 (${DB_IMAGE}), 6 CPUs, 12 GB, shared_buffers 2GB` : null,
   };
   // On Linux the containers run on the host itself, with no VM between them and the machine.
   if (process.platform === "linux") {
@@ -145,11 +145,11 @@ function environment(): Record<string, unknown> {
 
 function corpus(): Record<string, unknown> {
   if (family === "postgis") {
-    const counts = psql("SELECT (SELECT count(*) FROM bench.buildings) || '|' || (SELECT count(*) FROM bench.roads) || '|' || (SELECT count(*) FROM bench.pois) || '|' || (SELECT count(*) FROM bench.boundaries) || '|' || (SELECT value FROM bench.meta WHERE key = 'corpus_md5')");
-    const [buildings, roads, pois, boundaries, md5] = counts.split("|");
-    return { source: "Geofabrik Berlin 2026-01-01", md5, tables: { buildings: Number(buildings), roads: Number(roads), pois: Number(pois), boundaries: Number(boundaries) } };
+    const counts = psql("SELECT (SELECT count(*) FROM bench.buildings) || '|' || (SELECT count(*) FROM bench.roads) || '|' || (SELECT count(*) FROM bench.pois) || '|' || (SELECT count(*) FROM bench.boundaries) || '|' || (SELECT value FROM bench.meta WHERE key = 'corpus_md5') || '|' || current_setting('server_version') || '|' || postgis_lib_version()");
+    const [buildings, roads, pois, boundaries, md5, postgres, postgis] = counts.split("|");
+    return { source: "Geofabrik Berlin 2026-01-01", md5, tables: { buildings: Number(buildings), roads: Number(roads), pois: Number(pois), boundaries: Number(boundaries) }, database: { image: DB_IMAGE, postgres, postgis } };
   }
-  const size = (f: string) => Number(run(["stat", "-f", "%z", join(import.meta.dirname!, "..", "data", "cache", f)], { quiet: true }).stdout.trim());
+  const size = (f: string) => statSync(join(import.meta.dirname!, "..", "data", "cache", f)).size;
   return { source: "Planetiler 0.10.2 OpenMapTiles build of Geofabrik Berlin 2026-01-01", archives: { "berlin.mbtiles": size("berlin.mbtiles"), "berlin.pmtiles": size("berlin.pmtiles") } };
 }
 
