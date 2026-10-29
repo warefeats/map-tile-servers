@@ -136,6 +136,14 @@ jobs:
           . scripts/rig-lib.sh
           aws s3 sync "s3://$(stack_output RigBucketName)/results/lane/$RUN/" lane-results/ --only-show-errors || true
 
+      - name: Report
+        if: always()
+        run: |
+          set -euo pipefail
+          [ -d lane-results ] || { echo "no records"; exit 0; }
+          bun run src/lane/report.ts --records=lane-results --out=lane-results/report
+          cat lane-results/report/report.md >> "$GITHUB_STEP_SUMMARY"
+
       - uses: actions/upload-artifact@v7
         if: always()
         with:
