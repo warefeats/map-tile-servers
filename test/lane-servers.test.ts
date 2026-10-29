@@ -19,17 +19,26 @@ describe("the lane's servers", () => {
   });
 
   test("start on host networking with the archive read-only, configs where the image expects them", () => {
-    expect(dockerRun(server("martin-1"), "arm64", "planet", "pmtiles")).toEqual(["docker", "run", "-d", "--name", "lane-server", "--network", "host", "-v", "/opt/lane/data:/data:ro", "ghcr.io/maplibre/martin:1.16.1", "/data/planet.pmtiles"]);
-    expect(dockerRun(server("nginx"), "amd64", "berlin", "files")).toContain("/opt/lane/data/nginx.conf:/etc/nginx/nginx.conf:ro");
+    expect(dockerRun(server("martin-1"), "arm64", ["planet"], "pmtiles")).toEqual(["docker", "run", "-d", "--name", "lane-server", "--network", "host", "-v", "/opt/lane/data:/data:ro", "ghcr.io/maplibre/martin:1.16.1", "/data/planet.pmtiles"]);
+    expect(dockerRun(server("nginx"), "amd64", ["berlin"], "files")).toContain("/opt/lane/data/nginx.conf:/etc/nginx/nginx.conf:ro");
   });
 
   test("BBOX on Graviton needs the image built from its release binary", () => {
-    expect(() => dockerRun(server("bbox"), "arm64", "planet", "pmtiles")).toThrow(/arm64/);
-    expect(dockerRun(server("bbox"), "arm64", "planet", "pmtiles", "wf-bbox-release:0.6.2")).toContain("wf-bbox-release:0.6.2");
+    expect(() => dockerRun(server("bbox"), "arm64", ["planet"], "pmtiles")).toThrow(/arm64/);
+    expect(dockerRun(server("bbox"), "arm64", ["planet"], "pmtiles", "wf-bbox-release:0.6.2")).toContain("wf-bbox-release:0.6.2");
   });
 
   test("configs name the tileset and its file", () => {
-    expect(JSON.parse(server("tileserver-gl").config!("planet", "pmtiles")["config.json"]!).data).toEqual({ planet: { pmtiles: "planet.pmtiles" } });
-    expect(server("bbox").config!("berlin", "mbtiles")["bbox.toml"]).toContain('[tileset.mbtiles]\npath = "/data/berlin.mbtiles"');
+    expect(JSON.parse(server("tileserver-gl").config!(["planet"], "pmtiles")["config.json"]!).data).toEqual({ planet: { pmtiles: "planet.pmtiles" } });
+    expect(server("bbox").config!(["berlin"], "mbtiles")["bbox.toml"]).toContain('[tileset.mbtiles]\npath = "/data/berlin.mbtiles"');
+  });
+
+  test("a catalog is every archive in one start: arguments or config entries, one per tileset", () => {
+    const ts = ["berlin", "t0000", "t0001"];
+    expect(server("martin-2").args(ts, "pmtiles")).toEqual(["/data/berlin.pmtiles", "/data/t0000.pmtiles", "/data/t0001.pmtiles"]);
+    expect(server("versatiles").args(ts, "mbtiles").slice(3)).toEqual(["[berlin]/data/berlin.mbtiles", "[t0000]/data/t0000.mbtiles", "[t0001]/data/t0001.mbtiles"]);
+    expect(Object.keys(JSON.parse(server("tileserver-gl").config!(ts, "mbtiles")["config.json"]!).data)).toEqual(ts);
+    expect(server("bbox").config!(ts, "pmtiles")["bbox.toml"]!.match(/\[\[tileset\]\]/g)).toHaveLength(3);
+    expect(dockerRun(server("go-pmtiles"), "arm64", ts, "pmtiles", undefined, "/opt/lane/catalog")).toContain("/opt/lane/catalog:/data:ro");
   });
 });

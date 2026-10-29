@@ -4,14 +4,14 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { parsePrices } from "../src/cost";
 import type { UnitRecord } from "../src/lane/orchestrate";
-import { interval, markdown, measurementOf, networkCap, parseSamples, rankings, ranks, readRun, type ScenarioRecord, scenarioWindow, windowStats } from "../src/lane/report";
+import { catalogRows, interval, markdown, measurementOf, networkCap, parseSamples, rankings, ranks, readRun, type ScenarioRecord, scenarioWindow, windowStats } from "../src/lane/report";
 import { MISS_SHARE } from "../src/replay";
 
 const prices = parsePrices(JSON.parse(readFileSync("prices/aws-us-east-1-2026-10-29.json", "utf8")));
 
 const record = (over: Partial<UnitRecord> = {}): UnitRecord => ({
   id: "martin-2-pmtiles-berlin-arm64", pass: 1, server: "martin-2", version: "2.0.0-beta.4", stable: false, format: "pmtiles", dataset: "berlin", arch: "arm64",
-  placementGroup: "pg", serverHost: null, clientHost: null, dataSeconds: 1, readyMs: { alone: 900, cdn: 850 }, results: {},
+  placementGroup: "pg", serverHost: null, clientHost: null, dataSeconds: 1, readyMs: { alone: 900, cdn: 850 }, results: {}, catalog: null,
   log: ["2026-10-30T10:00:00.000Z start-alone Success", "2026-10-30T10:10:00.000Z alone Success", "2026-10-30T10:11:00.000Z start-cdn Success", "2026-10-30T10:20:00.000Z cdn Success"],
   error: null, startedAt: "", finishedAt: "", ...over,
 });
@@ -62,14 +62,18 @@ describe("the lane's report", () => {
     for (const [pass, server, bytes] of [[1, "martin-2", 80_000], [2, "martin-2", 80_100], [1, "go-pmtiles", 90_000], [2, "go-pmtiles", 90_100]] as const) {
       const unit = join(dir, `p${pass}`, `${server}-pmtiles-berlin-arm64`);
       mkdirSync(unit, { recursive: true });
-      writeFileSync(join(unit, "unit.json"), JSON.stringify(record({ id: `${server}-pmtiles-berlin-arm64`, pass, server, stable: server !== "martin-2", version: server === "martin-2" ? "2.0.0-beta.4" : "1.31.2" })));
+      writeFileSync(join(unit, "unit.json"), JSON.stringify(record({ id: `${server}-pmtiles-berlin-arm64`, pass, server, stable: server !== "martin-2", version: server === "martin-2" ? "2.0.0-beta.4" : "1.31.2", catalog: { firstMs: 100 + pass, lastMs: server === "go-pmtiles" && pass === 2 ? null : 200 } })));
       writeFileSync(join(unit, "alone.json"), JSON.stringify(scenario("alone", 20_000, bytes, { server })));
       writeFileSync(join(unit, "cdn.json"), JSON.stringify(scenario("cdn", 600, 20_000, { server })));
     }
-    const rs = rankings(readRun(dir, prices));
+    const ms = readRun(dir, prices);
+    const rs = rankings(ms);
+    const catalog = catalogRows(ms);
+    expect(catalog.map((c) => [c.server, c.firstMs?.mean, c.lastMs?.mean, c.neverServed])).toEqual([["go-pmtiles", 101.5, 200, 1], ["martin-2", 101.5, 200, 0]]);
     expect(rs.map((r) => `${r.dataset}/${r.format}/${r.scenario}/${r.arch}`)).toEqual(["berlin/pmtiles/alone/arm64", "berlin/pmtiles/cdn/arm64"]);
     expect(rs[0]!.entries.map((e) => [e.server, e.rank])).toEqual([["martin-2", 1], ["go-pmtiles", 2]]);
-    const md = markdown(rs, prices);
+    const md = markdown(rs, prices, catalog);
+    expect(md).toContain("| pmtiles | arm64 | go-pmtiles 1.31.2 | 102 | 200 | 1 | 2 |");
     expect(md).toContain("| 1 | martin-2 2.0.0-beta.4 (pre-release) (network-bound) |");
     expect(md).toContain("## berlin, pmtiles, behind a CDN, arm64");
   });

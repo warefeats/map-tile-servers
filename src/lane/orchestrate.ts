@@ -2,8 +2,9 @@
  * The archive lane's orchestrator (docs/adr/0011). Each pass puts every unit on a fresh pair of instances in a
  * cluster placement group of its own: the server sets up, the client launches beside it once the archive is in
  * place, and each scenario starts the server cold before the client measures it. A unit's record lands in the
- * bucket when it ends; one that fails is recorded and the others go on. Passes run one after another, and each
- * starts in the next zone that offers every lane instance type.
+ * bucket when it ends; one that fails is recorded and the others go on. A Berlin unit ends with the catalog start
+ * (1,000 more sources). Passes run one after another, and each starts in the next zone that offers every lane
+ * instance type.
  *   bun run src/lane/orchestrate.ts --run=<id> [--units=all|<pattern>,...] [--passes=3] [--quick]
  */
 import { readFileSync } from "node:fs";
@@ -11,7 +12,7 @@ import { BERLIN } from "../session-plan";
 import { lonLatToTile } from "../tiles";
 import { type ClientUnit, clientScenarioScript, clientSetupScript, type Scenario, SCENARIOS } from "./client-script";
 import { aws, AwsCloud, CapacityError, type Cloud, type Host } from "./cloud";
-import { collectScript, type ServerUnit, setupScript, startScript } from "./server-script";
+import { catalogScript, collectScript, type ServerUnit, setupScript, startScript } from "./server-script";
 import { type Arch, type Dataset, type Format, type LaneServer, units } from "./servers";
 
 /** The OpenFreeMap planet build the bucket holds (.github/workflows/stage-data.yml). */
@@ -23,7 +24,7 @@ export const LANE_TYPES = ["c8g.xlarge", "c8i.xlarge", "c8gn.xlarge"];
 /** Every start's first request: Berlin's centre at zoom 14, a tile both datasets hold. */
 export const FIRST_TILE = lonLatToTile(BERLIN.lon, BERLIN.lat, 14);
 
-const TIMEOUT_S = { setup: 3600, clientSetup: 900, start: 300, scenario: 1800, quickScenario: 600, collect: 300 };
+const TIMEOUT_S = { setup: 3600, clientSetup: 900, start: 300, scenario: 1800, quickScenario: 600, collect: 300, catalog: 900 };
 const ONLINE_MS = 15 * 60_000;
 
 export interface LaneUnit {
@@ -110,6 +111,8 @@ export interface UnitRecord {
   readyMs: Partial<Record<Scenario, number>>;
   /** Each scenario's result in the bucket. */
   results: Partial<Record<Scenario, string>>;
+  /** Berlin only: milliseconds from the start with 1,000 more sources to the dataset's first tile and to the last source's; null where none came within the wait. */
+  catalog: { firstMs: number | null; lastMs: number | null } | null;
   log: string[];
   error: string | null;
   startedAt: string;
@@ -121,7 +124,7 @@ const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 export async function runUnit(cloud: Cloud, ctx: RunContext, u: LaneUnit, pass: number): Promise<UnitRecord> {
   const scripts = `bundles/lane-${ctx.run}/p${pass}/${u.id}/`;
   const results = `results/lane/${ctx.run}/p${pass}/${u.id}/`;
-  const rec: UnitRecord = { id: u.id, pass, server: u.server.id, version: u.server.version, stable: u.server.stable, format: u.format, dataset: u.dataset, arch: u.arch, placementGroup: `lane-${ctx.run}-p${pass}-${u.id}`, serverHost: null, clientHost: null, dataSeconds: null, readyMs: {}, results: {}, log: [], error: null, startedAt: new Date().toISOString(), finishedAt: null };
+  const rec: UnitRecord = { id: u.id, pass, server: u.server.id, version: u.server.version, stable: u.server.stable, format: u.format, dataset: u.dataset, arch: u.arch, placementGroup: `lane-${ctx.run}-p${pass}-${u.id}`, serverHost: null, clientHost: null, dataSeconds: null, readyMs: {}, results: {}, catalog: null, log: [], error: null, startedAt: new Date().toISOString(), finishedAt: null };
   const tags = (role: string) => ({ Name: `lane-${ctx.run}-p${pass}-${u.id}-${role}`, Project: "martin-2-bench", LaneRun: ctx.run, Pass: String(pass), Unit: u.id, Role: role });
   const note = (what: string) => {
     rec.log.push(`${new Date().toISOString()} ${what}`);
@@ -168,6 +171,13 @@ export async function runUnit(cloud: Cloud, ctx: RunContext, u: LaneUnit, pass: 
       note(/capacity .*/.exec(out)?.[0] ?? `${scenario} done`);
     }
     await step(server, "collect", collectScript(su, `s3://${ctx.bucket}/${results}`), TIMEOUT_S.collect);
+    if (u.dataset === "berlin") {
+      const out = await step(server, "catalog", catalogScript(su, `bundles/lane-${ctx.run}/catalog/small.${u.format}`), TIMEOUT_S.catalog);
+      const m = /CATALOG first (\d+|none) ms, last (\d+|none) ms/.exec(out);
+      const ms = (v: string | undefined) => (v && v !== "none" ? Number(v) : null);
+      rec.catalog = { firstMs: ms(m?.[1]), lastMs: ms(m?.[2]) };
+      note(`catalog: first ${rec.catalog.firstMs ?? "none"} ms, last ${rec.catalog.lastMs ?? "none"} ms`);
+    }
   } catch (e) {
     rec.error = (e as Error).message;
     note(`failed: ${rec.error.split("\n")[0]}`);

@@ -4,7 +4,8 @@
  * at the dated list prices and ranks the servers by that price, per dataset, format, scenario and architecture.
  * A difference counts only where the 95% confidence intervals over the passes do not overlap: a server's rank is
  * one more than the number of servers whose interval lies wholly below its own. Behind a CDN, CloudFront sends
- * every tile, so its bytes are the whole replay's, measured from the same server alone.
+ * every tile, so its bytes are the whole replay's, measured from the same server alone. The start with 1,000 more
+ * sources is reported beside the rankings, not ranked.
  *   bun run src/lane/report.ts --records=<dir> --prices=prices/aws-us-east-1-2026-10-29.json --out=<dir>
  */
 import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
@@ -63,6 +64,9 @@ export interface Measurement {
   /** The network card's allowance counters over the scenario, and the server's peak memory. */
   allowanceExceeded: Record<string, number>;
   peakAnonBytes: number | null;
+  /** The unit's catalog start, on its alone measurement only: to the dataset's first tile and to the last source's. */
+  catalogFirstMs: number | null;
+  catalogLastMs: number | null;
 }
 
 /** Tiles a second a sustained rate carries at this size. */
@@ -150,6 +154,8 @@ export function measurementOf(rec: UnitRecord, s: ScenarioRecord, prices: Prices
     users: s.users ?? [],
     cost,
     ...stats,
+    catalogFirstMs: s.scenario === "alone" ? (rec.catalog?.firstMs ?? null) : null,
+    catalogLastMs: s.scenario === "alone" ? (rec.catalog?.lastMs ?? null) : null,
   };
 }
 
@@ -246,7 +252,41 @@ export function rankings(ms: readonly Measurement[]): Ranking[] {
 const fmt = (x: number | null | undefined, digits: number) => (x === null || x === undefined ? "–" : x.toLocaleString("en-US", { minimumFractionDigits: digits, maximumFractionDigits: digits }));
 const ci = (i: Interval | null, digits: number) => (i?.lo !== null && i?.lo !== undefined ? `${fmt(i.lo, digits)}–${fmt(i.hi, digits)}` : "–");
 
-export function markdown(rs: readonly Ranking[], prices: Prices): string {
+export interface CatalogRow {
+  server: string;
+  version: string;
+  format: string;
+  arch: Arch;
+  firstMs: Interval | null;
+  lastMs: Interval | null;
+  /** Passes whose last source never answered within the wait. */
+  neverServed: number;
+  passes: number;
+}
+
+/** The catalog starts, per server, format and architecture (Berlin units run them). */
+export function catalogRows(ms: readonly Measurement[]): CatalogRow[] {
+  const groups = new Map<string, Measurement[]>();
+  for (const m of ms) {
+    if (m.scenario !== "alone" || m.dataset !== "berlin") continue;
+    const key = [m.format, m.arch, m.server].join("/");
+    groups.set(key, [...(groups.get(key) ?? []), m]);
+  }
+  return [...groups.entries()]
+    .sort(([a], [b]) => a.localeCompare(b))
+    .map(([, list]) => ({
+      server: list[0]!.server,
+      version: list[0]!.version,
+      format: list[0]!.format,
+      arch: list[0]!.arch,
+      firstMs: interval(num(list.map((m) => m.catalogFirstMs))),
+      lastMs: interval(num(list.map((m) => m.catalogLastMs))),
+      neverServed: list.filter((m) => m.catalogFirstMs !== null && m.catalogLastMs === null).length,
+      passes: list.length,
+    }));
+}
+
+export function markdown(rs: readonly Ranking[], prices: Prices, catalog: readonly CatalogRow[] = []): string {
   const out = [`# Archive lane`, "", `Dollars per million tiles at AWS list prices of ${prices.date} (${prices.region}); lower is better. A rank is shared unless the 95% confidence intervals over the passes do not overlap. Capacity is capped at the instance's sustained network rate (${BASELINE_GBPS["c8g.xlarge"]} Gbps).`, ""];
   for (const r of rs) {
     out.push(`## ${r.dataset}, ${r.format}, ${r.scenario === "alone" ? "server alone" : "behind a CDN"}, ${r.arch}`, "");
@@ -255,6 +295,11 @@ export function markdown(rs: readonly Ranking[], prices: Prices): string {
       const flags = [e.networkBound ? "network-bound" : "", e.clientBound ? "client-bound" : ""].filter(Boolean).join(", ");
       out.push(`| ${e.rank} | ${e.server} ${e.version}${e.stable ? "" : " (pre-release)"}${flags ? ` (${flags})` : ""} | ${fmt(e.costPerMillion.mean, 3)} | ${ci(e.costPerMillion, 3)} | ${fmt(e.capacityRps?.mean, 0)} | ${fmt(e.bytesPerTile?.mean, 0)} | ${fmt(e.p99AtCapacityMs?.mean, 1)} | ${e.passes.length} |`);
     }
+    out.push("");
+  }
+  if (catalog.length) {
+    out.push("## Start with 1,000 more sources (Berlin, reported)", "", "| format | arch | server | first tile (ms) | last source's tile (ms) | never served | passes |", "| :-- | :-- | :-- | --: | --: | --: | --: |");
+    for (const c of catalog) out.push(`| ${c.format} | ${c.arch} | ${c.server} ${c.version} | ${fmt(c.firstMs?.mean, 0)} | ${fmt(c.lastMs?.mean, 0)} | ${c.neverServed} | ${c.passes} |`);
     out.push("");
   }
   return out.join("\n");
@@ -294,6 +339,6 @@ if (import.meta.main) {
   mkdirSync(out, { recursive: true });
   writeFileSync(join(out, "measurements.json"), `${JSON.stringify(ms, null, 2)}\n`);
   writeFileSync(join(out, "rankings.json"), `${JSON.stringify(rs, null, 2)}\n`);
-  writeFileSync(join(out, "report.md"), markdown(rs, prices));
+  writeFileSync(join(out, "report.md"), markdown(rs, prices, catalogRows(ms)));
   console.log(`${ms.length} measurements, ${rs.length} rankings`);
 }

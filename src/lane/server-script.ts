@@ -4,8 +4,11 @@
  * rig bucket, writes the server's config files, pulls the image and starts a sampler that records the network
  * card's allowance counters, the server's memory and the host's CPU every 10 seconds. Start runs before each
  * scenario: a cold start, timed to the first tile from inside the instance so neither the network nor SSM sits
- * in the number. Collect runs last and puts the samples and the server's log beside the unit's results.
+ * in the number. Collect puts the samples and the server's log beside the unit's results. On Berlin, the catalog
+ * step then starts the server once more with 1,000 small archives beside the dataset's own, timing its first tile
+ * and a tile of the last source, as the diagnostic lane does.
  */
+import { lonLatToTile } from "../tiles";
 import { type Arch, dockerRun, type Format, type LaneServer } from "./servers";
 import { q, scriptHead, waitReady } from "./shell";
 
@@ -38,7 +41,7 @@ const SAMPLER = [
 ];
 
 export function setupScript(u: ServerUnit): string {
-  const files = Object.entries(u.server.config?.(u.tileset, u.format) ?? {});
+  const files = Object.entries(u.server.config?.([u.tileset], u.format) ?? {});
   return [
     ...scriptHead(`setup ${u.server.id} ${u.server.version} ${u.format} ${u.tileset} ${u.arch}`),
     ...waitReady,
@@ -62,7 +65,7 @@ export function setupScript(u: ServerUnit): string {
 
 /** Nothing of the archive in the page cache, the server just started, timed to its first tile. */
 export function startScript(u: ServerUnit, scenario: string): string {
-  const run = dockerRun(u.server, u.arch, u.tileset, u.format, u.localImage?.tag).map(q).join(" ");
+  const run = dockerRun(u.server, u.arch, [u.tileset], u.format, u.localImage?.tag).map(q).join(" ");
   const url = `http://127.0.0.1:${u.server.port}${u.server.path(u.tileset, u.firstTile)}`;
   return [
     ...scriptHead(`start ${u.server.id} ${u.format} ${u.tileset} ${u.arch} for ${scenario}`),
@@ -85,5 +88,49 @@ export function collectScript(u: ServerUnit, prefix: string): string {
     "docker logs --tail 2000 lane-server > /opt/lane/server.log 2>&1 || true",
     `aws s3 cp /opt/lane/samples.log ${q(`${prefix}samples.log`)} --only-show-errors`,
     `aws s3 cp /opt/lane/server.log ${q(`${prefix}server.log`)} --only-show-errors`,
+  ].join("\n") + "\n";
+}
+
+/** The catalog start (docs/adr/0011, reported, not ranked): the dataset's archive plus 1,000 small ones. */
+export const CATALOG_SIZE = 1000;
+export const CATALOG_NAMES = Array.from({ length: CATALOG_SIZE }, (_, i) => `t${String(i).padStart(4, "0")}`);
+/** The zoom-8 tile holding central Berlin, which every small archive (zooms 0-8 of the Berlin build) holds. */
+export const SMALL_TILE = lonLatToTile(13.405, 52.52, 8);
+const CATALOG_WAIT_S = 300;
+
+/** `smallKey` is the small archive in the bucket; each of the 1,000 is a copy of it, a distinct file, not a link. */
+export function catalogScript(u: ServerUnit, smallKey: string): string {
+  const dir = "/opt/lane/catalog";
+  const names = [u.tileset, ...CATALOG_NAMES];
+  const files = Object.entries(u.server.config?.(names, u.format) ?? {});
+  const run = dockerRun(u.server, u.arch, names, u.format, u.localImage?.tag, dir).map(q).join(" ");
+  const url = (tileset: string, t: { z: number; x: number; y: number }) => q(`http://127.0.0.1:${u.server.port}${u.server.path(tileset, t)}`);
+  return [
+    ...scriptHead(`catalog ${u.server.id} ${u.format} ${u.tileset} ${u.arch}: ${CATALOG_SIZE} more sources`),
+    "docker rm -f lane-server >/dev/null 2>&1 || true",
+    `rm -rf ${dir}`,
+    `mkdir -p ${dir}`,
+    `ln ${q(`/opt/lane/data/${u.tileset}.${u.format}`)} ${q(`${dir}/${u.tileset}.${u.format}`)}`,
+    `aws s3 cp ${q(`s3://${u.bucket}/${smallKey}`)} ${q(`/opt/lane/small.${u.format}`)} --only-show-errors`,
+    `for i in $(seq 0 ${CATALOG_SIZE - 1}); do cp ${q(`/opt/lane/small.${u.format}`)} "${dir}/t$(printf %04d "$i").${u.format}"; done`,
+    ...files.map(([name, content]) => `printf '%s' ${q(content)} > ${q(`${dir}/${name}`)}`),
+    // milliseconds from the start to a URL's first 200, or "none" when the wait runs out
+    "until200() {",
+    "  local deadline",
+    `  deadline=$(( $(date +%s) + ${CATALOG_WAIT_S} ))`,
+    '  while [ "$(date +%s)" -lt "$deadline" ]; do',
+    `    if [ "$(curl -s -o /dev/null -w '%{http_code}' "$1" || true)" = 200 ]; then echo $(( ($(date +%s%N) - start) / 1000000 )); return; fi`,
+    "    sleep 0.01",
+    "  done",
+    "  echo none",
+    "}",
+    "sync && echo 3 > /proc/sys/vm/drop_caches",
+    "start=$(date +%s%N)",
+    run,
+    `first=$(until200 ${url(u.tileset, u.firstTile)})`,
+    `if [ "$first" = none ]; then last=none; else last=$(until200 ${url(CATALOG_NAMES.at(-1)!, SMALL_TILE)}); fi`,
+    'echo "CATALOG first $first ms, last $last ms"',
+    '[ "$last" != none ] || docker logs --tail 20 lane-server 2>&1 || true',
+    "docker rm -f lane-server >/dev/null 2>&1 || true",
   ].join("\n") + "\n";
 }

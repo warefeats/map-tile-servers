@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { collectScript, type ServerUnit, setupScript, startScript } from "../src/lane/server-script";
+import { CATALOG_NAMES, catalogScript, collectScript, type ServerUnit, SMALL_TILE, setupScript, startScript } from "../src/lane/server-script";
 import { LANE_SERVERS } from "../src/lane/servers";
 
 const server = (id: string) => LANE_SERVERS.find((s) => s.id === id)!;
@@ -42,11 +42,26 @@ describe("the server scripts", () => {
     expect(s).toContain("'s3://b/results/lane/1/p1/u/server.log'");
   });
 
+  test("the catalog starts the server with the dataset and 1,000 copies of the small archive, timing two tiles", () => {
+    const u: ServerUnit = { ...unit, tileset: "berlin", dataKey: "inputs/x-berlin.pmtiles", server: server("martin-2"), format: "pmtiles" };
+    const s = catalogScript(u, "bundles/lane-7/catalog/small.pmtiles");
+    expect(CATALOG_NAMES).toHaveLength(1000);
+    expect(SMALL_TILE).toEqual({ z: 8, x: 137, y: 83 });
+    expect(s).toContain("ln '/opt/lane/data/berlin.pmtiles' '/opt/lane/catalog/berlin.pmtiles'");
+    expect(s).toContain("for i in $(seq 0 999); do cp '/opt/lane/small.pmtiles'");
+    expect(s).toContain("'-v' '/opt/lane/catalog:/data:ro'");
+    expect(s).toContain("'/data/t0999.pmtiles'");
+    expect(s).toContain("until200 'http://127.0.0.1:3000/berlin/14/8802/5372'");
+    expect(s).toContain("until200 'http://127.0.0.1:3000/t0999/8/137/83'");
+    expect(s.indexOf("drop_caches")).toBeLessThan(s.indexOf("'docker' 'run'"));
+  });
+
   test("renders scripts bash accepts for every server and format", () => {
     for (const sv of LANE_SERVERS) {
       for (const format of sv.formats) {
         const u: ServerUnit = { ...unit, arch: "amd64", server: sv, format };
-        for (const s of [setupScript(u), startScript(u, "cdn"), collectScript(u, "s3://b/p/")]) {
+        const catalog = sv.formats.includes("files") ? [] : [catalogScript({ ...u, tileset: "berlin" }, "bundles/lane-7/catalog/small.pmtiles")];
+        for (const s of [setupScript(u), startScript(u, "cdn"), collectScript(u, "s3://b/p/"), ...catalog]) {
           const p = Bun.spawnSync(["bash", "-n"], { stdin: new TextEncoder().encode(s) });
           expect(p.exitCode).toBe(0);
         }

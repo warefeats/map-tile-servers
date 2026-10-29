@@ -87,6 +87,13 @@ jobs:
           ln -s bbox-tile-server "$ctx/bin/bbox-app"
           docker buildx build --platform linux/arm64 -f images/Dockerfile.bbox-release -t "wf-bbox-release:$BBOX_VERSION" --output "type=docker,dest=$ctx/image.tar" "$ctx"
           zstd -q -T0 "$ctx/image.tar" -o "$stage/images/bbox-arm64.tar.zst"
+          # the catalog's small archive: zooms 0-8 of the Berlin build, cut as the diagnostic lane cuts it
+          small=$RUNNER_TEMP/small
+          mkdir -p "$small" "$stage/catalog"
+          aws s3 cp "s3://$bucket/$(awk '$1 == "berlin.mbtiles" { print $2 }' scripts/rig-inputs.txt)" "$small/berlin.mbtiles" --only-show-errors
+          docker run --rm -v "$small:/w" --entrypoint /usr/local/bin/mbtiles ghcr.io/maplibre/martin:1.16.1 copy /w/berlin.mbtiles /w/small.mbtiles --max-zoom 8 --dst-type flat
+          docker run --rm -v "$small:/w" protomaps/go-pmtiles:v1.31.2 convert /w/small.mbtiles /w/small.pmtiles
+          cp "$small/small.mbtiles" "$small/small.pmtiles" "$stage/catalog/"
           curl -fsSL -o "$RUNNER_TEMP/$TILE_LOG" "https://planet.openstreetmap.org/tile_logs/$TILE_LOG"
           echo "$TILE_LOG_SHA256  $RUNNER_TEMP/$TILE_LOG" | sha256sum -c -
           pids=()

@@ -68,7 +68,7 @@ import { readFileSync, writeFileSync } from 'node:fs';
 import { clientScenarioScript, clientSetupScript } from './src/lane/client-script';
 import { ssmCommands } from './src/lane/cloud';
 import { parseInputs, planUnits, serverUnitOf } from './src/lane/orchestrate';
-import { collectScript, setupScript, startScript } from './src/lane/server-script';
+import { catalogScript, collectScript, setupScript, startScript } from './src/lane/server-script';
 const dir = process.env.LANE;
 const inputs = parseInputs(readFileSync('scripts/rig-inputs.txt', 'utf8'));
 for (const u of planUnits('all').run) {
@@ -78,6 +78,7 @@ for (const u of planUnits('all').run) {
   out('setup', setupScript(su));
   out('start', startScript(su, 'alone'));
   out('collect', collectScript(su, 's3://BUCKET/results/lane/RUN/p1/' + u.id + '/'));
+  if (u.dataset === 'berlin') out('catalog', catalogScript(su, 'bundles/lane-RUN/catalog/small.' + u.format));
   out('client-setup', clientSetupScript(cu));
   out('alone', clientScenarioScript(cu, { server: u.server.id, host: '10.0.0.1', format: u.format, scenario: 'alone', quick: false, resultKey: 'results/lane/RUN/p1/' + u.id + '/alone.json' }));
 }

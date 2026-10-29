@@ -39,7 +39,7 @@ class FakeCloud implements Cloud {
     const name = key.split("/").at(-1)!.replace(/\.sh$/, "");
     this.calls.push(`run ${id} ${name}`);
     if (name === this.opts.failScript) return { status: "Failed", stdout: "no 200 from the server within a minute", stderr: "" };
-    const stdout = name === "setup" ? "data in 812 s\nsetup done" : name.startsWith("start-") ? "READY 1234 ms to the first tile" : name === "alone" || name === "cdn" ? "capacity 4000/s, 50000 bytes a tile" : "";
+    const stdout = name === "setup" ? "data in 812 s\nsetup done" : name.startsWith("start-") ? "READY 1234 ms to the first tile" : name === "alone" || name === "cdn" ? "capacity 4000/s, 50000 bytes a tile" : name === "catalog" ? "CATALOG first 95 ms, last none ms" : "";
     return { status: "Success", stdout, stderr: "" };
   }
 
@@ -112,6 +112,15 @@ describe("a unit's flow", () => {
     expect(alone).toContain("'--host=10.0.0.1'");
     expect(alone).toContain("'--quick'");
     expect(JSON.parse(cloud.texts.get("results/lane/7/p1/martin-2-pmtiles-planet-arm64/unit.json")!).serverHost.az).toBe("zone-s-a");
+  });
+
+  test("ends a Berlin unit with the catalog start, after the server's log is kept", async () => {
+    const cloud = new FakeCloud();
+    const rec = await runUnit(cloud, ctx, planUnits("bbox-pmtiles-berlin-amd64").run[0]!, 1);
+    expect(rec.error).toBeNull();
+    expect(cloud.calls.slice(-3)).toEqual(["run i-1 collect", "run i-1 catalog", "terminate i-1 i-2"]);
+    expect(rec.catalog).toEqual({ firstMs: 95, lastMs: null });
+    expect(cloud.texts.get("bundles/lane-7/p1/bbox-pmtiles-berlin-amd64/catalog.sh")).toContain("s3://b/bundles/lane-7/catalog/small.pmtiles");
   });
 
   test("tries the next zone for a server, and waits in its zone for a client", async () => {
