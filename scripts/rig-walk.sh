@@ -78,7 +78,7 @@ for (const u of planUnits('all').run) {
   out('setup', setupScript(su));
   out('start', startScript(su, 'alone'));
   out('collect', collectScript(su, 's3://BUCKET/results/lane/RUN/p1/' + u.id + '/'));
-  if (u.dataset === 'berlin') out('catalog', catalogScript(su, 'bundles/lane-RUN/catalog/small.' + u.format));
+  if (u.dataset === 'berlin' && u.format !== 'files') out('catalog', catalogScript(su, 'bundles/lane-RUN/catalog/small.' + u.format));
   out('client-setup', clientSetupScript(cu));
   out('alone', clientScenarioScript(cu, { server: u.server.id, host: '10.0.0.1', format: u.format, scenario: 'alone', quick: false, resultKey: 'results/lane/RUN/p1/' + u.id + '/alone.json' }));
 }

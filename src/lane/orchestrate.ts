@@ -2,9 +2,9 @@
  * The archive lane's orchestrator (docs/adr/0011). Each pass puts every unit on a fresh pair of instances in a
  * cluster placement group of its own: the server sets up, the client launches beside it once the archive is in
  * place, and each scenario starts the server cold before the client measures it. A unit's record lands in the
- * bucket when it ends; one that fails is recorded and the others go on. A Berlin unit ends with the catalog start
- * (1,000 more sources). Passes run one after another, and each starts in the next zone that offers every lane
- * instance type.
+ * bucket when it ends; one that fails is recorded and the others go on. A Berlin unit of an archive server ends
+ * with the catalog start (1,000 more sources). A unit whose data is not in the bucket is skipped before the first
+ * pass. Passes run one after another, and each starts in the next zone that offers every lane instance type.
  *   bun run src/lane/orchestrate.ts --run=<id> [--units=all|<pattern>,...] [--passes=3] [--quick]
  */
 import { readFileSync } from "node:fs";
@@ -37,9 +37,8 @@ export interface LaneUnit {
 
 export const unitId = (u: Omit<LaneUnit, "id">) => `${u.server.id}-${u.format}-${u.dataset}-${u.arch}`;
 
-/** Why a unit cannot run yet, or null. */
+/** Why a unit cannot run, or null. */
 export function blocked(u: Omit<LaneUnit, "id">): string | null {
-  if (u.format === "files") return "the tile files are not staged";
   if (!u.server.image[u.arch] && !u.server.release?.[u.arch]) return `no ${u.arch} image, and none built from a release binary`;
   return null;
 }
@@ -67,9 +66,14 @@ export function parseInputs(text: string): Map<string, string> {
   return new Map(pairs);
 }
 
-/** The archive's key in the bucket: the planet as staged, Berlin as scripts/rig-inputs.txt pins it. */
-export function dataKey(u: Pick<LaneUnit, "dataset" | "format">, inputs: ReadonlyMap<string, string>): string {
-  if (u.dataset === "planet") return `inputs/openfreemap-planet-${PLANET_BUILD}.${u.format}`;
+/**
+ * The dataset's key in the bucket: the planet as staged, Berlin as scripts/rig-inputs.txt pins it. Tile files come
+ * as a Btrfs image: the planet's is OpenFreeMap's own, Berlin's the one lane.yml builds into the run's bundle.
+ */
+export function dataKey(u: Pick<LaneUnit, "dataset" | "format">, inputs: ReadonlyMap<string, string>, run: string): string {
+  const ext = u.format === "files" ? "btrfs" : u.format;
+  if (u.dataset === "planet") return `inputs/openfreemap-planet-${PLANET_BUILD}.${ext}`;
+  if (u.format === "files") return `bundles/lane-${run}/files/${u.dataset}.btrfs`;
   const key = inputs.get(`${u.dataset}.${u.format}`);
   if (!key) throw new Error(`scripts/rig-inputs.txt names no ${u.dataset}.${u.format}`);
   return key;
@@ -78,7 +82,7 @@ export function dataKey(u: Pick<LaneUnit, "dataset" | "format">, inputs: Readonl
 /** What a unit's server scripts need; an image lane.yml built from a release binary comes from the run's bundle. */
 export function serverUnitOf(u: LaneUnit, bucket: string, run: string, inputs: ReadonlyMap<string, string>): ServerUnit {
   const tag = u.server.image[u.arch] ? undefined : u.server.release?.[u.arch];
-  return { server: u.server, arch: u.arch, tileset: u.dataset, format: u.format, bucket, dataKey: dataKey(u, inputs), firstTile: FIRST_TILE, ...(tag ? { localImage: { tag, key: `bundles/lane-${run}/images/${u.server.id}-${u.arch}.tar.zst` } } : {}) };
+  return { server: u.server, arch: u.arch, tileset: u.dataset, format: u.format, bucket, dataKey: dataKey(u, inputs, run), firstTile: FIRST_TILE, ...(tag ? { localImage: { tag, key: `bundles/lane-${run}/images/${u.server.id}-${u.arch}.tar.zst` } } : {}) };
 }
 
 export interface RunContext {
@@ -171,7 +175,7 @@ export async function runUnit(cloud: Cloud, ctx: RunContext, u: LaneUnit, pass: 
       note(/capacity .*/.exec(out)?.[0] ?? `${scenario} done`);
     }
     await step(server, "collect", collectScript(su, `s3://${ctx.bucket}/${results}`), TIMEOUT_S.collect);
-    if (u.dataset === "berlin") {
+    if (u.dataset === "berlin" && u.format !== "files") {
       const out = await step(server, "catalog", catalogScript(su, `bundles/lane-${ctx.run}/catalog/small.${u.format}`), TIMEOUT_S.catalog);
       const m = /CATALOG first (\d+|none) ms, last (\d+|none) ms/.exec(out);
       const ms = (v: string | undefined) => (v && v !== "none" ? Number(v) : null);
@@ -224,6 +228,14 @@ if (import.meta.main) {
   const templates = { arm64: need("LaneServerArmId"), amd64: need("LaneServerX86Id"), client: need("LaneClientId") };
   const subnets = await laneSubnets();
   const inputs = parseInputs(readFileSync("scripts/rig-inputs.txt", "utf8"));
+  // every dataset a unit fetches must be in the bucket, and a staged planet file must carry its checked sum
+  const present = async (key: string) => aws(["s3api", "head-object", "--bucket", bucket, "--key", key]).then(() => true, () => false);
+  for (const u of [...plan.run]) {
+    const key = dataKey(u, inputs, run);
+    if ((await present(key)) && (!key.startsWith("inputs/openfreemap-") || (await present(`${key}.sha256`)))) continue;
+    plan.run.splice(plan.run.indexOf(u), 1);
+    plan.skipped.push({ id: u.id, reason: `${key} is not in the bucket` });
+  }
   // a minute's margin for clock skew against SSM's own timestamps
   const cloud = new AwsCloud(bucket, new Date(Date.now() - 60_000));
   console.log(`run ${run}: ${plan.run.length} units, ${passes} pass(es)${quick ? ", quick" : ""}; zones' subnets ${subnets.join(" ")}`);

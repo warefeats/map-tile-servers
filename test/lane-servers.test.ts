@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { dockerRun, LANE_SERVERS, tileUrl, units } from "../src/lane/servers";
+import { dockerRun, LANE_SERVERS, openFreeMapNginx, tileUrl, units } from "../src/lane/servers";
 
 const server = (id: string) => LANE_SERVERS.find((s) => s.id === id)!;
 const tile = { z: 14, x: 8802, y: 5371 };
@@ -31,6 +31,14 @@ describe("the lane's servers", () => {
   test("configs name the tileset and its file", () => {
     expect(JSON.parse(server("tileserver-gl").config!(["planet"], "pmtiles")["config.json"]!).data).toEqual({ planet: { pmtiles: "planet.pmtiles" } });
     expect(server("bbox").config!(["berlin"], "mbtiles")["bbox.toml"]).toContain('[tileset.mbtiles]\npath = "/data/berlin.mbtiles"');
+  });
+
+  test("nginx serves tile files with OpenFreeMap's production settings", () => {
+    const conf = openFreeMapNginx(["planet"]);
+    for (const line of ["worker_connections 40000;", "open_file_cache max=200000 inactive=60m;", "location ^~ /planet/ {", "alias /data/planet/tiles/;", "try_files $uri @empty_tile;", "add_header Content-Encoding gzip;", "return 200 '';", "access_log /var/log/nginx/access.jsonl access_json buffer=128k;"]) {
+      expect(conf).toContain(line);
+    }
+    expect(server("nginx").path("planet", { z: 14, x: 8802, y: 5373 })).toBe("/planet/14/8802/5373.pbf");
   });
 
   test("a catalog is every archive in one start: arguments or config entries, one per tileset", () => {
