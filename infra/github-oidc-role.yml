@@ -1,5 +1,5 @@
 AWSTemplateFormatVersion: "2010-09-09"
-Description: GitHub OIDC role for the cloud rig workflow of warefeats/martin-2
+Description: GitHub OIDC role for the cloud rig workflow of warefeats/map-tile-servers
 
 Parameters:
   GitHubOrg:
@@ -11,10 +11,10 @@ Parameters:
     Description: Numeric org ID (gh api orgs/warefeats -q .id).
   GitHubRepository:
     Type: String
-    Default: martin-2
+    Default: map-tile-servers
   RepositoryId:
     Type: String
-    Description: Numeric repository ID (gh api repos/warefeats/martin-2 -q .id). Required for immutable ID-form subject claims.
+    Description: Numeric repository ID (gh api repos/warefeats/map-tile-servers -q .id). Required for immutable ID-form subject claims.
   OidcProviderArn:
     Type: String
     Description: The account's existing token.actions.githubusercontent.com provider.
@@ -23,8 +23,8 @@ Resources:
   DeployRole:
     Type: AWS::IAM::Role
     Properties:
-      RoleName: martin-2-github-deploy
-      Description: Launches the martin-2 rig hosts and drives them over SSM.
+      RoleName: map-tile-servers-github-deploy
+      Description: Launches the cloud rig hosts of warefeats/map-tile-servers and drives them over SSM.
       # a host job holds one session for up to six hours
       MaxSessionDuration: 21600
       AssumeRolePolicyDocument:
@@ -55,5 +55,5 @@ Resources:
 
 Outputs:
   RoleArn:
-    Description: Stored as the AWS_ROLE_ARN secret of warefeats/martin-2.
+    Description: Stored as the AWS_ROLE_ARN secret of warefeats/map-tile-servers.
     Value: !GetAtt DeployRole.Arn

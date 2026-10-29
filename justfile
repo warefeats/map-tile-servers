@@ -73,12 +73,12 @@ rig-deploy:
 setup-oidc:
     #!/usr/bin/env bash
     set -euo pipefail
-    repo_id=$(gh api repos/warefeats/martin-2 --jq .id)
-    aws cloudformation deploy --template-file infra/github-oidc-role.yml --stack-name martin-2-github-oidc \
+    repo_id=$(gh api repos/warefeats/map-tile-servers --jq .id)
+    aws cloudformation deploy --template-file infra/github-oidc-role.yml --stack-name map-tile-servers-github-oidc \
         --capabilities CAPABILITY_NAMED_IAM --no-fail-on-empty-changeset \
         --parameter-overrides RepositoryId="$repo_id" OidcProviderArn=arn:aws:iam::{{aws_account}}:oidc-provider/token.actions.githubusercontent.com
-    role=$(aws cloudformation describe-stacks --stack-name martin-2-github-oidc --query "Stacks[0].Outputs[?OutputKey=='RoleArn'].OutputValue" --output text)
-    gh secret set AWS_ROLE_ARN --repo warefeats/martin-2 --body "$role"
+    role=$(aws cloudformation describe-stacks --stack-name map-tile-servers-github-oidc --query "Stacks[0].Outputs[?OutputKey=='RoleArn'].OutputValue" --output text)
+    gh secret set AWS_ROLE_ARN --repo warefeats/map-tile-servers --body "$role"
     echo "AWS_ROLE_ARN is $role"
 
 # Upload the inputs scripts/rig-inputs.txt pins (IMAGES and DBDATA name the saved helper images and database volume).
@@ -92,10 +92,10 @@ rig-walk:
 # A dispatch. smoke runs each family's smoke (the PostGIS host builds Martin 2.0 when the bucket lacks it), full runs
 # both passes and the verdict, collect scores a run whose host outlived its job (add -f run_id=<run>).
 rig-cloud MODE="smoke" FAMILIES="both" *ARGS:
-    gh workflow run rig.yml --repo warefeats/martin-2 -f mode={{MODE}} -f families={{FAMILIES}} {{ARGS}}
+    gh workflow run rig.yml --repo warefeats/map-tile-servers -f mode={{MODE}} -f families={{FAMILIES}} {{ARGS}}
 
 rig-watch:
-    gh run list --repo warefeats/martin-2 --workflow=rig.yml --limit=1 --json databaseId --jq '.[0].databaseId' | xargs gh run watch --repo warefeats/martin-2
+    gh run list --repo warefeats/map-tile-servers --workflow=rig.yml --limit=1 --json databaseId --jq '.[0].databaseId' | xargs gh run watch --repo warefeats/map-tile-servers
 
 # One dispatch's artifacts: results and the verdict into the repo, all of it (logs, the build record) in .work/rig/gh-<id>/.
 rig-fetch ID:
@@ -103,7 +103,7 @@ rig-fetch ID:
     set -euo pipefail
     dir=.work/rig/gh-{{ID}}
     rm -rf "$dir"
-    gh run download {{ID}} --repo warefeats/martin-2 --dir "$dir"
+    gh run download {{ID}} --repo warefeats/map-tile-servers --dir "$dir"
     find "$dir" -type f \( -name 'results-*.json' -o -name 'verdict-*' \) -exec cp {} . \;
     ls -R "$dir"
 

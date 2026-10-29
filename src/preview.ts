@@ -12,7 +12,7 @@ const site = process.argv.find((a) => a.startsWith("--site="))?.split("=")[1] ??
 const data = join(site, "web", "data");
 const meta = JSON.parse(readFileSync(join(root, "benchmark.json"), "utf8"));
 const slug: string = meta.slug;
-const repo = "warefeats/martin-2";
+const repo = "warefeats/map-tile-servers";
 const registryPath = join(data, "registry.json");
 const manifestPath = join(data, "cache", "manifest.json");
 const registry = JSON.parse(readFileSync(registryPath, "utf8"));
