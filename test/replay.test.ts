@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { addLine, aliasTable, BERLIN, buildModel, emptyListed, MAX_TAIL_PER_TILE, mulberry32, PLANET, regionTileCount, sampler, vectorTileOf } from "../src/replay";
+import { addLine, aliasTable, BERLIN, buildModel, emptyListed, localize, MAX_TAIL_PER_TILE, mulberry32, PLANET, regionTileCount, sampler, vectorTileOf } from "../src/replay";
 
 describe("vectorTileOf", () => {
   test("moves a raster tile one zoom down", () => {
@@ -29,6 +29,26 @@ describe("addLine", () => {
     addLine(l, "15/17605/10743 30", BERLIN); // Berlin
     addLine(l, "15/16374/10896 30", BERLIN); // near Greenwich
     expect(l.counts[14]!.size).toBe(1);
+  });
+});
+
+describe("localize", () => {
+  const lines = ["1/0/0 1000", "10/550/334 100", "10/0/0 900"]; // the world tile; a Berlin z9 tile; a z9 tile far away
+
+  test("scales a city's low zooms to the city's share of the world's local-zoom demand", () => {
+    const l = emptyListed();
+    for (const line of lines) addLine(l, line, BERLIN);
+    expect(localize(l, BERLIN)).toBeCloseTo(0.1); // Berlin has 100 of the world's 1,000 z9 requests
+    expect(l.counts[0]!.get(0)).toBeCloseTo(100); // the world tile keeps a tenth of its demand
+    expect(l.direct[0]).toBeCloseTo(100);
+    expect(l.counts[9]!.get(275 * 2 ** 9 + 167)).toBe(100); // local zooms are untouched
+  });
+
+  test("leaves the planet alone", () => {
+    const l = emptyListed();
+    for (const line of lines) addLine(l, line, PLANET);
+    expect(localize(l, PLANET)).toBeNull();
+    expect(l.counts[0]!.get(0)).toBe(1000);
   });
 });
 

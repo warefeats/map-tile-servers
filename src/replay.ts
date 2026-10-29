@@ -82,13 +82,44 @@ export interface Listed {
   /** Requests whose raster zoom mapped straight to the vector zoom, and those folded in from deeper zooms. */
   direct: number[];
   folded: number[];
+  /** The whole world's direct requests per vector zoom, before the region filter. */
+  globalDirect: number[];
   /** Raster z0 requests, which have no vector parent. */
   dropped: number;
   lines: number;
 }
 
 export function emptyListed(): Listed {
-  return { counts: Array.from({ length: MAX_ZOOM + 1 }, () => new Map()), direct: new Array(MAX_ZOOM + 1).fill(0), folded: new Array(MAX_ZOOM + 1).fill(0), dropped: 0, lines: 0 };
+  const zeros = () => new Array<number>(MAX_ZOOM + 1).fill(0);
+  return { counts: Array.from({ length: MAX_ZOOM + 1 }, () => new Map()), direct: zeros(), folded: zeros(), globalDirect: zeros(), dropped: 0, lines: 0 };
+}
+
+/** Below this zoom a tile touching a city's box reaches far beyond the city, so its log demand is everyone's. */
+export const LOCAL_MIN_ZOOM = 9;
+
+/**
+ * Scales a region's demand at zooms below LOCAL_MIN_ZOOM to the region's size: each such zoom gets the
+ * world's demand at that zoom times the region's share of the world's demand at LOCAL_MIN_ZOOM..MAX_ZOOM,
+ * split over the region's tiles as the log splits it. The planet is left alone. Returns the share.
+ */
+export function localize(listed: Listed, region: Region): number | null {
+  if (!region.bbox) return null;
+  let local = 0;
+  let world = 0;
+  for (let z = LOCAL_MIN_ZOOM; z <= MAX_ZOOM; z++) {
+    local += listed.direct[z]!;
+    world += listed.globalDirect[z]!;
+  }
+  const share = world > 0 ? local / world : 0;
+  for (let z = 0; z < LOCAL_MIN_ZOOM; z++) {
+    const have = listed.direct[z]!;
+    if (have <= 0) continue;
+    const factor = (listed.globalDirect[z]! * share) / have;
+    const m = listed.counts[z]!;
+    for (const [k, n] of m) m.set(k, n * factor);
+    listed.direct[z] = have * factor;
+  }
+  return share;
 }
 
 /** Add one `z/x/y count` line of OSM's tile log; tiles outside the region are skipped. */
@@ -107,6 +138,7 @@ export function addLine(listed: Listed, line: string, region: Region): void {
     listed.dropped += n;
     return;
   }
+  if (z - 1 <= MAX_ZOOM) listed.globalDirect[v.z]! += n;
   const r = regionRange(region, v.z);
   if (v.x < r.x0 || v.x > r.x1 || v.y < r.y0 || v.y > r.y1) return;
   const k = key(v.z, v.x, v.y);

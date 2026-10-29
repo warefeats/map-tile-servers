@@ -7,7 +7,7 @@
 import { createHash } from "node:crypto";
 import { readFileSync, writeFileSync } from "node:fs";
 import { basename } from "node:path";
-import { addLine, BERLIN, buildModel, emptyListed, MAX_TAIL_PER_TILE, MISS_SHARE, PLANET, sampler, type Scenario, TAIL_SHARE } from "./replay";
+import { addLine, BERLIN, buildModel, emptyListed, LOCAL_MIN_ZOOM, localize, MAX_TAIL_PER_TILE, MISS_SHARE, PLANET, sampler, type Scenario, TAIL_SHARE } from "./replay";
 
 const arg = (n: string) => process.argv.find((a) => a.startsWith(`--${n}=`))?.slice(n.length + 3);
 const log = arg("log");
@@ -37,6 +37,7 @@ for await (const chunk of xz.stdout) {
 if (rest) addLine(listed, rest, region);
 if ((await xz.exited) !== 0) throw new Error(`xz -dc ${log} failed`);
 
+const localShare = localize(listed, region);
 const model = buildModel(listed, region);
 const draw = sampler(listed, model, scenario, seed);
 const lines: string[] = new Array(n);
@@ -61,6 +62,8 @@ const summary = {
   tailShare: TAIL_SHARE,
   missShare: MISS_SHARE,
   maxTailPerTile: MAX_TAIL_PER_TILE,
+  localMinZoom: LOCAL_MIN_ZOOM,
+  localShare,
   logLines: listed.lines,
   droppedRasterZ0: listed.dropped,
   listedRequests: model.listedRequests,
