@@ -1,0 +1,159 @@
+name: Archive lane
+
+# The archive lane of docs/adr/0011 (src/lane/orchestrate.ts): every unit on a fresh pair of instances, its own
+# cluster placement group, three passes one after another; the records land in the bucket and as an artifact.
+# A smoke runs a few units once, with short steps.
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "smoke: a few units, one pass, short steps; full: every unit, three passes"
+        type: choice
+        options: [smoke, full]
+        default: smoke
+      units:
+        description: "Unit ids, comma-separated, * as a wildcard (empty: the mode's own)"
+        required: false
+        default: ""
+
+concurrency:
+  group: martin-2-lane
+  cancel-in-progress: false
+
+permissions:
+  id-token: write
+  contents: read
+
+defaults:
+  run:
+    shell: bash
+
+env:
+  OHA_VERSION: "1.16.0"
+  OHA_SHA256: 99a790eb8c3e0feaca974bd6b32f0f8d4426a0c5b289f39e833e5b2c7529cd39
+  TILE_LOG: tiles-2026-10-28.txt.xz
+  TILE_LOG_SHA256: c10c2b12974d34bef54924031cae6d440608bd1d4556b740dfa27df3067df9e7
+  BBOX_VERSION: "0.6.2"
+  BBOX_ARM64_SHA256: 8e5b9bf3dc4923cb68bfc617ab137f3e9188d35a45b778591fee411ece446635
+  SMOKE_UNITS: martin-2-pmtiles-berlin-arm64,martin-1-mbtiles-berlin-amd64,go-pmtiles-pmtiles-planet-arm64
+
+jobs:
+  lane:
+    name: lane ${{ inputs.mode }}
+    runs-on: ubuntu-24.04
+    environment: martin-2-bench
+    timeout-minutes: 340
+    env:
+      RUN: ${{ github.run_id }}
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: "1.4.0"
+
+      - uses: docker/setup-buildx-action@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v6
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-region: us-east-1
+          role-duration-seconds: 21600
+
+      - name: Bundle
+        run: |
+          set -euo pipefail
+          . scripts/rig-lib.sh
+          bucket=$(stack_output RigBucketName)
+          # the archives the units fetch: Berlin as scripts/rig-inputs.txt pins it, the planet as staged
+          planet=$(sed -n 's/^export const PLANET_BUILD = "\(.*\)";$/\1/p' src/lane/orchestrate.ts)
+          for f in mbtiles pmtiles; do
+            for key in "$(awk -v n="berlin.$f" '$1 == n { print $2 }' scripts/rig-inputs.txt)" "inputs/openfreemap-planet-$planet.$f.sha256"; do
+              aws s3api head-object --bucket "$bucket" --key "$key" >/dev/null 2>&1 || { echo "::error::$key is not in the bucket"; exit 1; }
+            done
+          done
+          stage=$RUNNER_TEMP/bundle
+          mkdir -p "$stage/replay"
+          bun build src/lane/unit.ts --target=bun --outfile="$stage/lane-unit.js"
+          curl -fsSL -o "$stage/oha" "https://github.com/hatoo/oha/releases/download/v$OHA_VERSION/oha-linux-arm64"
+          echo "$OHA_SHA256  $stage/oha" | sha256sum -c -
+          # BBOX publishes no arm64 image: its official aarch64 release binary, in an image like its amd64 one
+          ctx=$RUNNER_TEMP/bbox
+          mkdir -p "$ctx/bin" "$stage/images"
+          curl -fsSL -o "$ctx/release.tgz" "https://github.com/bbox-services/bbox/releases/download/v$BBOX_VERSION/bbox-tile-server-aarch64-unknown-linux-gnu.tar.gz"
+          echo "$BBOX_ARM64_SHA256  $ctx/release.tgz" | sha256sum -c -
+          tar -xzf "$ctx/release.tgz" -C "$ctx/bin" bbox-tile-server
+          ln -s bbox-tile-server "$ctx/bin/bbox-app"
+          docker buildx build --platform linux/arm64 -f images/Dockerfile.bbox-release -t "wf-bbox-release:$BBOX_VERSION" --output "type=docker,dest=$ctx/image.tar" "$ctx"
+          zstd -q -T0 "$ctx/image.tar" -o "$stage/images/bbox-arm64.tar.zst"
+          # the catalog's small archive: zooms 0-8 of the Berlin build, cut as the diagnostic lane cuts it
+          small=$RUNNER_TEMP/small
+          mkdir -p "$small" "$stage/catalog"
+          aws s3 cp "s3://$bucket/$(awk '$1 == "berlin.mbtiles" { print $2 }' scripts/rig-inputs.txt)" "$small/berlin.mbtiles" --only-show-errors
+          docker run --rm -v "$small:/w" --entrypoint /usr/local/bin/mbtiles ghcr.io/maplibre/martin:1.16.1 copy /w/berlin.mbtiles /w/small.mbtiles --max-zoom 8 --dst-type flat
+          docker run --rm -v "$small:/w" protomaps/go-pmtiles:v1.31.2 convert /w/small.mbtiles /w/small.pmtiles
+          cp "$small/small.mbtiles" "$small/small.pmtiles" "$stage/catalog/"
+          curl -fsSL -o "$RUNNER_TEMP/$TILE_LOG" "https://planet.openstreetmap.org/tile_logs/$TILE_LOG"
+          echo "$TILE_LOG_SHA256  $RUNNER_TEMP/$TILE_LOG" | sha256sum -c -
+          pids=()
+          for region in berlin planet; do
+            for scenario in alone cdn; do
+              bun run src/replay-build.ts --log="$RUNNER_TEMP/$TILE_LOG" --region="$region" --scenario="$scenario" --out="$stage/replay/$region-$scenario.txt" &
+              pids+=($!)
+            done
+          done
+          for pid in "${pids[@]}"; do wait "$pid"; done
+          aws s3 cp "$stage/" "s3://$bucket/bundles/lane-$RUN/" --recursive --only-show-errors
+          # what each replay holds, with the run's records
+          aws s3 cp "$stage/replay/" "s3://$bucket/results/lane/$RUN/replay/" --recursive --exclude '*' --include '*.json' --only-show-errors
+          echo "bundle lane-$RUN at $(git rev-parse --short HEAD)"
+
+      - name: Run
+        env:
+          MODE: ${{ inputs.mode }}
+          UNITS: ${{ inputs.units }}
+        run: |
+          set -euo pipefail
+          if [ "$MODE" = smoke ]; then
+            bun run src/lane/orchestrate.ts --run="$RUN" --units="${UNITS:-$SMOKE_UNITS}" --passes=1 --quick
+          else
+            bun run src/lane/orchestrate.ts --run="$RUN" --units="${UNITS:-all}" --passes=3
+          fi
+
+      - name: Clean up
+        if: always()
+        run: |
+          set -uo pipefail
+          . scripts/rig-lib.sh
+          # anything the run left running, then its placement groups once their instances are gone
+          mapfile -t left < <(aws ec2 describe-instances --filters "Name=tag:LaneRun,Values=$RUN" Name=instance-state-name,Values=pending,running,stopping,stopped --query 'Reservations[].Instances[].InstanceId' --output text | tr '\t' '\n' | grep .)
+          if [ ${#left[@]} -gt 0 ]; then
+            aws ec2 terminate-instances --instance-ids "${left[@]}" >/dev/null && echo "terminated ${left[*]}"
+          fi
+          mapfile -t all < <(aws ec2 describe-instances --filters "Name=tag:LaneRun,Values=$RUN" --query 'Reservations[].Instances[].InstanceId' --output text | tr '\t' '\n' | grep .)
+          if [ ${#all[@]} -gt 0 ]; then aws ec2 wait instance-terminated --instance-ids "${all[@]}" || echo "::warning::not every instance has terminated yet"; fi
+          for g in $(aws ec2 describe-placement-groups --filters "Name=group-name,Values=lane-$RUN-*" --query 'PlacementGroups[].GroupName' --output text); do
+            aws ec2 delete-placement-group --group-name "$g" || echo "::warning::placement group $g stays"
+          done
+
+      - name: Fetch the records
+        if: always()
+        run: |
+          . scripts/rig-lib.sh
+          aws s3 sync "s3://$(stack_output RigBucketName)/results/lane/$RUN/" lane-results/ --only-show-errors || true
+
+      - name: Report
+        if: always()
+        run: |
+          set -euo pipefail
+          [ -d lane-results ] || { echo "no records"; exit 0; }
+          bun run src/lane/report.ts --records=lane-results --out=lane-results/report
+          cat lane-results/report/report.md >> "$GITHUB_STEP_SUMMARY"
+
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: lane-${{ github.run_id }}
+          path: lane-results/
+          if-no-files-found: warn

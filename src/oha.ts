@@ -77,8 +77,8 @@ export interface OhaOptions {
   headers: Record<string, string>;
 }
 
-/** One oha invocation inside the client container. Compression handling is left to the headers given. */
-export function oha(url: string, opts: OhaOptions): OhaPass {
+/** oha's command line for one invocation. Compression handling is left to the headers given. */
+export function ohaArgs(url: string, opts: OhaOptions): string[] {
   const args = ["oha", "--output-format", "json", "--no-tui", "--disable-compression", "-t", `${opts.timeoutSeconds}s`, "-c", String(opts.connections)];
   if (opts.requests !== undefined) args.push("-n", String(opts.requests));
   if (opts.durationSeconds !== undefined) args.push("-z", `${opts.durationSeconds}s`);
@@ -86,6 +86,15 @@ export function oha(url: string, opts: OhaOptions): OhaPass {
   for (const [name, value] of Object.entries(opts.headers)) args.push("-H", `${name}: ${value}`);
   if (opts.urlsFromFile) args.push("--urls-from-file", opts.urlsFromFile);
   else args.push(url);
-  const budgetMs = ((opts.durationSeconds ?? 0) + opts.timeoutSeconds * (opts.requests !== undefined ? Math.ceil(opts.requests / opts.connections) + 1 : 2)) * 1000 + 30_000;
-  return parseOha(clientExec(args, budgetMs));
+  return args;
+}
+
+/** How long an invocation may take before it counts as hung. */
+export function ohaBudgetMs(opts: OhaOptions): number {
+  return ((opts.durationSeconds ?? 0) + opts.timeoutSeconds * (opts.requests !== undefined ? Math.ceil(opts.requests / opts.connections) + 1 : 2)) * 1000 + 30_000;
+}
+
+/** One oha invocation inside the client container. */
+export function oha(url: string, opts: OhaOptions): OhaPass {
+  return parseOha(clientExec(ohaArgs(url, opts), ohaBudgetMs(opts)));
 }
