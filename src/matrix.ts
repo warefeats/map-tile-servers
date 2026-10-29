@@ -48,7 +48,7 @@ export const CANDIDATES: readonly Candidate[] = [
   { id: "martin-2", family: "postgis", server: "martin", name: `Martin ${MARTIN_2.version}`, ...MARTIN_2, provenance: MARTIN_2_PROVENANCE, homepage: "https://martin.maplibre.org", color: "#1D4ED8", port: 3000, tilePath: martinPath },
   { id: "martin-1", family: "postgis", server: "martin", name: "Martin 1.16.1", ...MARTIN_1, homepage: "https://martin.maplibre.org", color: "#93C5FD", port: 3000, tilePath: martinPath },
   { id: "tegola", family: "postgis", server: "tegola", name: "Tegola", version: "0.21.2", image: "gospatial/tegola:v0.21.2", homepage: "https://tegola.io", color: "#16A34A", port: 8080, tilePath: (l, t) => `/maps/bench/${l}/${t.z}/${t.x}/${t.y}.pbf` },
-  { id: "bbox", family: "postgis", server: "bbox", name: "BBOX", version: "0.6.2", image: "wf-bbox:0.6.2", provenance: "built from bbox-services/bbox@v0.6.2 (the published image is amd64-only)", homepage: "https://www.bbox.earth", color: "#9333EA", port: 8080, tilePath: (l, t) => `/xyz/${l}/${t.z}/${t.x}/${t.y}.mvt` },
+  { id: "bbox", family: "postgis", server: "bbox", name: "BBOX", version: "0.6.2", image: "wf-bbox:0.6.2", provenance: "built from bbox-services/bbox@v0.6.2 without its map and asset servers (the published image is amd64-only; the project's aarch64 release binary has them)", homepage: "https://www.bbox.earth", color: "#9333EA", port: 8080, tilePath: (l, t) => `/xyz/${l}/${t.z}/${t.x}/${t.y}.mvt` },
   { id: "pg-tileserv", family: "postgis", server: "pg-tileserv", name: "pg_tileserv", version: "20250131", image: "pramsey/pg_tileserv:20250131", homepage: "https://github.com/CrunchyData/pg_tileserv", color: "#0891B2", port: 7800, tilePath: (l, t) => `/bench.${l}/${t.z}/${t.x}/${t.y}.pbf` },
   { id: "tipg", family: "postgis", server: "tipg", name: "TiPg", version: "1.6.1", image: "ghcr.io/developmentseed/tipg:1.6.1", homepage: "https://developmentseed.org/tipg/", color: "#EA580C", port: 8080, tilePath: (l, t) => `/collections/bench.${l}/tiles/WebMercatorQuad/${t.z}/${t.x}/${t.y}` },
   // OGC API Tiles addresses tiles as tileMatrix/tileRow/tileCol, i.e. z/y/x.
@@ -64,9 +64,9 @@ export const CANDIDATES: readonly Candidate[] = [
   { id: "go-pmtiles", family: "archive", server: "go-pmtiles", name: "go-pmtiles", version: "1.31.2", image: "protomaps/go-pmtiles:v1.31.2", homepage: "https://docs.protomaps.com/deploy/server", color: "#16A34A", archive: "pmtiles", port: 8080, tilePath: (_, t) => `/${archiveTileset}/${t.z}/${t.x}/${t.y}.mvt` },
   { id: "versatiles-pmtiles", family: "archive", server: "versatiles", name: "VersaTiles (PMTiles)", version: "5.4.1", image: "versatiles/versatiles:v5.4.1", homepage: "https://versatiles.org", color: "#0D9488", archive: "pmtiles", port: 8080, tilePath: (_, t) => `/tiles/${archiveTileset}/${t.z}/${t.x}/${t.y}` },
   { id: "versatiles-mbtiles", family: "archive", server: "versatiles", name: "VersaTiles (MBTiles)", version: "5.4.1", image: "versatiles/versatiles:v5.4.1", homepage: "https://versatiles.org", color: "#5EEAD4", archive: "mbtiles", port: 8080, tilePath: (_, t) => `/tiles/${archiveTileset}/${t.z}/${t.x}/${t.y}` },
-  { id: "bbox-pmtiles", family: "archive", server: "bbox", name: "BBOX (PMTiles)", version: "0.6.2", image: "wf-bbox:0.6.2", provenance: "built from bbox-services/bbox@v0.6.2 (the published image is amd64-only)", homepage: "https://www.bbox.earth", color: "#9333EA", archive: "pmtiles", port: 8080, tilePath: (_, t) => `/xyz/${archiveTileset}/${t.z}/${t.x}/${t.y}.mvt` },
-  { id: "bbox-mbtiles", family: "archive", server: "bbox", name: "BBOX (MBTiles)", version: "0.6.2", image: "wf-bbox:0.6.2", provenance: "built from bbox-services/bbox@v0.6.2 (the published image is amd64-only)", homepage: "https://www.bbox.earth", color: "#C084FC", archive: "mbtiles", port: 8080, tilePath: (_, t) => `/xyz/${archiveTileset}/${t.z}/${t.x}/${t.y}.mvt` },
-  { id: "mbtileserver", family: "archive", server: "mbtileserver", name: "mbtileserver", version: "0.11.0", image: "wf-mbtileserver:0.11.0", provenance: "the consbio/mbtileserver v0.11.0 linux_arm64 release binary on debian:bookworm-slim (no arm64 image is published)", homepage: "https://github.com/consbio/mbtileserver", color: "#64748B", archive: "mbtiles", port: 8000, tilePath: (_, t) => `/services/${archiveTileset}/tiles/${t.z}/${t.x}/${t.y}.pbf` },
+  { id: "bbox-pmtiles", family: "archive", server: "bbox", name: "BBOX (PMTiles)", version: "0.6.2", image: "wf-bbox:0.6.2", provenance: "built from bbox-services/bbox@v0.6.2 without its map and asset servers (the published image is amd64-only; the project's aarch64 release binary has them)", homepage: "https://www.bbox.earth", color: "#9333EA", archive: "pmtiles", port: 8080, tilePath: (_, t) => `/xyz/${archiveTileset}/${t.z}/${t.x}/${t.y}.mvt` },
+  { id: "bbox-mbtiles", family: "archive", server: "bbox", name: "BBOX (MBTiles)", version: "0.6.2", image: "wf-bbox:0.6.2", provenance: "built from bbox-services/bbox@v0.6.2 without its map and asset servers (the published image is amd64-only; the project's aarch64 release binary has them)", homepage: "https://www.bbox.earth", color: "#C084FC", archive: "mbtiles", port: 8080, tilePath: (_, t) => `/xyz/${archiveTileset}/${t.z}/${t.x}/${t.y}.mvt` },
+  { id: "mbtileserver", family: "archive", server: "mbtileserver", name: "mbtileserver", version: "0.11.0", image: "wf-mbtileserver:0.11.0", provenance: "the consbio/mbtileserver v0.11.0 linux_arm64 release binary on debian:bookworm-slim (the project's ghcr.io image also has an arm64 build, on Alpine)", homepage: "https://github.com/consbio/mbtileserver", color: "#64748B", archive: "mbtiles", port: 8000, tilePath: (_, t) => `/services/${archiveTileset}/tiles/${t.z}/${t.x}/${t.y}.pbf` },
   { id: "tileserver-gl", family: "archive", server: "tileserver-gl", name: "tileserver-gl-light", version: "5.7.0", image: "maptiler/tileserver-gl-light:v5.7.0", homepage: "https://tileserver.readthedocs.io", color: "#EA580C", archive: "mbtiles", port: 8080, tilePath: (_, t) => `/data/${archiveTileset}/${t.z}/${t.x}/${t.y}.pbf` },
 ];
 
@@ -86,15 +86,18 @@ export function isRival(c: Candidate): boolean {
 }
 
 /**
- * Request headers per family. PostGIS tiles are requested without Accept-Encoding, as the 2024
- * thesis did, so the numbers are tile generation and not gzip; the previously published PostGIS
- * page did the same. Archive tiles are stored gzip-compressed and every map client accepts gzip,
- * so archive requests accept it and a server can pass the stored bytes through.
+ * Request headers per family. Every map client accepts gzip, so every request does (docs/adr/0011).
+ * Archive tiles are stored gzip-compressed and a server can pass the stored bytes through. PostGIS
+ * requests asked for no compression until 2026-10-29, as the 2024 thesis did, which made Tegola
+ * gzip and then un-gzip every tile, a cost no map client triggers.
  */
 export const REQUEST_HEADERS: Record<Family, Readonly<Record<string, string>>> = {
-  postgis: { Accept: "application/vnd.mapbox-vector-tile" },
+  postgis: { Accept: "application/vnd.mapbox-vector-tile", "Accept-Encoding": "gzip" },
   archive: { Accept: "application/vnd.mapbox-vector-tile", "Accept-Encoding": "gzip" },
 };
+
+/** Pinned cores (docs/adr/0011): every engine 0-3 (compose `cpuset`), the database 4-9, the client per family. */
+export const CLIENT_CORES: Record<Family, string> = { archive: "4-9", postgis: "10-11" };
 
 /** What a current Chrome sends; recorded per server (encoding chosen, bytes, time), never ranked. */
 export const BROWSER_ACCEPT_ENCODING = "gzip, deflate, br, zstd";

@@ -6,10 +6,10 @@ services:
     volumes:
       - ../../configs/archive/floor/nginx.conf:/etc/nginx/nginx.conf:ro
       - m2-floor-www:/www:ro
+    cpuset: "0-3"
     deploy:
       resources:
         limits:
-          cpus: "4"
           memory: 4G
 
 networks:

@@ -29,10 +29,10 @@ services:
       interval: 2s
       timeout: 3s
       retries: 30
+    cpuset: "4-9"
     deploy:
       resources:
         limits:
-          cpus: "6"
           memory: 12G
 
 networks:

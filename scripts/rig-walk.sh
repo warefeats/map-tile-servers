@@ -22,7 +22,8 @@ jq -e '[.Resources[] | select(.Type == "AWS::EC2::LaunchTemplate") | .Properties
 grep -qF "awscli-exe-linux-\$(uname -m).zip" "$tmp" || { echo "user data installs the AWS CLI for one architecture only" >&2; exit 1; }
 # the archive lane (docs/adr/0011): servers on c8g.xlarge and c8i.xlarge, the client on c8gn.xlarge, one placement group
 jq -e '[.Resources[] | select(.Type == "AWS::EC2::LaunchTemplate") | .Properties.LaunchTemplateData | select(.Placement.GroupName) | .InstanceType] | sort == ["c8g.xlarge", "c8gn.xlarge", "c8i.xlarge"]' infra/cdk.out/WarefeatsMartin2Bench.template.json >/dev/null || { echo "the lane's launch templates are not c8g.xlarge, c8i.xlarge and c8gn.xlarge in a placement group" >&2; exit 1; }
-jq -e '[.Resources[] | select(.Type == "AWS::S3::Bucket") | .Properties.LifecycleConfiguration.Rules[] | .Prefix] | sort == ["bundles/", "images/", "results/"]' infra/cdk.out/WarefeatsMartin2Bench.template.json >/dev/null || { echo "the bucket's lifecycle would expire the inputs" >&2; exit 1; }
+# only a run's own objects expire; aborting an incomplete upload may cover the whole bucket
+jq -e '[.Resources[] | select(.Type == "AWS::S3::Bucket") | .Properties.LifecycleConfiguration.Rules[] | select(.ExpirationInDays or .ExpirationDate or .Transitions or .NoncurrentVersionExpiration) | .Prefix] | sort == ["bundles/", "images/", "results/"]' infra/cdk.out/WarefeatsMartin2Bench.template.json >/dev/null || { echo "the bucket's lifecycle would expire the inputs" >&2; exit 1; }
 echo "3. the SSM command a building PostGIS host gets"
 # shellcheck source=scripts/rig-lib.sh
 . scripts/rig-lib.sh
@@ -45,6 +46,12 @@ grep -rhoE '^\s+image: *[^ ]+' compose | awk '{ print $2 }' | sort -u | while re
   esac
 done
 grep -qxF "$(bun -e "import { FLOOR_IMAGE } from './src/matrix'; console.log(FLOOR_IMAGE)")" <<< "$pulls" || { echo "the floor image is not pulled" >&2; exit 1; }
+# pinned cores, never a CPU quota (docs/adr/0011): engines 0-3, the database 4-9
+! grep -rqE '^\s+cpus:' compose || { echo "a compose file sets a CPU quota: $(grep -rlE '^\s+cpus:' compose | tr '\n' ' ')" >&2; exit 1; }
+while read -r f; do
+  want='"0-3"'; [ "$(basename "$f")" = db.yml ] && want='"4-9"'
+  grep -qE "^\s+cpuset: $want\s*$" "$f" || { echo "$f does not pin cores $want" >&2; exit 1; }
+done < <(grep -rl 'deploy:' compose)
 echo "5. inputs"
 [ "$(awk '{ print $1 }' scripts/rig-inputs.txt | sort | tr '\n' ' ')" = "berlin.mbtiles berlin.pmtiles dbdata.tar.zst images.tar.zst " ] || { echo "scripts/rig-inputs.txt must name the four inputs remote.sh reads" >&2; exit 1; }
 images=${IMAGES:-.work/rig/c17/images.tar.zst}

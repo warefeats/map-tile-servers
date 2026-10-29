@@ -175,19 +175,15 @@ export function psql(sql: string, opts: { db?: string; user?: string } = {}): st
 }
 
 /**
- * The client container sits on the engine network with a CPU budget of its own. Archive runs give
- * it 6 CPUs (a 242 KB tile at 55k/s through nginx needed about that); PostGIS runs give it 2,
- * so the database keeps its 6 and the engine its 4.
+ * The client container sits on the engine network on cores of its own (docs/adr/0011): the engine
+ * has 0-3 and the database 4-9, so archive runs, which have no database, give it 4-9 (6 cores; a
+ * 242 KB tile at 55k/s through nginx needed about that) and PostGIS runs give it 10-11. It is made
+ * fresh each time, so no CPU limit from an earlier run carries over.
  */
-export function clientUp(cpus: number): void {
-  const exists = run(["docker", "inspect", CLIENT_CONTAINER], { quiet: true }).exitCode === 0;
-  if (!exists) {
-    const r = run(["docker", "run", "-d", "--name", CLIENT_CONTAINER, "--network", NETWORK, "--cpus", String(cpus), "-v", `${ROOT}:/app:ro`, "-v", `${join(ROOT, ".work")}:/work`, CLIENT_IMAGE]);
-    if (r.exitCode !== 0) throw new Error("client container failed to start");
-  } else {
-    run(["docker", "start", CLIENT_CONTAINER], { quiet: true });
-    run(["docker", "update", "--cpus", String(cpus), CLIENT_CONTAINER], { quiet: true });
-  }
+export function clientUp(cores: string): void {
+  run(["docker", "rm", "-f", CLIENT_CONTAINER], { quiet: true });
+  const r = run(["docker", "run", "-d", "--name", CLIENT_CONTAINER, "--network", NETWORK, "--cpuset-cpus", cores, "-v", `${ROOT}:/app:ro`, "-v", `${join(ROOT, ".work")}:/work`, CLIENT_IMAGE]);
+  if (r.exitCode !== 0) throw new Error("client container failed to start");
 }
 
 /** Run a command inside the client container and return its stdout. */

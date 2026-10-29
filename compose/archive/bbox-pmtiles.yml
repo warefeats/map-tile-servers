@@ -5,10 +5,10 @@ services:
     volumes:
       - ../../configs/archive/bbox-pmtiles:/config:ro
       - ../../data/cache:/tiles:ro
+    cpuset: "0-3"
     deploy:
       resources:
         limits:
-          cpus: "4"
           memory: 4G
 
 networks:
