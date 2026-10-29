@@ -93,6 +93,10 @@ jobs:
               fi
             done
           fi
+          # this dispatch's hosts write the run's logs, and a smoke's results, afresh
+          clear=(--include 'run-*.log')
+          if [ "$MODE" = smoke ]; then clear+=(--include "results-*-$RUN_ID-smoke.json"); fi
+          aws s3 rm "s3://$bucket/results/$RUN_ID/" --recursive --exclude '*' "${clear[@]}" --only-show-errors
           # the inputs every run names, uploaded once by just rig-inputs
           while read -r name key <&3; do
             aws s3api head-object --bucket "$bucket" --key "$key" >/dev/null 2>&1 || { echo "::error::$name is not in the bucket as $key: run just rig-inputs"; exit 1; }
