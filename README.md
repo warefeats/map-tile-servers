@@ -13,7 +13,7 @@ PostGIS family, all reading the same four tables through the same read-only role
 | Martin | 2.0.0-beta.5 (release PR maplibre/martin#3838 at `d176c39c`) | `wf-martin:2.0.0-beta.5-d176c39`, built on the rig with the release's profile-guided recipe (ADR 0010) |
 | Martin | 1.16.1 | `ghcr.io/maplibre/martin:1.16.1` |
 | Tegola | 0.21.2 | `gospatial/tegola:v0.21.2` |
-| BBOX | 0.6.2 | `wf-bbox:0.6.2`, built from `bbox-services/bbox@v0.6.2` (the published image is amd64-only) |
+| BBOX | 0.6.2 | `wf-bbox:0.6.2`, built from `bbox-services/bbox@v0.6.2` without its map and asset servers (the published image is amd64-only; the project's aarch64 release binary has them) |
 | pg_tileserv | 2025-01-31 build | `pramsey/pg_tileserv:20250131` (no image exists for v1.0.11) |
 | TiPg | 1.6.1 | `ghcr.io/developmentseed/tipg:1.6.1` |
 | ldproxy | 4.8.2, as shipped and with `PGIS_TILES` | `iide/ldproxy:4.8.2` |
@@ -26,7 +26,7 @@ Archive family, one Planetiler build of Berlin stored as MBTiles and, converted 
 | go-pmtiles | 1.31.2 | PMTiles | `protomaps/go-pmtiles:v1.31.2` |
 | VersaTiles | 5.4.1 | PMTiles and MBTiles | `versatiles/versatiles:v5.4.1` |
 | BBOX | 0.6.2 | PMTiles and MBTiles | `wf-bbox:0.6.2` |
-| mbtileserver | 0.11.0 | MBTiles | `wf-mbtileserver:0.11.0`, the release binary on Debian (no arm64 image) |
+| mbtileserver | 0.11.0 | MBTiles | `wf-mbtileserver:0.11.0`, the release binary on Debian (the project's ghcr.io image also has arm64, on Alpine) |
 | tileserver-gl-light | 5.7.0 | MBTiles | `maptiler/tileserver-gl-light:v5.7.0` |
 
 VersaTiles is new since the September archive page. Every other competitor's most recent stable release is the one those pages ran, except TiPg (1.5.0 then, 1.6.1 now), ldproxy (4.8.1 then, 4.8.2 now) and tileserver-gl-light (5.6.0 then, 5.7.0 now).
@@ -42,7 +42,7 @@ Map data © OpenStreetMap contributors, [ODbL](https://www.openstreetmap.org/cop
 Per candidate, one engine container at a time (4 CPUs, 4 GB), in this order:
 
 1. **Time to first tile**: process start to the first 200 for the marquee tile, one unrecorded warm-up start and then ten recorded; idle memory five seconds later.
-2. **Parity**: every test tile fetched once and decoded; bytes, encoding, layers and feature counts on record. Also recorded, never ranked: the marquee tile under the other encoding (archive: no `Accept-Encoding`; PostGIS: gzip) and under a current Chrome's `Accept-Encoding: gzip, deflate, br, zstd`.
+2. **Parity**: every test tile fetched once and decoded; bytes, encoding, layers and feature counts on record. Also recorded, never ranked: the marquee tile with no `Accept-Encoding` and under a current Chrome's `Accept-Encoding: gzip, deflate, br, zstd`.
 3. **Single tile**: one connection, 3 warmup and 20 measured passes per test tile (PostGIS 5 requests per pass, archive 20, as published).
 4. **Viewport burst**: four adjacent tiles at once, 20 repetitions.
 5. **Throughput**: 10 and 100 closed-loop clients on the marquee tile, and 10 clients over a 256-tile random walk; one 10 s warmup, eight 12 s passes each. Engine and database CPU is read from the cgroups before and after every pass.
@@ -55,11 +55,16 @@ A measured run does all of that twice, the second time in reverse candidate orde
 
 ## Fairness configuration
 
-- Tile caches off everywhere. PMTiles directory caches stay on at go-pmtiles' 64 MB default: they hold directory entries, not tiles, and are each server's normal operating mode. Martin gets `cache: { size_mb: 256, tile_size_mb: 0 }` and `pmtiles.directory_cache.size_mb: 64`; the September archive run's `cache: disable` also zeroed Martin's directory cache.
-- PostGIS servers keep the September page's settings unchanged (same files, same eight-connection pool; BBOX hard-codes eight).
-- PostGIS requests send no `Accept-Encoding` (as the 2024 thesis and the September page did); archive requests send `Accept-Encoding: gzip` (as every map client does).
+These are the diagnostic lane's settings since 2026-10-29 (docs/adr/0011): the same limits for every server, and each server's own documented performance advice within them.
+
+- Tile caches off everywhere. PMTiles directory caches stay on: go-pmtiles and Martin at go-pmtiles' 64 MB default (Martin gets `cache: { size_mb: 256, tile_size_mb: 0 }` and `pmtiles.directory_cache.size_mb: 64`; `cache: disable` would also zero its directory cache), VersaTiles with its fixed internal cache; BBOX 0.6.2 has none. `berlin.pmtiles` has a single 2.4 KB directory, so the size can't matter on this corpus.
+- Every PostGIS server is held to 8 database connections, BBOX's hard-coded pool: Martin, Tegola and pg_tileserv run one pool of 8, TiPg runs 4 worker processes with a pool of 2 each, and ldproxy keeps its documented dynamic pool, 4 on 4 cores.
+- Every request accepts gzip, as every map client does. PostGIS requests asked for no compression until 2026-10-29, as the 2024 thesis did, which made Tegola gzip and then un-gzip every tile.
 - The PostgreSQL buffer cache is prewarmed before the first candidate.
-- Every engine is limited to 4 CPUs and sizes its threads to match: Martin and the floor are configured for 4 workers, Tegola, pg_tileserv and mbtileserver run with `GOMAXPROCS=4` (their Go runtimes predate CPU-limit awareness), and the rest size their thread pools from the container's limit or serve from a single event loop.
+- Every engine is pinned to 4 cores (0-3), the database to 6 (4-9) and the client to cores of its own (archive 4-9, PostGIS 10-11); a CPU quota on a many-core host throttled thread-heavy servers. Each server sizes its threads to match: Martin and the floor are configured for 4 workers, Tegola, pg_tileserv and mbtileserver run with `GOMAXPROCS=4`, TiPg with 4 worker processes, and the rest size their thread pools from their cores or serve from a single event loop.
+- No server writes a line per request: go-pmtiles runs with `--quiet`, tileserver-gl-light with `--silent`, BBOX at loglevel Warn and the floor with `access_log off`; Martin, mbtileserver, VersaTiles, Tegola, TiPg and ldproxy are quiet by default, and Docker discards pg_tileserv's output because it has no switch.
+- Computing extents at startup is off wherever a server has a switch: Martin `auto_bounds: skip`, TiPg `SPATIAL_EXTENT=false`, ldproxy `spatialComputed` and `temporalComputed: false`. Tegola's layers name their geometry types, so it inspects nothing.
+- ldproxy turns its count query off (`computeNumberMatched: false`), as its docs advise for big datasets.
 - On the cloud rig every container may open 1,048,576 files. Docker on Ubuntu starts containers at 1,024, fewer than a server holding the catalog's 1,001 MBTiles files needs, and only the Go runtimes raise their own limit.
 
 ## Running

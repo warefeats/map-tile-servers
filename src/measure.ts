@@ -148,12 +148,9 @@ export interface ParityResult {
 }
 
 export function alternateHeaders(c: Candidate): Record<string, string> {
-  const base = { ...REQUEST_HEADERS[c.family] };
-  if (c.family === "archive") {
-    delete (base as Record<string, string>)["Accept-Encoding"];
-    return base;
-  }
-  return { ...base, "Accept-Encoding": "gzip" };
+  const base: Record<string, string> = { ...REQUEST_HEADERS[c.family] };
+  delete base["Accept-Encoding"];
+  return base;
 }
 
 export function parity(c: Candidate, tiles: readonly TileSpec[]): ParityResult {

@@ -6,6 +6,10 @@ label: bench
 enabled: true
 auto: true
 apiValidation: NONE
+# computing extents at startup is off for every server that has a switch (docs/adr/0011)
+defaultExtent:
+  spatialComputed: false
+  temporalComputed: false
 api:
   - buildingBlock: FEATURES_CORE
     enabled: true

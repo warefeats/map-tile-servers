@@ -7,10 +7,10 @@ services:
     volumes:
       - ../../configs/postgis/ldproxy/cfg.yml:/ldproxy/data/cfg.yml:ro
       - ../../configs/postgis/ldproxy/entities:/ldproxy/data/entities:ro
+    cpuset: "0-3"
     deploy:
       resources:
         limits:
-          cpus: "4"
           memory: 4G
 
 networks:

@@ -7,7 +7,7 @@
 import { copyFileSync, existsSync, linkSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { clientUp, dbUp, ensureNetwork, engineDown, imageDigest, psql, run, stopAllEngines, WORK_DIR } from "./docker";
-import { type Candidate, CANDIDATES, type Family, protocol, REQUEST_HEADERS, TILES, tileUrl } from "./matrix";
+import { type Candidate, CANDIDATES, CLIENT_CORES, type Family, protocol, REQUEST_HEADERS, TILES, tileUrl } from "./matrix";
 import { prepareFloor } from "./floor";
 import { coldStart, type ColdStartResult } from "./measure";
 import { lonLatToTile, type TileCoord } from "./tiles";
@@ -244,7 +244,7 @@ ${dirCache}  paths:
   // go-pmtiles and mbtileserver serve one directory: the catalog dir, with berlin mounted into it.
   // (Docker cannot bind a file into a read-only directory mount, so these two read hard-linked
   // directories holding the 1,000 files plus berlin.)
-  writeFile(join(cmp, "go-pmtiles.catalog.yml"), `services:\n  engine:\n    command: ["serve", "/catalog", "--port=8080", "--cache-size=64"]\n    volumes:\n${catalogMount("pmtiles-all", "/catalog")}`);
+  writeFile(join(cmp, "go-pmtiles.catalog.yml"), `services:\n  engine:\n    command: ["serve", "/catalog", "--port=8080", "--cache-size=64", "--quiet"]\n    volumes:\n${catalogMount("pmtiles-all", "/catalog")}`);
   writeFile(join(cmp, "mbtileserver.catalog.yml"), `services:\n  engine:\n    command: ["--dir", "/catalog", "--port", "8000", "--tiles-only"]\n    volumes:\n${catalogMount("mbtiles-all", "/catalog")}`);
 
   // tileserver-gl: one data entry per archive.
@@ -326,7 +326,7 @@ if (import.meta.main) {
     writeArchiveCatalogConfigs();
     if (!only || only.includes("floor")) prepareFloor();
   }
-  clientUp(family === "archive" ? 6 : 2);
+  clientUp(CLIENT_CORES[family]);
 
   const existing = args.includes("--resume") ? ((await Bun.file(outputPath).json().catch(() => undefined)) as { results: CatalogResult[]; failures?: { id: string; error: string }[] } | undefined) : undefined;
   const results: CatalogResult[] = existing?.results ?? [];

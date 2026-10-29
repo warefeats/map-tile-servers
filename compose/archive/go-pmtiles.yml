@@ -1,13 +1,13 @@
 services:
   engine:
     image: protomaps/go-pmtiles:v1.31.2
-    command: ["serve", "/tiles", "--port=8080", "--cache-size=64"]
+    command: ["serve", "/tiles", "--port=8080", "--cache-size=64", "--quiet"]
     volumes:
       - ../../data/cache:/tiles:ro
+    cpuset: "0-3"
     deploy:
       resources:
         limits:
-          cpus: "4"
           memory: 4G
 
 networks:

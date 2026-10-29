@@ -15,9 +15,10 @@ connectionInfo:
   schemas:
     - bench
   pool:
-    maxConnections: 8
     minConnections: 1
-    initFailFast: true
+# ldproxy's docs: turn the count query off for big datasets; the pool stays at its recommended dynamic size (docs/adr/0011)
+queryGeneration:
+  computeNumberMatched: false
 sourcePathDefaults:
   primaryKey: fid
   sortKey: fid
