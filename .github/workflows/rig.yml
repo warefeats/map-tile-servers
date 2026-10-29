@@ -93,9 +93,12 @@ jobs:
               fi
             done
           fi
-          # this dispatch's hosts write the run's logs, and a smoke's results, afresh
-          clear=(--include 'run-*.log')
-          if [ "$MODE" = smoke ]; then clear+=(--include "results-*-$RUN_ID-smoke.json"); fi
+          # this dispatch's hosts write their families' logs, and a smoke's results, afresh
+          clear=()
+          for family in $(jq -r '.[]' <<< "$FAMILIES"); do
+            clear+=(--include "run-$family.log")
+            if [ "$MODE" = smoke ]; then clear+=(--include "results-$family-*-smoke.json"); fi
+          done
           aws s3 rm "s3://$bucket/results/$RUN_ID/" --recursive --exclude '*' "${clear[@]}" --only-show-errors
           # the inputs every run names, uploaded once by just rig-inputs
           while read -r name key <&3; do

@@ -60,6 +60,7 @@ A measured run does all of that twice, the second time in reverse candidate orde
 - PostGIS requests send no `Accept-Encoding` (as the 2024 thesis and the September page did); archive requests send `Accept-Encoding: gzip` (as every map client does).
 - The PostgreSQL buffer cache is prewarmed before the first candidate.
 - Every engine is limited to 4 CPUs and sizes its threads to match: Martin and the floor are configured for 4 workers, Tegola, pg_tileserv and mbtileserver run with `GOMAXPROCS=4` (their Go runtimes predate CPU-limit awareness), and the rest size their thread pools from the container's limit or serve from a single event loop.
+- On the cloud rig every container may open 1,048,576 files. Docker on Ubuntu starts containers at 1,024, fewer than a server holding the catalog's 1,001 MBTiles files needs, and only the Go runtimes raise their own limit.
 
 ## Running
 

@@ -84,8 +84,18 @@ bun install --frozen-lockfile
 mkdir -p data/cache
 cp /opt/inputs/berlin.mbtiles /opt/inputs/berlin.pmtiles data/cache/
 
+# Docker on Ubuntu starts every container with a soft limit of 1,024 open files, fewer than a server holding the
+# catalog's 1,001 MBTiles files needs, and only the Go runtimes raise their own; every container gets one high limit.
+if ! grep -q '"default-ulimits"' /etc/docker/daemon.json 2>/dev/null; then
+  echo '{ "default-ulimits": { "nofile": { "Name": "nofile", "Soft": 1048576, "Hard": 1048576 } } }' > /etc/docker/daemon.json
+  systemctl restart docker
+fi
+
 echo "images: the local builds (client, BBOX, mbtileserver)"
 docker image inspect wf-client:1 wf-bbox:0.6.2 wf-mbtileserver:0.11.0 >/dev/null 2>&1 || zstd -dc /opt/inputs/images.tar.zst | docker load
+nofile=$(docker run --rm --entrypoint sh wf-client:1 -c 'ulimit -Sn')
+echo "containers: $nofile open files"
+[ "$nofile" = 1048576 ] || { echo "containers start with $nofile open files, not 1048576"; exit 1; }
 echo "images: pulling the published ones the justfile names"
 grep -oE 'docker pull [^ ]+' justfile | awk '{ print $3 }' | while read -r ref; do docker pull -q "$ref"; done
 
