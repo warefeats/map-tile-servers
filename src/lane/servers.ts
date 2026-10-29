@@ -21,6 +21,8 @@ export interface LaneServer {
   formats: readonly Format[];
   /** The official image per architecture; null where the project publishes none for it. */
   image: Record<Arch, string | null>;
+  /** Where it publishes none: the tag of the image lane.yml builds around the project's release binary. */
+  release?: Partial<Record<Arch, string>>;
   port: number;
   path: (tileset: string, t: TileCoord) => string;
   /** Arguments after the image, for one archive mounted at /data/<tileset>.<format>. */
@@ -45,7 +47,7 @@ export const LANE_SERVERS: readonly LaneServer[] = [
   { id: "mbtileserver", name: "mbtileserver", version: "0.11.0", stable: true, unmaintained: true, formats: ["mbtiles"], image: { arm64: "ghcr.io/consbio/mbtileserver:0.11.0", amd64: "ghcr.io/consbio/mbtileserver:0.11.0" }, port: 8000, path: (s, t) => `/services/${s}/tiles/${xyz(t)}.pbf`, args: () => ["--dir", "/data", "--port", "8000"] },
   // The project publishes an amd64 image only; on Graviton the lane wraps its official aarch64 release binary.
   {
-    id: "bbox", name: "BBOX", version: "0.6.2", stable: true, unmaintained: true, formats: ["pmtiles", "mbtiles"], image: { arm64: null, amd64: "sourcepole/bbox-tile-server:v0.6.2" }, port: 8080, path: (s, t) => `/xyz/${s}/${xyz(t)}.mvt`, args: () => ["bbox-tile-server", "-c", "/data/bbox.toml", "serve"],
+    id: "bbox", name: "BBOX", version: "0.6.2", stable: true, unmaintained: true, formats: ["pmtiles", "mbtiles"], image: { arm64: null, amd64: "sourcepole/bbox-tile-server:v0.6.2" }, release: { arm64: "wf-bbox-release:0.6.2" }, port: 8080, path: (s, t) => `/xyz/${s}/${xyz(t)}.mvt`, args: () => ["bbox-tile-server", "-c", "/data/bbox.toml", "serve"],
     // its documented defaults: worker threads one per core, loglevel Info, no tile cache
     config: (s, f) => ({ "bbox.toml": `[webserver]\nserver_addr = "0.0.0.0:8080"\n\n[[tileset]]\nname = "${s}"\n[tileset.${f}]\npath = "/data/${s}.${f}"\n` }),
   },

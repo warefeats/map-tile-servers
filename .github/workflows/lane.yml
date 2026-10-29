@@ -33,6 +33,8 @@ env:
   OHA_SHA256: 99a790eb8c3e0feaca974bd6b32f0f8d4426a0c5b289f39e833e5b2c7529cd39
   TILE_LOG: tiles-2026-10-28.txt.xz
   TILE_LOG_SHA256: c10c2b12974d34bef54924031cae6d440608bd1d4556b740dfa27df3067df9e7
+  BBOX_VERSION: "0.6.2"
+  BBOX_ARM64_SHA256: 8e5b9bf3dc4923cb68bfc617ab137f3e9188d35a45b778591fee411ece446635
   SMOKE_UNITS: martin-2-pmtiles-berlin-arm64,martin-1-mbtiles-berlin-amd64,go-pmtiles-pmtiles-planet-arm64
 
 jobs:
@@ -49,6 +51,8 @@ jobs:
       - uses: oven-sh/setup-bun@v2
         with:
           bun-version: "1.4.0"
+
+      - uses: docker/setup-buildx-action@v4
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v6
@@ -74,6 +78,15 @@ jobs:
           bun build src/lane/unit.ts --target=bun --outfile="$stage/lane-unit.js"
           curl -fsSL -o "$stage/oha" "https://github.com/hatoo/oha/releases/download/v$OHA_VERSION/oha-linux-arm64"
           echo "$OHA_SHA256  $stage/oha" | sha256sum -c -
+          # BBOX publishes no arm64 image: its official aarch64 release binary, in an image like its amd64 one
+          ctx=$RUNNER_TEMP/bbox
+          mkdir -p "$ctx/bin" "$stage/images"
+          curl -fsSL -o "$ctx/release.tgz" "https://github.com/bbox-services/bbox/releases/download/v$BBOX_VERSION/bbox-tile-server-aarch64-unknown-linux-gnu.tar.gz"
+          echo "$BBOX_ARM64_SHA256  $ctx/release.tgz" | sha256sum -c -
+          tar -xzf "$ctx/release.tgz" -C "$ctx/bin" bbox-tile-server
+          ln -s bbox-tile-server "$ctx/bin/bbox-app"
+          docker buildx build --platform linux/arm64 -f images/Dockerfile.bbox-release -t "wf-bbox-release:$BBOX_VERSION" --output "type=docker,dest=$ctx/image.tar" "$ctx"
+          zstd -q -T0 "$ctx/image.tar" -o "$stage/images/bbox-arm64.tar.zst"
           curl -fsSL -o "$RUNNER_TEMP/$TILE_LOG" "https://planet.openstreetmap.org/tile_logs/$TILE_LOG"
           echo "$TILE_LOG_SHA256  $RUNNER_TEMP/$TILE_LOG" | sha256sum -c -
           pids=()

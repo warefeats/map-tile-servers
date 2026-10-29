@@ -1,0 +1,11 @@
+# BBOX publishes an amd64 image only. On Graviton the archive lane (docs/adr/0011) runs its official aarch64
+# release binary the way that image runs its own build: Debian 12, the binary in /usr/local/bin with bbox-app
+# beside it, www-data in /var/www, the same address and command. lane.yml fetches the binary and checks its
+# sha256 into bin/; nothing here runs, so buildx makes the arm64 image on any runner.
+FROM debian:bookworm-slim@sha256:99c0b25c46d0214d5a2091092e7908907dcaecd6a962cde0ac700acee222b6f3
+COPY bin/ /usr/local/bin/
+WORKDIR /var/www
+USER www-data
+ENV BBOX_WEBSERVER__SERVER_ADDR=0.0.0.0:8080
+EXPOSE 8080
+CMD ["bbox-app", "serve"]

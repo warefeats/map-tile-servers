@@ -39,7 +39,7 @@ export const unitId = (u: Omit<LaneUnit, "id">) => `${u.server.id}-${u.format}-$
 /** Why a unit cannot run yet, or null. */
 export function blocked(u: Omit<LaneUnit, "id">): string | null {
   if (u.format === "files") return "the tile files are not staged";
-  if (!u.server.image[u.arch]) return `no ${u.arch} image: the one built from the release binary is not made yet`;
+  if (!u.server.image[u.arch] && !u.server.release?.[u.arch]) return `no ${u.arch} image, and none built from a release binary`;
   return null;
 }
 
@@ -72,6 +72,12 @@ export function dataKey(u: Pick<LaneUnit, "dataset" | "format">, inputs: Readonl
   const key = inputs.get(`${u.dataset}.${u.format}`);
   if (!key) throw new Error(`scripts/rig-inputs.txt names no ${u.dataset}.${u.format}`);
   return key;
+}
+
+/** What a unit's server scripts need; an image lane.yml built from a release binary comes from the run's bundle. */
+export function serverUnitOf(u: LaneUnit, bucket: string, run: string, inputs: ReadonlyMap<string, string>): ServerUnit {
+  const tag = u.server.image[u.arch] ? undefined : u.server.release?.[u.arch];
+  return { server: u.server, arch: u.arch, tileset: u.dataset, format: u.format, bucket, dataKey: dataKey(u, inputs), firstTile: FIRST_TILE, ...(tag ? { localImage: { tag, key: `bundles/lane-${run}/images/${u.server.id}-${u.arch}.tar.zst` } } : {}) };
 }
 
 export interface RunContext {
@@ -128,7 +134,7 @@ export async function runUnit(cloud: Cloud, ctx: RunContext, u: LaneUnit, pass: 
     if (r.status !== "Success") throw new Error(`${name} on ${host.id}: ${r.status}\n${`${r.stdout}\n${r.stderr}`.trim().slice(-1500)}`);
     return r.stdout;
   };
-  const su: ServerUnit = { server: u.server, arch: u.arch, tileset: u.dataset, format: u.format, bucket: ctx.bucket, dataKey: dataKey(u, ctx.inputs), firstTile: FIRST_TILE };
+  const su = serverUnitOf(u, ctx.bucket, ctx.run, ctx.inputs);
   const cu: ClientUnit = { bucket: ctx.bucket, bundle: `bundles/lane-${ctx.run}/`, dataset: u.dataset };
   try {
     await cloud.createPlacementGroup(rec.placementGroup, tags("placement"));

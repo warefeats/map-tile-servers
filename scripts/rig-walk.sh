@@ -67,12 +67,12 @@ LANE="$lane" bun -e "
 import { readFileSync, writeFileSync } from 'node:fs';
 import { clientScenarioScript, clientSetupScript } from './src/lane/client-script';
 import { ssmCommands } from './src/lane/cloud';
-import { dataKey, FIRST_TILE, parseInputs, planUnits } from './src/lane/orchestrate';
+import { parseInputs, planUnits, serverUnitOf } from './src/lane/orchestrate';
 import { collectScript, setupScript, startScript } from './src/lane/server-script';
 const dir = process.env.LANE;
 const inputs = parseInputs(readFileSync('scripts/rig-inputs.txt', 'utf8'));
 for (const u of planUnits('all').run) {
-  const su = { server: u.server, arch: u.arch, tileset: u.dataset, format: u.format, bucket: 'BUCKET', dataKey: dataKey(u, inputs), firstTile: FIRST_TILE };
+  const su = serverUnitOf(u, 'BUCKET', 'RUN', inputs);
   const cu = { bucket: 'BUCKET', bundle: 'bundles/lane-RUN/', dataset: u.dataset };
   const out = (name, text) => writeFileSync(dir + '/' + u.id + '.' + name + '.sh', text);
   out('setup', setupScript(su));
@@ -86,6 +86,9 @@ writeFileSync(dir + '/ssm.txt', ssmCommands('BUCKET', 'bundles/lane-RUN/p1/u/set
 shellcheck -s bash "$lane"/*.sh
 if command -v dash >/dev/null; then dash -n "$lane/ssm.txt"; else sh -n "$lane/ssm.txt"; fi
 grep -q 'martin-2-bench-ready' "$lane/ssm.txt" || { echo "the lane's SSM command does not wait for user data" >&2; exit 1; }
+# the image lane.yml builds around BBOX's release binary is the one the server table runs
+bbox=$(sed -n 's/^  BBOX_VERSION: "\(.*\)"$/\1/p' .github/workflows/lane.yml)
+grep -q "release: { arm64: \"wf-bbox-release:$bbox\" }" src/lane/servers.ts || { echo "lane.yml builds wf-bbox-release:$bbox, which src/lane/servers.ts does not run" >&2; exit 1; }
 echo "  $(find "$lane" -name '*.sh' | wc -l) scripts"
 rm -rf "$lane"
 echo "rig-walk: all good"

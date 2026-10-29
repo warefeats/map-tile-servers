@@ -1,6 +1,7 @@
 import { describe, expect, test } from "bun:test";
 import { CapacityError, type Cloud, type CommandResult, type Host, type LaunchRequest, type RunOptions } from "../src/lane/cloud";
-import { dataKey, FIRST_TILE, parseInputs, planUnits, type RunContext, runUnit } from "../src/lane/orchestrate";
+import { dataKey, FIRST_TILE, parseInputs, planUnits, type RunContext, runUnit, serverUnitOf } from "../src/lane/orchestrate";
+import { setupScript, startScript } from "../src/lane/server-script";
 
 /** Records what the orchestrator asks for, and answers the way the scripts would. */
 class FakeCloud implements Cloud {
@@ -59,10 +60,7 @@ describe("the lane's plan", () => {
   test("runs every server on every format, dataset and architecture it can, and says why the rest wait", () => {
     const { run, skipped } = planUnits("all");
     expect(run.length + skipped.length).toBe(52);
-    expect(skipped.map((s) => s.id).sort()).toEqual([
-      "bbox-mbtiles-berlin-arm64", "bbox-mbtiles-planet-arm64", "bbox-pmtiles-berlin-arm64", "bbox-pmtiles-planet-arm64",
-      "nginx-files-berlin-amd64", "nginx-files-berlin-arm64", "nginx-files-planet-amd64", "nginx-files-planet-arm64",
-    ]);
+    expect(skipped.map((s) => s.id).sort()).toEqual(["nginx-files-berlin-amd64", "nginx-files-berlin-arm64", "nginx-files-planet-amd64", "nginx-files-planet-arm64"]);
   });
 
   test("filters by id, with wildcards", () => {
@@ -74,6 +72,16 @@ describe("the lane's plan", () => {
     expect(dataKey({ dataset: "planet", format: "mbtiles" }, inputs)).toBe("inputs/openfreemap-planet-20261025_080012_pt.mbtiles");
     expect(dataKey({ dataset: "berlin", format: "pmtiles" }, inputs)).toBe("inputs/6879dc65c96911c8-berlin.pmtiles");
     expect(FIRST_TILE).toEqual({ z: 14, x: 8802, y: 5373 });
+  });
+
+  test("runs BBOX on arm64 from the image the run built around its release binary", () => {
+    const bbox = planUnits("bbox-pmtiles-berlin-*").run;
+    const [arm, x86] = [bbox.find((u) => u.arch === "arm64")!, bbox.find((u) => u.arch === "amd64")!];
+    const su = serverUnitOf(arm, "b", "7", inputs);
+    expect(su.localImage).toEqual({ tag: "wf-bbox-release:0.6.2", key: "bundles/lane-7/images/bbox-arm64.tar.zst" });
+    expect(setupScript(su)).toContain("aws s3 cp 's3://b/bundles/lane-7/images/bbox-arm64.tar.zst' - --only-show-errors | zstd -dc | docker load -q");
+    expect(startScript(su, "alone")).toContain("'wf-bbox-release:0.6.2' 'bbox-tile-server'");
+    expect(serverUnitOf(x86, "b", "7", inputs).localImage).toBeUndefined();
   });
 });
 
