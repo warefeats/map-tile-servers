@@ -1,0 +1,70 @@
+name: Stage data
+
+# Copies one OpenFreeMap planet build (the archive lane's data, docs/adr/0011) into the rig bucket once,
+# streamed through the runner without touching its disk, with each file's sha256 and size recorded beside it.
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "OpenFreeMap planet build (listed in https://btrfs.openfreemap.com/files.txt)"
+        required: true
+        default: "20261025_080012_pt"
+
+concurrency:
+  group: martin-2-stage-data
+  cancel-in-progress: false
+
+permissions:
+  id-token: write
+  contents: read
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  planet:
+    name: planet ${{ matrix.format }}
+    runs-on: ubuntu-24.04
+    environment: martin-2-bench
+    timeout-minutes: 300
+    strategy:
+      fail-fast: false
+      matrix:
+        format: [mbtiles, pmtiles]
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v6
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-region: us-east-1
+          role-duration-seconds: 21600
+
+      - name: Stream the planet into the bucket
+        env:
+          VERSION: ${{ inputs.version }}
+          FORMAT: ${{ matrix.format }}
+        run: |
+          set -euo pipefail
+          [[ $VERSION =~ ^[0-9]{8}_[0-9]{6}_[a-z]+$ ]] || { echo "::error::$VERSION is not an OpenFreeMap build id"; exit 1; }
+          . scripts/rig-lib.sh
+          bucket=$(stack_output RigBucketName)
+          url="https://btrfs.openfreemap.com/areas/planet/$VERSION/tiles.$FORMAT"
+          key="inputs/openfreemap-planet-$VERSION.$FORMAT"
+          size=$(curl -fsSI "$url" | tr -d '\r' | awk 'tolower($1) == "content-length:" { print $2 }')
+          [ -n "$size" ] || { echo "::error::no size for $url"; exit 1; }
+          if [ "$(aws s3api head-object --bucket "$bucket" --key "$key" --query ContentLength --output text 2>/dev/null || true)" = "$size" ]; then
+            echo "$key is already in the bucket ($size bytes)"
+            exit 0
+          fi
+          echo "streaming $url ($size bytes) to s3://$bucket/$key"
+          sum=$RUNNER_TEMP/sha256
+          curl -fsS --retry 3 "$url" | tee >(sha256sum | cut -d' ' -f1 > "$sum") | aws s3 cp - "s3://$bucket/$key" --expected-size "$size" --only-show-errors
+          for _ in $(seq 1 60); do [ -s "$sum" ] && break; sleep 1; done
+          [ -s "$sum" ] || { echo "::error::no sha256 for $key"; exit 1; }
+          got=$(aws s3api head-object --bucket "$bucket" --key "$key" --query ContentLength --output text)
+          [ "$got" = "$size" ] || { echo "::error::$key has $got bytes, the source has $size"; exit 1; }
+          printf '%s  %s\n' "$(cat "$sum")" "$size" | aws s3 cp - "s3://$bucket/$key.sha256" --only-show-errors
+          echo "$key: sha256 $(cat "$sum"), $size bytes"

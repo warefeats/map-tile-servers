@@ -7,7 +7,7 @@ root=$(cd "$(dirname "$0")/.." && pwd)
 cd "$root"
 echo "1. scripts and the workflow"
 shellcheck -x -s bash scripts/rig-*.sh scripts/remote.sh scripts/build-martin-pgo.sh
-actionlint .github/workflows/rig.yml
+actionlint .github/workflows/*.yml
 echo "2. user data from the synthesized stack"
 (cd infra && bun x cdk synth --quiet >/dev/null)
 tmp=$(mktemp)
