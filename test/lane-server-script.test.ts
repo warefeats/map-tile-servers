@@ -14,6 +14,10 @@ describe("the server scripts", () => {
     expect(s).toContain("docker pull -q 'ghcr.io/maplibre/martin:2.0.0-beta.4'");
     expect(s).toContain("allowance_exceeded");
     expect(s).toContain("nohup setsid bash /opt/lane/sampler.sh");
+    // the server starts once and goes again, so no measured start carries the instance's first container start
+    expect(s.indexOf("docker pull")).toBeLessThan(s.indexOf("'docker' 'run'"));
+    expect(s.indexOf("warm-up start")).toBeLessThan(s.lastIndexOf("docker rm -f lane-server"));
+    expect(s.lastIndexOf("docker rm -f lane-server")).toBeLessThan(s.indexOf("setup done"));
   });
 
   test("setup writes the server's config files, quoting their content", () => {

@@ -1,8 +1,9 @@
 /**
  * The scripts a server instance runs for one unit of the archive lane (docs/adr/0011), rendered from the server
  * table so they can be tested and shellchecked before they run. Setup runs once: it fetches the archive from the
- * rig bucket, writes the server's config files, pulls the image and starts a sampler that records the network
- * card's allowance counters, the server's memory and the host's CPU every 10 seconds. Start runs before each
+ * rig bucket, writes the server's config files, pulls the image, starts a sampler that records the network card's
+ * allowance counters, the server's memory and the host's CPU every 10 seconds, and starts the server once, so the
+ * instance's own first container start never lands in a measured one. Start runs before each
  * scenario: a cold start, timed to the first tile from inside the instance so neither the network nor SSM sits
  * in the number. Collect puts the samples and the server's log beside the unit's results. On Berlin, the catalog
  * step then starts the server once more with 1,000 small archives beside the dataset's own, timing its first tile
@@ -59,24 +60,35 @@ export function setupScript(u: ServerUnit): string {
     ...SAMPLER,
     "SAMPLER",
     "nohup setsid bash /opt/lane/sampler.sh > /opt/lane/samples.log 2>&1 < /dev/null &",
+    // a fresh instance's first container start once took 18.7 s where its next took 0.9 s (lane smoke 40958958712)
+    ...startToFirstTile(u),
+    'echo "warm-up start $(( (end - start) / 1000000 )) ms"',
+    "docker rm -f lane-server >/dev/null",
     'echo "setup done"',
   ].join("\n") + "\n";
 }
 
-/** Nothing of the archive in the page cache, the server just started, timed to its first tile. */
-export function startScript(u: ServerUnit, scenario: string): string {
+/** Starts the server and waits up to a minute for its first tile, leaving `start` and `end` in nanoseconds. */
+function startToFirstTile(u: ServerUnit): string[] {
   const run = dockerRun(u.server, u.arch, [u.tileset], u.format, u.localImage?.tag).map(q).join(" ");
   const url = `http://127.0.0.1:${u.server.port}${u.server.path(u.tileset, u.firstTile)}`;
   return [
-    ...scriptHead(`start ${u.server.id} ${u.format} ${u.tileset} ${u.arch} for ${scenario}`),
-    "docker rm -f lane-server >/dev/null 2>&1 || true",
-    "sync && echo 3 > /proc/sys/vm/drop_caches",
     "start=$(date +%s%N)",
     run,
     "code=000",
     `for _ in $(seq 1 6000); do code=$(curl -s -o /dev/null -w '%{http_code}' ${q(url)} || true); [ "$code" = 200 ] && break; sleep 0.01; done`,
     "end=$(date +%s%N)",
     '[ "$code" = 200 ] || { echo "no 200 from the server within a minute (last $code)"; docker logs --tail 40 lane-server; exit 1; }',
+  ];
+}
+
+/** Nothing of the archive in the page cache, the server just started, timed to its first tile. */
+export function startScript(u: ServerUnit, scenario: string): string {
+  return [
+    ...scriptHead(`start ${u.server.id} ${u.format} ${u.tileset} ${u.arch} for ${scenario}`),
+    "docker rm -f lane-server >/dev/null 2>&1 || true",
+    "sync && echo 3 > /proc/sys/vm/drop_caches",
+    ...startToFirstTile(u),
     'echo "READY $(( (end - start) / 1000000 )) ms to the first tile"',
   ].join("\n") + "\n";
 }
