@@ -95,14 +95,23 @@ elif [ -n "$build" ]; then
   # the training run needs the same oha the harness uses
   docker run --rm --entrypoint cat wf-client:1 /usr/local/bin/oha > /tmp/oha && install -m 755 /tmp/oha /usr/local/bin/oha
   echo "== build $(date -u +%T)"
-  bash scripts/build-martin-pgo.sh "${build%%:*}" "${build##*:}" "$image"
+  if ! bash scripts/build-martin-pgo.sh "${build%%:*}" "${build##*:}" "$image"; then
+    # the hosts waiting for this image stop waiting
+    echo "build of $image failed on $instance_id" | aws s3 cp - "$s3/$image_key.failed" --only-show-errors || true
+    echo "BUILD FAILED"; exit 1
+  fi
   echo "== build done $(date -u +%T)"
   docker save "$image" | zstd -T0 -3 -q -f -o /opt/inputs/martin-2.tar.zst
-  aws s3 cp /opt/martin-build/build-info.txt "$s3/$image_key.txt" --only-show-errors
   aws s3 cp /opt/inputs/martin-2.tar.zst "$s3/$image_key" --only-show-errors
+  aws s3 cp /opt/martin-build/build-info.txt "$s3/$image_key.txt" --only-show-errors
 else
   echo "  waiting for the building host to upload $image_key"
-  for _ in $(seq 1 180); do aws s3 ls "$s3/$image_key" >/dev/null 2>&1 && break; sleep 60; done
+  exists() { aws s3api head-object --bucket "$bucket" --key "$1" >/dev/null 2>&1; }
+  for _ in $(seq 1 180); do
+    exists "$image_key" && break
+    exists "$image_key.failed" && { echo "the building host failed: $(aws s3 cp "$s3/$image_key.failed" -)"; exit 1; }
+    sleep 60
+  done
   aws s3 cp "$s3/$image_key" /opt/inputs/martin-2.tar.zst --only-show-errors
   zstd -dc /opt/inputs/martin-2.tar.zst | docker load
   mkdir -p /opt/martin-build
