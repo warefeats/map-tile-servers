@@ -22,7 +22,8 @@ jq -e '[.Resources[] | select(.Type == "AWS::EC2::LaunchTemplate") | .Properties
 grep -qF "awscli-exe-linux-\$(uname -m).zip" "$tmp" || { echo "user data installs the AWS CLI for one architecture only" >&2; exit 1; }
 # the archive lane (docs/adr/0011): servers on c8g.xlarge and c8i.xlarge, the client on c8gn.xlarge, one placement group
 jq -e '[.Resources[] | select(.Type == "AWS::EC2::LaunchTemplate") | .Properties.LaunchTemplateData | select(.Placement.GroupName) | .InstanceType] | sort == ["c8g.xlarge", "c8gn.xlarge", "c8i.xlarge"]' infra/cdk.out/WarefeatsMartin2Bench.template.json >/dev/null || { echo "the lane's launch templates are not c8g.xlarge, c8i.xlarge and c8gn.xlarge in a placement group" >&2; exit 1; }
-jq -e '[.Resources[] | select(.Type == "AWS::S3::Bucket") | .Properties.LifecycleConfiguration.Rules[] | .Prefix] | sort == ["bundles/", "images/", "results/"]' infra/cdk.out/WarefeatsMartin2Bench.template.json >/dev/null || { echo "the bucket's lifecycle would expire the inputs" >&2; exit 1; }
+# only a run's own objects expire; aborting an incomplete upload may cover the whole bucket
+jq -e '[.Resources[] | select(.Type == "AWS::S3::Bucket") | .Properties.LifecycleConfiguration.Rules[] | select(.ExpirationInDays or .ExpirationDate or .Transitions or .NoncurrentVersionExpiration) | .Prefix] | sort == ["bundles/", "images/", "results/"]' infra/cdk.out/WarefeatsMartin2Bench.template.json >/dev/null || { echo "the bucket's lifecycle would expire the inputs" >&2; exit 1; }
 echo "3. the SSM command a building PostGIS host gets"
 # shellcheck source=scripts/rig-lib.sh
 . scripts/rig-lib.sh
