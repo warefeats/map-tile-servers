@@ -10,7 +10,7 @@ PostGIS family, all reading the same four tables through the same read-only role
 
 | Candidate | Version | Image |
 |-----------|---------|-------|
-| Martin | 2.0.0-beta.5 (release PR maplibre/martin#3838 at `b0def8ca`) | `wf-martin:2.0.0-beta.5-b0def8c`, built on the rig with the release's profile-guided recipe (ADR 0010) |
+| Martin | 2.0.0-beta.5 (release PR maplibre/martin#3838 at `d176c39c`) | `wf-martin:2.0.0-beta.5-d176c39`, built on the rig with the release's profile-guided recipe (ADR 0010) |
 | Martin | 1.16.1 | `ghcr.io/maplibre/martin:1.16.1` |
 | Tegola | 0.21.2 | `gospatial/tegola:v0.21.2` |
 | BBOX | 0.6.2 | `wf-bbox:0.6.2`, built from `bbox-services/bbox@v0.6.2` (the published image is amd64-only) |
