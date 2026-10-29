@@ -1,7 +1,8 @@
 /**
  * The archive lane's servers (docs/adr/0011): each as the image or binary its project tells users to install,
  * at its latest release, started the way its docs show for production. For most that is their defaults:
- * Martin's 512 MB cache, go-pmtiles' 64 MB directory cache, each server's own request logging. Every server
+ * Martin's 256 MB tile cache and 128 MB PMTiles directory cache (1.16.1 and 2.0 alike), go-pmtiles' 64 MB
+ * directory cache, each server's own request logging. Every server
  * runs alone on its instance with host networking, so no Docker port forwarding sits in the path.
  */
 import type { TileCoord } from "../tiles";
