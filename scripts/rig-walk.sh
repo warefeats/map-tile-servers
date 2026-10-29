@@ -60,4 +60,32 @@ done 3< scripts/rig-inputs.txt
 if [ -s "$images" ]; then
   zstd -dc "$images" | tar -xOf - manifest.json | jq -e '[.[].RepoTags[]] | contains(["wf-client:1", "wf-bbox:0.6.2", "wf-mbtileserver:0.11.0"])' >/dev/null || { echo "$images lacks a helper image" >&2; exit 1; }
 fi
+echo "6. the archive lane's scripts"
+# every runnable unit's server and client scripts as orchestrate.ts renders them, and the SSM command under dash
+lane=$(mktemp -d)
+LANE="$lane" bun -e "
+import { readFileSync, writeFileSync } from 'node:fs';
+import { clientScenarioScript, clientSetupScript } from './src/lane/client-script';
+import { ssmCommands } from './src/lane/cloud';
+import { dataKey, FIRST_TILE, parseInputs, planUnits } from './src/lane/orchestrate';
+import { collectScript, setupScript, startScript } from './src/lane/server-script';
+const dir = process.env.LANE;
+const inputs = parseInputs(readFileSync('scripts/rig-inputs.txt', 'utf8'));
+for (const u of planUnits('all').run) {
+  const su = { server: u.server, arch: u.arch, tileset: u.dataset, format: u.format, bucket: 'BUCKET', dataKey: dataKey(u, inputs), firstTile: FIRST_TILE };
+  const cu = { bucket: 'BUCKET', bundle: 'bundles/lane-RUN/', dataset: u.dataset };
+  const out = (name, text) => writeFileSync(dir + '/' + u.id + '.' + name + '.sh', text);
+  out('setup', setupScript(su));
+  out('start', startScript(su, 'alone'));
+  out('collect', collectScript(su, 's3://BUCKET/results/lane/RUN/p1/' + u.id + '/'));
+  out('client-setup', clientSetupScript(cu));
+  out('alone', clientScenarioScript(cu, { server: u.server.id, host: '10.0.0.1', format: u.format, scenario: 'alone', quick: false, resultKey: 'results/lane/RUN/p1/' + u.id + '/alone.json' }));
+}
+writeFileSync(dir + '/ssm.txt', ssmCommands('BUCKET', 'bundles/lane-RUN/p1/u/setup.sh').join('\\n') + '\\n');
+"
+shellcheck -s bash "$lane"/*.sh
+if command -v dash >/dev/null; then dash -n "$lane/ssm.txt"; else sh -n "$lane/ssm.txt"; fi
+grep -q 'martin-2-bench-ready' "$lane/ssm.txt" || { echo "the lane's SSM command does not wait for user data" >&2; exit 1; }
+echo "  $(find "$lane" -name '*.sh' | wc -l) scripts"
+rm -rf "$lane"
 echo "rig-walk: all good"

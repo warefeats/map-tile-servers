@@ -1,0 +1,226 @@
+/**
+ * The archive lane's orchestrator (docs/adr/0011). Each pass puts every unit on a fresh pair of instances in a
+ * cluster placement group of its own: the server sets up, the client launches beside it once the archive is in
+ * place, and each scenario starts the server cold before the client measures it. A unit's record lands in the
+ * bucket when it ends; one that fails is recorded and the others go on. Passes run one after another, and each
+ * starts in the next zone that offers every lane instance type.
+ *   bun run src/lane/orchestrate.ts --run=<id> [--units=all|<pattern>,...] [--passes=3] [--quick]
+ */
+import { readFileSync } from "node:fs";
+import { BERLIN } from "../session-plan";
+import { lonLatToTile } from "../tiles";
+import { type ClientUnit, clientScenarioScript, clientSetupScript, type Scenario, SCENARIOS } from "./client-script";
+import { aws, AwsCloud, CapacityError, type Cloud, type Host } from "./cloud";
+import { collectScript, type ServerUnit, setupScript, startScript } from "./server-script";
+import { type Arch, type Dataset, type Format, type LaneServer, units } from "./servers";
+
+/** The OpenFreeMap planet build the bucket holds (.github/workflows/stage-data.yml). */
+export const PLANET_BUILD = "20261025_080012_pt";
+export const DATASETS: readonly Dataset[] = ["berlin", "planet"];
+export const ARCHS: readonly Arch[] = ["arm64", "amd64"];
+/** The stack's lane launch templates, which rig-walk checks. */
+export const LANE_TYPES = ["c8g.xlarge", "c8i.xlarge", "c8gn.xlarge"];
+/** Every start's first request: Berlin's centre at zoom 14, a tile both datasets hold. */
+export const FIRST_TILE = lonLatToTile(BERLIN.lon, BERLIN.lat, 14);
+
+const TIMEOUT_S = { setup: 3600, clientSetup: 900, start: 300, scenario: 1800, quickScenario: 600, collect: 300 };
+const ONLINE_MS = 15 * 60_000;
+
+export interface LaneUnit {
+  id: string;
+  server: LaneServer;
+  format: Format;
+  dataset: Dataset;
+  arch: Arch;
+}
+
+export const unitId = (u: Omit<LaneUnit, "id">) => `${u.server.id}-${u.format}-${u.dataset}-${u.arch}`;
+
+/** Why a unit cannot run yet, or null. */
+export function blocked(u: Omit<LaneUnit, "id">): string | null {
+  if (u.format === "files") return "the tile files are not staged";
+  if (!u.server.image[u.arch]) return `no ${u.arch} image: the one built from the release binary is not made yet`;
+  return null;
+}
+
+const matches = (pattern: string, id: string) => new RegExp(`^${pattern.split("*").map((p) => p.replace(/[.+?^${}()|[\]\\]/g, "\\$&")).join(".*")}$`).test(id);
+
+/** The units a filter names (`all`, or comma-separated ids with `*` wildcards), and those that cannot run yet. */
+export function planUnits(filter: string): { run: LaneUnit[]; skipped: { id: string; reason: string }[] } {
+  const patterns = filter === "all" ? ["*"] : filter.split(",").map((p) => p.trim()).filter(Boolean);
+  const run: LaneUnit[] = [];
+  const skipped: { id: string; reason: string }[] = [];
+  for (const u of units(DATASETS, ARCHS)) {
+    const id = unitId(u);
+    if (!patterns.some((p) => matches(p, id))) continue;
+    const reason = blocked(u);
+    if (reason) skipped.push({ id, reason });
+    else run.push({ id, ...u });
+  }
+  return { run, skipped };
+}
+
+/** scripts/rig-inputs.txt: one `name key` per line. */
+export function parseInputs(text: string): Map<string, string> {
+  const pairs = text.split("\n").map((l) => l.trim().split(/\s+/)).filter((f): f is [string, string] => f.length === 2);
+  return new Map(pairs);
+}
+
+/** The archive's key in the bucket: the planet as staged, Berlin as scripts/rig-inputs.txt pins it. */
+export function dataKey(u: Pick<LaneUnit, "dataset" | "format">, inputs: ReadonlyMap<string, string>): string {
+  if (u.dataset === "planet") return `inputs/openfreemap-planet-${PLANET_BUILD}.${u.format}`;
+  const key = inputs.get(`${u.dataset}.${u.format}`);
+  if (!key) throw new Error(`scripts/rig-inputs.txt names no ${u.dataset}.${u.format}`);
+  return key;
+}
+
+export interface RunContext {
+  run: string;
+  bucket: string;
+  templates: Record<Arch | "client", string>;
+  /** Tried in order for a server; its client follows it into its subnet. */
+  subnets: readonly string[];
+  quick: boolean;
+  inputs: ReadonlyMap<string, string>;
+  /** How long a client launch waits for capacity before it tries again. */
+  retryMs: number;
+}
+
+export interface UnitRecord {
+  id: string;
+  pass: number;
+  server: string;
+  version: string;
+  stable: boolean;
+  format: Format;
+  dataset: Dataset;
+  arch: Arch;
+  placementGroup: string;
+  serverHost: Host | null;
+  clientHost: Host | null;
+  /** Seconds the archive took from the bucket to the server's disk. */
+  dataSeconds: number | null;
+  /** Each scenario's cold start, to the first tile. */
+  readyMs: Partial<Record<Scenario, number>>;
+  /** Each scenario's result in the bucket. */
+  results: Partial<Record<Scenario, string>>;
+  log: string[];
+  error: string | null;
+  startedAt: string;
+  finishedAt: string | null;
+}
+
+const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
+export async function runUnit(cloud: Cloud, ctx: RunContext, u: LaneUnit, pass: number): Promise<UnitRecord> {
+  const scripts = `bundles/lane-${ctx.run}/p${pass}/${u.id}/`;
+  const results = `results/lane/${ctx.run}/p${pass}/${u.id}/`;
+  const rec: UnitRecord = { id: u.id, pass, server: u.server.id, version: u.server.version, stable: u.server.stable, format: u.format, dataset: u.dataset, arch: u.arch, placementGroup: `lane-${ctx.run}-p${pass}-${u.id}`, serverHost: null, clientHost: null, dataSeconds: null, readyMs: {}, results: {}, log: [], error: null, startedAt: new Date().toISOString(), finishedAt: null };
+  const tags = (role: string) => ({ Name: `lane-${ctx.run}-p${pass}-${u.id}-${role}`, Project: "martin-2-bench", LaneRun: ctx.run, Pass: String(pass), Unit: u.id, Role: role });
+  const note = (what: string) => {
+    rec.log.push(`${new Date().toISOString()} ${what}`);
+    console.log(`p${pass} ${u.id}: ${what}`);
+  };
+  const step = async (host: Host, name: string, script: string, timeoutS: number): Promise<string> => {
+    await cloud.putText(`${scripts}${name}.sh`, script);
+    const r = await cloud.run(host.id, `${scripts}${name}.sh`, { timeoutS, outputPrefix: `${results}ssm`, comment: `lane ${ctx.run} p${pass} ${u.id} ${name}` });
+    note(`${name} ${r.status}`);
+    if (r.status !== "Success") throw new Error(`${name} on ${host.id}: ${r.status}\n${`${r.stdout}\n${r.stderr}`.trim().slice(-1500)}`);
+    return r.stdout;
+  };
+  const su: ServerUnit = { server: u.server, arch: u.arch, tileset: u.dataset, format: u.format, bucket: ctx.bucket, dataKey: dataKey(u, ctx.inputs), firstTile: FIRST_TILE };
+  const cu: ClientUnit = { bucket: ctx.bucket, bundle: `bundles/lane-${ctx.run}/`, dataset: u.dataset };
+  try {
+    await cloud.createPlacementGroup(rec.placementGroup, tags("placement"));
+    const server = await cloud.launch({ template: ctx.templates[u.arch], placementGroup: rec.placementGroup, subnets: ctx.subnets, tags: tags("server") });
+    rec.serverHost = server;
+    note(`server ${server.id} in ${server.az}`);
+    await cloud.waitOnline(server.id, ONLINE_MS);
+    const setup = await step(server, "setup", setupScript(su), TIMEOUT_S.setup);
+    rec.dataSeconds = Number(/data in (\d+) s/.exec(setup)?.[1] ?? Number.NaN);
+    // the client follows its server into the placement group's zone, so only that subnet will do
+    let client: Host | null = null;
+    for (let attempt = 1; !client; attempt++) {
+      try {
+        client = await cloud.launch({ template: ctx.templates.client, placementGroup: rec.placementGroup, subnets: [server.subnet], tags: tags("client") });
+      } catch (e) {
+        if (!(e instanceof CapacityError) || attempt === 3) throw e;
+        note(`no client capacity in ${server.az}, attempt ${attempt}`);
+        await sleep(ctx.retryMs);
+      }
+    }
+    rec.clientHost = client;
+    note(`client ${client.id}`);
+    await cloud.waitOnline(client.id, ONLINE_MS);
+    await step(client, "client-setup", clientSetupScript(cu), TIMEOUT_S.clientSetup);
+    for (const scenario of SCENARIOS) {
+      const started = await step(server, `start-${scenario}`, startScript(su, scenario), TIMEOUT_S.start);
+      rec.readyMs[scenario] = Number(/READY (\d+) ms/.exec(started)?.[1] ?? Number.NaN);
+      const resultKey = `${results}${scenario}.json`;
+      const out = await step(client, scenario, clientScenarioScript(cu, { server: u.server.id, host: server.ip, format: u.format, scenario, quick: ctx.quick, resultKey }), ctx.quick ? TIMEOUT_S.quickScenario : TIMEOUT_S.scenario);
+      rec.results[scenario] = resultKey;
+      note(/capacity .*/.exec(out)?.[0] ?? `${scenario} done`);
+    }
+    await step(server, "collect", collectScript(su, `s3://${ctx.bucket}/${results}`), TIMEOUT_S.collect);
+  } catch (e) {
+    rec.error = (e as Error).message;
+    note(`failed: ${rec.error.split("\n")[0]}`);
+    // the server's own log says most about a failure
+    if (rec.serverHost && !rec.log.some((l) => l.endsWith("collect Success"))) {
+      await step(rec.serverHost, "collect", collectScript(su, `s3://${ctx.bucket}/${results}`), TIMEOUT_S.collect).catch(() => undefined);
+    }
+  } finally {
+    const ids = [rec.serverHost?.id, rec.clientHost?.id].filter((id): id is string => !!id);
+    await cloud.terminate(ids).catch((e: Error) => note(`terminate failed: ${e.message}`));
+    rec.finishedAt = new Date().toISOString();
+    await cloud.putText(`${results}unit.json`, `${JSON.stringify(rec, null, 2)}\n`).catch((e: Error) => note(`record not written: ${e.message}`));
+  }
+  return rec;
+}
+
+/** Default subnets in the zones that offer every lane instance type, in zone order. */
+async function laneSubnets(): Promise<string[]> {
+  const offers = await aws<[string, string][]>(["ec2", "describe-instance-type-offerings", "--location-type", "availability-zone", "--filters", `Name=instance-type,Values=${LANE_TYPES.join(",")}`, "--query", "InstanceTypeOfferings[].[InstanceType,Location]"]);
+  const types = new Map<string, Set<string>>();
+  for (const [type, zone] of offers) types.set(zone, (types.get(zone) ?? new Set()).add(type));
+  const subnets = await aws<[string, string][]>(["ec2", "describe-subnets", "--filters", "Name=default-for-az,Values=true", "--query", "Subnets[].[AvailabilityZone,SubnetId]"]);
+  return subnets
+    .filter(([zone]) => types.get(zone)?.size === LANE_TYPES.length)
+    .sort(([a], [b]) => a.localeCompare(b))
+    .map(([, id]) => id);
+}
+
+const rotate = <T>(xs: readonly T[], n: number) => [...xs.slice(n % xs.length), ...xs.slice(0, n % xs.length)];
+
+if (import.meta.main) {
+  const arg = (n: string) => process.argv.find((a) => a.startsWith(`--${n}=`))?.slice(n.length + 3);
+  const run = arg("run");
+  const passes = Number(arg("passes") ?? 3);
+  if (!run || !/^[\w-]+$/.test(run) || !(passes >= 1)) {
+    console.error("usage: orchestrate.ts --run=<id> [--units=all|<pattern>,...] [--passes=3] [--quick]");
+    process.exit(2);
+  }
+  const quick = process.argv.includes("--quick");
+  const plan = planUnits(arg("units") ?? "all");
+  const outputs = new Map(await aws<[string, string][]>(["cloudformation", "describe-stacks", "--stack-name", "WarefeatsMartin2Bench", "--query", "Stacks[0].Outputs[].[OutputKey,OutputValue]"]));
+  const need = (k: string) => outputs.get(k) ?? (console.error(`the stack has no ${k} output`), process.exit(1));
+  const bucket = need("RigBucketName");
+  const templates = { arm64: need("LaneServerArmId"), amd64: need("LaneServerX86Id"), client: need("LaneClientId") };
+  const subnets = await laneSubnets();
+  const inputs = parseInputs(readFileSync("scripts/rig-inputs.txt", "utf8"));
+  // a minute's margin for clock skew against SSM's own timestamps
+  const cloud = new AwsCloud(bucket, new Date(Date.now() - 60_000));
+  console.log(`run ${run}: ${plan.run.length} units, ${passes} pass(es)${quick ? ", quick" : ""}; zones' subnets ${subnets.join(" ")}`);
+  for (const s of plan.skipped) console.log(`  skipped ${s.id}: ${s.reason}`);
+  await cloud.putText(`results/lane/${run}/plan.json`, `${JSON.stringify({ run, passes, quick, planetBuild: PLANET_BUILD, units: plan.run.map((u) => u.id), skipped: plan.skipped, startedAt: new Date().toISOString() }, null, 2)}\n`);
+  let failed = 0;
+  for (let pass = 1; pass <= passes; pass++) {
+    const ctx: RunContext = { run, bucket, templates, subnets: rotate(subnets, pass - 1), quick, inputs, retryMs: 60_000 };
+    // launches spread over a minute or so, under EC2's request rate
+    const records = await Promise.all(plan.run.map((u, i) => sleep(i * 1500).then(() => runUnit(cloud, ctx, u, pass))));
+    const bad = records.filter((r) => r.error);
+    failed += bad.length;
+    console.log(`pass ${pass}: ${records.length - bad.length} of ${records.length} units done${bad.length ? `; failed: ${bad.map((r) => r.id).join(", ")}` : ""}`);
+  }
+  process.exit(failed ? 1 : 0);
+}
