@@ -1,6 +1,6 @@
 # 0011 — A real-world benchmark for map tile servers
 
-Date: 2026-10-29. Status: proposed for John's review. Nothing is built from it until it is accepted.
+Date: 2026-10-29. Status: accepted by John on 2026-10-29, before anything was built.
 
 ## Context
 
