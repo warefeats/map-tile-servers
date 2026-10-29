@@ -76,7 +76,7 @@ Facts the design rests on, gathered on 2026-10-29, with sources in the runner's 
 
   They run at modest volume, for latency and per-request resource use, and their cost comes from AWS list prices; pushing terabytes through CloudFront would exceed the budget. Cloudflare setups may follow later.
 - **Traffic.**
-  - **Replay.** OSM's counts for 2026-10-28, moved one zoom down to vector tiles as Planetiler's top-osm-tiles does, with 2026-10-02 as a cross-check. Demand at zoom 15 and above folds into the zoom-14 parent tiles a vector map fetches. Berlin runs use the tiles that touch Berlin's box.
+  - **Replay.** OSM's counts for 2026-10-28, moved one zoom down to vector tiles as Planetiler's top-osm-tiles does, with 2026-10-02 as a cross-check. Demand at zoom 15 and above folds into the zoom-14 parent tiles a vector map fetches. Berlin runs use the tiles that touch Berlin's box. At zooms 0–8 those tiles cover whole countries and continents, so the log's demand for them is everyone's, and taken as it is, 76% of the Berlin replay landed on those 12 tiles. Their demand is therefore scaled to Berlin's size: each zoom's worldwide demand times Berlin's share of the worldwide demand at zooms 9–14 (0.275% on 2026-10-28). This was added on 2026-10-29, while the replay was being built.
   - **The unlisted 15.25%.** It is spread over the archive's unlisted tiles, weighted toward the zooms that have more of them, at no more than 9 requests per tile per day.
   - **Simulated map users.** They start where real users look, sampled from the same counts, move with think time between views, and run as 10 and as 100 users, each over HTTP/1.1 with 6 connections.
   - **Encoding.** Every request carries a browser's `Accept-Encoding`.
