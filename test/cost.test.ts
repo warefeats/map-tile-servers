@@ -1,10 +1,12 @@
 import { describe, expect, test } from "bun:test";
-import { behindCdn, HOURS_PER_MONTH, originPerMillion, type Prices, serverAlone, serverless } from "../src/cost";
+import { readFileSync } from "node:fs";
+import { behindCdn, HOURS_PER_MONTH, originPerMillion, parsePrices, type Prices, serverAlone, serverless } from "../src/cost";
 
 // Round numbers, so every expectation can be checked by hand; the real table lives in prices/.
 const p: Prices = {
   date: "test",
   region: "test",
+  sources: {},
   ec2PerHour: { small: 0.36 },
   gp3PerGbMonth: 0.073,
   egressPerGb: 0.09,
@@ -53,5 +55,17 @@ describe("serverless", () => {
     expect(c.lambda).toBeCloseTo(0.0142 + 0.01775);
     expect(c.s3).toBeCloseTo(0.0568);
     expect(c.total).toBeCloseTo(1 + 4.25 + 0.0142 + 0.01775 + 0.0568);
+  });
+});
+
+describe("parsePrices", () => {
+  test("reads the committed table", () => {
+    const t = parsePrices(JSON.parse(readFileSync(new URL("../prices/aws-us-east-1-2026-10-29.json", import.meta.url), "utf8")));
+    expect(t.ec2PerHour["c8g.xlarge"]).toBe(0.15952);
+    expect(t.egressPerGb).toBe(0.09);
+    expect(Object.keys(t.sources).length).toBeGreaterThan(5);
+  });
+  test("refuses a table with a missing price", () => {
+    expect(() => parsePrices({ date: "x", region: "x", sources: {}, ec2PerHour: {}, lambdaPerGbSecond: { arm64: 1, x86: 1 } })).toThrow(/gp3PerGbMonth/);
   });
 });

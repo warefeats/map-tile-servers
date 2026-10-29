@@ -6,10 +6,12 @@
  * pay per request for their misses: Lambda invocations and GB-seconds, and S3 GETs.
  */
 
-/** A dated list-price table; prices/<region>-<date>.json holds one with its sources. */
+/** A dated list-price table; prices/<region>-<date>.json holds one. First paid tiers; free allowances not applied. */
 export interface Prices {
   date: string;
   region: string;
+  /** Where each price came from: the price-list file, its version, the SKU. */
+  sources: Record<string, string>;
   /** On-demand Linux, $ per hour. */
   ec2PerHour: Record<string, number>;
   gp3PerGbMonth: number;
@@ -21,6 +23,33 @@ export interface Prices {
   lambdaPerGbSecond: { arm64: number; x86: number };
   lambdaPerMillionRequests: number;
   s3GetPerMillion: number;
+}
+
+/** Reads a price table, refusing one with a missing or non-numeric price. */
+export function parsePrices(json: unknown): Prices {
+  const fail = (what: string): never => {
+    throw new Error(`price table: ${what}`);
+  };
+  if (typeof json !== "object" || json === null) return fail("not an object");
+  const o = json as Record<string, unknown>;
+  const num = (v: unknown, name: string): number => (typeof v === "number" && Number.isFinite(v) && v >= 0 ? v : fail(`${name} is not a price`));
+  const rec = (v: unknown, name: string): Record<string, unknown> => (typeof v === "object" && v !== null ? (v as Record<string, unknown>) : fail(`${name} is missing`));
+  const ec2 = rec(o.ec2PerHour, "ec2PerHour");
+  const lambda = rec(o.lambdaPerGbSecond, "lambdaPerGbSecond");
+  const sources = rec(o.sources, "sources");
+  return {
+    date: typeof o.date === "string" ? o.date : fail("date is missing"),
+    region: typeof o.region === "string" ? o.region : fail("region is missing"),
+    sources: Object.fromEntries(Object.entries(sources).map(([k, v]) => [k, typeof v === "string" ? v : fail(`source ${k} is not text`)])),
+    ec2PerHour: Object.fromEntries(Object.entries(ec2).map(([k, v]) => [k, num(v, `ec2PerHour.${k}`)])),
+    gp3PerGbMonth: num(o.gp3PerGbMonth, "gp3PerGbMonth"),
+    egressPerGb: num(o.egressPerGb, "egressPerGb"),
+    cloudfrontPerGb: num(o.cloudfrontPerGb, "cloudfrontPerGb"),
+    cloudfrontHttpsPerMillion: num(o.cloudfrontHttpsPerMillion, "cloudfrontHttpsPerMillion"),
+    lambdaPerGbSecond: { arm64: num(lambda.arm64, "lambdaPerGbSecond.arm64"), x86: num(lambda.x86, "lambdaPerGbSecond.x86") },
+    lambdaPerMillionRequests: num(o.lambdaPerMillionRequests, "lambdaPerMillionRequests"),
+    s3GetPerMillion: num(o.s3GetPerMillion, "s3GetPerMillion"),
+  };
 }
 
 /** AWS bills a month as 730 hours and a GB as 10^9 bytes. */
