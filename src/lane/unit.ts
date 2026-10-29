@@ -3,7 +3,9 @@
  * over the network, a warm-up of fixed length, then the capacity search, with each request carrying what a
  * browser sends. An empty tile (204 or 404) is an answer, not an error, as in the diagnostic lane. It starts with
  * the first view a user loads from the just-started server, and records its own CPU in every step, so a capacity
- * the client could not offer is never credited to the server.
+ * the client could not offer is never credited to the server. With the server alone, simulated map users load
+ * views from the warm server, 10 and then 100 of them, before the capacity search; behind a CDN they would load
+ * from the CDN, so that scenario has none.
  *   bun run src/lane/unit.ts --server=<id> --host=<ip> --tileset=planet --format=pmtiles --scenario=alone|cdn
  *     --replay=<z/x/y list> --out=<file.json>
  */
@@ -14,13 +16,15 @@ import { type OhaOptions, type OhaPass, ohaArgs, ohaBudgetMs, parseOha } from ".
 import { BERLIN, CONNECTIONS_PER_USER, viewTiles } from "../session-plan";
 import { findCapacity, held, type StepOutcome } from "./capacity";
 import { type LaneServer, LANE_SERVERS, tileUrl } from "./servers";
+import { runUsers, type UsersResult } from "./users";
 
 /** What a current browser sends for a tile. */
 export const BROWSER_HEADERS = { Accept: "*/*", "Accept-Encoding": "gzip, deflate, br, zstd" };
 export const TARGET_MS = 50;
 const TIMEOUT_S = 10;
 /** Warm-up, and each capacity step's unrecorded and recorded seconds; --quick is for smokes. */
-export const TIMING = { full: { warmupS: 120, stepWarmupS: 10, stepS: 20 }, quick: { warmupS: 10, stepWarmupS: 3, stepS: 5 } };
+export const TIMING = { full: { warmupS: 120, stepWarmupS: 10, stepS: 20, usersS: 60 }, quick: { warmupS: 10, stepWarmupS: 3, stepS: 5, usersS: 10 } };
+export const USER_COUNTS = [10, 100];
 
 /** Enough connections to carry a rate at 5 ms a request, so the client never queues what the server could take. */
 export const connections = (rps: number) => Math.min(1024, Math.max(32, Math.ceil(rps * 0.005)));
@@ -139,6 +143,14 @@ if (import.meta.main) {
   console.log(`first view: ${first.tiles} tiles in ${first.wallMs.toFixed(1)} ms`);
   console.log(`warm-up: ${t.warmupS} s, 64 connections, ${lines.length} replay lines`);
   const warmup = oha({ ...base, connections: 64, durationSeconds: t.warmupS });
+  const users: UsersResult[] = [];
+  if (scenario === "alone") {
+    for (const n of USER_COUNTS) {
+      const u = await runUsers(server, host, tileset, BROWSER_HEADERS, lines, n, t.usersS, 20261029 + n);
+      users.push(u);
+      console.log(`${n} users: ${u.views} views, load p50 ${u.p50Ms?.toFixed(1) ?? "n/a"} ms, p95 ${u.p95Ms?.toFixed(1) ?? "n/a"} ms, ${u.failures} failed tiles`);
+    }
+  }
   const capacity = await findCapacity(
     async (rps) => {
       oha({ ...base, connections: connections(rps), rate: rps, durationSeconds: t.stepWarmupS });
@@ -151,6 +163,6 @@ if (import.meta.main) {
     { startRps: 1000, maxRps: 256_000, minRps: 125, bisections: 3 },
   );
   const atCapacity = (capacity.steps as Step[]).filter((s) => s.held && s.offeredRps === capacity.capacityRps).at(-1) ?? null;
-  writeFileSync(out, JSON.stringify({ server: server.id, version: server.version, tileset, format: arg("format"), scenario, timing: t, targetMs: TARGET_MS, replayLines: lines.length, firstView: first, warmup: { rps: warmup.requestsPerSec, p99Ms: warmup.p99Ms, statusCodes: warmup.statusCodes }, capacity, clientBoundAtRps: clientBoundAt(capacity.steps as Step[]), bytesPerTile: atCapacity?.bytesPerRequest ?? null, p99AtCapacityMs: atCapacity?.p99Ms ?? null }, null, 2) + "\n");
+  writeFileSync(out, JSON.stringify({ server: server.id, version: server.version, tileset, format: arg("format"), scenario, timing: t, targetMs: TARGET_MS, replayLines: lines.length, firstView: first, warmup: { rps: warmup.requestsPerSec, p99Ms: warmup.p99Ms, statusCodes: warmup.statusCodes }, users, capacity, clientBoundAtRps: clientBoundAt(capacity.steps as Step[]), bytesPerTile: atCapacity?.bytesPerRequest ?? null, p99AtCapacityMs: atCapacity?.p99Ms ?? null }, null, 2) + "\n");
   console.log(`capacity ${capacity.capacityRps}/s${capacity.atCeiling ? " (at the ceiling)" : ""}, ${atCapacity?.bytesPerRequest ?? "?"} bytes a tile`);
 }
