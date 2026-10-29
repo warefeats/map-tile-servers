@@ -74,7 +74,8 @@ for name in images.tar.zst dbdata.tar.zst berlin.mbtiles berlin.pmtiles; do
   key=$(input "$name")
   [ -n "$key" ] || { echo "the bundle names no $name"; exit 1; }
   [ -s "/opt/inputs/$(basename "$key")" ] || aws s3 cp "$s3/$key" "/opt/inputs/$(basename "$key")" --only-show-errors
-  ln -sf "/opt/inputs/$(basename "$key")" "/opt/inputs/$name"
+  # a hard link: zstd skips symbolic links
+  ln -f "/opt/inputs/$(basename "$key")" "/opt/inputs/$name"
 done
 rm -rf /opt/m2 && mkdir -p /opt/m2
 tar -xzf "/opt/bundle/$run_id/repo.tar.gz" -C /opt/m2
