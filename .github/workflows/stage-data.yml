@@ -2,7 +2,8 @@ name: Stage data
 
 # Copies one OpenFreeMap planet build (the archive lane's data, docs/adr/0011) into the rig bucket once, in
 # ranged parts that retry on their own (scripts/rig-stage-planet.sh), with each file's sha256 and size recorded
-# beside it.
+# beside it: the MBTiles and PMTiles archives, and the Btrfs image of tile files that nginx serves the way
+# OpenFreeMap does.
 on:
   workflow_dispatch:
     inputs:
@@ -32,7 +33,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        format: [mbtiles, pmtiles]
+        format: [mbtiles, pmtiles, btrfs]
     steps:
       - uses: actions/checkout@v7
 
