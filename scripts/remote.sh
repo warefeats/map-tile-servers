@@ -50,7 +50,7 @@ finish() {
 }
 trap finish EXIT
 
-# The progress log reaches the bucket every minute, so the laptop can follow a run without SSM.
+# The progress log reaches the bucket every minute, so the workflow can follow a run without SSM.
 uploader=""
 ( while sleep 60; do aws s3 cp "$log" "$s3/results/$run_id/run-$label.log" --only-show-errors || true; done ) &
 uploader=$!

@@ -1,0 +1,343 @@
+name: Cloud rig
+
+# A run on the cloud rig (docs/adr/0010): one c7g.metal host per family, each running scripts/remote.sh over SSM,
+# driven from here through an OIDC role the way kv-stores runs its rig. smoke runs each family's smoke protocol
+# (the PostGIS host builds Martin 2.0 when the bucket lacks it), full runs both passes and scores them, and
+# collect gathers a run's results from the bucket again, for a host that outlived its job, and scores them.
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "smoke, full or collect"
+        type: choice
+        options: [smoke, full, collect]
+        default: smoke
+      families:
+        description: "Families, one host each"
+        type: choice
+        options: [both, postgis, archive]
+        default: both
+      run_id:
+        description: "Run id (empty: rc and the first seven characters of the Martin 2.0 commit)"
+        required: false
+        default: ""
+
+concurrency:
+  group: martin-2-rig
+  cancel-in-progress: false
+
+permissions:
+  id-token: write
+  contents: read
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  prepare:
+    runs-on: ubuntu-24.04
+    environment: martin-2-bench
+    timeout-minutes: 15
+    outputs:
+      run_id: ${{ steps.plan.outputs.run_id }}
+      image: ${{ steps.plan.outputs.image }}
+      families: ${{ steps.plan.outputs.families }}
+      build: ${{ steps.image.outputs.build }}
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: "1.4.0"
+
+      - run: bun install --frozen-lockfile
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v6
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-region: us-east-1
+
+      - name: Plan
+        id: plan
+        env:
+          RUN_ID: ${{ inputs.run_id }}
+          FAMILIES: ${{ inputs.families }}
+          MODE: ${{ inputs.mode }}
+        run: |
+          set -euo pipefail
+          image=$(bun -e "import { MARTIN_2 } from './src/matrix'; console.log(MARTIN_2.image)")
+          commit=$(bun -e "import { MARTIN_2_BUILD } from './src/matrix'; console.log(MARTIN_2_BUILD.commit)")
+          run_id=${RUN_ID:-rc${commit:0:7}}
+          [[ $run_id =~ ^[a-z0-9][a-z0-9-]*$ ]] || { echo "::error::run_id $run_id: lower-case letters, digits and dashes only"; exit 1; }
+          if [ "$FAMILIES" = both ]; then families='["postgis","archive"]'; else families="[\"$FAMILIES\"]"; fi
+          { echo "run_id=$run_id"; echo "image=$image"; echo "families=$families"; } >> "$GITHUB_OUTPUT"
+          echo "run $run_id, mode $MODE, families $families, Martin 2.0 $image"
+
+      - name: Pack the bundle
+        if: inputs.mode != 'collect'
+        env:
+          RUN_ID: ${{ steps.plan.outputs.run_id }}
+          FAMILIES: ${{ steps.plan.outputs.families }}
+          MODE: ${{ inputs.mode }}
+        run: |
+          set -euo pipefail
+          . scripts/rig-lib.sh
+          bucket=$(stack_output RigBucketName)
+          # a measured run never lands on top of another one's results
+          if [ "$MODE" = full ]; then
+            for family in $(jq -r '.[]' <<< "$FAMILIES"); do
+              if aws s3api head-object --bucket "$bucket" --key "results/$RUN_ID/results-$family-$RUN_ID-p1.json" >/dev/null 2>&1; then
+                echo "::error::run $RUN_ID already has $family results: dispatch with a new run_id"; exit 1
+              fi
+            done
+          fi
+          # the inputs every run names, uploaded once by just rig-inputs
+          while read -r name key <&3; do
+            aws s3api head-object --bucket "$bucket" --key "$key" >/dev/null 2>&1 || { echo "::error::$name is not in the bucket as $key: run just rig-inputs"; exit 1; }
+          done 3< scripts/rig-inputs.txt
+          stage=$RUNNER_TEMP/bundle
+          mkdir -p "$stage"
+          git archive --format=tar.gz -o "$stage/repo.tar.gz" HEAD
+          cp scripts/remote.sh "$stage/"
+          cp scripts/rig-inputs.txt "$stage/inputs.txt"
+          for f in repo.tar.gz remote.sh inputs.txt; do aws s3 cp "$stage/$f" "s3://$bucket/bundles/$RUN_ID/$f" --only-show-errors; done
+          echo "bundle $RUN_ID at $(git rev-parse --short HEAD)"
+
+      - name: Martin 2.0 image
+        id: image
+        if: inputs.mode != 'collect'
+        env:
+          IMAGE: ${{ steps.plan.outputs.image }}
+          FAMILIES: ${{ steps.plan.outputs.families }}
+        run: |
+          set -euo pipefail
+          . scripts/rig-lib.sh
+          bucket=$(stack_output RigBucketName)
+          key=images/$(echo "$IMAGE" | tr ':/' '__').tar.zst
+          if aws s3api head-object --bucket "$bucket" --key "$key" >/dev/null 2>&1; then
+            echo "$IMAGE: built by an earlier dispatch, and every host loads that build"
+          elif jq -e 'index("postgis")' <<< "$FAMILIES" >/dev/null; then
+            # the PostGIS host builds it; an earlier failure's marker would stop the archive host at once
+            aws s3 rm "s3://$bucket/$key.failed" --only-show-errors
+            echo "build=$(bun -e "import { MARTIN_2_BUILD as b } from './src/matrix'; console.log(b.commit + ':' + b.rustc)")" >> "$GITHUB_OUTPUT"
+            echo "$IMAGE: the PostGIS host builds it"
+          else
+            echo "::error::$IMAGE is not in the bucket, and only a PostGIS host builds it: dispatch families=both or postgis"; exit 1
+          fi
+
+  host:
+    name: ${{ matrix.family }} host
+    needs: prepare
+    if: inputs.mode != 'collect'
+    runs-on: ubuntu-24.04
+    environment: martin-2-bench
+    # a full family run takes four to five hours, and GitHub ends a hosted job at six
+    timeout-minutes: 355
+    strategy:
+      fail-fast: false
+      matrix:
+        family: ${{ fromJSON(needs.prepare.outputs.families) }}
+    env:
+      RUN_ID: ${{ needs.prepare.outputs.run_id }}
+      IMAGE: ${{ needs.prepare.outputs.image }}
+      BUILD: ${{ needs.prepare.outputs.build }}
+      FAMILY: ${{ matrix.family }}
+      MODE: ${{ inputs.mode }}
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v6
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-region: us-east-1
+          role-duration-seconds: 21600
+
+      - name: Launch the host
+        id: launch
+        run: |
+          set -euo pipefail
+          echo "started=$(date +%s)" >> "$GITHUB_OUTPUT"
+          . scripts/rig-lib.sh
+          lt=$(stack_output LaunchTemplateId)
+          tags="ResourceType=instance,Tags=[{Key=Name,Value=martin-2-$RUN_ID-$FAMILY},{Key=Project,Value=martin-2-bench},{Key=RunId,Value=$RUN_ID},{Key=Families,Value=$FAMILY}]"
+          err=$(mktemp)
+          instance=""
+          # metal capacity differs by zone, so try each default subnet until one launches
+          for subnet in $(aws ec2 describe-subnets --filters Name=default-for-az,Values=true --query 'Subnets[].SubnetId' --output text); do
+            if instance=$(aws ec2 run-instances --launch-template "LaunchTemplateId=$lt,Version=\$Latest" --subnet-id "$subnet" --tag-specifications "$tags" --query 'Instances[0].InstanceId' --output text 2>"$err"); then
+              break
+            fi
+            instance=""
+            grep -q -E "InsufficientInstanceCapacity|Unsupported" "$err" || { cat "$err" >&2; exit 1; }
+            echo "no capacity in $subnet, trying the next zone"
+          done
+          [ -n "$instance" ] || { echo "::error::no zone had capacity"; exit 1; }
+          echo "instance=$instance" >> "$GITHUB_OUTPUT"
+          echo "$FAMILY host $instance"
+
+      - name: Start remote.sh
+        id: start
+        env:
+          INSTANCE: ${{ steps.launch.outputs.instance }}
+        run: |
+          set -euo pipefail
+          . scripts/rig-lib.sh
+          bucket=$(stack_output RigBucketName)
+          # SSM comes up before user data finishes; the command waits for user data itself
+          ping=""
+          for _ in $(seq 1 120); do
+            ping=$(aws ssm describe-instance-information --filters "Key=InstanceIds,Values=$INSTANCE" --query 'InstanceInformationList[0].PingStatus' --output text 2>/dev/null || true)
+            [ "$ping" = Online ] && break
+            sleep 10
+          done
+          [ "$ping" = Online ] || { echo "::error::SSM never came online on $INSTANCE"; exit 1; }
+          args=(--families="$FAMILY")
+          if [ "$FAMILY" = postgis ] && [ -n "$BUILD" ]; then args+=(--build="$BUILD"); fi
+          if [ "$MODE" = smoke ]; then args+=(--smoke); fi
+          cmd=$(ssm_command "$bucket" "$RUN_ID" "$IMAGE" "${args[@]}")
+          params=$(jq -n --arg c "$cmd" '{commands: [$c], executionTimeout: ["36000"]}')
+          command=$(aws ssm send-command --instance-ids "$INSTANCE" --document-name AWS-RunShellScript --parameters "$params" --query 'Command.CommandId' --output text)
+          echo "command=$command" >> "$GITHUB_OUTPUT"
+          echo "remote.sh ${args[*]} as SSM command $command"
+
+      - name: Follow the host's log
+        id: follow
+        env:
+          INSTANCE: ${{ steps.launch.outputs.instance }}
+          COMMAND: ${{ steps.start.outputs.command }}
+          STARTED: ${{ steps.launch.outputs.started }}
+        run: |
+          set -euo pipefail
+          . scripts/rig-lib.sh
+          bucket=$(stack_output RigBucketName)
+          log=$RUNNER_TEMP/run-$FAMILY.log
+          seen=0
+          # the host uploads its log every minute; print the whole lines added since the last look
+          show() {
+            aws s3 cp "s3://$bucket/results/$RUN_ID/run-$FAMILY.log" "$log" --only-show-errors 2>/dev/null || return 0
+            local total
+            total=$(wc -l < "$log")
+            if [ "$total" -gt "$seen" ]; then head -n "$total" "$log" | tail -n +"$((seen + 1))"; seen=$total; fi
+          }
+          # past this point the host keeps running on its own, and a collect dispatch gathers its results
+          deadline=$((STARTED + 340 * 60))
+          status=InProgress
+          while :; do
+            sleep 60
+            show
+            status=$(aws ssm get-command-invocation --command-id "$COMMAND" --instance-id "$INSTANCE" --query Status --output text 2>/dev/null || echo InProgress)
+            case "$status" in Pending | InProgress | Delayed | Cancelling) ;; *) break ;; esac
+            state=$(aws ec2 describe-instances --instance-ids "$INSTANCE" --query 'Reservations[0].Instances[0].State.Name' --output text 2>/dev/null || echo unknown)
+            case "$state" in shutting-down | terminated | stopping | stopped) echo "::error::the host is $state and remote.sh never reported"; status=Lost; break ;; esac
+            if [ "$(date +%s)" -ge "$deadline" ]; then
+              echo "state=running" >> "$GITHUB_OUTPUT"
+              echo "::warning::the $FAMILY host $INSTANCE is still running at the job's limit; it uploads its results and terminates itself when done. Then dispatch mode=collect run_id=$RUN_ID."
+              exit 1
+            fi
+          done
+          echo "state=done" >> "$GITHUB_OUTPUT"
+          # remote.sh uploads its log once more on exit
+          sleep 10
+          show
+          echo "remote.sh: $status"
+          [ "$status" = Success ]
+
+      - name: Collect the results
+        if: always() && steps.start.outputs.command != ''
+        run: |
+          set -euo pipefail
+          . scripts/rig-lib.sh
+          bucket=$(stack_output RigBucketName)
+          mkdir -p "$RUNNER_TEMP/out"
+          aws s3 cp "s3://$bucket/results/$RUN_ID/" "$RUNNER_TEMP/out/" --recursive --exclude '*' --include "results-$FAMILY-*" --include "run-$FAMILY.log" --include build-info.txt --only-show-errors
+          ls -l "$RUNNER_TEMP/out"
+
+      - uses: actions/upload-artifact@v7
+        if: always() && steps.start.outputs.command != ''
+        with:
+          name: rig-${{ env.RUN_ID }}-${{ matrix.family }}-${{ inputs.mode }}
+          path: ${{ runner.temp }}/out/
+          retention-days: 90
+
+      - name: Terminate the host
+        if: always() && steps.launch.outputs.instance != '' && steps.follow.outputs.state != 'running'
+        env:
+          INSTANCE: ${{ steps.launch.outputs.instance }}
+        run: aws ec2 terminate-instances --instance-ids "$INSTANCE" --query 'TerminatingInstances[0].CurrentState.Name' --output text || true
+
+  verdict:
+    needs: [prepare, host]
+    if: >-
+      always() && needs.prepare.result == 'success' &&
+      (inputs.mode == 'collect' || (inputs.mode == 'full' && inputs.families == 'both' && needs.host.result == 'success'))
+    runs-on: ubuntu-24.04
+    environment: martin-2-bench
+    timeout-minutes: 20
+    env:
+      RUN_ID: ${{ needs.prepare.outputs.run_id }}
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: "1.4.0"
+
+      - run: bun install --frozen-lockfile
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v6
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-region: us-east-1
+
+      - name: Score the run
+        run: |
+          set -euo pipefail
+          . scripts/rig-lib.sh
+          bucket=$(stack_output RigBucketName)
+          mkdir -p out
+          aws s3 cp "s3://$bucket/results/$RUN_ID/" out/ --recursive --only-show-errors
+          cp out/results-*-"$RUN_ID"-p?.json .
+          # docs/adr/0001 as amended by 0005, 0007, 0008 and 0009, pooled over both passes
+          bun run src/analysis.ts --run="$RUN_ID" | tee "out/verdict-$RUN_ID.txt"
+          cp "verdict-$RUN_ID.json" out/
+
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: rig-${{ env.RUN_ID }}-verdict
+          path: out/
+          retention-days: 90
+
+  reaper:
+    name: Reap stuck rig hosts
+    needs: host
+    if: always()
+    runs-on: ubuntu-24.04
+    environment: martin-2-bench
+    timeout-minutes: 10
+    steps:
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v6
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-region: us-east-1
+
+      - name: Terminate hosts launched more than eleven hours ago
+        run: |
+          set -euo pipefail
+          # every host shuts itself down within ten hours (the user data), so an older one is stuck
+          cutoff=$(date -u -d '11 hours ago' +%Y-%m-%dT%H:%M:%S+00:00)
+          stale=()
+          while read -r id launched; do
+            [ -n "$id" ] && [[ $launched < $cutoff ]] && stale+=("$id")
+          done < <(aws ec2 describe-instances --filters Name=tag:Project,Values=martin-2-bench Name=instance-state-name,Values=pending,running,stopping,stopped --query 'Reservations[].Instances[].[InstanceId,LaunchTime]' --output text)
+          if [ ${#stale[@]} -gt 0 ]; then
+            echo "terminating ${stale[*]}"
+            aws ec2 terminate-instances --instance-ids "${stale[@]}" >/dev/null
+          else
+            echo "no stuck hosts"
+          fi

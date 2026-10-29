@@ -42,6 +42,7 @@ unpreview:
     bun run src/preview.ts --remove
 
 # Build or tag every image a run needs but Martin 2.0, which is built from source (docs/adr/0010: on the rig, scripts/build-martin-pgo.sh).
+# The rig loads the helper builds from the saved copy scripts/rig-inputs.txt pins and pulls the rest.
 images:
     docker build -q -t wf-client:1 images/client
     docker build -q -f images/Dockerfile.bbox -t wf-bbox:0.6.2 images
@@ -64,39 +65,47 @@ clean:
     docker ps -a --format '{{"{{"}}.Names{{"}}"}}' | grep -E '^m2-' | xargs -r docker rm -f >/dev/null || true
     echo "removed m2-* containers (volume m2-dbdata kept)"
 
-# The cloud rig (docs/adr/0010): dedicated c7g.metal hosts, each running whole families of the protocol.
+# The cloud rig (docs/adr/0010): c7g.metal hosts, one per family, dispatched from GitHub Actions (.github/workflows/rig.yml)
+# the way kv-stores runs its rig. Once, with AWS credentials: the stack, the role the workflow assumes, and the inputs.
 rig-deploy:
     cd infra && bun x cdk deploy --require-approval never
+
+setup-oidc:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    repo_id=$(gh api repos/warefeats/martin-2 --jq .id)
+    aws cloudformation deploy --template-file infra/github-oidc-role.yml --stack-name martin-2-github-oidc \
+        --capabilities CAPABILITY_NAMED_IAM --no-fail-on-empty-changeset \
+        --parameter-overrides RepositoryId="$repo_id" OidcProviderArn=arn:aws:iam::{{aws_account}}:oidc-provider/token.actions.githubusercontent.com
+    role=$(aws cloudformation describe-stacks --stack-name martin-2-github-oidc --query "Stacks[0].Outputs[?OutputKey=='RoleArn'].OutputValue" --output text)
+    gh secret set AWS_ROLE_ARN --repo warefeats/martin-2 --body "$role"
+    echo "AWS_ROLE_ARN is $role"
+
+# Upload the inputs scripts/rig-inputs.txt pins (IMAGES and DBDATA name the saved helper images and database volume).
+rig-inputs:
+    bash scripts/rig-inputs.sh
 
 # Offline preflight; run it before every dispatch.
 rig-walk:
     bash scripts/rig-walk.sh
 
-# Upload one run's bundle: the committed tree and the inputs (local images, the database volume, the archives).
-rig-pack RUN:
-    bash scripts/rig-pack.sh {{RUN}}
+# A dispatch. smoke runs each family's smoke (the PostGIS host builds Martin 2.0 when the bucket lacks it), full runs
+# both passes and the verdict, collect scores a run whose host outlived its job (add -f run_id=<run>).
+rig-cloud MODE="smoke" FAMILIES="both" *ARGS:
+    gh workflow run rig.yml --repo warefeats/martin-2 -f mode={{MODE}} -f families={{FAMILIES}} {{ARGS}}
 
-# Launch a host and start the run on it (args: --families=postgis|archive, --build=<commit>:<rustc>, --smoke-first, --smoke, --keep).
-rig-run RUN *ARGS:
-    bash scripts/rig-run.sh {{RUN}} "$(bun -e "import { MARTIN_2 } from './src/matrix'; console.log(MARTIN_2.image)")" {{ARGS}}
+rig-watch:
+    gh run list --repo warefeats/martin-2 --workflow=rig.yml --limit=1 --json databaseId --jq '.[0].databaseId' | xargs gh run watch --repo warefeats/martin-2
 
-# The last lines of one host's progress log (LABEL: postgis, archive, or postgis-archive).
-rig-log RUN LABEL:
+# One dispatch's artifacts: results and the verdict into the repo, all of it (logs, the build record) in .work/rig/gh-<id>/.
+rig-fetch ID:
     #!/usr/bin/env bash
     set -euo pipefail
-    . scripts/rig-lib.sh
-    aws s3 cp "s3://$(stack_output RigBucketName)/results/{{RUN}}/run-{{LABEL}}.log" - | tail -n 40
-
-# Copy a run's results into the repo.
-rig-fetch RUN:
-    bash scripts/rig-fetch.sh {{RUN}}
-
-# Instances of any run that are still up.
-rig-instances:
-    #!/usr/bin/env bash
-    set -euo pipefail
-    . scripts/rig-lib.sh
-    aws ec2 describe-instances --filters Name=tag:Project,Values=martin-2-bench Name=instance-state-name,Values=pending,running,stopping --query 'Reservations[].Instances[].[InstanceId,InstanceType,State.Name,Tags[?Key==`RunId`]|[0].Value,LaunchTime]' --output table
+    dir=.work/rig/gh-{{ID}}
+    rm -rf "$dir"
+    gh run download {{ID}} --repo warefeats/martin-2 --dir "$dir"
+    find "$dir" -type f \( -name 'results-*.json' -o -name 'verdict-*' \) -exec cp {} . \;
+    ls -R "$dir"
 
 rig-destroy:
     cd infra && bun x cdk destroy --force

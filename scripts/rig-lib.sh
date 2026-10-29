@@ -1,4 +1,4 @@
-# Shared by the rig scripts: a working aws CLI and the stack's outputs.
+# Shared by the rig scripts and the rig workflow: a working aws CLI, the stack's outputs, input keys and the SSM command.
 export AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION:-us-east-1}
 
 # The first aws on PATH that runs: an old x86_64 install can shadow the native one on Apple silicon.
@@ -11,6 +11,13 @@ aws() { "$AWS_BIN" "$@"; }
 
 stack_output() {
   aws cloudformation describe-stacks --stack-name WarefeatsMartin2Bench --query "Stacks[0].Outputs[?OutputKey=='$1'].OutputValue" --output text
+}
+
+# The bucket key of an input: a hash of its bytes, so scripts/rig-inputs.txt pins the corpus.
+input_key() {
+  local sum
+  if command -v sha256sum >/dev/null; then sum=$(sha256sum "$2"); else sum=$(shasum -a 256 "$2"); fi
+  echo "inputs/${sum:0:16}-$1"
 }
 
 # The command SSM runs on the instance. SSM is online before user data installs the AWS CLI, and runs

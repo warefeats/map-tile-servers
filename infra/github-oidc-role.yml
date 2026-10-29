@@ -1,0 +1,59 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: GitHub OIDC role for the cloud rig workflow of warefeats/martin-2
+
+Parameters:
+  GitHubOrg:
+    Type: String
+    Default: warefeats
+  GitHubOrgId:
+    Type: String
+    Default: "322872963"
+    Description: Numeric org ID (gh api orgs/warefeats -q .id).
+  GitHubRepository:
+    Type: String
+    Default: martin-2
+  RepositoryId:
+    Type: String
+    Description: Numeric repository ID (gh api repos/warefeats/martin-2 -q .id). Required for immutable ID-form subject claims.
+  OidcProviderArn:
+    Type: String
+    Description: The account's existing token.actions.githubusercontent.com provider.
+
+Resources:
+  DeployRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: martin-2-github-deploy
+      Description: Launches the martin-2 rig hosts and drives them over SSM.
+      # a host job holds one session for up to six hours
+      MaxSessionDuration: 21600
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Federated: !Ref OidcProviderArn
+            Action: sts:AssumeRoleWithWebIdentity
+            Condition:
+              StringEquals:
+                token.actions.githubusercontent.com:aud: sts.amazonaws.com
+              StringLike:
+                token.actions.githubusercontent.com:sub:
+                  - !Sub repo:${GitHubOrg}/${GitHubRepository}:environment:martin-2-bench
+                  - !Sub "repo:${GitHubOrg}@${GitHubOrgId}/${GitHubRepository}@${RepositoryId}:environment:martin-2-bench"
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/PowerUserAccess
+      Policies:
+        - PolicyName: martin-2-bench-operations
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Sid: PassBenchInstanceRole
+                Effect: Allow
+                Action: iam:PassRole
+                Resource: !Sub "arn:aws:iam::${AWS::AccountId}:role/WarefeatsMartin2Bench-*"
+
+Outputs:
+  RoleArn:
+    Description: Stored as the AWS_ROLE_ARN secret of warefeats/martin-2.
+    Value: !GetAtt DeployRole.Arn

@@ -6,10 +6,10 @@ import type { Construct } from "constructs";
 
 /**
  * Dedicated Graviton hosts that each run whole families of the harness (database, engines and client on
- * one Docker network, as on the Mac), driven from the laptop over SSM. The bucket carries the bundle in
- * (repo, images, database volume, archives), the Martin image from the host that builds it to the
- * others, and the results out. No VPC lookup: the instances launch into the default VPC with its
- * default security group, which only needs outbound traffic.
+ * one Docker network, as on the Mac), driven over SSM by the rig workflow (.github/workflows/rig.yml).
+ * The bucket carries the bundle in (repo, images, database volume, archives), the Martin image from the
+ * host that builds it to the others, and the results out. No VPC lookup: the instances launch into the
+ * default VPC with its default security group, which only needs outbound traffic.
  */
 export class Martin2BenchStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
@@ -18,7 +18,12 @@ export class Martin2BenchStack extends cdk.Stack {
     const instanceType = this.node.tryGetContext("instanceType") ?? "c7g.metal";
 
     const bucket = new s3.Bucket(this, "RigBucket", {
-      lifecycleRules: [{ expiration: cdk.Duration.days(30) }],
+      // the inputs every run names (scripts/rig-inputs.txt) stay; a run's own objects expire
+      lifecycleRules: [
+        { prefix: "bundles/", expiration: cdk.Duration.days(30) },
+        { prefix: "images/", expiration: cdk.Duration.days(30) },
+        { prefix: "results/", expiration: cdk.Duration.days(90) },
+      ],
       autoDeleteObjects: true,
       removalPolicy: cdk.RemovalPolicy.DESTROY,
       enforceSSL: true,
