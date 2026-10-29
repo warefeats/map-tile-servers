@@ -23,6 +23,8 @@ export class Martin2BenchStack extends cdk.Stack {
         { prefix: "bundles/", expiration: cdk.Duration.days(30) },
         { prefix: "images/", expiration: cdk.Duration.days(30) },
         { prefix: "results/", expiration: cdk.Duration.days(90) },
+        // a staging job cancelled mid-copy never reaches its abort
+        { abortIncompleteMultipartUploadAfter: cdk.Duration.days(1) },
       ],
       autoDeleteObjects: true,
       removalPolicy: cdk.RemovalPolicy.DESTROY,
