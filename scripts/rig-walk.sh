@@ -11,13 +11,17 @@ actionlint .github/workflows/rig.yml
 echo "2. user data from the synthesized stack"
 (cd infra && bun x cdk synth --quiet >/dev/null)
 tmp=$(mktemp)
-jq -r '.Resources[] | select(.Type == "AWS::EC2::LaunchTemplate") | .Properties.LaunchTemplateData.UserData["Fn::Base64"]' infra/cdk.out/WarefeatsMartin2Bench.template.json > "$tmp"
+# every launch template shares one user data
+jq -r '[.Resources[] | select(.Type == "AWS::EC2::LaunchTemplate") | .Properties.LaunchTemplateData.UserData["Fn::Base64"]] | first' infra/cdk.out/WarefeatsMartin2Bench.template.json > "$tmp"
 head -1 "$tmp" | grep -q '^#!/bin/bash' || { echo "user data has no bash shebang" >&2; exit 1; }
 shellcheck -s bash "$tmp"
 grep -q 'shutdown -h +' "$tmp" || { echo "user data lost its safety shutdown" >&2; exit 1; }
 grep -q 'martin-2-bench-ready' "$tmp" || { echo "user data lost its ready marker" >&2; exit 1; }
 grep -q 'docker-buildx' "$tmp" || { echo "user data has no buildx: the Martin image build needs BuildKit for TARGETPLATFORM" >&2; exit 1; }
-jq -e '.Resources[] | select(.Type == "AWS::EC2::LaunchTemplate") | .Properties.LaunchTemplateData.InstanceInitiatedShutdownBehavior == "terminate"' infra/cdk.out/WarefeatsMartin2Bench.template.json >/dev/null || { echo "shutdown does not terminate" >&2; exit 1; }
+jq -e '[.Resources[] | select(.Type == "AWS::EC2::LaunchTemplate") | .Properties.LaunchTemplateData.InstanceInitiatedShutdownBehavior == "terminate"] | all' infra/cdk.out/WarefeatsMartin2Bench.template.json >/dev/null || { echo "a launch template's shutdown does not terminate" >&2; exit 1; }
+grep -qF "awscli-exe-linux-\$(uname -m).zip" "$tmp" || { echo "user data installs the AWS CLI for one architecture only" >&2; exit 1; }
+# the archive lane (docs/adr/0011): servers on c8g.xlarge and c8i.xlarge, the client on c8gn.xlarge, one placement group
+jq -e '[.Resources[] | select(.Type == "AWS::EC2::LaunchTemplate") | .Properties.LaunchTemplateData | select(.Placement.GroupName) | .InstanceType] | sort == ["c8g.xlarge", "c8gn.xlarge", "c8i.xlarge"]' infra/cdk.out/WarefeatsMartin2Bench.template.json >/dev/null || { echo "the lane's launch templates are not c8g.xlarge, c8i.xlarge and c8gn.xlarge in a placement group" >&2; exit 1; }
 jq -e '[.Resources[] | select(.Type == "AWS::S3::Bucket") | .Properties.LifecycleConfiguration.Rules[] | .Prefix] | sort == ["bundles/", "images/", "results/"]' infra/cdk.out/WarefeatsMartin2Bench.template.json >/dev/null || { echo "the bucket's lifecycle would expire the inputs" >&2; exit 1; }
 echo "3. the SSM command a building PostGIS host gets"
 # shellcheck source=scripts/rig-lib.sh
