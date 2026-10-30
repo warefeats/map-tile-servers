@@ -1,10 +1,11 @@
 /**
  * The archive lane's orchestrator (docs/adr/0011). Each pass puts every unit on a fresh pair of instances in a
- * cluster placement group of its own: the server sets up, the client launches beside it once the archive is in
- * place, and each scenario starts the server cold before the client measures it. A unit's record lands in the
+ * cluster placement group of its own, in the first zone with room for both, each unit starting from its own place
+ * in the zone rotation so the pairs spread out; both set up at once, and each scenario starts the server cold
+ * before the client measures it. A unit's record lands in the
  * bucket when it ends; one that fails is recorded and the others go on. A Berlin unit of an archive server ends
  * with the catalog start (1,000 more sources). A unit whose data is not in the bucket is skipped before the first
- * pass. Passes run one after another, and each starts in the next zone that offers every lane instance type.
+ * pass. Passes run one after another.
  *   bun run src/lane/orchestrate.ts --run=<id> [--units=all|<pattern>,...] [--passes=3] [--quick]
  */
 import { readFileSync } from "node:fs";
@@ -89,11 +90,11 @@ export interface RunContext {
   run: string;
   bucket: string;
   templates: Record<Arch | "client", string>;
-  /** Tried in order for a server; its client follows it into its subnet. */
+  /** The zones' subnets in the order this unit tries them. */
   subnets: readonly string[];
   quick: boolean;
   inputs: ReadonlyMap<string, string>;
-  /** How long a client launch waits for capacity before it tries again. */
+  /** How long a server launch waits for capacity before it tries again in the same zone. */
   retryMs: number;
 }
 
@@ -125,10 +126,46 @@ export interface UnitRecord {
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
+/**
+ * A server and its client in one zone, in a cluster placement group of their own. The client's network-optimized
+ * type is the scarce one (the first coverage smoke ran out of it in one zone after 15 clients), so it launches
+ * first and picks the zone: each zone in turn until one takes it, then the server follows it. A zone that takes
+ * the client but not the server, twice, gives the client back and the pair moves on.
+ */
+export async function launchPair(cloud: Cloud, ctx: RunContext, u: LaneUnit, pass: number, tags: (role: string) => Record<string, string>, note: (what: string) => void): Promise<{ server: Host; client: Host; placementGroup: string }> {
+  for (const [i, subnet] of ctx.subnets.entries()) {
+    const placementGroup = `lane-${ctx.run}-p${pass}-${u.id}-${i}`;
+    await cloud.createPlacementGroup(placementGroup, tags("placement"));
+    let client: Host;
+    try {
+      client = await cloud.launch({ template: ctx.templates.client, placementGroup, subnets: [subnet], tags: tags("client") });
+    } catch (e) {
+      if (!(e instanceof CapacityError)) throw e;
+      note(`no client capacity in ${subnet}`);
+      continue;
+    }
+    for (let attempt = 1; attempt <= 2; attempt++) {
+      try {
+        const server = await cloud.launch({ template: ctx.templates[u.arch], placementGroup, subnets: [subnet], tags: tags("server") });
+        return { server, client, placementGroup };
+      } catch (e) {
+        if (!(e instanceof CapacityError)) {
+          await cloud.terminate([client.id]);
+          throw e;
+        }
+        note(`no server capacity in ${client.az}, attempt ${attempt}`);
+        if (attempt < 2) await sleep(ctx.retryMs);
+      }
+    }
+    await cloud.terminate([client.id]);
+  }
+  throw new CapacityError(`no zone had room for both of ${u.id}'s instances`);
+}
+
 export async function runUnit(cloud: Cloud, ctx: RunContext, u: LaneUnit, pass: number): Promise<UnitRecord> {
   const scripts = `bundles/lane-${ctx.run}/p${pass}/${u.id}/`;
   const results = `results/lane/${ctx.run}/p${pass}/${u.id}/`;
-  const rec: UnitRecord = { id: u.id, pass, server: u.server.id, version: u.server.version, stable: u.server.stable, format: u.format, dataset: u.dataset, arch: u.arch, placementGroup: `lane-${ctx.run}-p${pass}-${u.id}`, serverHost: null, clientHost: null, dataSeconds: null, readyMs: {}, results: {}, catalog: null, log: [], error: null, startedAt: new Date().toISOString(), finishedAt: null };
+  const rec: UnitRecord = { id: u.id, pass, server: u.server.id, version: u.server.version, stable: u.server.stable, format: u.format, dataset: u.dataset, arch: u.arch, placementGroup: "", serverHost: null, clientHost: null, dataSeconds: null, readyMs: {}, results: {}, catalog: null, log: [], error: null, startedAt: new Date().toISOString(), finishedAt: null };
   const tags = (role: string) => ({ Name: `lane-${ctx.run}-p${pass}-${u.id}-${role}`, Project: "martin-2-bench", LaneRun: ctx.run, Pass: String(pass), Unit: u.id, Role: role });
   const note = (what: string) => {
     rec.log.push(`${new Date().toISOString()} ${what}`);
@@ -144,28 +181,14 @@ export async function runUnit(cloud: Cloud, ctx: RunContext, u: LaneUnit, pass: 
   const su = serverUnitOf(u, ctx.bucket, ctx.run, ctx.inputs);
   const cu: ClientUnit = { bucket: ctx.bucket, bundle: `bundles/lane-${ctx.run}/`, dataset: u.dataset };
   try {
-    await cloud.createPlacementGroup(rec.placementGroup, tags("placement"));
-    const server = await cloud.launch({ template: ctx.templates[u.arch], placementGroup: rec.placementGroup, subnets: ctx.subnets, tags: tags("server") });
+    const { server, client, placementGroup } = await launchPair(cloud, ctx, u, pass, tags, note);
     rec.serverHost = server;
-    note(`server ${server.id} in ${server.az}`);
-    await cloud.waitOnline(server.id, ONLINE_MS);
-    const setup = await step(server, "setup", setupScript(su), TIMEOUT_S.setup);
-    rec.dataSeconds = Number(/data in (\d+) s/.exec(setup)?.[1] ?? Number.NaN);
-    // the client follows its server into the placement group's zone, so only that subnet will do
-    let client: Host | null = null;
-    for (let attempt = 1; !client; attempt++) {
-      try {
-        client = await cloud.launch({ template: ctx.templates.client, placementGroup: rec.placementGroup, subnets: [server.subnet], tags: tags("client") });
-      } catch (e) {
-        if (!(e instanceof CapacityError) || attempt === 3) throw e;
-        note(`no client capacity in ${server.az}, attempt ${attempt}`);
-        await sleep(ctx.retryMs);
-      }
-    }
     rec.clientHost = client;
-    note(`client ${client.id}`);
-    await cloud.waitOnline(client.id, ONLINE_MS);
-    await step(client, "client-setup", clientSetupScript(cu), TIMEOUT_S.clientSetup);
+    rec.placementGroup = placementGroup;
+    note(`server ${server.id} and client ${client.id} in ${server.az}`);
+    await Promise.all([cloud.waitOnline(server.id, ONLINE_MS), cloud.waitOnline(client.id, ONLINE_MS)]);
+    const [setup] = await Promise.all([step(server, "setup", setupScript(su), TIMEOUT_S.setup), step(client, "client-setup", clientSetupScript(cu), TIMEOUT_S.clientSetup)]);
+    rec.dataSeconds = Number(/data in (\d+) s/.exec(setup)?.[1] ?? Number.NaN);
     for (const scenario of SCENARIOS) {
       const started = await step(server, `start-${scenario}`, startScript(su, scenario), TIMEOUT_S.start);
       rec.readyMs[scenario] = Number(/READY (\d+) ms/.exec(started)?.[1] ?? Number.NaN);
@@ -243,9 +266,8 @@ if (import.meta.main) {
   await cloud.putText(`results/lane/${run}/plan.json`, `${JSON.stringify({ run, passes, quick, planetBuild: PLANET_BUILD, units: plan.run.map((u) => u.id), skipped: plan.skipped, startedAt: new Date().toISOString() }, null, 2)}\n`);
   let failed = 0;
   for (let pass = 1; pass <= passes; pass++) {
-    const ctx: RunContext = { run, bucket, templates, subnets: rotate(subnets, pass - 1), quick, inputs, retryMs: 60_000 };
-    // launches spread over a minute or so, under EC2's request rate
-    const records = await Promise.all(plan.run.map((u, i) => sleep(i * 1500).then(() => runUnit(cloud, ctx, u, pass))));
+    // launches spread over a minute or so, under EC2's request rate, and over the zones: each unit starts from its own
+    const records = await Promise.all(plan.run.map((u, i) => sleep(i * 1500).then(() => runUnit(cloud, { run, bucket, templates, subnets: rotate(subnets, i + pass - 1), quick, inputs, retryMs: 60_000 }, u, pass))));
     const bad = records.filter((r) => r.error);
     failed += bad.length;
     console.log(`pass ${pass}: ${records.length - bad.length} of ${records.length} units done${bad.length ? `; failed: ${bad.map((r) => r.id).join(", ")}` : ""}`);
