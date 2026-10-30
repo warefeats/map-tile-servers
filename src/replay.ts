@@ -2,8 +2,8 @@
  * The popularity replay of docs/adr/0011: OSM's daily tile request counts for its standard raster layer,
  * moved one zoom down to 512 px vector tiles (as Planetiler's top-osm-tiles does), with demand past the
  * archive's maxzoom folded into the tiles a vector map overzooms. Tiles the log leaves out (fewer than 10
- * requests or 3 IPs a day) get a modelled tail, and a modelled CDN keeps the most popular tiles so the
- * origin sees only the least popular share. The output is a seeded, weighted list of tiles: oha picks a
+ * requests or 3 IPs a day) get a modelled tail on the unlisted tiles nearest the listed ones, and a modelled
+ * CDN keeps the most popular tiles so the origin sees only the least popular share. The output is a seeded, weighted list of tiles: oha picks a
  * random line of its URL file for every request, so repeats in the list carry the popularity.
  */
 import { lonLatToTile } from "./tiles";
@@ -156,6 +156,9 @@ export interface ZoomModel {
   tailRequests: number;
   /** Tail requests that a CDN passes on to the origin. */
   missTailRequests: number;
+  /** How far the tail reaches from the listed tiles (Chebyshev, in tiles), and how many unlisted tiles that covers. */
+  ringRadius: number | null;
+  ringTiles: number;
 }
 
 export interface Model {
@@ -169,18 +172,115 @@ export interface Model {
   missRequests: number;
   /** The least popular listed tiles that also miss (when the tail alone is smaller than the miss share). */
   missListed: { z: number; k: number; requests: number }[];
+  /** Per zoom, the unlisted tiles the tail lands on; null where a zoom has no tail. */
+  rings: (Ring | null)[];
+}
+
+/** A zoom's tiles as a bitmap over its region's range: one row of bits per x, a bit per y from the range's y0. */
+export interface Bitmap {
+  r: Range;
+  /** 32-bit words per row. */
+  words: number;
+  bits: Uint32Array;
+}
+
+export interface Ring {
+  radius: number | null;
+  tiles: number;
+  bitmap: Bitmap;
+}
+
+function popcount(bits: Uint32Array): number {
+  let n = 0;
+  for (let i = 0; i < bits.length; i++) {
+    let v = bits[i]!;
+    v -= (v >>> 1) & 0x55555555;
+    v = (v & 0x33333333) + ((v >>> 2) & 0x33333333);
+    n += (((v + (v >>> 4)) & 0x0f0f0f0f) * 0x01010101) >>> 24;
+  }
+  return n;
+}
+
+export const inBitmap = (b: Bitmap, x: number, y: number) => {
+  const dy = y - b.r.y0;
+  return ((b.bits[(x - b.r.x0) * b.words + (dy >>> 5)]! >>> (dy & 31)) & 1) === 1;
+};
+
+/** One Chebyshev step of `src` into `dst` through `tmp`, inside the range; across the antimeridian when `wrap`. */
+function dilate(src: Uint32Array, dst: Uint32Array, tmp: Uint32Array, rows: number, words: number, lastMask: number, wrap: boolean): void {
+  for (let x = 0; x < rows; x++) {
+    const o = x * words;
+    for (let i = 0; i < words; i++) {
+      const v = src[o + i]!;
+      const fromBelow = (v << 1) | (i > 0 ? src[o + i - 1]! >>> 31 : 0);
+      const fromAbove = (v >>> 1) | (i < words - 1 ? (src[o + i + 1]! & 1) << 31 : 0);
+      tmp[o + i] = v | fromBelow | fromAbove;
+    }
+    tmp[o + words - 1]! &= lastMask;
+  }
+  for (let x = 0; x < rows; x++) {
+    const o = x * words;
+    const a = x > 0 ? o - words : wrap ? (rows - 1) * words : -1;
+    const c = x < rows - 1 ? o + words : wrap ? 0 : -1;
+    for (let i = 0; i < words; i++) dst[o + i] = tmp[o + i]! | (a >= 0 ? tmp[a + i]! : 0) | (c >= 0 ? tmp[c + i]! : 0);
+  }
 }
 
 /**
- * The tail is TAIL_SHARE of all requests, spread over each zoom's unlisted tiles in proportion to how many
- * there are, at most MAX_TAIL_PER_TILE each. The CDN holds the most popular tiles until 1 - MISS_SHARE of
- * requests hit; every tail tile is less popular than every listed one, so misses come from the tail first.
+ * The unlisted tiles nearest a zoom's listed ones: the smallest Chebyshev radius around them whose unlisted
+ * tiles hold `tail` at MAX_TAIL_PER_TILE a tile, or every unlisted tile when the zoom lists none.
+ */
+export function ringOf(listed: Listed, region: Region, z: number, tail: number): Ring {
+  const r = regionRange(region, z);
+  const rows = r.x1 - r.x0 + 1;
+  const height = r.y1 - r.y0 + 1;
+  const words = Math.ceil(height / 32);
+  const lastMask = height % 32 === 0 ? 0xffffffff : (2 ** (height % 32) - 1) >>> 0;
+  const base = new Uint32Array(rows * words);
+  const n = 2 ** z;
+  for (const k of listed.counts[z]!.keys()) {
+    const x = Math.floor(k / n) - r.x0;
+    const dy = (k % n) - r.y0;
+    base[x * words + (dy >>> 5)]! |= 1 << (dy & 31);
+  }
+  const listedCount = popcount(base);
+  const unlisted = rows * height - listedCount;
+  const need = Math.ceil(tail / MAX_TAIL_PER_TILE);
+  let d = base.slice();
+  let radius: number | null = 0;
+  let tiles = 0;
+  if (listedCount === 0) {
+    // nothing listed to be near: every tile of the zoom
+    d.fill(0xffffffff);
+    for (let x = 0; x < rows; x++) d[x * words + words - 1]! &= lastMask;
+    radius = null;
+    tiles = unlisted;
+  } else {
+    let next = new Uint32Array(d.length);
+    const tmp = new Uint32Array(d.length);
+    while (tiles < need && tiles < unlisted) {
+      dilate(d, next, tmp, rows, words, lastMask, !region.bbox);
+      [d, next] = [next, d];
+      radius++;
+      tiles = popcount(d) - listedCount;
+    }
+  }
+  for (let i = 0; i < d.length; i++) d[i] = (d[i]! & ~base[i]!) >>> 0;
+  return { radius, tiles, bitmap: { r, words, bits: d } };
+}
+
+/**
+ * The tail is TAIL_SHARE of all requests, given to each zoom in proportion to its unlisted tiles, at most
+ * MAX_TAIL_PER_TILE each. Within a zoom it lands on the unlisted tiles nearest the listed ones: the smallest
+ * ring around them that holds it at MAX_TAIL_PER_TILE a tile, which keeps it off open ocean (docs/adr/0011).
+ * The CDN holds the most popular tiles until 1 - MISS_SHARE of requests hit; every tail tile is less popular
+ * than every listed one, so misses come from the tail first.
  */
 export function buildModel(listed: Listed, region: Region, tailShare = TAIL_SHARE, missShare = MISS_SHARE): Model {
   const zooms: ZoomModel[] = listed.counts.map((m, z) => {
     let requests = 0;
     for (const n of m.values()) requests += n;
-    return { z, listedTiles: m.size, listedRequests: requests, unlistedTiles: Math.max(0, regionTileCount(region, z) - m.size), tailRequests: 0, missTailRequests: 0 };
+    return { z, listedTiles: m.size, listedRequests: requests, unlistedTiles: Math.max(0, regionTileCount(region, z) - m.size), tailRequests: 0, missTailRequests: 0, ringRadius: null, ringTiles: 0 };
   });
   const listedRequests = zooms.reduce((s, z) => s + z.listedRequests, 0);
   const tailWanted = (listedRequests * tailShare) / (1 - tailShare);
@@ -188,6 +288,12 @@ export function buildModel(listed: Listed, region: Region, tailShare = TAIL_SHAR
   for (const z of zooms) z.tailRequests = unlisted > 0 ? Math.min((tailWanted * z.unlistedTiles) / unlisted, MAX_TAIL_PER_TILE * z.unlistedTiles) : 0;
   const tailRequests = zooms.reduce((s, z) => s + z.tailRequests, 0);
   const totalRequests = listedRequests + tailRequests;
+  const rings = zooms.map((z) => (z.tailRequests > 0 ? ringOf(listed, region, z.z, z.tailRequests) : null));
+  rings.forEach((ring, z) => {
+    if (!ring) return;
+    zooms[z]!.ringRadius = ring.radius;
+    zooms[z]!.ringTiles = ring.tiles;
+  });
 
   // Misses: the tail first. Every tail tile is equally popular (the share and the cap are both per tile),
   // so each zoom passes on the same fraction of its tail; then the least requested listed tiles.
@@ -208,7 +314,7 @@ export function buildModel(listed: Listed, region: Region, tailShare = TAIL_SHAR
     }
   }
   const missRequests = zooms.reduce((s, z) => s + z.missTailRequests, 0) + missListed.reduce((s, t) => s + t.requests, 0);
-  return { region, zooms, listedRequests, tailRequests, tailWanted, totalRequests, missRequests, missListed };
+  return { region, zooms, listedRequests, tailRequests, tailWanted, totalRequests, missRequests, missListed, rings };
 }
 
 export function mulberry32(seed: number): () => number {
@@ -251,8 +357,8 @@ export function aliasTable(weights: ArrayLike<number>): (rand: () => number) => 
 
 /**
  * Draws tiles for a scenario. Alone: listed tiles by their counts, plus the tail. CDN: only the misses.
- * A tail draw picks a zoom by its tail requests, then a uniformly random unlisted tile of the region at that
- * zoom; a zoom the CDN only partly passes on draws from all its unlisted tiles, since they are equally popular.
+ * A tail draw picks a zoom by its tail requests, then a uniformly random tile of that zoom's ring; a zoom the
+ * CDN only partly passes on draws from its whole ring, since its tiles are equally popular.
  */
 export function sampler(listed: Listed, model: Model, scenario: Scenario, seed: number): () => string {
   const rand = mulberry32(seed);
@@ -275,11 +381,12 @@ export function sampler(listed: Listed, model: Model, scenario: Scenario, seed: 
   return () => {
     if (pickTailZoom && (!pickListed || rand() < tailShare)) {
       const z = pickTailZoom(rand);
-      const r = regionRange(model.region, z);
+      const ring = model.rings[z]!;
+      const r = ring.bitmap.r;
       for (;;) {
         const x = r.x0 + Math.floor(rand() * (r.x1 - r.x0 + 1));
         const y = r.y0 + Math.floor(rand() * (r.y1 - r.y0 + 1));
-        if (!listed.counts[z]!.has(key(z, x, y))) return `${z}/${x}/${y}`;
+        if (inBitmap(ring.bitmap, x, y)) return `${z}/${x}/${y}`;
       }
     }
     const i = pickListed!(rand);

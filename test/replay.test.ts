@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { addLine, aliasTable, BERLIN, buildModel, emptyListed, localize, MAX_TAIL_PER_TILE, mulberry32, PLANET, regionTileCount, sampler, vectorTileOf } from "../src/replay";
+import { addLine, aliasTable, BERLIN, buildModel, emptyListed, inBitmap, localize, MAX_TAIL_PER_TILE, mulberry32, PLANET, regionTileCount, ringOf, sampler, vectorTileOf } from "../src/replay";
 
 describe("vectorTileOf", () => {
   test("moves a raster tile one zoom down", () => {
@@ -95,6 +95,59 @@ describe("buildModel", () => {
     expect(m.tailRequests).toBe(0);
     expect(m.missListed[0]!.requests).toBe(10);
     expect(m.missRequests).toBeCloseTo(0.5 * m.totalRequests);
+  });
+});
+
+describe("the tail's ring", () => {
+  // a 3 x 3 block of listed tiles at vector z10
+  const block = () => {
+    const l = emptyListed();
+    for (let x = 500; x <= 502; x++) for (let y = 300; y <= 302; y++) l.counts[10]!.set(x * 1024 + y, 100);
+    return l;
+  };
+
+  test("is the fewest unlisted tiles nearest the listed ones that hold the tail at MAX_TAIL_PER_TILE a tile", () => {
+    // one step out is 5 x 5 less the block (16 tiles), two steps out 7 x 7 less the block (40)
+    expect(ringOf(block(), PLANET, 10, 16 * MAX_TAIL_PER_TILE)).toMatchObject({ radius: 1, tiles: 16 });
+    expect(ringOf(block(), PLANET, 10, 17 * MAX_TAIL_PER_TILE)).toMatchObject({ radius: 2, tiles: 40 });
+    const ring = ringOf(block(), PLANET, 10, 30 * MAX_TAIL_PER_TILE).bitmap;
+    expect(inBitmap(ring, 498, 298)).toBe(true);
+    expect(inBitmap(ring, 501, 301)).toBe(false); // listed
+    expect(inBitmap(ring, 497, 301)).toBe(false); // three steps out
+  });
+
+  test("wraps across the antimeridian on the planet, but not past a pole or a city's box", () => {
+    const l = emptyListed();
+    l.counts[10]!.set(0 * 1024 + 512, 100); // x 0, mid-latitude
+    l.counts[10]!.set(600 * 1024 + 0, 100); // y 0, the top row
+    const ring = ringOf(l, PLANET, 10, 1);
+    expect(ring.radius).toBe(1);
+    expect(inBitmap(ring.bitmap, 1023, 512)).toBe(true);
+    // 8 neighbours for the first tile, 5 for the one on the top row
+    expect(ring.tiles).toBe(8 + 5);
+    const city = emptyListed();
+    city.counts[14]!.set(8802 * 2 ** 14 + 5371, 100);
+    const all = ringOf(city, BERLIN, 14, 1e9);
+    expect(all.tiles).toBe(regionTileCount(BERLIN, 14) - 1);
+  });
+
+  test("the model records each zoom's ring, and the tail is drawn only from it", () => {
+    const l = emptyListed();
+    addLine(l, "15/17605/10743 1000", BERLIN); // 14/8802/5371
+    addLine(l, "15/17609/10747 1000", BERLIN); // 14/8804/5373
+    const m = buildModel(l, BERLIN, 0.01, 0.05);
+    const z14 = m.zooms[14]!;
+    expect(z14.ringRadius).toBe(1);
+    expect(z14.tailRequests / z14.ringTiles).toBeLessThanOrEqual(MAX_TAIL_PER_TILE);
+    const draw = sampler(l, m, "cdn", 3);
+    const near = (x: number, y: number) => [[8802, 5371], [8804, 5373]].some(([lx, ly]) => Math.max(Math.abs(x - lx!), Math.abs(y - ly!)) <= 1);
+    // the tail alone is smaller than the miss share here, so the least popular listed tile misses too
+    const tail = Array.from({ length: 2000 }, () => draw()).filter((t) => t.startsWith("14/") && t !== "14/8802/5371" && t !== "14/8804/5373");
+    expect(tail.length).toBeGreaterThan(0);
+    for (const t of tail) {
+      const [, x, y] = t.split("/").map(Number);
+      expect(near(x!, y!)).toBe(true);
+    }
   });
 });
 
