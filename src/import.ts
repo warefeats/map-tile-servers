@@ -6,7 +6,7 @@
  */
 import { readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
-import { CATEGORIES, type CategoryVerdict, verdicts } from "./analysis";
+import { CATEGORIES, type Cell, type CategoryVerdict, verdicts } from "./analysis";
 import type { CatalogResult } from "./catalog";
 import { CANDIDATES, type Candidate, type Family, LADDER } from "./matrix";
 import type { CandidateResult, RawResults } from "./run";
@@ -81,6 +81,9 @@ const SECTION_DECK: Record<string, string> = {
   catalog: "The same cold start with 1,000 extra sources configured beside the test source.",
 };
 
+/** The categories whose strata are one value per measured pass, so a cell's samples can be published as such. */
+const PER_PASS = new Set(["burst", "c10", "c100", "walk", "coldStart", "cpu", "catalog"]);
+
 function sectionFor(l: Loaded, v: CategoryVerdict): object | null {
   const def = CATEGORIES.find((d) => d.id === v.id)!;
   if (v.cells.length < 2) return null;
@@ -90,8 +93,28 @@ function sectionFor(l: Loaded, v: CategoryVerdict): object | null {
     const metrics: Record<string, Metric> = { lo: { value: cell.lo, unit: v.unit, label: "95% interval, low" }, hi: { value: cell.hi, unit: v.unit, label: "95% interval, high" } };
     return siteCandidate(byId(cell.candidateId), strata.flat(), metrics);
   });
-  const tests: { id: string; title: string; description: string; unit: string; lowerIsBetter: boolean; results: { candidateId: string; value: number }[] }[] = [
-    { id: `${v.id}-mean`, title: v.title, description: SECTION_DECK[v.id] ?? "", unit: v.unit, lowerIsBetter: !v.higherIsBetter, results: v.cells.map((c) => ({ candidateId: c.candidateId, value: round(c.mean, 3) })) },
+  // The site's contract: `samples` are one measurement per measured pass, which the value is the `statistic` of. A cell's
+  // mean is the plain mean of its pooled strata, so the categories whose strata are per-pass values publish them under
+  // "mean"; the ones that pool tiles, views or two readings publish the statistic alone, and the capacity ladder its one step.
+  const samplesOf = (cell: Cell): number[] | undefined => {
+    const r = l.raw.results.find((x) => x.id === cell.candidateId)!;
+    const strata = def.strata(r, l.catalog.find((x) => x.id === cell.candidateId)) ?? [];
+    if (def.kind === "ladder") return [round(cell.mean, 3)];
+    return PER_PASS.has(v.id) ? strata.flat() : undefined;
+  };
+  const tests: { id: string; title: string; description: string; unit: string; lowerIsBetter: boolean; results: { candidateId: string; value: number; samples?: number[] }[]; statistic: "mean" }[] = [
+    {
+      id: `${v.id}-mean`,
+      title: v.title,
+      description: SECTION_DECK[v.id] ?? "",
+      unit: v.unit,
+      lowerIsBetter: !v.higherIsBetter,
+      results: v.cells.map((c) => {
+        const samples = samplesOf(c);
+        return samples ? { candidateId: c.candidateId, value: round(c.mean, 3), samples } : { candidateId: c.candidateId, value: round(c.mean, 3) };
+      }),
+      statistic: "mean",
+    },
   ];
   const winner = byId(v.winnerId!);
   const best = v.cells.find((c) => c.candidateId === v.winnerId)!;
