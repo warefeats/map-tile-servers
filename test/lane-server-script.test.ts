@@ -1,6 +1,7 @@
 import { describe, expect, test } from "bun:test";
 import { CATALOG_NAMES, catalogScript, collectScript, type ServerUnit, SMALL_TILE, setupScript, startScript } from "../src/lane/server-script";
 import { LANE_SERVERS } from "../src/lane/servers";
+import { writeFile } from "../src/lane/shell";
 
 const server = (id: string) => LANE_SERVERS.find((s) => s.id === id)!;
 const unit = { arch: "arm64" as const, tileset: "planet", bucket: "b", dataKey: "inputs/openfreemap-planet-20261025_080012_pt.pmtiles", firstTile: { z: 14, x: 8802, y: 5372 } };
@@ -42,6 +43,15 @@ describe("the server scripts", () => {
     expect(s).toContain("'s3://b/results/lane/1/p1/u/server.log'");
   });
 
+  test("setup mounts a tile-file image read-only where nginx reads it, as OpenFreeMap does", () => {
+    const s = setupScript({ ...unit, dataKey: "inputs/openfreemap-planet-20261025_080012_pt.btrfs", server: server("nginx"), format: "files" });
+    expect(s).toContain("aws s3 cp 's3://b/inputs/openfreemap-planet-20261025_080012_pt.btrfs' '/opt/lane/data/planet.btrfs'");
+    expect(s).toContain("mount -o loop,ro '/opt/lane/data/planet.btrfs' '/opt/lane/data/planet'");
+    expect(s).toContain("'/opt/lane/data/planet/metadata.json'");
+    expect(s.indexOf("mount -o loop,ro")).toBeLessThan(s.indexOf("docker pull"));
+    expect(setupScript({ ...unit, server: server("martin-2"), format: "pmtiles" })).not.toContain("mount -o loop");
+  });
+
   test("the catalog starts the server with the dataset and 1,000 copies of the small archive, timing two tiles", () => {
     const u: ServerUnit = { ...unit, tileset: "berlin", dataKey: "inputs/x-berlin.pmtiles", server: server("martin-2"), format: "pmtiles" };
     const s = catalogScript(u, "bundles/lane-7/catalog/small.pmtiles");
@@ -54,6 +64,11 @@ describe("the server scripts", () => {
     expect(s).toContain("until200 'http://127.0.0.1:3000/berlin/14/8802/5372'");
     expect(s).toContain("until200 'http://127.0.0.1:3000/t0999/8/137/83'");
     expect(s.indexOf("drop_caches")).toBeLessThan(s.indexOf("'docker' 'run'"));
+  });
+
+  test("writes config files verbatim, and refuses content holding the heredoc's delimiter", () => {
+    expect(writeFile("/x", "a $b 'c'\n")).toEqual(["cat > '/x' <<'WF_FILE'", "a $b 'c'", "WF_FILE"]);
+    expect(() => writeFile("/x", "WF_FILE\n")).toThrow(/delimiter/);
   });
 
   test("renders scripts bash accepts for every server and format", () => {

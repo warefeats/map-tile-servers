@@ -57,10 +57,10 @@ const ctx: RunContext = { run: "7", bucket: "b", templates: { arm64: "lt-arm", a
 const martin = planUnits("martin-2-pmtiles-planet-arm64").run[0]!;
 
 describe("the lane's plan", () => {
-  test("runs every server on every format, dataset and architecture it can, and says why the rest wait", () => {
+  test("runs every server on every format, dataset and architecture", () => {
     const { run, skipped } = planUnits("all");
-    expect(run.length + skipped.length).toBe(52);
-    expect(skipped.map((s) => s.id).sort()).toEqual(["nginx-files-berlin-amd64", "nginx-files-berlin-arm64", "nginx-files-planet-amd64", "nginx-files-planet-arm64"]);
+    expect(run).toHaveLength(52);
+    expect(skipped).toEqual([]);
   });
 
   test("filters by id, with wildcards", () => {
@@ -69,8 +69,11 @@ describe("the lane's plan", () => {
   });
 
   test("finds each archive in the bucket", () => {
-    expect(dataKey({ dataset: "planet", format: "mbtiles" }, inputs)).toBe("inputs/openfreemap-planet-20261025_080012_pt.mbtiles");
-    expect(dataKey({ dataset: "berlin", format: "pmtiles" }, inputs)).toBe("inputs/6879dc65c96911c8-berlin.pmtiles");
+    expect(dataKey({ dataset: "planet", format: "mbtiles" }, inputs, "7")).toBe("inputs/openfreemap-planet-20261025_080012_pt.mbtiles");
+    expect(dataKey({ dataset: "berlin", format: "pmtiles" }, inputs, "7")).toBe("inputs/6879dc65c96911c8-berlin.pmtiles");
+    // tile files: OpenFreeMap's own planet image, and Berlin's built into the run's bundle
+    expect(dataKey({ dataset: "planet", format: "files" }, inputs, "7")).toBe("inputs/openfreemap-planet-20261025_080012_pt.btrfs");
+    expect(dataKey({ dataset: "berlin", format: "files" }, inputs, "7")).toBe("bundles/lane-7/files/berlin.btrfs");
     expect(FIRST_TILE).toEqual({ z: 14, x: 8802, y: 5373 });
   });
 
@@ -121,6 +124,14 @@ describe("a unit's flow", () => {
     expect(cloud.calls.slice(-3)).toEqual(["run i-1 collect", "run i-1 catalog", "terminate i-1 i-2"]);
     expect(rec.catalog).toEqual({ firstMs: 95, lastMs: null });
     expect(cloud.texts.get("bundles/lane-7/p1/bbox-pmtiles-berlin-amd64/catalog.sh")).toContain("s3://b/bundles/lane-7/catalog/small.pmtiles");
+  });
+
+  test("serves Berlin's tile files without a catalog start, which only archive servers have", async () => {
+    const cloud = new FakeCloud();
+    const rec = await runUnit(cloud, ctx, planUnits("nginx-files-berlin-arm64").run[0]!, 1);
+    expect(rec.error).toBeNull();
+    expect(cloud.calls.slice(-2)).toEqual(["run i-1 collect", "terminate i-1 i-2"]);
+    expect(cloud.texts.get("bundles/lane-7/p1/nginx-files-berlin-arm64/setup.sh")).toContain("aws s3 cp 's3://b/bundles/lane-7/files/berlin.btrfs' '/opt/lane/data/berlin.btrfs'");
   });
 
   test("tries the next zone for a server, and waits in its zone for a client", async () => {

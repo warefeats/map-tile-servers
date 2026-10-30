@@ -10,7 +10,7 @@
  */
 import { lonLatToTile } from "../tiles";
 import { type Arch, dockerRun, type Format, type LaneServer } from "./servers";
-import { q, scriptHead, waitReady } from "./shell";
+import { q, scriptHead, waitReady, writeFile } from "./shell";
 
 export interface ServerUnit {
   server: LaneServer;
@@ -40,8 +40,22 @@ const SAMPLER = [
   "done",
 ];
 
+/** Where the dataset lands on the server: an archive, or for tile files the Btrfs image that holds them. */
+export const archivePath = (u: Pick<ServerUnit, "tileset" | "format">) => `/opt/lane/data/${u.tileset}.${u.format === "files" ? "btrfs" : u.format}`;
+
 export function setupScript(u: ServerUnit): string {
   const files = Object.entries(u.server.config?.([u.tileset], u.format) ?? {});
+  const mountAt = `/opt/lane/data/${u.tileset}`;
+  // OpenFreeMap mounts each build's image read-only (linux_host/linux_host_lib/mount.py)
+  const mount =
+    u.format === "files"
+      ? [
+          'modprobe btrfs 2>/dev/null || { apt-get install -y -q "linux-modules-extra-$(uname -r)" >/dev/null && modprobe btrfs; }',
+          `mkdir -p ${q(mountAt)}`,
+          `mount -o loop,ro ${q(archivePath(u))} ${q(mountAt)}`,
+          `[ -f ${q(`${mountAt}/metadata.json`)} ] || { echo 'the image holds no metadata.json'; exit 1; }`,
+        ]
+      : [];
   return [
     ...scriptHead(`setup ${u.server.id} ${u.server.version} ${u.format} ${u.tileset} ${u.arch}`),
     ...waitReady,
@@ -51,9 +65,10 @@ export function setupScript(u: ServerUnit): string {
     "systemctl restart docker",
     "mkdir -p /opt/lane/data",
     "t0=$(date +%s)",
-    `aws s3 cp ${q(`s3://${u.bucket}/${u.dataKey}`)} ${q(`/opt/lane/data/${u.tileset}.${u.format}`)} --only-show-errors`,
+    `aws s3 cp ${q(`s3://${u.bucket}/${u.dataKey}`)} ${q(archivePath(u))} --only-show-errors`,
     'echo "data in $(( $(date +%s) - t0 )) s"',
-    ...files.map(([name, content]) => `printf '%s' ${q(content)} > ${q(`/opt/lane/data/${name}`)}`),
+    ...mount,
+    ...files.flatMap(([name, content]) => writeFile(`/opt/lane/data/${name}`, content)),
     u.localImage ? `aws s3 cp ${q(`s3://${u.bucket}/${u.localImage.key}`)} - --only-show-errors | zstd -dc | docker load -q` : `docker pull -q ${q(u.server.image[u.arch] ?? "")}`,
     "cat > /opt/lane/sampler.sh <<'SAMPLER'",
     ...SAMPLER,
@@ -113,7 +128,7 @@ export function catalogScript(u: ServerUnit, smallKey: string): string {
     `ln ${q(`/opt/lane/data/${u.tileset}.${u.format}`)} ${q(`${dir}/${u.tileset}.${u.format}`)}`,
     `aws s3 cp ${q(`s3://${u.bucket}/${smallKey}`)} ${q(`/opt/lane/small.${u.format}`)} --only-show-errors`,
     `for i in $(seq 0 ${CATALOG_SIZE - 1}); do cp ${q(`/opt/lane/small.${u.format}`)} "${dir}/t$(printf %04d "$i").${u.format}"; done`,
-    ...files.map(([name, content]) => `printf '%s' ${q(content)} > ${q(`${dir}/${name}`)}`),
+    ...files.flatMap(([name, content]) => writeFile(`${dir}/${name}`, content)),
     // milliseconds from the start to a URL's first 200, or "none" when the wait runs out
     "until200() {",
     "  local deadline",

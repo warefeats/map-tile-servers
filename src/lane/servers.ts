@@ -52,13 +52,83 @@ export const LANE_SERVERS: readonly LaneServer[] = [
     // its documented defaults: worker threads one per core, loglevel Info, no tile cache
     config: (ts, f) => ({ "bbox.toml": `[webserver]\nserver_addr = "0.0.0.0:8080"\n\n${ts.map((t) => `[[tileset]]\nname = "${t}"\n[tileset.${f}]\npath = "/data/${t}.${f}"\n`).join("\n")}` }),
   },
+  // OpenFreeMap's way (github.com/hyperknot/openfreemap at 332669ab): the tiles as files in a read-only Btrfs image,
+  // gzip-encoded as stored, served by nginx with OpenFreeMap's production settings; a tile with no file is an empty 200
   {
-    id: "nginx", name: "nginx (tile files)", version: "1.30.4", stable: true, formats: ["files"], image: { arm64: "nginx:1.30.4", amd64: "nginx:1.30.4" }, port: 8080, path: (s, t) => `/tiles/${s}/${xyz(t)}`, args: () => [],
-    // the archive's stored tiles as files under /data/tiles/<tileset>/z/x/y, gzip-encoded as stored; a tile with no file is empty
-    config: () => ({ "nginx.conf": "worker_processes auto;\nevents { worker_connections 4096; }\nhttp {\n  open_file_cache max=100000 inactive=600s;\n  tcp_nodelay on;\n  server {\n    listen 8080;\n    location /tiles/ {\n      root /data;\n      default_type application/vnd.mapbox-vector-tile;\n      add_header Content-Encoding gzip;\n      try_files $uri =204;\n    }\n  }\n}\n" }),
+    id: "nginx", name: "nginx (OpenFreeMap's files)", version: "1.30.4", stable: true, formats: ["files"], image: { arm64: "nginx:1.30.4", amd64: "nginx:1.30.4" }, port: 8080, path: (s, t) => `/${s}/${xyz(t)}.pbf`, args: () => [],
+    config: (ts) => ({ "nginx.conf": openFreeMapNginx(ts) }),
     mounts: { "nginx.conf": "/etc/nginx/nginx.conf" },
   },
 ];
+
+// what OpenFreeMap adds to every tile and empty tile; Strict-Transport-Security is left out with TLS
+const OFM_HEADERS = `add_header 'Access-Control-Allow-Origin' '*' always;
+      add_header Cache-Control public;
+      add_header X-Robots-Tag "noindex, nofollow" always;`;
+
+/**
+ * OpenFreeMap's production nginx (shared_lib/assets/nginx/nginx.conf, and the tile locations
+ * linux_host/linux_host_lib/nginx_config_gen.py and nginx_templates/static_blocks.conf write), with each tileset's
+ * Btrfs image mounted at /data/<tileset>; what serves TLS, ACME, styles, fonts and sprites is left out. The lane
+ * is plain HTTP throughout (docs/adr/0011).
+ */
+export function openFreeMapNginx(tilesets: readonly string[]): string {
+  const locations = tilesets.map(
+    (t) => `
+    location ^~ /${t}/ {
+      alias /data/${t}/tiles/;
+      try_files $uri @empty_tile;
+      add_header Content-Encoding gzip;
+      expires 10y;
+      types { application/vnd.mapbox-vector-tile pbf; }
+      ${OFM_HEADERS}
+    }
+`,
+  );
+  return `user nginx;
+pid /var/run/nginx.pid;
+worker_processes auto;
+worker_rlimit_nofile 300000;
+error_log /dev/stderr warn;
+events {
+  worker_connections 40000;
+  multi_accept off;
+}
+http {
+  open_file_cache max=200000 inactive=60m;
+  open_file_cache_valid 60m;
+  open_file_cache_min_uses 1;
+  open_file_cache_errors on;
+  server_tokens off;
+  include /etc/nginx/mime.types;
+  types { application/x-protobuf pbf; }
+  default_type application/octet-stream;
+  charset utf-8;
+  sendfile on;
+  tcp_nopush on;
+  tcp_nodelay on;
+  reset_timedout_connection on;
+  send_timeout 20;
+  max_ranges 0;
+  gzip on;
+  gzip_comp_level 1;
+  gzip_types application/json application/x-protobuf;
+  log_format access_json '{"time": "$time_iso8601", "status": $status, "body_bytes_sent": $body_bytes_sent, "http_referrer": "$http_referer", "http_user_agent": "$http_user_agent", "_": "_"}';
+  access_log off;
+  server {
+    listen 8080;
+    access_log /var/log/nginx/access.jsonl access_json buffer=128k;
+${locations.join("")}
+    location @empty_tile {
+      return 200 '';
+      expires 10y;
+      types { application/vnd.mapbox-vector-tile pbf; }
+      ${OFM_HEADERS}
+    }
+  }
+}
+`;
+}
 
 /** The server's tile URL for a tile of a dataset, on a host. */
 export function tileUrl(server: LaneServer, host: string, tileset: string, t: TileCoord): string {

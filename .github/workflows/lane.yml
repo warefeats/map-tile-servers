@@ -66,12 +66,10 @@ jobs:
           set -euo pipefail
           . scripts/rig-lib.sh
           bucket=$(stack_output RigBucketName)
-          # the archives the units fetch: Berlin as scripts/rig-inputs.txt pins it, the planet as staged
-          planet=$(sed -n 's/^export const PLANET_BUILD = "\(.*\)";$/\1/p' src/lane/orchestrate.ts)
+          # Berlin's archives, as scripts/rig-inputs.txt pins them; orchestrate.ts checks each unit's own data
           for f in mbtiles pmtiles; do
-            for key in "$(awk -v n="berlin.$f" '$1 == n { print $2 }' scripts/rig-inputs.txt)" "inputs/openfreemap-planet-$planet.$f.sha256"; do
-              aws s3api head-object --bucket "$bucket" --key "$key" >/dev/null 2>&1 || { echo "::error::$key is not in the bucket"; exit 1; }
-            done
+            key=$(awk -v n="berlin.$f" '$1 == n { print $2 }' scripts/rig-inputs.txt)
+            aws s3api head-object --bucket "$bucket" --key "$key" >/dev/null 2>&1 || { echo "::error::$key is not in the bucket"; exit 1; }
           done
           stage=$RUNNER_TEMP/bundle
           mkdir -p "$stage/replay"
@@ -94,6 +92,10 @@ jobs:
           docker run --rm -v "$small:/w" --entrypoint /usr/local/bin/mbtiles ghcr.io/maplibre/martin:1.16.1 copy /w/berlin.mbtiles /w/small.mbtiles --max-zoom 8 --dst-type flat
           docker run --rm -v "$small:/w" protomaps/go-pmtiles:v1.31.2 convert /w/small.mbtiles /w/small.pmtiles
           cp "$small/small.mbtiles" "$small/small.pmtiles" "$stage/catalog/"
+          # nginx serves Berlin's tile files the way OpenFreeMap serves the planet's: from a read-only Btrfs image
+          sudo apt-get install -y -q btrfs-progs >/dev/null
+          mkdir -p "$stage/files"
+          scripts/lane-berlin-btrfs.sh "$small/berlin.mbtiles" "$stage/files/berlin.btrfs"
           curl -fsSL -o "$RUNNER_TEMP/$TILE_LOG" "https://planet.openstreetmap.org/tile_logs/$TILE_LOG"
           echo "$TILE_LOG_SHA256  $RUNNER_TEMP/$TILE_LOG" | sha256sum -c -
           pids=()
