@@ -1,0 +1,24 @@
+{
+  "id": "tileserver-gl-mbtiles-berlin-amd64",
+  "pass": 2,
+  "server": "tileserver-gl",
+  "version": "5.7.0",
+  "stable": true,
+  "format": "mbtiles",
+  "dataset": "berlin",
+  "arch": "amd64",
+  "placementGroup": "",
+  "serverHost": null,
+  "clientHost": null,
+  "dataSeconds": null,
+  "readyMs": {},
+  "results": {},
+  "catalog": null,
+  "log": [
+    "2026-10-30T04:28:15.416Z no client capacity in subnet-02c157cadc5e12a02",
+    "2026-10-30T04:30:21.170Z failed: aws ec2 run-instances: aws: [ERROR]: An error occurred (RequestLimitExceeded) when calling the RunInstances operation (reached max retries: 9): Request limit exceeded. The account has been throttled on ec2:RunInstances because it exceeded its request rate limit."
+  ],
+  "error": "aws ec2 run-instances: aws: [ERROR]: An error occurred (RequestLimitExceeded) when calling the RunInstances operation (reached max retries: 9): Request limit exceeded. The account has been throttled on ec2:RunInstances because it exceeded its request rate limit.",
+  "startedAt": "2026-10-30T04:26:12.730Z",
+  "finishedAt": "2026-10-30T04:30:21.170Z"
+}

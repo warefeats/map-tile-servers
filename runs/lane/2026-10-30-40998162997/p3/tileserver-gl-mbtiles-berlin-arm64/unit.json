@@ -1,0 +1,57 @@
+{
+  "id": "tileserver-gl-mbtiles-berlin-arm64",
+  "pass": 3,
+  "server": "tileserver-gl",
+  "version": "5.7.0",
+  "stable": true,
+  "format": "mbtiles",
+  "dataset": "berlin",
+  "arch": "arm64",
+  "placementGroup": "lane-40998162997-p3-tileserver-gl-mbtiles-berlin-arm64-2",
+  "serverHost": {
+    "id": "i-04d590fe1ea5960ec",
+    "ip": "172.31.16.108",
+    "az": "us-east-1b",
+    "subnet": "subnet-0a17ca6edfc559485"
+  },
+  "clientHost": {
+    "id": "i-0810b529721e20684",
+    "ip": "172.31.29.16",
+    "az": "us-east-1b",
+    "subnet": "subnet-0a17ca6edfc559485"
+  },
+  "dataSeconds": 1,
+  "readyMs": {
+    "alone": 1702,
+    "cdn": 1713
+  },
+  "results": {
+    "alone": "results/lane/40998162997/p3/tileserver-gl-mbtiles-berlin-arm64/alone.json",
+    "cdn": "results/lane/40998162997/p3/tileserver-gl-mbtiles-berlin-arm64/cdn.json"
+  },
+  "catalog": {
+    "firstMs": 2071,
+    "lastMs": 2083
+  },
+  "log": [
+    "2026-10-30T05:11:17.725Z no client capacity in subnet-02c157cadc5e12a02",
+    "2026-10-30T05:13:03.796Z no server capacity in us-east-1a, attempt 1",
+    "2026-10-30T05:15:28.437Z no server capacity in us-east-1a, attempt 2",
+    "2026-10-30T05:16:54.177Z no server capacity in us-east-1b, attempt 1",
+    "2026-10-30T05:19:05.374Z server i-04d590fe1ea5960ec and client i-0810b529721e20684 in us-east-1b",
+    "2026-10-30T05:19:50.218Z client-setup Success",
+    "2026-10-30T05:20:23.025Z setup Success",
+    "2026-10-30T05:20:39.881Z start-alone Success",
+    "2026-10-30T05:28:49.178Z alone Success",
+    "2026-10-30T05:28:49.178Z capacity 4000/s, 82412 bytes a tile",
+    "2026-10-30T05:29:06.918Z start-cdn Success",
+    "2026-10-30T05:35:04.848Z cdn Success",
+    "2026-10-30T05:35:04.850Z capacity 7500/s, 16245 bytes a tile",
+    "2026-10-30T05:35:23.292Z collect Success",
+    "2026-10-30T05:35:43.401Z catalog Success",
+    "2026-10-30T05:35:43.406Z catalog: first 2071 ms, last 2083 ms"
+  ],
+  "error": null,
+  "startedAt": "2026-10-30T05:09:21.685Z",
+  "finishedAt": "2026-10-30T05:35:47.195Z"
+}

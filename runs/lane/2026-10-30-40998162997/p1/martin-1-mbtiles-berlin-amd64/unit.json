@@ -1,0 +1,57 @@
+{
+  "id": "martin-1-mbtiles-berlin-amd64",
+  "pass": 1,
+  "server": "martin-1",
+  "version": "1.16.1",
+  "stable": true,
+  "format": "mbtiles",
+  "dataset": "berlin",
+  "arch": "amd64",
+  "placementGroup": "lane-40998162997-p1-martin-1-mbtiles-berlin-amd64-3",
+  "serverHost": {
+    "id": "i-02e38ad430da858a9",
+    "ip": "172.31.23.15",
+    "az": "us-east-1b",
+    "subnet": "subnet-0a17ca6edfc559485"
+  },
+  "clientHost": {
+    "id": "i-0627cc48f1307c4eb",
+    "ip": "172.31.29.65",
+    "az": "us-east-1b",
+    "subnet": "subnet-0a17ca6edfc559485"
+  },
+  "dataSeconds": 1,
+  "readyMs": {
+    "alone": 2298,
+    "cdn": 973
+  },
+  "results": {
+    "alone": "results/lane/40998162997/p1/martin-1-mbtiles-berlin-amd64/alone.json",
+    "cdn": "results/lane/40998162997/p1/martin-1-mbtiles-berlin-amd64/cdn.json"
+  },
+  "catalog": {
+    "firstMs": 2161,
+    "lastMs": 2168
+  },
+  "log": [
+    "2026-10-30T03:40:23.460Z no client capacity in subnet-099a403aa8952f07d",
+    "2026-10-30T03:42:13.778Z no client capacity in subnet-02c157cadc5e12a02",
+    "2026-10-30T03:43:25.752Z no server capacity in us-east-1a, attempt 1",
+    "2026-10-30T03:45:31.558Z no server capacity in us-east-1a, attempt 2",
+    "2026-10-30T03:45:43.908Z server i-02e38ad430da858a9 and client i-0627cc48f1307c4eb in us-east-1b",
+    "2026-10-30T03:46:49.471Z setup Success",
+    "2026-10-30T03:46:49.471Z client-setup Success",
+    "2026-10-30T03:47:10.535Z start-alone Success",
+    "2026-10-30T03:56:15.722Z alone Success",
+    "2026-10-30T03:56:15.722Z capacity 18000/s, 82169 bytes a tile",
+    "2026-10-30T03:56:35.037Z start-cdn Success",
+    "2026-10-30T04:04:14.289Z cdn Success",
+    "2026-10-30T04:04:14.289Z capacity 32000/s, 16338 bytes a tile",
+    "2026-10-30T04:04:36.194Z collect Success",
+    "2026-10-30T04:04:56.329Z catalog Success",
+    "2026-10-30T04:04:56.334Z catalog: first 2161 ms, last 2168 ms"
+  ],
+  "error": null,
+  "startedAt": "2026-10-30T03:39:01.596Z",
+  "finishedAt": "2026-10-30T04:04:59.907Z"
+}

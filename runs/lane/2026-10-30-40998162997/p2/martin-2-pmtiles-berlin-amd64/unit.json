@@ -1,0 +1,59 @@
+{
+  "id": "martin-2-pmtiles-berlin-amd64",
+  "pass": 2,
+  "server": "martin-2",
+  "version": "2.0.0-beta.4",
+  "stable": false,
+  "format": "pmtiles",
+  "dataset": "berlin",
+  "arch": "amd64",
+  "placementGroup": "lane-40998162997-p2-martin-2-pmtiles-berlin-amd64-4",
+  "serverHost": {
+    "id": "i-0a1d6ea8568d504de",
+    "ip": "172.31.21.88",
+    "az": "us-east-1b",
+    "subnet": "subnet-0a17ca6edfc559485"
+  },
+  "clientHost": {
+    "id": "i-0bf9ea0e5768a4687",
+    "ip": "172.31.31.33",
+    "az": "us-east-1b",
+    "subnet": "subnet-0a17ca6edfc559485"
+  },
+  "dataSeconds": 1,
+  "readyMs": {
+    "alone": 1730,
+    "cdn": 849
+  },
+  "results": {
+    "alone": "results/lane/40998162997/p2/martin-2-pmtiles-berlin-amd64/alone.json",
+    "cdn": "results/lane/40998162997/p2/martin-2-pmtiles-berlin-amd64/cdn.json"
+  },
+  "catalog": {
+    "firstMs": 1157,
+    "lastMs": 1164
+  },
+  "log": [
+    "2026-10-30T04:26:29.509Z no server capacity in us-east-1c, attempt 1",
+    "2026-10-30T04:28:43.340Z no server capacity in us-east-1c, attempt 2",
+    "2026-10-30T04:29:46.239Z no client capacity in subnet-099a403aa8952f07d",
+    "2026-10-30T04:30:45.351Z no client capacity in subnet-02c157cadc5e12a02",
+    "2026-10-30T04:32:04.645Z no server capacity in us-east-1a, attempt 1",
+    "2026-10-30T04:34:26.534Z no server capacity in us-east-1a, attempt 2",
+    "2026-10-30T04:34:35.137Z server i-0a1d6ea8568d504de and client i-0bf9ea0e5768a4687 in us-east-1b",
+    "2026-10-30T04:35:32.092Z setup Success",
+    "2026-10-30T04:35:32.092Z client-setup Success",
+    "2026-10-30T04:35:48.943Z start-alone Success",
+    "2026-10-30T04:45:01.021Z alone Success",
+    "2026-10-30T04:45:01.021Z capacity 18000/s, 82379 bytes a tile",
+    "2026-10-30T04:45:18.635Z start-cdn Success",
+    "2026-10-30T04:53:34.885Z cdn Success",
+    "2026-10-30T04:53:34.885Z capacity 88000/s, 16329 bytes a tile",
+    "2026-10-30T04:53:54.131Z collect Success",
+    "2026-10-30T04:54:15.894Z catalog Success",
+    "2026-10-30T04:54:15.904Z catalog: first 1157 ms, last 1164 ms"
+  ],
+  "error": null,
+  "startedAt": "2026-10-30T04:25:24.725Z",
+  "finishedAt": "2026-10-30T04:54:21.148Z"
+}

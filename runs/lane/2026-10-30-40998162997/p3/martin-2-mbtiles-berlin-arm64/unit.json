@@ -1,0 +1,53 @@
+{
+  "id": "martin-2-mbtiles-berlin-arm64",
+  "pass": 3,
+  "server": "martin-2",
+  "version": "2.0.0-beta.4",
+  "stable": false,
+  "format": "mbtiles",
+  "dataset": "berlin",
+  "arch": "arm64",
+  "placementGroup": "lane-40998162997-p3-martin-2-mbtiles-berlin-arm64-0",
+  "serverHost": {
+    "id": "i-0fe8a11260b1ec231",
+    "ip": "172.31.25.119",
+    "az": "us-east-1b",
+    "subnet": "subnet-0a17ca6edfc559485"
+  },
+  "clientHost": {
+    "id": "i-0b1edc80984ff2e9e",
+    "ip": "172.31.30.122",
+    "az": "us-east-1b",
+    "subnet": "subnet-0a17ca6edfc559485"
+  },
+  "dataSeconds": 1,
+  "readyMs": {
+    "alone": 2353,
+    "cdn": 818
+  },
+  "results": {
+    "alone": "results/lane/40998162997/p3/martin-2-mbtiles-berlin-arm64/alone.json",
+    "cdn": "results/lane/40998162997/p3/martin-2-mbtiles-berlin-arm64/cdn.json"
+  },
+  "catalog": {
+    "firstMs": 2217,
+    "lastMs": 2226
+  },
+  "log": [
+    "2026-10-30T05:08:52.257Z server i-0fe8a11260b1ec231 and client i-0b1edc80984ff2e9e in us-east-1b",
+    "2026-10-30T05:12:09.563Z client-setup Success",
+    "2026-10-30T05:12:09.563Z setup Success",
+    "2026-10-30T05:13:08.964Z start-alone Success",
+    "2026-10-30T05:22:44.400Z alone Success",
+    "2026-10-30T05:22:44.401Z capacity 18000/s, 82545 bytes a tile",
+    "2026-10-30T05:23:10.116Z start-cdn Success",
+    "2026-10-30T05:31:53.934Z cdn Success",
+    "2026-10-30T05:31:53.935Z capacity 88000/s, 16311 bytes a tile",
+    "2026-10-30T05:32:43.612Z collect Success",
+    "2026-10-30T05:33:38.796Z catalog Success",
+    "2026-10-30T05:33:38.815Z catalog: first 2217 ms, last 2226 ms"
+  ],
+  "error": null,
+  "startedAt": "2026-10-30T05:08:39.685Z",
+  "finishedAt": "2026-10-30T05:33:50.686Z"
+}

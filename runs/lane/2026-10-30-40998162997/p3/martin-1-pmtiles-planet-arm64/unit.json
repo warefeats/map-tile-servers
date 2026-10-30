@@ -1,0 +1,48 @@
+{
+  "id": "martin-1-pmtiles-planet-arm64",
+  "pass": 3,
+  "server": "martin-1",
+  "version": "1.16.1",
+  "stable": true,
+  "format": "pmtiles",
+  "dataset": "planet",
+  "arch": "arm64",
+  "placementGroup": "lane-40998162997-p3-martin-1-pmtiles-planet-arm64-0",
+  "serverHost": {
+    "id": "i-056be9b734f42d37d",
+    "ip": "172.31.38.139",
+    "az": "us-east-1c",
+    "subnet": "subnet-09cd73e59c55312c3"
+  },
+  "clientHost": {
+    "id": "i-09c14a5dc6dfa5fcd",
+    "ip": "172.31.32.128",
+    "az": "us-east-1c",
+    "subnet": "subnet-09cd73e59c55312c3"
+  },
+  "dataSeconds": 679,
+  "readyMs": {
+    "alone": 1167,
+    "cdn": 700
+  },
+  "results": {
+    "alone": "results/lane/40998162997/p3/martin-1-pmtiles-planet-arm64/alone.json",
+    "cdn": "results/lane/40998162997/p3/martin-1-pmtiles-planet-arm64/cdn.json"
+  },
+  "catalog": null,
+  "log": [
+    "2026-10-30T05:09:11.294Z server i-056be9b734f42d37d and client i-09c14a5dc6dfa5fcd in us-east-1c",
+    "2026-10-30T05:13:08.964Z client-setup Success",
+    "2026-10-30T05:22:21.247Z setup Success",
+    "2026-10-30T05:22:44.400Z start-alone Success",
+    "2026-10-30T05:31:01.971Z alone Success",
+    "2026-10-30T05:31:01.973Z capacity 4500/s, 67914 bytes a tile",
+    "2026-10-30T05:31:26.846Z start-cdn Success",
+    "2026-10-30T05:37:48.015Z cdn Success",
+    "2026-10-30T05:37:48.018Z capacity 4500/s, 516 bytes a tile",
+    "2026-10-30T05:38:09.740Z collect Success"
+  ],
+  "error": null,
+  "startedAt": "2026-10-30T05:08:48.691Z",
+  "finishedAt": "2026-10-30T05:38:15.367Z"
+}

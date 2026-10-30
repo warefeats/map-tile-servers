@@ -1,0 +1,56 @@
+{
+  "id": "tileserver-gl-pmtiles-berlin-arm64",
+  "pass": 1,
+  "server": "tileserver-gl",
+  "version": "5.7.0",
+  "stable": true,
+  "format": "pmtiles",
+  "dataset": "berlin",
+  "arch": "arm64",
+  "placementGroup": "lane-40998162997-p1-tileserver-gl-pmtiles-berlin-arm64-3",
+  "serverHost": {
+    "id": "i-0dbc1f9138010d7d5",
+    "ip": "172.31.23.73",
+    "az": "us-east-1b",
+    "subnet": "subnet-0a17ca6edfc559485"
+  },
+  "clientHost": {
+    "id": "i-089d330e7bf24cb24",
+    "ip": "172.31.31.112",
+    "az": "us-east-1b",
+    "subnet": "subnet-0a17ca6edfc559485"
+  },
+  "dataSeconds": 0,
+  "readyMs": {
+    "alone": 4753,
+    "cdn": 1821
+  },
+  "results": {
+    "alone": "results/lane/40998162997/p1/tileserver-gl-pmtiles-berlin-arm64/alone.json",
+    "cdn": "results/lane/40998162997/p1/tileserver-gl-pmtiles-berlin-arm64/cdn.json"
+  },
+  "catalog": {
+    "firstMs": 3311,
+    "lastMs": 3323
+  },
+  "log": [
+    "2026-10-30T03:41:27.797Z no client capacity in subnet-099a403aa8952f07d",
+    "2026-10-30T03:43:09.020Z no client capacity in subnet-02c157cadc5e12a02",
+    "2026-10-30T03:44:29.587Z no client capacity in subnet-075b8107a2a2814ab",
+    "2026-10-30T03:44:39.545Z server i-0dbc1f9138010d7d5 and client i-089d330e7bf24cb24 in us-east-1b",
+    "2026-10-30T03:45:55.199Z client-setup Success",
+    "2026-10-30T03:46:23.751Z setup Success",
+    "2026-10-30T03:46:49.471Z start-alone Success",
+    "2026-10-30T03:54:22.303Z alone Success",
+    "2026-10-30T03:54:22.303Z capacity 344/s, 80625 bytes a tile",
+    "2026-10-30T03:54:44.143Z start-cdn Success",
+    "2026-10-30T04:00:26.215Z cdn Success",
+    "2026-10-30T04:00:26.217Z capacity 2000/s, 16333 bytes a tile",
+    "2026-10-30T04:00:46.346Z collect Success",
+    "2026-10-30T04:01:07.588Z catalog Success",
+    "2026-10-30T04:01:07.597Z catalog: first 3311 ms, last 3323 ms"
+  ],
+  "error": null,
+  "startedAt": "2026-10-30T03:39:24.129Z",
+  "finishedAt": "2026-10-30T04:01:11.824Z"
+}

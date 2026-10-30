@@ -1,0 +1,58 @@
+{
+  "id": "martin-1-mbtiles-berlin-arm64",
+  "pass": 3,
+  "server": "martin-1",
+  "version": "1.16.1",
+  "stable": true,
+  "format": "mbtiles",
+  "dataset": "berlin",
+  "arch": "arm64",
+  "placementGroup": "lane-40998162997-p3-martin-1-mbtiles-berlin-arm64-3",
+  "serverHost": {
+    "id": "i-0aa070e989a2a3f94",
+    "ip": "172.31.37.247",
+    "az": "us-east-1c",
+    "subnet": "subnet-09cd73e59c55312c3"
+  },
+  "clientHost": {
+    "id": "i-093e6e0c3714bbf6f",
+    "ip": "172.31.42.143",
+    "az": "us-east-1c",
+    "subnet": "subnet-09cd73e59c55312c3"
+  },
+  "dataSeconds": 0,
+  "readyMs": {
+    "alone": 1093,
+    "cdn": 645
+  },
+  "results": {
+    "alone": "results/lane/40998162997/p3/martin-1-mbtiles-berlin-arm64/alone.json",
+    "cdn": "results/lane/40998162997/p3/martin-1-mbtiles-berlin-arm64/cdn.json"
+  },
+  "catalog": {
+    "firstMs": 2002,
+    "lastMs": 2010
+  },
+  "log": [
+    "2026-10-30T05:10:13.172Z no client capacity in subnet-02c157cadc5e12a02",
+    "2026-10-30T05:12:38.929Z no server capacity in us-east-1a, attempt 1",
+    "2026-10-30T05:14:43.683Z no server capacity in us-east-1a, attempt 2",
+    "2026-10-30T05:15:54.823Z no server capacity in us-east-1b, attempt 1",
+    "2026-10-30T05:18:09.655Z no server capacity in us-east-1b, attempt 2",
+    "2026-10-30T05:18:17.570Z server i-0aa070e989a2a3f94 and client i-093e6e0c3714bbf6f in us-east-1c",
+    "2026-10-30T05:19:10.656Z client-setup Success",
+    "2026-10-30T05:19:30.834Z setup Success",
+    "2026-10-30T05:19:50.218Z start-alone Success",
+    "2026-10-30T05:29:06.918Z alone Success",
+    "2026-10-30T05:29:06.918Z capacity 18000/s, 82242 bytes a tile",
+    "2026-10-30T05:29:25.551Z start-cdn Success",
+    "2026-10-30T05:37:08.706Z cdn Success",
+    "2026-10-30T05:37:08.706Z capacity 36000/s, 16294 bytes a tile",
+    "2026-10-30T05:37:27.109Z collect Success",
+    "2026-10-30T05:37:48.015Z catalog Success",
+    "2026-10-30T05:37:48.023Z catalog: first 2002 ms, last 2010 ms"
+  ],
+  "error": null,
+  "startedAt": "2026-10-30T05:08:51.688Z",
+  "finishedAt": "2026-10-30T05:37:52.179Z"
+}

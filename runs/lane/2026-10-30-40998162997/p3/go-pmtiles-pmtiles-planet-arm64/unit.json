@@ -1,0 +1,50 @@
+{
+  "id": "go-pmtiles-pmtiles-planet-arm64",
+  "pass": 3,
+  "server": "go-pmtiles",
+  "version": "1.31.2",
+  "stable": true,
+  "format": "pmtiles",
+  "dataset": "planet",
+  "arch": "arm64",
+  "placementGroup": "lane-40998162997-p3-go-pmtiles-pmtiles-planet-arm64-1",
+  "serverHost": {
+    "id": "i-0c2ef6f75b695b3b4",
+    "ip": "172.31.16.24",
+    "az": "us-east-1b",
+    "subnet": "subnet-0a17ca6edfc559485"
+  },
+  "clientHost": {
+    "id": "i-00a0d610560de5d98",
+    "ip": "172.31.21.168",
+    "az": "us-east-1b",
+    "subnet": "subnet-0a17ca6edfc559485"
+  },
+  "dataSeconds": 692,
+  "readyMs": {
+    "alone": 909,
+    "cdn": 913
+  },
+  "results": {
+    "alone": "results/lane/40998162997/p3/go-pmtiles-pmtiles-planet-arm64/alone.json",
+    "cdn": "results/lane/40998162997/p3/go-pmtiles-pmtiles-planet-arm64/cdn.json"
+  },
+  "catalog": null,
+  "log": [
+    "2026-10-30T05:11:12.124Z no server capacity in us-east-1a, attempt 1",
+    "2026-10-30T05:12:54.033Z no server capacity in us-east-1a, attempt 2",
+    "2026-10-30T05:13:06.246Z server i-0c2ef6f75b695b3b4 and client i-00a0d610560de5d98 in us-east-1b",
+    "2026-10-30T05:14:10.825Z client-setup Success",
+    "2026-10-30T05:25:56.188Z setup Success",
+    "2026-10-30T05:26:15.632Z start-alone Success",
+    "2026-10-30T05:34:29.021Z alone Success",
+    "2026-10-30T05:34:29.021Z capacity 4000/s, 67427 bytes a tile",
+    "2026-10-30T05:34:46.403Z start-cdn Success",
+    "2026-10-30T05:40:18.268Z cdn Success",
+    "2026-10-30T05:40:18.269Z capacity 3750/s, 521 bytes a tile",
+    "2026-10-30T05:40:35.886Z collect Success"
+  ],
+  "error": null,
+  "startedAt": "2026-10-30T05:09:00.691Z",
+  "finishedAt": "2026-10-30T05:40:37.907Z"
+}

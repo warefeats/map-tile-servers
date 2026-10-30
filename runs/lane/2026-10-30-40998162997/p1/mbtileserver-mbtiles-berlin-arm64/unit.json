@@ -1,0 +1,53 @@
+{
+  "id": "mbtileserver-mbtiles-berlin-arm64",
+  "pass": 1,
+  "server": "mbtileserver",
+  "version": "0.11.0",
+  "stable": true,
+  "format": "mbtiles",
+  "dataset": "berlin",
+  "arch": "arm64",
+  "placementGroup": "lane-40998162997-p1-mbtileserver-mbtiles-berlin-arm64-0",
+  "serverHost": {
+    "id": "i-03d71464503326b20",
+    "ip": "172.31.17.79",
+    "az": "us-east-1b",
+    "subnet": "subnet-0a17ca6edfc559485"
+  },
+  "clientHost": {
+    "id": "i-01015b1db7b78cf74",
+    "ip": "172.31.27.212",
+    "az": "us-east-1b",
+    "subnet": "subnet-0a17ca6edfc559485"
+  },
+  "dataSeconds": 1,
+  "readyMs": {
+    "alone": 1156,
+    "cdn": 663
+  },
+  "results": {
+    "alone": "results/lane/40998162997/p1/mbtileserver-mbtiles-berlin-arm64/alone.json",
+    "cdn": "results/lane/40998162997/p1/mbtileserver-mbtiles-berlin-arm64/cdn.json"
+  },
+  "catalog": {
+    "firstMs": 8737,
+    "lastMs": 8747
+  },
+  "log": [
+    "2026-10-30T03:41:03.860Z server i-03d71464503326b20 and client i-01015b1db7b78cf74 in us-east-1b",
+    "2026-10-30T03:43:10.737Z setup Success",
+    "2026-10-30T03:43:10.737Z client-setup Success",
+    "2026-10-30T03:44:07.344Z start-alone Success",
+    "2026-10-30T03:53:12.418Z alone Success",
+    "2026-10-30T03:53:12.422Z capacity 14000/s, 82271 bytes a tile",
+    "2026-10-30T03:54:00.459Z start-cdn Success",
+    "2026-10-30T04:01:57.320Z cdn Success",
+    "2026-10-30T04:01:57.324Z capacity 36000/s, 16309 bytes a tile",
+    "2026-10-30T04:02:51.990Z collect Success",
+    "2026-10-30T04:03:50.586Z catalog Success",
+    "2026-10-30T04:03:50.592Z catalog: first 8737 ms, last 8747 ms"
+  ],
+  "error": null,
+  "startedAt": "2026-10-30T03:39:36.115Z",
+  "finishedAt": "2026-10-30T04:04:04.396Z"
+}
