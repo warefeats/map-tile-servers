@@ -89,30 +89,31 @@ describe("the lane's plan", () => {
 });
 
 describe("a unit's flow", () => {
-  test("sets the server up, then the client beside it, starts cold before each scenario, collects and terminates", async () => {
+  test("launches the client and then the server in one zone, sets both up, starts cold before each scenario, collects and terminates", async () => {
     const cloud = new FakeCloud();
     const rec = await runUnit(cloud, ctx, martin, 1);
     expect(rec.error).toBeNull();
     expect(cloud.calls).toEqual([
-      "placement lane-7-p1-martin-2-pmtiles-planet-arm64",
-      "launch server i-1 s-a lane-7-p1-martin-2-pmtiles-planet-arm64",
-      "online i-1",
-      "run i-1 setup",
-      "launch client i-2 s-a lane-7-p1-martin-2-pmtiles-planet-arm64",
+      "placement lane-7-p1-martin-2-pmtiles-planet-arm64-0",
+      "launch client i-1 s-a lane-7-p1-martin-2-pmtiles-planet-arm64-0",
+      "launch server i-2 s-a lane-7-p1-martin-2-pmtiles-planet-arm64-0",
       "online i-2",
-      "run i-2 client-setup",
-      "run i-1 start-alone",
-      "run i-2 alone",
-      "run i-1 start-cdn",
-      "run i-2 cdn",
-      "run i-1 collect",
-      "terminate i-1 i-2",
+      "online i-1",
+      "run i-2 setup",
+      "run i-1 client-setup",
+      "run i-2 start-alone",
+      "run i-1 alone",
+      "run i-2 start-cdn",
+      "run i-1 cdn",
+      "run i-2 collect",
+      "terminate i-2 i-1",
     ]);
+    expect(rec.placementGroup).toBe("lane-7-p1-martin-2-pmtiles-planet-arm64-0");
     expect(rec.dataSeconds).toBe(812);
     expect(rec.readyMs).toEqual({ alone: 1234, cdn: 1234 });
     expect(rec.results.cdn).toBe("results/lane/7/p1/martin-2-pmtiles-planet-arm64/cdn.json");
     const alone = cloud.texts.get("bundles/lane-7/p1/martin-2-pmtiles-planet-arm64/alone.sh")!;
-    expect(alone).toContain("'--host=10.0.0.1'");
+    expect(alone).toContain("'--host=10.0.0.2'");
     expect(alone).toContain("'--quick'");
     expect(JSON.parse(cloud.texts.get("results/lane/7/p1/martin-2-pmtiles-planet-arm64/unit.json")!).serverHost.az).toBe("zone-s-a");
   });
@@ -121,7 +122,7 @@ describe("a unit's flow", () => {
     const cloud = new FakeCloud();
     const rec = await runUnit(cloud, ctx, planUnits("bbox-pmtiles-berlin-amd64").run[0]!, 1);
     expect(rec.error).toBeNull();
-    expect(cloud.calls.slice(-3)).toEqual(["run i-1 collect", "run i-1 catalog", "terminate i-1 i-2"]);
+    expect(cloud.calls.slice(-3)).toEqual(["run i-2 collect", "run i-2 catalog", "terminate i-2 i-1"]);
     expect(rec.catalog).toEqual({ firstMs: 95, lastMs: null });
     expect(cloud.texts.get("bundles/lane-7/p1/bbox-pmtiles-berlin-amd64/catalog.sh")).toContain("s3://b/bundles/lane-7/catalog/small.pmtiles");
   });
@@ -130,33 +131,46 @@ describe("a unit's flow", () => {
     const cloud = new FakeCloud();
     const rec = await runUnit(cloud, ctx, planUnits("nginx-files-berlin-arm64").run[0]!, 1);
     expect(rec.error).toBeNull();
-    expect(cloud.calls.slice(-2)).toEqual(["run i-1 collect", "terminate i-1 i-2"]);
+    expect(cloud.calls.slice(-2)).toEqual(["run i-2 collect", "terminate i-2 i-1"]);
     expect(cloud.texts.get("bundles/lane-7/p1/nginx-files-berlin-arm64/setup.sh")).toContain("aws s3 cp 's3://b/bundles/lane-7/files/berlin.btrfs' '/opt/lane/data/berlin.btrfs'");
   });
 
-  test("tries the next zone for a server, and waits in its zone for a client", async () => {
-    let clientTries = 0;
-    const cloud = new FakeCloud({ capacity: (role, subnet) => (role === "server" ? subnet === "s-b" : ++clientTries > 1) });
-    const rec = await runUnit(cloud, ctx, martin, 2);
+  test("a catalog start that never finishes is recorded as never served, and the unit's scenarios stand", async () => {
+    const cloud = new FakeCloud({ failScript: "catalog" });
+    const rec = await runUnit(cloud, ctx, planUnits("bbox-pmtiles-berlin-arm64").run[0]!, 1);
     expect(rec.error).toBeNull();
-    expect(rec.serverHost?.subnet).toBe("s-b");
-    expect(rec.clientHost?.subnet).toBe("s-b");
-    expect(rec.log.some((l) => l.includes("no client capacity in zone-s-b, attempt 1"))).toBe(true);
+    expect(rec.catalog).toEqual({ firstMs: null, lastMs: null });
+    expect(rec.results.cdn).toBe("results/lane/7/p1/bbox-pmtiles-berlin-arm64/cdn.json");
+    expect(cloud.calls.at(-1)).toBe("terminate i-2 i-1");
+  });
+
+  test("moves the pair on from a zone with no client, and from one that takes the client but not the server", async () => {
+    // no clients in s-a; s-b takes the client but never the server; s-c takes both
+    const cloud = new FakeCloud({ capacity: (role, subnet) => (role === "client" ? subnet !== "s-a" : subnet === "s-c") });
+    const rec = await runUnit(cloud, { ...ctx, subnets: ["s-a", "s-b", "s-c"] }, martin, 2);
+    expect(rec.error).toBeNull();
+    expect(rec.serverHost?.subnet).toBe("s-c");
+    expect(rec.clientHost?.subnet).toBe("s-c");
+    expect(rec.placementGroup).toBe("lane-7-p2-martin-2-pmtiles-planet-arm64-2");
+    expect(cloud.calls).toContain("terminate i-1");
+    expect(rec.log.some((l) => l.endsWith("no client capacity in s-a"))).toBe(true);
+    expect(rec.log.some((l) => l.endsWith("no server capacity in zone-s-b, attempt 2"))).toBe(true);
   });
 
   test("a failed step ends the unit, keeps the server's log and terminates both hosts", async () => {
     const cloud = new FakeCloud({ failScript: "start-cdn" });
     const rec = await runUnit(cloud, ctx, martin, 1);
-    expect(rec.error).toContain("start-cdn on i-1: Failed");
+    expect(rec.error).toContain("start-cdn on i-2: Failed");
     expect(rec.results).toEqual({ alone: "results/lane/7/p1/martin-2-pmtiles-planet-arm64/alone.json" });
-    expect(cloud.calls.slice(-2)).toEqual(["run i-1 collect", "terminate i-1 i-2"]);
+    expect(cloud.calls.slice(-2)).toEqual(["run i-2 collect", "terminate i-2 i-1"]);
     expect(cloud.texts.has("results/lane/7/p1/martin-2-pmtiles-planet-arm64/unit.json")).toBe(true);
   });
 
-  test("no capacity anywhere fails the unit without launching a client", async () => {
+  test("no room in any zone fails the unit with nothing left running", async () => {
     const cloud = new FakeCloud({ capacity: () => false });
     const rec = await runUnit(cloud, ctx, martin, 1);
-    expect(rec.error).toContain("no capacity");
+    expect(rec.error).toContain("no zone had room");
+    expect(cloud.calls.filter((c) => c.startsWith("launch"))).toEqual([]);
     expect(cloud.calls.at(-1)).toBe("terminate ");
   });
 });

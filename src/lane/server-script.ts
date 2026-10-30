@@ -89,8 +89,10 @@ function startToFirstTile(u: ServerUnit): string[] {
   return [
     "start=$(date +%s%N)",
     run,
+    // a server that takes the connection and never answers must not stall the wait, so each try has its own limit
     "code=000",
-    `for _ in $(seq 1 6000); do code=$(curl -s -o /dev/null -w '%{http_code}' ${q(url)} || true); [ "$code" = 200 ] && break; sleep 0.01; done`,
+    "deadline=$(( $(date +%s) + 60 ))",
+    `while [ "$(date +%s)" -lt "$deadline" ]; do code=$(curl -s --max-time 2 -o /dev/null -w '%{http_code}' ${q(url)} || true); [ "$code" = 200 ] && break; sleep 0.01; done`,
     "end=$(date +%s%N)",
     '[ "$code" = 200 ] || { echo "no 200 from the server within a minute (last $code)"; docker logs --tail 40 lane-server; exit 1; }',
   ];
@@ -145,7 +147,7 @@ export function catalogScript(u: ServerUnit, smallKey: string): string {
     "  local deadline",
     `  deadline=$(( $(date +%s) + ${CATALOG_WAIT_S} ))`,
     '  while [ "$(date +%s)" -lt "$deadline" ]; do',
-    `    if [ "$(curl -s -o /dev/null -w '%{http_code}' "$1" || true)" = 200 ]; then echo $(( ($(date +%s%N) - start) / 1000000 )); return; fi`,
+    `    if [ "$(curl -s --max-time 2 -o /dev/null -w '%{http_code}' "$1" || true)" = 200 ]; then echo $(( ($(date +%s%N) - start) / 1000000 )); return; fi`,
     "    sleep 0.01",
     "  done",
     "  echo none",
