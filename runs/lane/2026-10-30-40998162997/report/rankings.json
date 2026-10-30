@@ -28,7 +28,12 @@
           "lo": 18000,
           "hi": 18000
         },
-        "cpuPerTileUs": null,
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 23.76922563718672,
+          "lo": 21.751059667768672,
+          "hi": 25.78739160660477
+        },
         "emptyStatus": null,
         "emptyShare": {
           "n": 3,
@@ -87,7 +92,12 @@
           "lo": 18000,
           "hi": 18000
         },
-        "cpuPerTileUs": null,
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 22.243525046083207,
+          "lo": 20.395401592754233,
+          "hi": 24.09164849941218
+        },
         "emptyStatus": null,
         "emptyShare": {
           "n": 3,
@@ -146,7 +156,12 @@
           "lo": 88000,
           "hi": 88000
         },
-        "cpuPerTileUs": null,
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 13.995209084762914,
+          "lo": 13.402649746517076,
+          "hi": 14.587768423008752
+        },
         "emptyStatus": null,
         "emptyShare": {
           "n": 3,
@@ -205,7 +220,12 @@
           "lo": 88000,
           "hi": 88000
         },
-        "cpuPerTileUs": null,
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 12.851318456571507,
+          "lo": 11.774038939165425,
+          "hi": 13.928597973977588
+        },
         "emptyStatus": null,
         "emptyShare": {
           "n": 3,
@@ -264,7 +284,12 @@
           "lo": 20000,
           "hi": 20000
         },
-        "cpuPerTileUs": null,
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 32.017663187637595,
+          "lo": 28.782402528771964,
+          "hi": 35.25292384650322
+        },
         "emptyStatus": null,
         "emptyShare": {
           "n": 3,
@@ -315,7 +340,12 @@
           "lo": 18000,
           "hi": 18000
         },
-        "cpuPerTileUs": null,
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 43.79903173476041,
+          "lo": 39.92767005774683,
+          "hi": 47.67039341177399
+        },
         "emptyStatus": null,
         "emptyShare": {
           "n": 3,
@@ -366,7 +396,12 @@
           "lo": 18000,
           "hi": 18000
         },
-        "cpuPerTileUs": null,
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 162.12352051484265,
+          "lo": 157.31576076809148,
+          "hi": 166.93128026159383
+        },
         "emptyStatus": null,
         "emptyShare": {
           "n": 3,
@@ -417,7 +452,12 @@
           "lo": 5000,
           "hi": 5000
         },
-        "cpuPerTileUs": null,
+        "cpuPerTileUs": {
+          "n": 2,
+          "mean": 267.53682796251246,
+          "lo": 247.49618576253792,
+          "hi": 287.57747016248703
+        },
         "emptyStatus": null,
         "emptyShare": {
           "n": 2,
@@ -467,7 +507,12 @@
           "lo": 9899,
           "hi": 12767.666666666668
         },
-        "cpuPerTileUs": null,
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 252.65359549076948,
+          "lo": 237.51453781769558,
+          "hi": 267.79265316384334
+        },
         "emptyStatus": null,
         "emptyShare": {
           "n": 3,
@@ -518,7 +563,12 @@
           "lo": 4116.166666666666,
           "hi": 5550.5
         },
-        "cpuPerTileUs": null,
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 528.3653803408296,
+          "lo": 520.7721096464318,
+          "hi": 535.9586510352274
+        },
         "emptyStatus": 500,
         "emptyShare": {
           "n": 3,
@@ -577,7 +627,12 @@
           "lo": 20000,
           "hi": 20000
         },
-        "cpuPerTileUs": null,
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 28.963496344993604,
+          "lo": 27.853309194355173,
+          "hi": 30.073683495632036
+        },
         "emptyStatus": null,
         "emptyShare": {
           "n": 3,
@@ -628,7 +683,12 @@
           "lo": 18000,
           "hi": 18000
         },
-        "cpuPerTileUs": null,
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 141.0575300006404,
+          "lo": 134.2587847483794,
+          "hi": 147.8562752529014
+        },
         "emptyStatus": null,
         "emptyShare": {
           "n": 3,
@@ -679,7 +739,12 @@
           "lo": 11515.661791677041,
           "hi": 16484.33820832296
         },
-        "cpuPerTileUs": null,
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 195.62203110565179,
+          "lo": 171.95592630806107,
+          "hi": 219.2881359032425
+        },
         "emptyStatus": null,
         "emptyShare": {
           "n": 3,
@@ -730,7 +795,12 @@
           "lo": 3449.5000000000005,
           "hi": 4883.833333333334
         },
-        "cpuPerTileUs": null,
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 292.14379164405744,
+          "lo": 259.4770378419536,
+          "hi": 324.8105454461613
+        },
         "emptyStatus": null,
         "emptyShare": {
           "n": 3,
@@ -781,7 +851,12 @@
           "lo": 4116.166666666666,
           "hi": 5550.5
         },
-        "cpuPerTileUs": null,
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 509.6324633410593,
+          "lo": 490.688740004607,
+          "hi": 528.5761866775116
+        },
         "emptyStatus": 500,
         "emptyShare": {
           "n": 3,
@@ -832,7 +907,12 @@
           "lo": 18000,
           "hi": 18000
         },
-        "cpuPerTileUs": null,
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 40.75501328622288,
+          "lo": 36.73243555072335,
+          "hi": 44.777591021722415
+        },
         "emptyStatus": null,
         "emptyShare": {
           "n": 3,
@@ -891,7 +971,12 @@
           "lo": 96000,
           "hi": 96000
         },
-        "cpuPerTileUs": null,
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 23.46619067240047,
+          "lo": 22.07749791544609,
+          "hi": 24.854883429354846
+        },
         "emptyStatus": null,
         "emptyShare": {
           "n": 3,
@@ -942,7 +1027,12 @@
           "lo": 88000,
           "hi": 88000
         },
-        "cpuPerTileUs": null,
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 20.039056057352077,
+          "lo": 18.840887593121785,
+          "hi": 21.23722452158237
+        },
         "emptyStatus": null,
         "emptyShare": {
           "n": 3,
@@ -993,7 +1083,12 @@
           "lo": 32000,
           "hi": 32000
         },
-        "cpuPerTileUs": null,
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 112.82959346759718,
+          "lo": 105.2542954418705,
+          "hi": 120.40489149332386
+        },
         "emptyStatus": null,
         "emptyShare": {
           "n": 3,
@@ -1044,7 +1139,12 @@
           "lo": 10000,
           "hi": 10000
         },
-        "cpuPerTileUs": null,
+        "cpuPerTileUs": {
+          "n": 2,
+          "mean": 127.40850126467663,
+          "lo": 114.19337221504924,
+          "hi": 140.62363031430402
+        },
         "emptyStatus": null,
         "emptyShare": {
           "n": 2,
@@ -1094,7 +1194,12 @@
           "lo": 32000,
           "hi": 32000
         },
-        "cpuPerTileUs": null,
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 91.20437525836876,
+          "lo": 88.03664603981977,
+          "hi": 94.37210447691774
+        },
         "emptyStatus": null,
         "emptyShare": {
           "n": 3,
@@ -1145,7 +1250,12 @@
           "lo": 11899,
           "hi": 14767.666666666668
         },
-        "cpuPerTileUs": null,
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 170.75328534840585,
+          "lo": 164.66919084087527,
+          "hi": 176.83737985593643
+        },
         "emptyStatus": 500,
         "emptyShare": {
           "n": 3,
@@ -1204,7 +1314,12 @@
           "lo": 96000,
           "hi": 96000
         },
-        "cpuPerTileUs": null,
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 21.578642755153794,
+          "lo": 19.241718580039763,
+          "hi": 23.915566930267826
+        },
         "emptyStatus": null,
         "emptyShare": {
           "n": 3,
@@ -1255,7 +1370,12 @@
           "lo": 36000,
           "hi": 36000
         },
-        "cpuPerTileUs": null,
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 103.7192627585721,
+          "lo": 99.76438986930367,
+          "hi": 107.67413564784053
+        },
         "emptyStatus": null,
         "emptyShare": {
           "n": 3,
@@ -1306,7 +1426,12 @@
           "lo": 28929.333333333332,
           "hi": 40404
         },
-        "cpuPerTileUs": null,
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 82.79903924952684,
+          "lo": 72.81774670331046,
+          "hi": 92.78033179574322
+        },
         "emptyStatus": null,
         "emptyShare": {
           "n": 3,
@@ -1357,7 +1482,12 @@
           "lo": 11232.333333333332,
           "hi": 14101
         },
-        "cpuPerTileUs": null,
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 169.8664711357646,
+          "lo": 150.68673564562832,
+          "hi": 189.0462066259009
+        },
         "emptyStatus": 500,
         "emptyShare": {
           "n": 3,
@@ -1408,7 +1538,12 @@
           "lo": 6949.5,
           "hi": 8383.833333333334
         },
-        "cpuPerTileUs": null,
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 154.82548927028677,
+          "lo": 142.49568077756078,
+          "hi": 167.15529776301275
+        },
         "emptyStatus": null,
         "emptyShare": {
           "n": 3,
@@ -1459,7 +1594,12 @@
           "lo": 88000,
           "hi": 88000
         },
-        "cpuPerTileUs": null,
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 23.902631272527017,
+          "lo": 22.736550231241768,
+          "hi": 25.068712313812267
+        },
         "emptyStatus": null,
         "emptyShare": {
           "n": 3,
@@ -1518,7 +1658,12 @@
           "lo": 20000,
           "hi": 20000
         },
-        "cpuPerTileUs": null,
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 34.189901272580656,
+          "lo": 29.08391481535433,
+          "hi": 39.295887729806985
+        },
         "emptyStatus": null,
         "emptyShare": {
           "n": 3,
@@ -1569,7 +1714,12 @@
           "lo": 6899.000000000001,
           "hi": 9767.666666666668
         },
-        "cpuPerTileUs": null,
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 360.51659899232004,
+          "lo": 303.3591851456554,
+          "hi": 417.6740128389847
+        },
         "emptyStatus": null,
         "emptyShare": {
           "n": 3,
@@ -1620,7 +1770,12 @@
           "lo": 18000,
           "hi": 18000
         },
-        "cpuPerTileUs": null,
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 167.8625319600143,
+          "lo": 162.32424385562993,
+          "hi": 173.4008200643987
+        },
         "emptyStatus": null,
         "emptyShare": {
           "n": 3,
@@ -1671,7 +1826,12 @@
           "lo": 6500,
           "hi": 6500
         },
-        "cpuPerTileUs": null,
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 493.92539205133556,
+          "lo": 479.7260152720215,
+          "hi": 508.1247688306496
+        },
         "emptyStatus": 500,
         "emptyShare": {
           "n": 3,
@@ -1722,7 +1882,12 @@
           "lo": 18000,
           "hi": 18000
         },
-        "cpuPerTileUs": null,
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 45.72135605732647,
+          "lo": 38.879673695981595,
+          "hi": 52.56303841867134
+        },
         "emptyStatus": null,
         "emptyShare": {
           "n": 3,
@@ -1773,7 +1938,12 @@
           "lo": 247.86899999999997,
           "hi": 336.79766666666666
         },
-        "cpuPerTileUs": null,
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 7655.240176153275,
+          "lo": 7035.457407533154,
+          "hi": 8275.022944773395
+        },
         "emptyStatus": null,
         "emptyShare": {
           "n": 3,
@@ -1832,7 +2002,12 @@
           "lo": 20000,
           "hi": 20000
         },
-        "cpuPerTileUs": null,
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 27.4446760407034,
+          "lo": 22.91024117994433,
+          "hi": 31.97911090146247
+        },
         "emptyStatus": null,
         "emptyShare": {
           "n": 3,
@@ -1883,7 +2058,12 @@
           "lo": 162.55700000000002,
           "hi": 556.443
         },
-        "cpuPerTileUs": null,
+        "cpuPerTileUs": {
+          "n": 2,
+          "mean": 5782.0105609180555,
+          "lo": 3408.042717022463,
+          "hi": 8155.978404813648
+        },
         "emptyStatus": null,
         "emptyShare": {
           "n": 2,
@@ -1933,7 +2113,12 @@
           "lo": 18000,
           "hi": 18000
         },
-        "cpuPerTileUs": null,
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 137.65977648181226,
+          "lo": 126.81467006379327,
+          "hi": 148.50488289983124
+        },
         "emptyStatus": null,
         "emptyShare": {
           "n": 3,
@@ -1984,7 +2169,12 @@
           "lo": 8000,
           "hi": 8000
         },
-        "cpuPerTileUs": null,
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 417.5762127327594,
+          "lo": 407.68663041487497,
+          "hi": 427.46579505064386
+        },
         "emptyStatus": 500,
         "emptyShare": {
           "n": 3,
@@ -2035,7 +2225,12 @@
           "lo": 18000,
           "hi": 18000
         },
-        "cpuPerTileUs": null,
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 40.72751794730215,
+          "lo": 37.737998976352856,
+          "hi": 43.71703691825144
+        },
         "emptyStatus": null,
         "emptyShare": {
           "n": 3,
@@ -2086,7 +2281,12 @@
           "lo": 6899.000000000001,
           "hi": 9767.666666666668
         },
-        "cpuPerTileUs": null,
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 335.88338102045356,
+          "lo": 286.22801245639425,
+          "hi": 385.53874958451286
+        },
         "emptyStatus": null,
         "emptyShare": {
           "n": 3,
@@ -2145,7 +2345,12 @@
           "lo": 67717.33333333334,
           "hi": 113616
         },
-        "cpuPerTileUs": null,
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 23.5487856119472,
+          "lo": 23.055563593086937,
+          "hi": 24.04200763080746
+        },
         "emptyStatus": null,
         "emptyShare": {
           "n": 3,
@@ -2196,7 +2401,12 @@
           "lo": 24000,
           "hi": 24000
         },
-        "cpuPerTileUs": null,
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 122.9705159376846,
+          "lo": 116.30033318583293,
+          "hi": 129.64069868953626
+        },
         "emptyStatus": null,
         "emptyShare": {
           "n": 3,
@@ -2247,7 +2457,12 @@
           "lo": 32000,
           "hi": 32000
         },
-        "cpuPerTileUs": null,
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 115.7460046631859,
+          "lo": 111.45167619987475,
+          "hi": 120.04033312649705
+        },
         "emptyStatus": null,
         "emptyShare": {
           "n": 3,
@@ -2298,7 +2513,12 @@
           "lo": 23798,
           "hi": 29535.333333333336
         },
-        "cpuPerTileUs": null,
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 115.12924184339847,
+          "lo": 106.39132142549552,
+          "hi": 123.86716226130143
+        },
         "emptyStatus": 500,
         "emptyShare": {
           "n": 3,
@@ -2349,7 +2569,12 @@
           "lo": 88000,
           "hi": 88000
         },
-        "cpuPerTileUs": null,
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 21.15662703001007,
+          "lo": 19.947044349246767,
+          "hi": 22.366209710773376
+        },
         "emptyStatus": null,
         "emptyShare": {
           "n": 3,
@@ -2400,7 +2625,12 @@
           "lo": 1587.125,
           "hi": 2662.875
         },
-        "cpuPerTileUs": null,
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 1250.481364661586,
+          "lo": 922.479790651144,
+          "hi": 1578.482938672028
+        },
         "emptyStatus": null,
         "emptyShare": {
           "n": 3,
@@ -2459,7 +2689,12 @@
           "lo": 96000,
           "hi": 96000
         },
-        "cpuPerTileUs": null,
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 21.065372935367307,
+          "lo": 17.832959892085572,
+          "hi": 24.297785978649042
+        },
         "emptyStatus": null,
         "emptyShare": {
           "n": 3,
@@ -2510,7 +2745,12 @@
           "lo": 2000,
           "hi": 2000
         },
-        "cpuPerTileUs": null,
+        "cpuPerTileUs": {
+          "n": 2,
+          "mean": 1213.720168870056,
+          "lo": 931.2001769652452,
+          "hi": 1496.240160774867
+        },
         "emptyStatus": null,
         "emptyShare": {
           "n": 2,
@@ -2560,7 +2800,12 @@
           "lo": 28929.333333333332,
           "hi": 40404
         },
-        "cpuPerTileUs": null,
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 105.22993156354897,
+          "lo": 98.55181412098553,
+          "hi": 111.90804900611242
+        },
         "emptyStatus": null,
         "emptyShare": {
           "n": 3,
@@ -2611,7 +2856,12 @@
           "lo": 30000,
           "hi": 30000
         },
-        "cpuPerTileUs": null,
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 103.19674598434119,
+          "lo": 98.81663814108168,
+          "hi": 107.5768538276007
+        },
         "emptyStatus": 500,
         "emptyShare": {
           "n": 3,
@@ -2662,7 +2912,12 @@
           "lo": 88000,
           "hi": 88000
         },
-        "cpuPerTileUs": null,
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 23.342091281127413,
+          "lo": 21.388810786422315,
+          "hi": 25.29537177583251
+        },
         "emptyStatus": null,
         "emptyShare": {
           "n": 3,
@@ -2713,7 +2968,12 @@
           "lo": 22000,
           "hi": 22000
         },
-        "cpuPerTileUs": null,
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 125.1072439231765,
+          "lo": 119.96168947149958,
+          "hi": 130.25279837485343
+        },
         "emptyStatus": null,
         "emptyShare": {
           "n": 3,
@@ -2772,7 +3032,12 @@
           "lo": 568.5675516371939,
           "hi": 1348.7657816961394
         },
-        "cpuPerTileUs": null,
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 68.63447455899812,
+          "lo": 47.38979222511195,
+          "hi": 89.8791568928843
+        },
         "emptyStatus": null,
         "emptyShare": {
           "n": 3,
@@ -2831,7 +3096,12 @@
           "lo": 477.5296666666667,
           "hi": 1731.1369999999997
         },
-        "cpuPerTileUs": null,
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 69.54420580032968,
+          "lo": 64.180986001595,
+          "hi": 74.90742559906435
+        },
         "emptyStatus": null,
         "emptyShare": {
           "n": 3,
@@ -2890,7 +3160,12 @@
           "lo": 476.29503825251106,
           "hi": 1565.704961747489
         },
-        "cpuPerTileUs": null,
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 50.21828794516799,
+          "lo": 25.991258130312993,
+          "hi": 74.44531776002299
+        },
         "emptyStatus": null,
         "emptyShare": {
           "n": 3,
@@ -2949,7 +3224,12 @@
           "lo": 628.5176130025793,
           "hi": 1746.8157203307542
         },
-        "cpuPerTileUs": null,
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 52.93074737115777,
+          "lo": 49.73879835364291,
+          "hi": 56.12269638867263
+        },
         "emptyStatus": null,
         "emptyShare": {
           "n": 3,
@@ -3008,7 +3288,12 @@
           "lo": 1654.0416666666665,
           "hi": 2012.625
         },
-        "cpuPerTileUs": null,
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 566.8644578538946,
+          "lo": 543.5635627525523,
+          "hi": 590.1653529552368
+        },
         "emptyStatus": null,
         "emptyShare": {
           "n": 3,
@@ -3059,7 +3344,12 @@
           "lo": 1875,
           "hi": 1875
         },
-        "cpuPerTileUs": null,
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 159.50642247177973,
+          "lo": 139.2042728819141,
+          "hi": 179.80857206164535
+        },
         "emptyStatus": null,
         "emptyShare": {
           "n": 3,
@@ -3110,7 +3400,12 @@
           "lo": 1875,
           "hi": 1875
         },
-        "cpuPerTileUs": null,
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 271.76706365154604,
+          "lo": 236.8917311147496,
+          "hi": 306.64239618834245
+        },
         "emptyStatus": null,
         "emptyShare": {
           "n": 3,
@@ -3161,7 +3456,12 @@
           "lo": -221.6666454813417,
           "hi": 576.3333121480084
         },
-        "cpuPerTileUs": null,
+        "cpuPerTileUs": {
+          "n": 2,
+          "mean": 464.5804365255434,
+          "lo": 210.17673505119245,
+          "hi": 718.9841379998943
+        },
         "emptyStatus": null,
         "emptyShare": {
           "n": 2,
@@ -3246,7 +3546,12 @@
           "lo": 1875,
           "hi": 1875
         },
-        "cpuPerTileUs": null,
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 144.3263617120547,
+          "lo": 124.92388514877344,
+          "hi": 163.72883827533596
+        },
         "emptyStatus": null,
         "emptyShare": {
           "n": 3,
@@ -3297,7 +3602,12 @@
           "lo": 1875,
           "hi": 1875
         },
-        "cpuPerTileUs": null,
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 218.69715437932368,
+          "lo": 180.48943217477517,
+          "hi": 256.9048765838722
+        },
         "emptyStatus": null,
         "emptyShare": {
           "n": 3,
@@ -3348,7 +3658,12 @@
           "lo": 1875,
           "hi": 1875
         },
-        "cpuPerTileUs": null,
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 639.2718625443682,
+          "lo": 426.6148993171713,
+          "hi": 851.9288257715651
+        },
         "emptyStatus": null,
         "emptyShare": {
           "n": 3,
@@ -3399,7 +3714,12 @@
           "lo": 482.113,
           "hi": 1018.5536666666667
         },
-        "cpuPerTileUs": null,
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 350.74129578033876,
+          "lo": 297.78165369254833,
+          "hi": 403.7009378681292
+        },
         "emptyStatus": null,
         "emptyShare": {
           "n": 3,
@@ -3485,7 +3805,12 @@
           "lo": 2250,
           "hi": 2250
         },
-        "cpuPerTileUs": null,
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 1494.1786457706155,
+          "lo": 1382.123589974659,
+          "hi": 1606.233701566572
+        },
         "emptyStatus": null,
         "emptyShare": {
           "n": 3,
@@ -3536,7 +3861,12 @@
           "lo": 5500,
           "hi": 5500
         },
-        "cpuPerTileUs": null,
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 571.5178945404142,
+          "lo": 521.0913350659823,
+          "hi": 621.9444540148461
+        },
         "emptyStatus": null,
         "emptyShare": {
           "n": 3,
@@ -3587,7 +3917,12 @@
           "lo": 7500,
           "hi": 7500
         },
-        "cpuPerTileUs": null,
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 77.10782816090568,
+          "lo": 63.71796396327603,
+          "hi": 90.49769235853535
+        },
         "emptyStatus": null,
         "emptyShare": {
           "n": 3,
@@ -3638,7 +3973,12 @@
           "lo": 90.25599999999997,
           "hi": 1077.0773333333332
         },
-        "cpuPerTileUs": null,
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 247.3605965780673,
+          "lo": 174.98742906995307,
+          "hi": 319.7337640861815
+        },
         "emptyStatus": null,
         "emptyShare": {
           "n": 3,
@@ -3689,7 +4029,12 @@
           "lo": 7500,
           "hi": 7500
         },
-        "cpuPerTileUs": null,
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 69.21642845840813,
+          "lo": 59.29687860621381,
+          "hi": 79.13597831060245
+        },
         "emptyStatus": null,
         "emptyShare": {
           "n": 3,
@@ -3748,7 +4093,12 @@
           "lo": 2366.166666666667,
           "hi": 3800.5
         },
-        "cpuPerTileUs": null,
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 1049.958336580065,
+          "lo": 942.7405926683278,
+          "hi": 1157.1760804918022
+        },
         "emptyStatus": null,
         "emptyShare": {
           "n": 3,
@@ -3799,7 +4149,12 @@
           "lo": 7500,
           "hi": 7500
         },
-        "cpuPerTileUs": null,
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 78.1154335884852,
+          "lo": 67.51481475583596,
+          "hi": 88.71605242113445
+        },
         "emptyStatus": null,
         "emptyShare": {
           "n": 3,
@@ -3850,7 +4205,12 @@
           "lo": 7500,
           "hi": 7500
         },
-        "cpuPerTileUs": null,
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 63.71609858040009,
+          "lo": 51.97796442366267,
+          "hi": 75.45423273713752
+        },
         "emptyStatus": null,
         "emptyShare": {
           "n": 3,
@@ -3901,7 +4261,12 @@
           "lo": 1099.75,
           "hi": 1816.9166666666665
         },
-        "cpuPerTileUs": null,
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 176.7055676122308,
+          "lo": 159.2794669436701,
+          "hi": 194.1316682807915
+        },
         "emptyStatus": null,
         "emptyShare": {
           "n": 3,
@@ -3952,7 +4317,12 @@
           "lo": 4949.5,
           "hi": 6383.833333333334
         },
-        "cpuPerTileUs": null,
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 511.2022559982684,
+          "lo": 463.80301171494006,
+          "hi": 558.6015002815967
+        },
         "emptyStatus": null,
         "emptyShare": {
           "n": 3,
@@ -4011,7 +4381,12 @@
           "lo": 3750,
           "hi": 3750
         },
-        "cpuPerTileUs": null,
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 750.3640629600999,
+          "lo": 719.1634471832757,
+          "hi": 781.5646787369241
+        },
         "emptyStatus": null,
         "emptyShare": {
           "n": 3,
@@ -4062,7 +4437,12 @@
           "lo": 1625,
           "hi": 1625
         },
-        "cpuPerTileUs": null,
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 188.06093816334047,
+          "lo": 176.60347622364824,
+          "hi": 199.5184001030327
+        },
         "emptyStatus": null,
         "emptyShare": {
           "n": 3,
@@ -4113,7 +4493,12 @@
           "lo": 3616.1666666666665,
           "hi": 5050.5
         },
-        "cpuPerTileUs": null,
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 801.7936298052617,
+          "lo": 709.7739149346156,
+          "hi": 893.8133446759078
+        },
         "emptyStatus": null,
         "emptyShare": {
           "n": 3,
@@ -4164,7 +4549,12 @@
           "lo": 1625,
           "hi": 1625
         },
-        "cpuPerTileUs": null,
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 908.9355084601963,
+          "lo": 885.7210173606423,
+          "hi": 932.1499995597502
+        },
         "emptyStatus": 500,
         "emptyShare": {
           "n": 3,
@@ -4215,7 +4605,12 @@
           "lo": -137.62500000000003,
           "hi": 220.95833333333334
         },
-        "cpuPerTileUs": null,
+        "cpuPerTileUs": {
+          "n": 1,
+          "mean": 8144.7218046239195,
+          "lo": null,
+          "hi": null
+        },
         "emptyStatus": null,
         "emptyShare": {
           "n": 1,
@@ -4299,7 +4694,12 @@
           "lo": 1625,
           "hi": 1625
         },
-        "cpuPerTileUs": null,
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 183.63223726348505,
+          "lo": 170.81964578877498,
+          "hi": 196.44482873819513
+        },
         "emptyStatus": null,
         "emptyShare": {
           "n": 3,
@@ -4350,7 +4750,12 @@
           "lo": 3558.083333333333,
           "hi": 4275.25
         },
-        "cpuPerTileUs": null,
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 669.060416572917,
+          "lo": 649.790760083381,
+          "hi": 688.330073062453
+        },
         "emptyStatus": null,
         "emptyShare": {
           "n": 3,
@@ -4401,7 +4806,12 @@
           "lo": 4500,
           "hi": 4500
         },
-        "cpuPerTileUs": null,
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 766.2232101244152,
+          "lo": 685.5551436331629,
+          "hi": 846.8912766156676
+        },
         "emptyStatus": null,
         "emptyShare": {
           "n": 3,
@@ -4452,7 +4862,12 @@
           "lo": 1625,
           "hi": 1625
         },
-        "cpuPerTileUs": null,
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 907.16482279113,
+          "lo": 868.7212335564976,
+          "hi": 945.6084120257623
+        },
         "emptyStatus": 500,
         "emptyShare": {
           "n": 3,
@@ -4565,7 +4980,12 @@
           "lo": 1375,
           "hi": 1375
         },
-        "cpuPerTileUs": null,
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 2164.3365970815485,
+          "lo": 2020.9738356032806,
+          "hi": 2307.6993585598166
+        },
         "emptyStatus": null,
         "emptyShare": {
           "n": 3,
@@ -4616,7 +5036,12 @@
           "lo": 372.86899999999997,
           "hi": 461.79766666666666
         },
-        "cpuPerTileUs": null,
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 2086.331283948435,
+          "lo": 1952.535376297581,
+          "hi": 2220.1271915992893
+        },
         "emptyStatus": null,
         "emptyShare": {
           "n": 3,
@@ -4667,7 +5092,12 @@
           "lo": 3250,
           "hi": 3250
         },
-        "cpuPerTileUs": null,
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 907.9702130606273,
+          "lo": 898.0381522732628,
+          "hi": 917.9022738479919
+        },
         "emptyStatus": null,
         "emptyShare": {
           "n": 3,
@@ -4718,7 +5148,12 @@
           "lo": 6000,
           "hi": 6000
         },
-        "cpuPerTileUs": null,
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 174.04088255017655,
+          "lo": 156.7621812977633,
+          "hi": 191.3195838025898
+        },
         "emptyStatus": null,
         "emptyShare": {
           "n": 3,
@@ -4769,7 +5204,12 @@
           "lo": 3474.75,
           "hi": 4191.916666666667
         },
-        "cpuPerTileUs": null,
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 654.9807740885221,
+          "lo": 643.9566589714863,
+          "hi": 666.004889205558
+        },
         "emptyStatus": 500,
         "emptyShare": {
           "n": 3,
@@ -4820,7 +5260,12 @@
           "lo": 4000,
           "hi": 4000
         },
-        "cpuPerTileUs": null,
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 761.5018605281871,
+          "lo": 731.1213854489822,
+          "hi": 791.882335607392
+        },
         "emptyStatus": null,
         "emptyShare": {
           "n": 3,
@@ -4879,7 +5324,12 @@
           "lo": 1462.125,
           "hi": 2537.875
         },
-        "cpuPerTileUs": null,
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 1558.986021368379,
+          "lo": 1316.9349112252862,
+          "hi": 1801.0371315114717
+        },
         "emptyStatus": null,
         "emptyShare": {
           "n": 3,
@@ -4930,7 +5380,12 @@
           "lo": 6500,
           "hi": 6500
         },
-        "cpuPerTileUs": null,
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 156.5687485853812,
+          "lo": 153.11136874774417,
+          "hi": 160.02612842301824
+        },
         "emptyStatus": null,
         "emptyShare": {
           "n": 3,
@@ -4981,7 +5436,12 @@
           "lo": 3750,
           "hi": 3750
         },
-        "cpuPerTileUs": null,
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 793.7296939864251,
+          "lo": 761.2727620776701,
+          "hi": 826.1866258951801
+        },
         "emptyStatus": null,
         "emptyShare": {
           "n": 3,
@@ -5032,7 +5492,12 @@
           "lo": 3134.6110090407556,
           "hi": 5032.055657625911
         },
-        "cpuPerTileUs": null,
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 692.3081494935728,
+          "lo": 572.9219307757135,
+          "hi": 811.6943682114322
+        },
         "emptyStatus": null,
         "emptyShare": {
           "n": 3,
@@ -5083,7 +5548,12 @@
           "lo": 4500,
           "hi": 4500
         },
-        "cpuPerTileUs": null,
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 573.9421644288277,
+          "lo": 550.3767993776088,
+          "hi": 597.5075294800466
+        },
         "emptyStatus": 500,
         "emptyShare": {
           "n": 3,
@@ -5134,7 +5604,12 @@
           "lo": 341.02509845438703,
           "hi": 576.3082348789463
         },
-        "cpuPerTileUs": null,
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 1865.4411223439909,
+          "lo": 1612.6716443171888,
+          "hi": 2118.2106003707927
+        },
         "emptyStatus": null,
         "emptyShare": {
           "n": 3,

@@ -109,7 +109,7 @@ lane-fetch ID:
     dst="runs/lane/$(jq -r '.startedAt[0:10]' "$src/plan.json")-{{ID}}"
     rm -rf "$dst"
     mkdir -p "$dst"
-    rsync -a --prune-empty-dirs --exclude 'ssm/' --include '*/' --include '*.json' --include '*.md' --exclude '*' "$src/" "$dst/"
+    rsync -a --prune-empty-dirs --exclude 'ssm/' --include '*/' --include '*.json' --include '*.md' --include 'samples.log' --exclude '*' "$src/" "$dst/"
     rm -rf "$tmp"
     echo "$dst: $(find "$dst" -type f | wc -l) files, $(du -sh "$dst" | cut -f1)"
 

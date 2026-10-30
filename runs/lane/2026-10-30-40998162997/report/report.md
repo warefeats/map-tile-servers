@@ -10,7 +10,7 @@ Dollars per million tiles at AWS list prices of 2026-10-29 (us-east-1); lower is
 
 | server | measured (tiles/s) | priced at (tiles/s) | CPU per tile (µs) | tile (KB) | p99 at capacity (ms) |
 | :-- | --: | --: | --: | --: | --: |
-| nginx 1.30.4 (network-bound) | 18,000 | 2,850 | – | 82.2 | 5.4 |
+| nginx 1.30.4 (network-bound) | 18,000 | 2,850 | 24 | 82.2 | 5.4 |
 
 ## berlin, files, server alone, arm64
 
@@ -20,7 +20,7 @@ Dollars per million tiles at AWS list prices of 2026-10-29 (us-east-1); lower is
 
 | server | measured (tiles/s) | priced at (tiles/s) | CPU per tile (µs) | tile (KB) | p99 at capacity (ms) |
 | :-- | --: | --: | --: | --: | --: |
-| nginx 1.30.4 (network-bound) | 18,000 | 2,847 | – | 82.3 | 5.6 |
+| nginx 1.30.4 (network-bound) | 18,000 | 2,847 | 22 | 82.3 | 5.6 |
 
 ## berlin, files, behind a CDN, amd64
 
@@ -30,7 +30,7 @@ Dollars per million tiles at AWS list prices of 2026-10-29 (us-east-1); lower is
 
 | server | measured (tiles/s) | priced at (tiles/s) | CPU per tile (µs) | tile (KB) | p99 at capacity (ms) |
 | :-- | --: | --: | --: | --: | --: |
-| nginx 1.30.4 (network-bound) | 88,000 | 14,365 | – | 16.3 | 24.8 |
+| nginx 1.30.4 (network-bound) | 88,000 | 14,365 | 14 | 16.3 | 24.8 |
 
 ## berlin, files, behind a CDN, arm64
 
@@ -40,7 +40,7 @@ Dollars per million tiles at AWS list prices of 2026-10-29 (us-east-1); lower is
 
 | server | measured (tiles/s) | priced at (tiles/s) | CPU per tile (µs) | tile (KB) | p99 at capacity (ms) |
 | :-- | --: | --: | --: | --: | --: |
-| nginx 1.30.4 (network-bound) | 88,000 | 14,370 | – | 16.3 | 25.4 |
+| nginx 1.30.4 (network-bound) | 88,000 | 14,370 | 13 | 16.3 | 25.4 |
 
 ## berlin, mbtiles, server alone, amd64
 
@@ -55,12 +55,12 @@ Dollars per million tiles at AWS list prices of 2026-10-29 (us-east-1); lower is
 
 | server | measured (tiles/s) | priced at (tiles/s) | CPU per tile (µs) | tile (KB) | p99 at capacity (ms) |
 | :-- | --: | --: | --: | --: | --: |
-| versatiles 5.4.1 (network-bound) | 20,000 | 3,144 | – | 74.5 | 7.2 |
-| martin-2 2.0.0-beta.4 (pre-release) (network-bound) | 18,000 | 2,851 | – | 82.2 | 5.7 |
-| martin-1 1.16.1 (network-bound) | 18,000 | 2,851 | – | 82.2 | 5.6 |
-| tileserver-gl 5.7.0 (network-bound) | 5,000 | 2,850 | – | 82.2 | 17.6 |
-| mbtileserver 0.11.0 (network-bound) | 11,333 | 2,848 | – | 82.3 | 10.4 |
-| bbox 0.6.2 (network-bound) | 4,833 | 2,840 | – | 82.5 | 22.1 |
+| versatiles 5.4.1 (network-bound) | 20,000 | 3,144 | 32 | 74.5 | 7.2 |
+| martin-2 2.0.0-beta.4 (pre-release) (network-bound) | 18,000 | 2,851 | 44 | 82.2 | 5.7 |
+| martin-1 1.16.1 (network-bound) | 18,000 | 2,851 | 162 | 82.2 | 5.6 |
+| tileserver-gl 5.7.0 (network-bound) | 5,000 | 2,850 | 268 | 82.2 | 17.6 |
+| mbtileserver 0.11.0 (network-bound) | 11,333 | 2,848 | 253 | 82.3 | 10.4 |
+| bbox 0.6.2 (network-bound) | 4,833 | 2,840 | 528 | 82.5 | 22.1 |
 
 bbox 0.6.2 answers a tile its archive lacks with 500, counted as that empty tile: 1.5% of its answers at capacity, where the others' empty answers are 1.5–1.5%.
 
@@ -77,12 +77,12 @@ bbox 0.6.2 answers a tile its archive lacks with 500, counted as that empty tile
 
 | server | measured (tiles/s) | priced at (tiles/s) | CPU per tile (µs) | tile (KB) | p99 at capacity (ms) |
 | :-- | --: | --: | --: | --: | --: |
-| versatiles 5.4.1 (network-bound) | 20,000 | 3,142 | – | 74.6 | 6.7 |
-| martin-1 1.16.1 (network-bound) | 18,000 | 2,850 | – | 82.3 | 5.3 |
-| mbtileserver 0.11.0 (network-bound) | 14,000 | 2,850 | – | 82.3 | 10.9 |
-| tileserver-gl 5.7.0 (network-bound) | 4,167 | 2,848 | – | 82.3 | 11.4 |
-| bbox 0.6.2 (network-bound) | 4,833 | 2,848 | – | 82.3 | 41.4 |
-| martin-2 2.0.0-beta.4 (pre-release) (network-bound) | 18,000 | 2,844 | – | 82.4 | 6.8 |
+| versatiles 5.4.1 (network-bound) | 20,000 | 3,142 | 29 | 74.6 | 6.7 |
+| martin-1 1.16.1 (network-bound) | 18,000 | 2,850 | 141 | 82.3 | 5.3 |
+| mbtileserver 0.11.0 (network-bound) | 14,000 | 2,850 | 196 | 82.3 | 10.9 |
+| tileserver-gl 5.7.0 (network-bound) | 4,167 | 2,848 | 292 | 82.3 | 11.4 |
+| bbox 0.6.2 (network-bound) | 4,833 | 2,848 | 510 | 82.3 | 41.4 |
+| martin-2 2.0.0-beta.4 (pre-release) (network-bound) | 18,000 | 2,844 | 41 | 82.4 | 6.8 |
 
 bbox 0.6.2 answers a tile its archive lacks with 500, counted as that empty tile: 1.5% of its answers at capacity, where the others' empty answers are 1.5–1.5%.
 
@@ -99,12 +99,12 @@ bbox 0.6.2 answers a tile its archive lacks with 500, counted as that empty tile
 
 | server | measured (tiles/s) | priced at (tiles/s) | CPU per tile (µs) | tile (KB) | p99 at capacity (ms) |
 | :-- | --: | --: | --: | --: | --: |
-| versatiles 5.4.1 (network-bound) | 96,000 | 15,387 | – | 15.2 | 33.9 |
-| martin-2 2.0.0-beta.4 (pre-release) (network-bound) | 88,000 | 14,371 | – | 16.3 | 24.9 |
-| martin-1 1.16.1 (network-bound) | 32,000 | 14,350 | – | 16.3 | 15.3 |
-| tileserver-gl 5.7.0 | 10,000 | 10,000 | – | 16.3 | 20.0 |
-| mbtileserver 0.11.0 (network-bound) | 32,000 | 14,377 | – | 16.3 | 10.3 |
-| bbox 0.6.2 | 13,333 | 13,333 | – | 16.4 | 6.1 |
+| versatiles 5.4.1 (network-bound) | 96,000 | 15,387 | 23 | 15.2 | 33.9 |
+| martin-2 2.0.0-beta.4 (pre-release) (network-bound) | 88,000 | 14,371 | 20 | 16.3 | 24.9 |
+| martin-1 1.16.1 (network-bound) | 32,000 | 14,350 | 113 | 16.3 | 15.3 |
+| tileserver-gl 5.7.0 | 10,000 | 10,000 | 127 | 16.3 | 20.0 |
+| mbtileserver 0.11.0 (network-bound) | 32,000 | 14,377 | 91 | 16.3 | 10.3 |
+| bbox 0.6.2 | 13,333 | 13,333 | 171 | 16.4 | 6.1 |
 
 bbox 0.6.2 answers a tile its archive lacks with 500, counted as that empty tile: 18.5% of its answers at capacity, where the others' empty answers are 18.5–18.5%.
 
@@ -121,12 +121,12 @@ bbox 0.6.2 answers a tile its archive lacks with 500, counted as that empty tile
 
 | server | measured (tiles/s) | priced at (tiles/s) | CPU per tile (µs) | tile (KB) | p99 at capacity (ms) |
 | :-- | --: | --: | --: | --: | --: |
-| versatiles 5.4.1 (network-bound) | 96,000 | 15,360 | – | 15.3 | 30.7 |
-| martin-1 1.16.1 (network-bound) | 36,000 | 14,371 | – | 16.3 | 17.1 |
-| mbtileserver 0.11.0 (network-bound) | 34,667 | 14,368 | – | 16.3 | 9.6 |
-| bbox 0.6.2 | 12,667 | 12,667 | – | 16.4 | 16.6 |
-| tileserver-gl 5.7.0 | 7,667 | 7,667 | – | 16.3 | 12.3 |
-| martin-2 2.0.0-beta.4 (pre-release) (network-bound) | 88,000 | 14,370 | – | 16.3 | 25.6 |
+| versatiles 5.4.1 (network-bound) | 96,000 | 15,360 | 22 | 15.3 | 30.7 |
+| martin-1 1.16.1 (network-bound) | 36,000 | 14,371 | 104 | 16.3 | 17.1 |
+| mbtileserver 0.11.0 (network-bound) | 34,667 | 14,368 | 83 | 16.3 | 9.6 |
+| bbox 0.6.2 | 12,667 | 12,667 | 170 | 16.4 | 16.6 |
+| tileserver-gl 5.7.0 | 7,667 | 7,667 | 155 | 16.3 | 12.3 |
+| martin-2 2.0.0-beta.4 (pre-release) (network-bound) | 88,000 | 14,370 | 24 | 16.3 | 25.6 |
 
 bbox 0.6.2 answers a tile its archive lacks with 500, counted as that empty tile: 18.5% of its answers at capacity, where the others' empty answers are 18.5–18.6%.
 
@@ -143,12 +143,12 @@ bbox 0.6.2 answers a tile its archive lacks with 500, counted as that empty tile
 
 | server | measured (tiles/s) | priced at (tiles/s) | CPU per tile (µs) | tile (KB) | p99 at capacity (ms) |
 | :-- | --: | --: | --: | --: | --: |
-| versatiles 5.4.1 (network-bound) | 20,000 | 3,144 | – | 74.5 | 7.4 |
-| go-pmtiles 1.31.2 (network-bound) | 8,333 | 2,848 | – | 82.3 | 26.2 |
-| martin-1 1.16.1 (network-bound) | 18,000 | 2,845 | – | 82.4 | 5.1 |
-| bbox 0.6.2 (network-bound) | 6,500 | 2,844 | – | 82.4 | 8.3 |
-| martin-2 2.0.0-beta.4 (pre-release) (network-bound) | 18,000 | 2,842 | – | 82.5 | 6.0 |
-| tileserver-gl 5.7.0 | 292 | 292 | – | 82.6 | 45.3 |
+| versatiles 5.4.1 (network-bound) | 20,000 | 3,144 | 34 | 74.5 | 7.4 |
+| go-pmtiles 1.31.2 (network-bound) | 8,333 | 2,848 | 361 | 82.3 | 26.2 |
+| martin-1 1.16.1 (network-bound) | 18,000 | 2,845 | 168 | 82.4 | 5.1 |
+| bbox 0.6.2 (network-bound) | 6,500 | 2,844 | 494 | 82.4 | 8.3 |
+| martin-2 2.0.0-beta.4 (pre-release) (network-bound) | 18,000 | 2,842 | 46 | 82.5 | 6.0 |
+| tileserver-gl 5.7.0 | 292 | 292 | 7,655 | 82.6 | 45.3 |
 
 bbox 0.6.2 answers a tile its archive lacks with 500, counted as that empty tile: 1.5% of its answers at capacity, where the others' empty answers are 1.3–1.5%.
 
@@ -165,12 +165,12 @@ bbox 0.6.2 answers a tile its archive lacks with 500, counted as that empty tile
 
 | server | measured (tiles/s) | priced at (tiles/s) | CPU per tile (µs) | tile (KB) | p99 at capacity (ms) |
 | :-- | --: | --: | --: | --: | --: |
-| versatiles 5.4.1 (network-bound) | 20,000 | 3,142 | – | 74.6 | 7.9 |
-| tileserver-gl 5.7.0 | 360 | 360 | – | 81.9 | 41.6 |
-| martin-1 1.16.1 (network-bound) | 18,000 | 2,849 | – | 82.3 | 5.8 |
-| bbox 0.6.2 (network-bound) | 8,000 | 2,847 | – | 82.3 | 42.4 |
-| martin-2 2.0.0-beta.4 (pre-release) (network-bound) | 18,000 | 2,845 | – | 82.4 | 5.9 |
-| go-pmtiles 1.31.2 (network-bound) | 8,333 | 2,842 | – | 82.5 | 17.9 |
+| versatiles 5.4.1 (network-bound) | 20,000 | 3,142 | 27 | 74.6 | 7.9 |
+| tileserver-gl 5.7.0 | 360 | 360 | 5,782 | 81.9 | 41.6 |
+| martin-1 1.16.1 (network-bound) | 18,000 | 2,849 | 138 | 82.3 | 5.8 |
+| bbox 0.6.2 (network-bound) | 8,000 | 2,847 | 418 | 82.3 | 42.4 |
+| martin-2 2.0.0-beta.4 (pre-release) (network-bound) | 18,000 | 2,845 | 41 | 82.4 | 5.9 |
+| go-pmtiles 1.31.2 (network-bound) | 8,333 | 2,842 | 336 | 82.5 | 17.9 |
 
 bbox 0.6.2 answers a tile its archive lacks with 500, counted as that empty tile: 1.5% of its answers at capacity, where the others' empty answers are 1.5–1.5%.
 
@@ -187,12 +187,12 @@ bbox 0.6.2 answers a tile its archive lacks with 500, counted as that empty tile
 
 | server | measured (tiles/s) | priced at (tiles/s) | CPU per tile (µs) | tile (KB) | p99 at capacity (ms) |
 | :-- | --: | --: | --: | --: | --: |
-| versatiles 5.4.1 (network-bound) | 90,667 | 15,379 | – | 15.2 | 31.1 |
-| go-pmtiles 1.31.2 (network-bound) | 24,000 | 14,387 | – | 16.3 | 26.3 |
-| martin-1 1.16.1 (network-bound) | 32,000 | 14,357 | – | 16.3 | 19.8 |
-| bbox 0.6.2 (network-bound) | 26,667 | 14,382 | – | 16.3 | 19.5 |
-| martin-2 2.0.0-beta.4 (pre-release) (network-bound) | 88,000 | 14,363 | – | 16.3 | 23.1 |
-| tileserver-gl 5.7.0 | 2,125 | 2,125 | – | 16.5 | 41.0 |
+| versatiles 5.4.1 (network-bound) | 90,667 | 15,379 | 24 | 15.2 | 31.1 |
+| go-pmtiles 1.31.2 (network-bound) | 24,000 | 14,387 | 123 | 16.3 | 26.3 |
+| martin-1 1.16.1 (network-bound) | 32,000 | 14,357 | 116 | 16.3 | 19.8 |
+| bbox 0.6.2 (network-bound) | 26,667 | 14,382 | 115 | 16.3 | 19.5 |
+| martin-2 2.0.0-beta.4 (pre-release) (network-bound) | 88,000 | 14,363 | 21 | 16.3 | 23.1 |
+| tileserver-gl 5.7.0 | 2,125 | 2,125 | 1,250 | 16.5 | 41.0 |
 
 bbox 0.6.2 answers a tile its archive lacks with 500, counted as that empty tile: 18.5% of its answers at capacity, where the others' empty answers are 18.5–18.5%.
 
@@ -209,12 +209,12 @@ bbox 0.6.2 answers a tile its archive lacks with 500, counted as that empty tile
 
 | server | measured (tiles/s) | priced at (tiles/s) | CPU per tile (µs) | tile (KB) | p99 at capacity (ms) |
 | :-- | --: | --: | --: | --: | --: |
-| versatiles 5.4.1 (network-bound) | 96,000 | 15,366 | – | 15.3 | 30.2 |
-| tileserver-gl 5.7.0 | 2,000 | 2,000 | – | 16.4 | 36.4 |
-| martin-1 1.16.1 (network-bound) | 34,667 | 14,368 | – | 16.3 | 11.5 |
-| bbox 0.6.2 (network-bound) | 30,000 | 14,338 | – | 16.3 | 26.1 |
-| martin-2 2.0.0-beta.4 (pre-release) (network-bound) | 88,000 | 14,370 | – | 16.3 | 24.2 |
-| go-pmtiles 1.31.2 (network-bound) | 22,000 | 14,395 | – | 16.3 | 26.7 |
+| versatiles 5.4.1 (network-bound) | 96,000 | 15,366 | 21 | 15.3 | 30.2 |
+| tileserver-gl 5.7.0 | 2,000 | 2,000 | 1,214 | 16.4 | 36.4 |
+| martin-1 1.16.1 (network-bound) | 34,667 | 14,368 | 105 | 16.3 | 11.5 |
+| bbox 0.6.2 (network-bound) | 30,000 | 14,338 | 103 | 16.3 | 26.1 |
+| martin-2 2.0.0-beta.4 (pre-release) (network-bound) | 88,000 | 14,370 | 23 | 16.3 | 24.2 |
+| go-pmtiles 1.31.2 (network-bound) | 22,000 | 14,395 | 125 | 16.3 | 26.7 |
 
 bbox 0.6.2 answers a tile its archive lacks with 500, counted as that empty tile: 18.5% of its answers at capacity, where the others' empty answers are 18.5–18.7%.
 
@@ -226,7 +226,7 @@ bbox 0.6.2 answers a tile its archive lacks with 500, counted as that empty tile
 
 | server | measured (tiles/s) | priced at (tiles/s) | CPU per tile (µs) | tile (KB) | p99 at capacity (ms) |
 | :-- | --: | --: | --: | --: | --: |
-| nginx 1.30.4 | 959 | 959 | – | 67.6 | 15.9 |
+| nginx 1.30.4 | 959 | 959 | 69 | 67.6 | 15.9 |
 
 ## planet, files, server alone, arm64
 
@@ -236,7 +236,7 @@ bbox 0.6.2 answers a tile its archive lacks with 500, counted as that empty tile
 
 | server | measured (tiles/s) | priced at (tiles/s) | CPU per tile (µs) | tile (KB) | p99 at capacity (ms) |
 | :-- | --: | --: | --: | --: | --: |
-| nginx 1.30.4 | 1,104 | 1,104 | – | 67.3 | 34.3 |
+| nginx 1.30.4 | 1,104 | 1,104 | 70 | 67.3 | 34.3 |
 
 ## planet, files, behind a CDN, amd64
 
@@ -246,7 +246,7 @@ bbox 0.6.2 answers a tile its archive lacks with 500, counted as that empty tile
 
 | server | measured (tiles/s) | priced at (tiles/s) | CPU per tile (µs) | tile (KB) | p99 at capacity (ms) |
 | :-- | --: | --: | --: | --: | --: |
-| nginx 1.30.4 | 1,021 | 1,021 | – | 0.5 | 32.5 |
+| nginx 1.30.4 | 1,021 | 1,021 | 50 | 0.5 | 32.5 |
 
 ## planet, files, behind a CDN, arm64
 
@@ -256,7 +256,7 @@ bbox 0.6.2 answers a tile its archive lacks with 500, counted as that empty tile
 
 | server | measured (tiles/s) | priced at (tiles/s) | CPU per tile (µs) | tile (KB) | p99 at capacity (ms) |
 | :-- | --: | --: | --: | --: | --: |
-| nginx 1.30.4 | 1,188 | 1,188 | – | 0.5 | 10.8 |
+| nginx 1.30.4 | 1,188 | 1,188 | 53 | 0.5 | 10.8 |
 
 ## planet, mbtiles, server alone, amd64
 
@@ -270,10 +270,10 @@ bbox 0.6.2 answers a tile its archive lacks with 500, counted as that empty tile
 
 | server | measured (tiles/s) | priced at (tiles/s) | CPU per tile (µs) | tile (KB) | p99 at capacity (ms) |
 | :-- | --: | --: | --: | --: | --: |
-| martin-1 1.16.1 | 1,833 | 1,833 | – | 67.5 | 5.1 |
-| martin-2 2.0.0-beta.4 (pre-release) | 1,875 | 1,875 | – | 67.6 | 4.1 |
-| mbtileserver 0.11.0 | 1,875 | 1,875 | – | 68.2 | 4.3 |
-| tileserver-gl 5.7.0 | 177 | 177 | – | 68.1 | 48.0 |
+| martin-1 1.16.1 | 1,833 | 1,833 | 567 | 67.5 | 5.1 |
+| martin-2 2.0.0-beta.4 (pre-release) | 1,875 | 1,875 | 160 | 67.6 | 4.1 |
+| mbtileserver 0.11.0 | 1,875 | 1,875 | 272 | 68.2 | 4.3 |
+| tileserver-gl 5.7.0 | 177 | 177 | 465 | 68.1 | 48.0 |
 | versatiles 5.4.1 | 0 | 0 | – | – | – |
 
 ## planet, mbtiles, server alone, arm64
@@ -288,10 +288,10 @@ bbox 0.6.2 answers a tile its archive lacks with 500, counted as that empty tile
 
 | server | measured (tiles/s) | priced at (tiles/s) | CPU per tile (µs) | tile (KB) | p99 at capacity (ms) |
 | :-- | --: | --: | --: | --: | --: |
-| martin-2 2.0.0-beta.4 (pre-release) | 1,875 | 1,875 | – | 67.4 | 3.9 |
-| mbtileserver 0.11.0 | 1,875 | 1,875 | – | 67.8 | 4.0 |
-| martin-1 1.16.1 | 1,875 | 1,875 | – | 68.1 | 4.9 |
-| tileserver-gl 5.7.0 | 750 | 750 | – | 68.0 | 27.0 |
+| martin-2 2.0.0-beta.4 (pre-release) | 1,875 | 1,875 | 144 | 67.4 | 3.9 |
+| mbtileserver 0.11.0 | 1,875 | 1,875 | 219 | 67.8 | 4.0 |
+| martin-1 1.16.1 | 1,875 | 1,875 | 639 | 68.1 | 4.9 |
+| tileserver-gl 5.7.0 | 750 | 750 | 351 | 68.0 | 27.0 |
 | versatiles 5.4.1 | 0 | 0 | – | – | – |
 
 ## planet, mbtiles, behind a CDN, amd64
@@ -306,11 +306,11 @@ bbox 0.6.2 answers a tile its archive lacks with 500, counted as that empty tile
 
 | server | measured (tiles/s) | priced at (tiles/s) | CPU per tile (µs) | tile (KB) | p99 at capacity (ms) |
 | :-- | --: | --: | --: | --: | --: |
-| versatiles 5.4.1 | 2,250 | 2,250 | – | 0.5 | 31.1 |
-| martin-1 1.16.1 | 5,500 | 5,500 | – | 0.5 | 14.3 |
-| martin-2 2.0.0-beta.4 (pre-release) | 7,500 | 7,500 | – | 0.5 | 1.7 |
-| tileserver-gl 5.7.0 | 584 | 584 | – | 0.5 | 26.7 |
-| mbtileserver 0.11.0 | 7,500 | 7,500 | – | 0.5 | 1.6 |
+| versatiles 5.4.1 | 2,250 | 2,250 | 1,494 | 0.5 | 31.1 |
+| martin-1 1.16.1 | 5,500 | 5,500 | 572 | 0.5 | 14.3 |
+| martin-2 2.0.0-beta.4 (pre-release) | 7,500 | 7,500 | 77 | 0.5 | 1.7 |
+| tileserver-gl 5.7.0 | 584 | 584 | 247 | 0.5 | 26.7 |
+| mbtileserver 0.11.0 | 7,500 | 7,500 | 69 | 0.5 | 1.6 |
 
 ## planet, mbtiles, behind a CDN, arm64
 
@@ -324,11 +324,11 @@ bbox 0.6.2 answers a tile its archive lacks with 500, counted as that empty tile
 
 | server | measured (tiles/s) | priced at (tiles/s) | CPU per tile (µs) | tile (KB) | p99 at capacity (ms) |
 | :-- | --: | --: | --: | --: | --: |
-| versatiles 5.4.1 | 3,083 | 3,083 | – | 0.5 | 23.9 |
-| martin-2 2.0.0-beta.4 (pre-release) | 7,500 | 7,500 | – | 0.5 | 1.7 |
-| mbtileserver 0.11.0 | 7,500 | 7,500 | – | 0.5 | 1.5 |
-| tileserver-gl 5.7.0 | 1,458 | 1,458 | – | 0.5 | 16.8 |
-| martin-1 1.16.1 | 5,667 | 5,667 | – | 0.5 | 8.1 |
+| versatiles 5.4.1 | 3,083 | 3,083 | 1,050 | 0.5 | 23.9 |
+| martin-2 2.0.0-beta.4 (pre-release) | 7,500 | 7,500 | 78 | 0.5 | 1.7 |
+| mbtileserver 0.11.0 | 7,500 | 7,500 | 64 | 0.5 | 1.5 |
+| tileserver-gl 5.7.0 | 1,458 | 1,458 | 177 | 0.5 | 16.8 |
+| martin-1 1.16.1 | 5,667 | 5,667 | 511 | 0.5 | 8.1 |
 
 ## planet, pmtiles, server alone, amd64
 
@@ -343,11 +343,11 @@ bbox 0.6.2 answers a tile its archive lacks with 500, counted as that empty tile
 
 | server | measured (tiles/s) | priced at (tiles/s) | CPU per tile (µs) | tile (KB) | p99 at capacity (ms) |
 | :-- | --: | --: | --: | --: | --: |
-| go-pmtiles 1.31.2 (network-bound) | 3,750 | 3,465 | – | 67.6 | 27.5 |
-| martin-2 2.0.0-beta.4 (pre-release) | 1,625 | 1,625 | – | 67.8 | 14.9 |
-| martin-1 1.16.1 (network-bound) | 4,333 | 3,436 | – | 68.2 | 14.5 |
-| bbox 0.6.2 | 1,625 | 1,625 | – | 68.1 | 14.3 |
-| tileserver-gl 5.7.0 | 42 | 42 | – | 65.5 | 44.0 |
+| go-pmtiles 1.31.2 (network-bound) | 3,750 | 3,465 | 750 | 67.6 | 27.5 |
+| martin-2 2.0.0-beta.4 (pre-release) | 1,625 | 1,625 | 188 | 67.8 | 14.9 |
+| martin-1 1.16.1 (network-bound) | 4,333 | 3,436 | 802 | 68.2 | 14.5 |
+| bbox 0.6.2 | 1,625 | 1,625 | 909 | 68.1 | 14.3 |
+| tileserver-gl 5.7.0 | 42 | 42 | 8,145 | 65.5 | 44.0 |
 | versatiles 5.4.1 | 0 | 0 | – | – | – |
 
 bbox 0.6.2 answers a tile its archive lacks with 500, counted as that empty tile: 2.0% of its answers at capacity, where the others' empty answers are 2.0–2.3%.
@@ -365,10 +365,10 @@ bbox 0.6.2 answers a tile its archive lacks with 500, counted as that empty tile
 
 | server | measured (tiles/s) | priced at (tiles/s) | CPU per tile (µs) | tile (KB) | p99 at capacity (ms) |
 | :-- | --: | --: | --: | --: | --: |
-| martin-2 2.0.0-beta.4 (pre-release) | 1,625 | 1,625 | – | 67.3 | 3.2 |
-| go-pmtiles 1.31.2 (network-bound) | 3,917 | 3,464 | – | 67.7 | 24.5 |
-| martin-1 1.16.1 (network-bound) | 4,500 | 3,461 | – | 67.7 | 24.3 |
-| bbox 0.6.2 | 1,625 | 1,625 | – | 68.5 | 8.0 |
+| martin-2 2.0.0-beta.4 (pre-release) | 1,625 | 1,625 | 184 | 67.3 | 3.2 |
+| go-pmtiles 1.31.2 (network-bound) | 3,917 | 3,464 | 669 | 67.7 | 24.5 |
+| martin-1 1.16.1 (network-bound) | 4,500 | 3,461 | 766 | 67.7 | 24.3 |
+| bbox 0.6.2 | 1,625 | 1,625 | 907 | 68.5 | 8.0 |
 | tileserver-gl 5.7.0 | 0 | 0 | – | – | – |
 | versatiles 5.4.1 | 0 | 0 | – | – | – |
 
@@ -387,12 +387,12 @@ bbox 0.6.2 answers a tile its archive lacks with 500, counted as that empty tile
 
 | server | measured (tiles/s) | priced at (tiles/s) | CPU per tile (µs) | tile (KB) | p99 at capacity (ms) |
 | :-- | --: | --: | --: | --: | --: |
-| versatiles 5.4.1 | 1,375 | 1,375 | – | 0.5 | 25.8 |
-| tileserver-gl 5.7.0 | 417 | 417 | – | 0.5 | 48.4 |
-| go-pmtiles 1.31.2 | 3,250 | 3,250 | – | 0.5 | 7.8 |
-| martin-2 2.0.0-beta.4 (pre-release) | 6,000 | 6,000 | – | 0.5 | 4.3 |
-| bbox 0.6.2 | 3,833 | 3,833 | – | 0.5 | 19.0 |
-| martin-1 1.16.1 | 4,000 | 4,000 | – | 0.5 | 8.6 |
+| versatiles 5.4.1 | 1,375 | 1,375 | 2,164 | 0.5 | 25.8 |
+| tileserver-gl 5.7.0 | 417 | 417 | 2,086 | 0.5 | 48.4 |
+| go-pmtiles 1.31.2 | 3,250 | 3,250 | 908 | 0.5 | 7.8 |
+| martin-2 2.0.0-beta.4 (pre-release) | 6,000 | 6,000 | 174 | 0.5 | 4.3 |
+| bbox 0.6.2 | 3,833 | 3,833 | 655 | 0.5 | 19.0 |
+| martin-1 1.16.1 | 4,000 | 4,000 | 762 | 0.5 | 8.6 |
 
 bbox 0.6.2 answers a tile its archive lacks with 500, counted as that empty tile: 12.6% of its answers at capacity, where the others' empty answers are 12.5–12.8%.
 
@@ -409,12 +409,12 @@ bbox 0.6.2 answers a tile its archive lacks with 500, counted as that empty tile
 
 | server | measured (tiles/s) | priced at (tiles/s) | CPU per tile (µs) | tile (KB) | p99 at capacity (ms) |
 | :-- | --: | --: | --: | --: | --: |
-| versatiles 5.4.1 | 2,000 | 2,000 | – | 0.5 | 26.0 |
-| martin-2 2.0.0-beta.4 (pre-release) | 6,500 | 6,500 | – | 0.5 | 3.6 |
-| go-pmtiles 1.31.2 | 3,750 | 3,750 | – | 0.5 | 16.0 |
-| martin-1 1.16.1 | 4,083 | 4,083 | – | 0.5 | 7.5 |
-| bbox 0.6.2 | 4,500 | 4,500 | – | 0.5 | 16.1 |
-| tileserver-gl 5.7.0 | 459 | 459 | – | 0.5 | 48.6 |
+| versatiles 5.4.1 | 2,000 | 2,000 | 1,559 | 0.5 | 26.0 |
+| martin-2 2.0.0-beta.4 (pre-release) | 6,500 | 6,500 | 157 | 0.5 | 3.6 |
+| go-pmtiles 1.31.2 | 3,750 | 3,750 | 794 | 0.5 | 16.0 |
+| martin-1 1.16.1 | 4,083 | 4,083 | 692 | 0.5 | 7.5 |
+| bbox 0.6.2 | 4,500 | 4,500 | 574 | 0.5 | 16.1 |
+| tileserver-gl 5.7.0 | 459 | 459 | 1,865 | 0.5 | 48.6 |
 
 bbox 0.6.2 answers a tile its archive lacks with 500, counted as that empty tile: 12.7% of its answers at capacity, where the others' empty answers are 12.4–12.6%.
 

@@ -48,9 +48,15 @@
       "egress": 7.44372,
       "total": 7.464240191338894
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 139579392,
+    "cpuPerTileUs": 531.8556361863402,
     "emptyShare": 0.014532179826974046,
     "emptyStatus": 500,
     "catalogFirstMs": 7986,
@@ -83,9 +89,15 @@
       "originStorage": 0.0000332623637781126,
       "total": 8.030497690083786
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 65875968,
+    "cpuPerTileUs": 173.32133893149833,
     "emptyShare": 0.18514073834744948,
     "emptyStatus": 500,
     "catalogFirstMs": null,
@@ -140,9 +152,15 @@
       "egress": 7.42023,
       "total": 7.437959188710218
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 138919936,
+    "cpuPerTileUs": 512.6139714644993,
     "emptyShare": 0.014551600676074368,
     "emptyStatus": 500,
     "catalogFirstMs": 8351,
@@ -175,9 +193,15 @@
       "originStorage": 0.0000332623637781126,
       "total": 8.008270349173593
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 70311936,
+    "cpuPerTileUs": 166.01045904374672,
     "emptyShare": 0.18409665247343096,
     "emptyStatus": 500,
     "catalogFirstMs": null,
@@ -232,9 +256,15 @@
       "egress": 7.412039999999999,
       "total": 7.432472858706605
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 96657408,
+    "cpuPerTileUs": 493.3846142078877,
     "emptyShare": 0.014732355792162232,
     "emptyStatus": 500,
     "catalogFirstMs": null,
@@ -267,9 +297,15 @@
       "originStorage": 0.00003009117436532572,
       "total": 8.000547401934783
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 42209280,
+    "cpuPerTileUs": 118.13169517441371,
     "emptyShare": 0.18490887242138995,
     "emptyStatus": 500,
     "catalogFirstMs": null,
@@ -324,9 +360,15 @@
       "egress": 7.4122200000000005,
       "total": 7.429930050381411
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 94744576,
+    "cpuPerTileUs": 412.9921240897084,
     "emptyShare": 0.014533248321644225,
     "emptyStatus": 500,
     "catalogFirstMs": null,
@@ -359,9 +401,15 @@
       "originStorage": 0.000030176042177760115,
       "total": 8.000679800294753
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 41914368,
+    "cpuPerTileUs": 102.62765336348373,
     "emptyShare": 0.1848219583580567,
     "emptyStatus": 500,
     "catalogFirstMs": null,
@@ -416,9 +464,15 @@
       "egress": 6.125039999999999,
       "total": 6.160824240721227
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 96714752,
+    "cpuPerTileUs": 905.7346468466347,
     "emptyShare": 0.02009354421810573,
     "emptyStatus": 500,
     "catalogFirstMs": null,
@@ -451,9 +505,15 @@
       "originStorage": 0.0001153095277641237,
       "total": 6.785861325623783
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 19238912,
+    "cpuPerTileUs": 658.338676515503,
     "emptyShare": 0.12605680757434323,
     "emptyStatus": 500,
     "catalogFirstMs": null,
@@ -508,9 +568,15 @@
       "egress": 6.180479999999999,
       "total": 6.211495009951996
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 97943552,
+    "cpuPerTileUs": 919.7047311709957,
     "emptyShare": 0.01926331661384128,
     "emptyStatus": 500,
     "catalogFirstMs": null,
@@ -543,9 +609,15 @@
       "originStorage": 0.00009609127313676974,
       "total": 6.837915453168154
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 19525632,
+    "cpuPerTileUs": 564.2387839771444,
     "emptyShare": 0.12772672215493006,
     "emptyStatus": 500,
     "catalogFirstMs": null,
@@ -600,9 +672,15 @@
       "egress": 7.40781,
       "total": 7.428231197815363
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 137,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 45887488,
+    "cpuPerTileUs": 334.3309777247465,
     "emptyShare": 0.01455765208490944,
     "emptyStatus": null,
     "catalogFirstMs": 942,
@@ -635,9 +713,15 @@
       "originStorage": 0.000030164972463094762,
       "total": 7.996553106783182
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 35729408,
+    "cpuPerTileUs": 119.87428838079897,
     "emptyShare": 0.18537016316724902,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -692,9 +776,15 @@
       "egress": 7.41699,
       "total": 7.434711447363735
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 4,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 44621824,
+    "cpuPerTileUs": 348.9692699188524,
     "emptyShare": 0.015058320519071373,
     "emptyStatus": null,
     "catalogFirstMs": 779,
@@ -727,9 +817,15 @@
       "originStorage": 0.000030105933984879526,
       "total": 8.005184219932119
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 39272448,
+    "cpuPerTileUs": 127.32603829935832,
     "emptyShare": 0.18526971425973496,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -784,9 +880,15 @@
       "egress": 6.10344,
       "total": 6.120265425543338
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 191905792,
+    "cpuPerTileUs": 763.2745204192737,
     "emptyShare": 0.019789833039953058,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -819,9 +921,15 @@
       "originStorage": 0.0001330494551124504,
       "total": 6.765630760335135
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 174661632,
+    "cpuPerTileUs": 911.3912136514543,
     "emptyShare": 0.12697509115805344,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -876,9 +984,15 @@
       "egress": 6.10029,
       "total": 6.11486545016759
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 185851904,
+    "cpuPerTileUs": 660.1329722657563,
     "emptyShare": 0.020219482862297054,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -911,9 +1025,15 @@
       "originStorage": 0.0001153095277641237,
       "total": 6.762339543801785
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 173178880,
+    "cpuPerTileUs": 803.305617437424,
     "emptyShare": 0.12677878395860284,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -968,9 +1088,15 @@
       "egress": 7.39521,
       "total": 7.415596463245702
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 39332807,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 166088704,
+    "cpuPerTileUs": 160.0569015701449,
     "emptyShare": 0.014645136020312071,
     "emptyStatus": null,
     "catalogFirstMs": 2161,
@@ -1003,9 +1129,15 @@
       "originStorage": 0.000030142833033764047,
       "total": 7.984652895328662
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 85180416,
+    "cpuPerTileUs": 109.3349037554,
     "emptyShare": 0.18437098593926288,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -1060,9 +1192,15 @@
       "egress": 7.39584,
       "total": 7.413510913574186
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 40866028,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 168886272,
+    "cpuPerTileUs": 141.57927511521055,
     "emptyShare": 0.01519465548132613,
     "emptyStatus": null,
     "catalogFirstMs": 2414,
@@ -1095,9 +1233,15 @@
       "originStorage": 0.00003012438350932179,
       "total": 7.98520937265913
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 85110784,
+    "cpuPerTileUs": 104.03684909040867,
     "emptyShare": 0.1849153250952445,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -1152,9 +1296,15 @@
       "egress": 6.04368,
       "total": 6.074693008625063
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 452055040,
+    "cpuPerTileUs": 566.8375970349243,
     "emptyShare": 0.019308211323572553,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -1187,9 +1337,15 @@
       "originStorage": 0.00007862013256644797,
       "total": 6.708670903834398
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 645652480,
+    "cpuPerTileUs": 552.1752142283319,
     "emptyShare": 0.12552388744942952,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -1244,9 +1400,15 @@
       "egress": 6.13638,
       "total": 6.16325967529173
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 462778368,
+    "cpuPerTileUs": 725.9906373622454,
     "emptyShare": 0.01957542137828035,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -1279,9 +1441,15 @@
       "originStorage": 0.00007862013256644797,
       "total": 6.7961208253194
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 637276160,
+    "cpuPerTileUs": 526.4982633745843,
     "emptyShare": 0.12708643950689116,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -1336,9 +1504,15 @@
       "egress": 7.42662,
       "total": 7.447093051565783
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 38770929,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 173084672,
+    "cpuPerTileUs": 170.254926955327,
     "emptyShare": 0.014691748287490486,
     "emptyStatus": null,
     "catalogFirstMs": 1117,
@@ -1371,9 +1545,15 @@
       "originStorage": 0.000030129918366654464,
       "total": 8.014317771980194
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 81518592,
+    "cpuPerTileUs": 115.22928981895394,
     "emptyShare": 0.18474846453185803,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -1428,9 +1608,15 @@
       "egress": 7.42023,
       "total": 7.437959188710218
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 41138373,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 171171840,
+    "cpuPerTileUs": 139.80745916602677,
     "emptyShare": 0.015147222222222222,
     "emptyStatus": null,
     "catalogFirstMs": 1954,
@@ -1463,9 +1649,15 @@
       "originStorage": 0.000030164972463094762,
       "total": 8.008244708658548
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 80457728,
+    "cpuPerTileUs": 104.16186724667185,
     "emptyShare": 0.1844028962438556,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -1520,9 +1712,15 @@
       "egress": 6.108389999999999,
       "total": 6.125229071267133
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 572329984,
+    "cpuPerTileUs": 844.5482247967977,
     "emptyShare": 0.020439799477441213,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -1555,9 +1753,15 @@
       "originStorage": 0.00010810268227886598,
       "total": 6.770067492772296
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 778702848,
+    "cpuPerTileUs": 756.4909383640967,
     "emptyShare": 0.12530939820486536,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -1612,9 +1816,15 @@
       "egress": 6.09858,
       "total": 6.113151364456946
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 571179008,
+    "cpuPerTileUs": 780.8483456443365,
     "emptyShare": 0.019750369555311037,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -1647,9 +1857,15 @@
       "originStorage": 0.00010810268227886598,
       "total": 6.760664884814173
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 780881920,
+    "cpuPerTileUs": 735.2055197971232,
     "emptyShare": 0.12623446758506887,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -1704,9 +1920,15 @@
       "egress": 7.40898,
       "total": 7.429404423168259
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 42791817,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 158351360,
+    "cpuPerTileUs": 42.05481929210214,
     "emptyShare": 0.015083878028928823,
     "emptyStatus": null,
     "catalogFirstMs": 1880,
@@ -1739,9 +1961,15 @@
       "originStorage": 0.000030067189983550778,
       "total": 7.997657172859053
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 42219019,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 129818624,
+    "cpuPerTileUs": 19.702832657017083,
     "emptyShare": 0.18536429319823905,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -1796,9 +2024,15 @@
       "egress": 7.4209499999999995,
       "total": 7.438680909009436
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 42986696,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 158330880,
+    "cpuPerTileUs": 40.19892667611656,
     "emptyShare": 0.015061906045041266,
     "emptyStatus": null,
     "catalogFirstMs": 1919,
@@ -1831,9 +2065,15 @@
       "originStorage": 0.000030137298176431367,
       "total": 8.008924479568035
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 43486168,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 130002944,
+    "cpuPerTileUs": 24.334444419244868,
     "emptyShare": 0.18513914015836797,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -1888,9 +2128,15 @@
       "egress": 6.044040000000001,
       "total": 6.075053008625064
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 437886976,
+    "cpuPerTileUs": 152.3170132559348,
     "emptyShare": 0.020800554681458173,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -1923,9 +2169,15 @@
       "originStorage": 0.00005765476388206185,
       "total": 6.708810662811892
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 800923648,
+    "cpuPerTileUs": 71.72661141014144,
     "emptyShare": 0.1260033600896024,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -1980,9 +2232,15 @@
       "egress": 6.036029999999999,
       "total": 6.0629096752917295
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 434692096,
+    "cpuPerTileUs": 147.56853755808186,
     "emptyShare": 0.01893535310433113,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -2015,9 +2273,15 @@
       "originStorage": 0.00005765476388206185,
       "total": 6.701172271900892
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 819388416,
+    "cpuPerTileUs": 80.35535228770588,
     "emptyShare": 0.12454832731103081,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -2072,9 +2336,15 @@
       "egress": 7.409879999999999,
       "total": 7.430306904208949
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 42640453,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 152731648,
+    "cpuPerTileUs": 48.8805687352177,
     "emptyShare": 0.014850412511458652,
     "emptyStatus": null,
     "catalogFirstMs": 1354,
@@ -2107,9 +2377,15 @@
       "originStorage": 0.000030093019317769946,
       "total": 7.998507419555992
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 42063809,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 124067840,
+    "cpuPerTileUs": 21.677506283785423,
     "emptyShare": 0.18528165240776318,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -2164,9 +2440,15 @@
       "egress": 7.4187899999999996,
       "total": 7.4365157481117805
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 42976737,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 152211456,
+    "cpuPerTileUs": 40.24644706445526,
     "emptyShare": 0.015169612995699952,
     "emptyStatus": null,
     "catalogFirstMs": 1880,
@@ -2199,9 +2481,15 @@
       "originStorage": 0.000030137298176431367,
       "total": 8.006884479568035
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 43361987,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 125440000,
+    "cpuPerTileUs": 23.104491108470217,
     "emptyShare": 0.1851183261994985,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -2256,9 +2544,15 @@
       "egress": 6.103529999999999,
       "total": 6.139314240721227
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 508018688,
+    "cpuPerTileUs": 185.34948623683388,
     "emptyShare": 0.02027817096436704,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -2291,9 +2585,15 @@
       "originStorage": 0.0000720684548525773,
       "total": 6.765133328514865
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 750129152,
+    "cpuPerTileUs": 167.99078131851485,
     "emptyShare": 0.126210436840614,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -2348,9 +2648,15 @@
       "egress": 6.10965,
       "total": 6.140665009951997
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 530911232,
+    "cpuPerTileUs": 188.65449785328224,
     "emptyShare": 0.019201181611176073,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -2383,9 +2689,15 @@
       "originStorage": 0.0000665247275562252,
       "total": 6.770775698347184
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 751833088,
+    "cpuPerTileUs": 154.99280257448376,
     "emptyShare": 0.12631157881780977,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -2440,9 +2752,15 @@
       "egress": 7.404389999999999,
       "total": 7.42480176986074
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 48857088,
+    "cpuPerTileUs": 257.5062527109423,
     "emptyShare": 0.01514159734533388,
     "emptyStatus": null,
     "catalogFirstMs": 3351,
@@ -2475,9 +2793,15 @@
       "originStorage": 0.000030069034935995008,
       "total": 7.993322190480263
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 45944832,
+    "cpuPerTileUs": 91.1058859035094,
     "emptyShare": 0.1848307610090116,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -2532,9 +2856,15 @@
       "egress": 7.404389999999999,
       "total": 7.422081342127407
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 93,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 48750592,
+    "cpuPerTileUs": 198.337690182888,
     "emptyShare": 0.014950800935764416,
     "emptyStatus": null,
     "catalogFirstMs": 8737,
@@ -2567,9 +2897,15 @@
       "originStorage": 0.000030089329412881493,
       "total": 7.993284082477814
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 46071808,
+    "cpuPerTileUs": 82.51683782936891,
     "emptyShare": 0.18432213691040963,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -2624,9 +2960,15 @@
       "egress": 6.12486,
       "total": 6.155873008625063
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 52977664,
+    "cpuPerTileUs": 277.3534138847576,
     "emptyShare": 0.02061443276974772,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -2659,9 +3001,15 @@
       "originStorage": 0.00005765476388206185,
       "total": 6.785140662811892
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 32403456,
+    "cpuPerTileUs": 72.5913062923947,
     "emptyShare": 0.12539335431222998,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -2716,9 +3064,15 @@
       "egress": 6.071759999999999,
       "total": 6.09863967529173
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 51150848,
+    "cpuPerTileUs": 228.21920846593923,
     "emptyShare": 0.019627190058401557,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -2751,9 +3105,15 @@
       "originStorage": 0.00005765476388206185,
       "total": 6.734917271900892
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 32440320,
+    "cpuPerTileUs": 67.14461347835118,
     "emptyShare": 0.12638842589505966,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -2808,9 +3168,15 @@
       "egress": 7.398089999999999,
       "total": 7.41848440257591
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 43120595,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 75882496,
+    "cpuPerTileUs": 22.83144497592368,
     "emptyShare": 0,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -2843,9 +3209,15 @@
       "originStorage": 0.000030087484460437263,
       "total": 7.9873723666923615
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 43722682,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 74280960,
+    "cpuPerTileUs": 13.905069380403363,
     "emptyShare": 0,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -2900,9 +3272,15 @@
       "egress": 7.41033,
       "total": 7.428035534595962
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 43069027,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 75763712,
+    "cpuPerTileUs": 22.747018037296737,
     "emptyShare": 0,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -2935,9 +3313,15 @@
       "originStorage": 0.00003011700369954488,
       "total": 7.998894311568326
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 44858581,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 74170368,
+    "cpuPerTileUs": 13.290182748237214,
     "emptyShare": 0,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -2992,9 +3376,15 @@
       "egress": 6.110549999999999,
       "total": 6.182074466386215
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 105410560,
+    "cpuPerTileUs": 78.2167041048517,
     "emptyShare": 0,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -3027,9 +3417,15 @@
       "originStorage": 0.0005318705155171756,
       "total": 6.776154915238848
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 112353280,
+    "cpuPerTileUs": 61.44832787611332,
     "emptyShare": 0,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -3084,9 +3480,15 @@
       "egress": 6.0054300000000005,
       "total": 6.045749512937595
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 59,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 119181312,
+    "cpuPerTileUs": 71.11219570260545,
     "emptyShare": 0,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -3119,9 +3521,15 @@
       "originStorage": 0.0003144805302657919,
       "total": 6.674398301277593
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 133492736,
+    "cpuPerTileUs": 51.44723522614135,
     "emptyShare": 0,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -3176,9 +3584,15 @@
       "egress": 7.382339999999999,
       "total": 7.402690984363835
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 212897792,
+    "cpuPerTileUs": 265.95956980101596,
     "emptyShare": 0.01567172388962786,
     "emptyStatus": null,
     "catalogFirstMs": 2293,
@@ -3211,9 +3625,15 @@
       "originStorage": 0.000043241072911546383,
       "total": 7.972622997108919
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 207831040,
+    "cpuPerTileUs": 126.36843129382605,
     "emptyShare": 0.18685368536853686,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -3268,9 +3688,15 @@
       "egress": 7.38864,
       "total": 7.406293710581998
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 212680704,
+    "cpuPerTileUs": 303.2366895506628,
     "emptyShare": 0.015362884072101802,
     "emptyStatus": null,
     "catalogFirstMs": 2075,
@@ -3303,9 +3729,15 @@
       "originStorage": 0.00005765476388206185,
       "total": 7.978637271900893
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 217862144,
+    "cpuPerTileUs": 155.49854535788506,
     "emptyShare": 0.1863919725305864,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -3360,9 +3792,15 @@
       "egress": 6.25707,
       "total": 6.522592334118693
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 199593984,
+    "cpuPerTileUs": 484.6027646755789,
     "emptyShare": 0.021004566210045664,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -3395,9 +3833,15 @@
       "originStorage": 0.0009219844970478975,
       "total": 6.918260908505724
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 105529344,
+    "cpuPerTileUs": 272.30270924536785,
     "emptyShare": 0.1268417680973735,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -3452,9 +3896,15 @@
       "egress": 6.1426799999999995,
       "total": 6.200279304196564
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 225525760,
+    "cpuPerTileUs": 369.4270306919107,
     "emptyShare": 0.01898553210956711,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -3487,9 +3937,15 @@
       "originStorage": 0.0002660989102249008,
       "total": 6.803622793388733
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 118890496,
+    "cpuPerTileUs": 177.13950177697086,
     "emptyShare": 0.12548078402412383,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -3544,9 +4000,15 @@
       "egress": 7.51221,
       "total": 7.718413514794304
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 310517760,
+    "cpuPerTileUs": 7842.186240849899,
     "emptyShare": 0.011879432624113475,
     "emptyStatus": null,
     "catalogFirstMs": 2584,
@@ -3579,9 +4041,15 @@
       "originStorage": 0.00019218254627353948,
       "total": 8.096700542706305
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 276267008,
+    "cpuPerTileUs": 1167.2199348488055,
     "emptyShare": 0.18567173468480483,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -3636,9 +4104,15 @@
       "egress": 7.25625,
       "total": 7.402759858058121
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 315875328,
+    "cpuPerTileUs": 5595.172229114531,
     "emptyShare": 0.014680232558139534,
     "emptyStatus": null,
     "catalogFirstMs": 3311,
@@ -3671,9 +4145,15 @@
       "originStorage": 0.00021620536455773195,
       "total": 7.854914769628345
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 249008128,
+    "cpuPerTileUs": 1191.4850050179539,
     "emptyShare": 0.18827531012404963,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -3728,9 +4208,15 @@
       "egress": 5.89122,
       "total": 6.356415129375951
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 615317504,
+    "cpuPerTileUs": 8144.7218046239195,
     "emptyShare": 0.0228,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -3763,9 +4249,15 @@
       "originStorage": 0.0010624342238709187,
       "total": 6.574077349113475
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 947974144,
+    "cpuPerTileUs": 2110.006517422413,
     "emptyShare": 0.1314657820371053,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -3815,8 +4307,14 @@
       }
     ],
     "cost": null,
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 618389504,
     "cpuPerTileUs": null,
     "emptyShare": null,
     "emptyStatus": null,
@@ -3850,9 +4348,15 @@
       "originStorage": 0.0008648214582309278,
       "total": 6.825515328513382
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 947568640,
+    "cpuPerTileUs": 1773.1779702225804,
     "emptyShare": 0.1284,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -3907,9 +4411,15 @@
       "egress": 6.71913,
       "total": 6.737652705479371
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 40992507,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 547225600,
+    "cpuPerTileUs": 31.900931955252258,
     "emptyShare": 0.01489753724384311,
     "emptyStatus": null,
     "catalogFirstMs": 3919,
@@ -3942,9 +4452,15 @@
       "originStorage": 0.000028113385345115466,
       "total": 7.346113511997682
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 61643735,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 273911808,
+    "cpuPerTileUs": 23.15592503500291,
     "emptyShare": 0.1850659310954036,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -3999,9 +4515,15 @@
       "egress": 6.723629999999999,
       "total": 6.739694799216154
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 43339612,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 529113088,
+    "cpuPerTileUs": 29.42809583141644,
     "emptyShare": 0.014742905429899322,
     "emptyStatus": null,
     "catalogFirstMs": 4994,
@@ -4034,9 +4556,15 @@
       "originStorage": 0.000028129989917113502,
       "total": 7.350327862869532
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 65417453,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 198938624,
+    "cpuPerTileUs": 22.40820344359557,
     "emptyShare": 0.18509295742370305,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -4086,8 +4614,14 @@
       }
     ],
     "cost": null,
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 2860486656,
     "cpuPerTileUs": null,
     "emptyShare": null,
     "emptyStatus": null,
@@ -4121,9 +4655,15 @@
       "originStorage": 0.00019218254627353948,
       "total": 5.069531792706304
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 78090240,
+    "cpuPerTileUs": 1544.5982505209145,
     "emptyShare": 0.1255584450223378,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -4173,8 +4713,14 @@
       }
     ],
     "cost": null,
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 1655701504,
     "cpuPerTileUs": null,
     "emptyShare": null,
     "emptyStatus": null,
@@ -4208,9 +4754,15 @@
       "originStorage": 0.0001330494551124504,
       "total": 5.880356396694367
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 43347968,
+    "cpuPerTileUs": 1058.1671876387406,
     "emptyShare": 0.12553273328717593,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -4265,9 +4817,15 @@
       "egress": 6.7139999999999995,
       "total": 6.732508563547437
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 41302587,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 516349952,
+    "cpuPerTileUs": 32.46294611403575,
     "emptyShare": 0.01524845302831427,
     "emptyStatus": null,
     "catalogFirstMs": 1745,
@@ -4300,9 +4858,15 @@
       "originStorage": 0.000028107850487782793,
       "total": 7.341268459134054
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 45836624,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 229634048,
+    "cpuPerTileUs": 23.618384649635118,
     "emptyShare": 0.1855243157294719,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -4357,9 +4921,15 @@
       "egress": 6.721559999999999,
       "total": 6.7376198533559
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 43443740,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 530534400,
+    "cpuPerTileUs": 26.327532776913134,
     "emptyShare": 0.014638524696728772,
     "emptyStatus": null,
     "catalogFirstMs": 1669,
@@ -4392,9 +4962,15 @@
       "originStorage": 0.00002817426877577493,
       "total": 7.348373229414353
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 66111097,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 225165312,
+    "cpuPerTileUs": 20.51870030732839,
     "emptyShare": 0.1848571339284784,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -4444,8 +5020,14 @@
       }
     ],
     "cost": null,
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 2967863296,
     "cpuPerTileUs": null,
     "emptyShare": null,
     "emptyStatus": null,
@@ -4479,9 +5061,15 @@
       "originStorage": 0.0003144805302657919,
       "total": 5.603968615337589
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 239587328,
+    "cpuPerTileUs": 2161.9538717150244,
     "emptyShare": 0.12462724561786312,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -4531,8 +5119,14 @@
       }
     ],
     "cost": null,
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 1970561024,
     "cpuPerTileUs": null,
     "emptyShare": null,
     "emptyStatus": null,
@@ -4566,9 +5160,15 @@
       "originStorage": 0.0002306190555282474,
       "total": 5.666177837603569
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 236507136,
+    "cpuPerTileUs": 1594.4250339296525,
     "emptyShare": 0.12388318442458994,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -4623,9 +5223,15 @@
       "egress": 7.41564,
       "total": 7.436082782869366
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 139653120,
+    "cpuPerTileUs": 527.0735840270983,
     "emptyShare": 0.014600811156175343,
     "emptyStatus": 500,
     "catalogFirstMs": 8844,
@@ -4658,9 +5264,15 @@
       "originStorage": 0.0000332623637781126,
       "total": 8.003977690083785
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 66039808,
+    "cpuPerTileUs": 170.49460166168606,
     "emptyShare": 0.18499984614437812,
     "emptyStatus": 500,
     "catalogFirstMs": null,
@@ -4715,9 +5327,15 @@
       "egress": 7.4017800000000005,
       "total": 7.419465106042741
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 140419072,
+    "cpuPerTileUs": 500.966924385557,
     "emptyShare": 0.014731473147314732,
     "emptyStatus": 500,
     "catalogFirstMs": 7611,
@@ -4750,9 +5368,15 @@
       "originStorage": 0.0000332623637781126,
       "total": 7.9908453491735925
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 68534272,
+    "cpuPerTileUs": 164.83381745812318,
     "emptyShare": 0.1853228089611029,
     "emptyStatus": 500,
     "catalogFirstMs": null,
@@ -4807,9 +5431,15 @@
       "egress": 7.40817,
       "total": 7.4285921902316385
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 96817152,
+    "cpuPerTileUs": 499.8921185656133,
     "emptyShare": 0.014755094661856004,
     "emptyStatus": 500,
     "catalogFirstMs": null,
@@ -4842,9 +5472,15 @@
       "originStorage": 0.00002999154693333752,
       "total": 7.996891450389444
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 42188800,
+    "cpuPerTileUs": 115.99648905953053,
     "emptyShare": 0.186335164824598,
     "emptyStatus": 500,
     "catalogFirstMs": null,
@@ -4899,9 +5535,15 @@
       "egress": 7.39665,
       "total": 7.414322848910807
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 95514624,
+    "cpuPerTileUs": 420.161751312487,
     "emptyShare": 0.015304304335594385,
     "emptyStatus": 500,
     "catalogFirstMs": null,
@@ -4934,9 +5576,15 @@
       "originStorage": 0.000030179732082648568,
       "total": 7.985974830840154
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 41955328,
+    "cpuPerTileUs": 101.78848963340808,
     "emptyShare": 0.18462405162873183,
     "emptyStatus": 500,
     "catalogFirstMs": null,
@@ -4991,9 +5639,15 @@
       "egress": 6.126299999999999,
       "total": 6.162084240721226
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 93315072,
+    "cpuPerTileUs": 919.4596425373327,
     "emptyShare": 0.02015694722264964,
     "emptyStatus": 500,
     "catalogFirstMs": null,
@@ -5026,9 +5680,15 @@
       "originStorage": 0.00010810268227886598,
       "total": 6.786982492772296
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 19324928,
+    "cpuPerTileUs": 649.9500636336684,
     "emptyShare": 0.12538597127248635,
     "emptyStatus": 500,
     "catalogFirstMs": null,
@@ -5083,9 +5743,15 @@
       "egress": 6.141869999999999,
       "total": 6.172885009951996
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 95838208,
+    "cpuPerTileUs": 911.918452719567,
     "emptyShare": 0.020432026586251463,
     "emptyStatus": 500,
     "catalogFirstMs": null,
@@ -5118,9 +5784,15 @@
       "originStorage": 0.00009609127313676974,
       "total": 6.801450453168154
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 19230720,
+    "cpuPerTileUs": 583.1937810486243,
     "emptyShare": 0.1266768174088934,
     "emptyStatus": 500,
     "catalogFirstMs": null,
@@ -5175,9 +5847,15 @@
       "egress": 7.4006099999999995,
       "total": 7.421011349489842
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 44732416,
+    "cpuPerTileUs": 377.49032577442506,
     "emptyShare": 0.015363844336379433,
     "emptyStatus": null,
     "catalogFirstMs": 819,
@@ -5210,9 +5888,15 @@
       "originStorage": 0.000029987857028449066,
       "total": 7.9897514151470235
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 37232640,
+    "cpuPerTileUs": 124.65531424488005,
     "emptyShare": 0.18569350913455127,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -5267,9 +5951,15 @@
       "egress": 7.42761,
       "total": 7.445356821777209
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 46964736,
+    "cpuPerTileUs": 345.804466973252,
     "emptyShare": 0.014895332629091842,
     "emptyStatus": null,
     "catalogFirstMs": 851,
@@ -5302,9 +5992,15 @@
       "originStorage": 0.00002990852407334735,
       "total": 8.015212585753131
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 39686144,
+    "cpuPerTileUs": 124.77087433039706,
     "emptyShare": 0.18527245146045082,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -5359,9 +6055,15 @@
       "egress": 6.07833,
       "total": 6.095086204508087
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 189640704,
+    "cpuPerTileUs": 738.1889873287579,
     "emptyShare": 0.018803008481357016,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -5394,9 +6096,15 @@
       "originStorage": 0.0001330494551124504,
       "total": 6.741915760335135
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 170053632,
+    "cpuPerTileUs": 908.9440244926114,
     "emptyShare": 0.12289797990676493,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -5451,9 +6159,15 @@
       "egress": 6.10047,
       "total": 6.115045880242394
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 187777024,
+    "cpuPerTileUs": 674.1471486414877,
     "emptyShare": 0.02026936924923323,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -5486,9 +6200,15 @@
       "originStorage": 0.0001153095277641237,
       "total": 6.762509543801785
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 173555712,
+    "cpuPerTileUs": 778.8466574949874,
     "emptyShare": 0.12622511434400543,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -5543,9 +6263,15 @@
       "egress": 7.40304,
       "total": 7.423448048299705
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 38816157,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 169979904,
+    "cpuPerTileUs": 163.89298233366324,
     "emptyShare": 0.014631327764520904,
     "emptyStatus": null,
     "catalogFirstMs": 2410,
@@ -5578,9 +6304,15 @@
       "originStorage": 0.00003014098808131982,
       "total": 7.992047877707452
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 85499904,
+    "cpuPerTileUs": 114.20530549148866,
     "emptyShare": 0.18532725590236093,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -5635,9 +6367,15 @@
       "egress": 7.4099699999999995,
       "total": 7.427674674446352
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 40836176,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 167202816,
+    "cpuPerTileUs": 143.4957402686687,
     "emptyShare": 0.014958416435646864,
     "emptyStatus": null,
     "catalogFirstMs": 2192,
@@ -5670,9 +6408,15 @@
       "originStorage": 0.000030078259698216134,
       "total": 7.998553990841608
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 85127168,
+    "cpuPerTileUs": 105.1284524219702,
     "emptyShare": 0.1852891992644322,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -5727,9 +6471,15 @@
       "egress": 6.08355,
       "total": 6.114563008625063
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 460795904,
+    "cpuPerTileUs": 557.4988015688735,
     "emptyShare": 0.0180401366353544,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -5762,9 +6512,15 @@
       "originStorage": 0.00007862013256644797,
       "total": 6.746325903834398
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 650633216,
+    "cpuPerTileUs": 569.7264444602629,
     "emptyShare": 0.12636843062374978,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -5819,9 +6575,15 @@
       "egress": 6.15033,
       "total": 6.1772096752917305
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 461115392,
+    "cpuPerTileUs": 554.8383220546359,
     "emptyShare": 0.019894924927327518,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -5854,9 +6616,15 @@
       "originStorage": 0.0000720684548525773,
       "total": 6.809241589876115
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 641761280,
+    "cpuPerTileUs": 517.2852717043988,
     "emptyShare": 0.12571671444762983,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -5911,9 +6679,15 @@
       "egress": 7.4115899999999995,
       "total": 7.43202161818626
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 39019236,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 170602496,
+    "cpuPerTileUs": 167.48915197931697,
     "emptyShare": 0.014956428013856363,
     "emptyStatus": null,
     "catalogFirstMs": 1109,
@@ -5946,9 +6720,15 @@
       "originStorage": 0.000030035825791998943,
       "total": 8.000121873298484
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 81174528,
+    "cpuPerTileUs": 117.67399531687913,
     "emptyShare": 0.18528617166393482,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -6003,9 +6783,15 @@
       "egress": 7.40781,
       "total": 7.425509513548696
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 41225608,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 173166592,
+    "cpuPerTileUs": 132.63660246826967,
     "emptyShare": 0.014894816814864816,
     "emptyStatus": null,
     "catalogFirstMs": 1405,
@@ -6038,9 +6824,15 @@
       "originStorage": 0.00003011884865198911,
       "total": 7.996514326841026
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 81096704,
+    "cpuPerTileUs": 103.24003006276419,
     "emptyShare": 0.18527855327305304,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -6095,9 +6887,15 @@
       "egress": 6.1074,
       "total": 6.124236342122375
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 575021056,
+    "cpuPerTileUs": 779.4213872861061,
     "emptyShare": 0.019336770981507823,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -6130,9 +6928,15 @@
       "originStorage": 0.00010810268227886598,
       "total": 6.769132492772297
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 781381632,
+    "cpuPerTileUs": 752.5744066839266,
     "emptyShare": 0.12384833672946383,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -6187,9 +6991,15 @@
       "egress": 6.073829999999999,
       "total": 6.088342229171303
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 579715072,
+    "cpuPerTileUs": 788.8091692432273,
     "emptyShare": 0.019813986605255546,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -6222,9 +7032,15 @@
       "originStorage": 0.0001153095277641237,
       "total": 6.737349543801784
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 765652992,
+    "cpuPerTileUs": 701.342194164361,
     "emptyShare": 0.1267184937260811,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -6279,9 +7095,15 @@
       "egress": 7.39368,
       "total": 7.414062245476529
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 42588690,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 156610560,
+    "cpuPerTileUs": 44.28823719423129,
     "emptyShare": 0.015361623165216618,
     "emptyStatus": null,
     "catalogFirstMs": 2090,
@@ -6314,9 +7136,15 @@
       "originStorage": 0.00003008379455554881,
       "total": 7.983207331449943
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 41869516,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 129781760,
+    "cpuPerTileUs": 19.822696895002707,
     "emptyShare": 0.18552380454539513,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -6371,9 +7199,15 @@
       "egress": 7.4006099999999995,
       "total": 7.418292310556509
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 42888677,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 159735808,
+    "cpuPerTileUs": 39.48715792633188,
     "emptyShare": 0.01504229342889287,
     "emptyStatus": null,
     "catalogFirstMs": 1770,
@@ -6406,9 +7240,15 @@
       "originStorage": 0.000030043205601775842,
       "total": 7.989713700660292
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 43380165,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 131637248,
+    "cpuPerTileUs": 23.40306296667922,
     "emptyShare": 0.18531248011345558,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -6463,9 +7303,15 @@
       "egress": 6.13962,
       "total": 6.170633008625063
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 432279552,
+    "cpuPerTileUs": 157.80803851161227,
     "emptyShare": 0.018266666666666667,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -6498,9 +7344,15 @@
       "originStorage": 0.00005765476388206185,
       "total": 6.799080662811892
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 825499648,
+    "cpuPerTileUs": 77.09088025302437,
     "emptyShare": 0.125298345267144,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -6555,9 +7407,15 @@
       "egress": 6.08508,
       "total": 6.11195967529173
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 440758272,
+    "cpuPerTileUs": 149.9930055289091,
     "emptyShare": 0.020134944128863644,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -6590,9 +7448,15 @@
       "originStorage": 0.00005765476388206185,
       "total": 6.747497271900892
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 813604864,
+    "cpuPerTileUs": 80.79602452818108,
     "emptyShare": 0.12463331377673476,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -6647,9 +7511,15 @@
       "egress": 7.41411,
       "total": 7.434548565100193
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 42689230,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 151044096,
+    "cpuPerTileUs": 44.45581522613862,
     "emptyShare": 0.014926119458959422,
     "emptyStatus": null,
     "catalogFirstMs": 1157,
@@ -6682,9 +7552,15 @@
       "originStorage": 0.000030126228461766018,
       "total": 8.002502736737771
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 42463809,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 123318272,
+    "cpuPerTileUs": 20.71296920225357,
     "emptyShare": 0.1847196550299701,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -6739,9 +7615,15 @@
       "egress": 7.4209499999999995,
       "total": 7.438680909009436
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 42864146,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 150700032,
+    "cpuPerTileUs": 39.83912902949154,
     "emptyShare": 0.014647344283424584,
     "emptyStatus": null,
     "catalogFirstMs": 1062,
@@ -6774,9 +7656,15 @@
       "originStorage": 0.000030028445982222037,
       "total": 8.008923578478685
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 43348773,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 124727296,
+    "cpuPerTileUs": 22.70205711328497,
     "emptyShare": 0.1856888715655286,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -6831,9 +7719,15 @@
       "egress": 6.10857,
       "total": 6.144354240721228
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 528670720,
+    "cpuPerTileUs": 185.44735314431836,
     "emptyShare": 0.020680104631481767,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -6866,9 +7760,15 @@
       "originStorage": 0.0000720684548525773,
       "total": 6.769893328514866
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 745738240,
+    "cpuPerTileUs": 172.49209957980148,
     "emptyShare": 0.12686983841262697,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -6923,9 +7823,15 @@
       "egress": 6.092549999999999,
       "total": 6.123565009951996
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 528281600,
+    "cpuPerTileUs": 178.34966498545614,
     "emptyShare": 0.01932426610868361,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -6958,9 +7864,15 @@
       "originStorage": 0.0000665247275562252,
       "total": 6.7546256983471835
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 746672128,
+    "cpuPerTileUs": 157.62882819956485,
     "emptyShare": 0.12453939118862076,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -7015,9 +7927,15 @@
       "egress": 7.39485,
       "total": 7.415235470829427
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 47702016,
+    "cpuPerTileUs": 245.8144248713597,
     "emptyShare": 0.01465109883241243,
     "emptyStatus": null,
     "catalogFirstMs": 3375,
@@ -7050,9 +7968,15 @@
       "originStorage": 0.000030163127510650536,
       "total": 7.984313089161972
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 45608960,
+    "cpuPerTileUs": 89.98139624171003,
     "emptyShare": 0.18507800390019502,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -7107,9 +8031,15 @@
       "egress": 7.401689999999999,
       "total": 7.4193748910053365
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 461,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 48848896,
+    "cpuPerTileUs": 185.0329575542645,
     "emptyShare": 0.014792317463069214,
     "emptyStatus": null,
     "catalogFirstMs": 3151,
@@ -7142,9 +8072,15 @@
       "originStorage": 0.00003010777893732376,
       "total": 7.990734235204822
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 46837760,
+    "cpuPerTileUs": 78.92989332307755,
     "emptyShare": 0.18525442656103294,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -7199,9 +8135,15 @@
       "egress": 6.09498,
       "total": 6.125993008625063
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 51400704,
+    "cpuPerTileUs": 255.7957953184127,
     "emptyShare": 0.020027734812523335,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -7234,9 +8176,15 @@
       "originStorage": 0.00005765476388206185,
       "total": 6.756920662811891
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 32804864,
+    "cpuPerTileUs": 64.80862699764593,
     "emptyShare": 0.12401245391451601,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -7291,9 +8239,15 @@
       "egress": 6.12567,
       "total": 6.152549675291731
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 51630080,
+    "cpuPerTileUs": 200.95441182755724,
     "emptyShare": 0.01973385956958852,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -7326,9 +8280,15 @@
       "originStorage": 0.00005765476388206185,
       "total": 6.785832271900893
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 32432128,
+    "cpuPerTileUs": 58.32649011568588,
     "emptyShare": 0.12633670231206165,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -7383,9 +8343,15 @@
       "egress": 7.401059999999999,
       "total": 7.421462590010187
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 43125906,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 75853824,
+    "cpuPerTileUs": 24.256747603911847,
     "emptyShare": 0,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -7418,9 +8384,15 @@
       "originStorage": 0.00003010777893732376,
       "total": 7.990177560525672
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 43551708,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 74293248,
+    "cpuPerTileUs": 14.265660731752234,
     "emptyShare": 0,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -7475,9 +8447,15 @@
       "egress": 7.40502,
       "total": 7.422712847389224
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 43143772,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 75755520,
+    "cpuPerTileUs": 22.594499750259374,
     "emptyShare": 0,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -7510,9 +8488,15 @@
       "originStorage": 0.000030069034935995008,
       "total": 7.993878914478104
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 44960783,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 74186752,
+    "cpuPerTileUs": 12.84064971693018,
     "emptyShare": 0,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -7567,9 +8551,15 @@
       "egress": 6.13233,
       "total": 6.194322954341144
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 108187648,
+    "cpuPerTileUs": 61.77868676514836,
     "emptyShare": 0,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -7602,9 +8592,15 @@
       "originStorage": 0.0004324107291154639,
       "total": 6.795774971089185
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 123912192,
+    "cpuPerTileUs": 43.886120503071695,
     "emptyShare": 0,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -7659,9 +8655,15 @@
       "egress": 6.09759,
       "total": 6.159581871060263
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 90,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 105631744,
+    "cpuPerTileUs": 70.43846176981806,
     "emptyShare": 0,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -7694,9 +8696,15 @@
       "originStorage": 0.00046099224852394873,
       "total": 6.762651139932507
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 113119232,
+    "cpuPerTileUs": 53.68586613584275,
     "emptyShare": 0,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -7751,9 +8759,15 @@
       "egress": 7.4127600000000005,
       "total": 7.430471340605825
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 216236032,
+    "cpuPerTileUs": 277.619094994348,
     "emptyShare": 0.014667155571852395,
     "emptyStatus": null,
     "catalogFirstMs": 1992,
@@ -7786,9 +8800,15 @@
       "originStorage": 0.00005405134113943299,
       "total": 8.001387442407086
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 223281152,
+    "cpuPerTileUs": 149.5602933219489,
     "emptyShare": 0.18624362436243624,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -7843,9 +8863,15 @@
       "egress": 6.00273,
       "total": 6.188510802466434
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 222556160,
+    "cpuPerTileUs": 444.5581083755079,
     "emptyShare": 0.016293929712460065,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -7878,9 +8904,15 @@
       "originStorage": 0.0009219844970478975,
       "total": 6.678050908505725
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 106582016,
+    "cpuPerTileUs": 254.43636206743565,
     "emptyShare": 0.11982942430703625,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -7935,9 +8967,15 @@
       "egress": 6.1091999999999995,
       "total": 6.182454929029061
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 219160576,
+    "cpuPerTileUs": 327.5216776016545,
     "emptyShare": 0.018313953488372094,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -7970,9 +9008,15 @@
       "originStorage": 0.0003144805302657919,
       "total": 6.772403301277593
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 130379776,
+    "cpuPerTileUs": 169.4842911259718,
     "emptyShare": 0.125941011746736,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -8027,9 +9071,15 @@
       "egress": 7.41888,
       "total": 7.604660802466434
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 314007552,
+    "cpuPerTileUs": 7371.960259822501,
     "emptyShare": 0.015976993129892956,
     "emptyStatus": null,
     "catalogFirstMs": 2262,
@@ -8062,9 +9112,15 @@
       "originStorage": 0.0002306190555282474,
       "total": 8.008922651247566
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 259637248,
+    "cpuPerTileUs": 1402.71034560221,
     "emptyShare": 0.18493918053777209,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -8114,8 +9170,14 @@
       }
     ],
     "cost": null,
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 611303424,
     "cpuPerTileUs": null,
     "emptyShare": null,
     "emptyStatus": null,
@@ -8149,9 +9211,15 @@
       "originStorage": 0.0009872391075695522,
       "total": 6.727549157737864
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 945926144,
+    "cpuPerTileUs": 2024.693519222323,
     "emptyShare": 0.12351598173515982,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -8201,8 +9269,14 @@
       }
     ],
     "cost": null,
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 621314048,
     "cpuPerTileUs": null,
     "emptyShare": null,
     "emptyStatus": null,
@@ -8236,9 +9310,15 @@
       "originStorage": 0.0010624342238709187,
       "total": 6.734734936748627
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 939118592,
+    "cpuPerTileUs": 1974.562522876377,
     "emptyShare": 0.12567567567567567,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -8293,9 +9373,15 @@
       "egress": 6.70212,
       "total": 6.72059581381033
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 41114703,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 546889728,
+    "cpuPerTileUs": 33.37436164430574,
     "emptyShare": 0.014883318582522039,
     "emptyStatus": null,
     "catalogFirstMs": 5000,
@@ -8328,9 +9414,15 @@
       "originStorage": 0.000028104160582894344,
       "total": 7.3300484238916335
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 61035472,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 270241792,
+    "cpuPerTileUs": 24.11148559637699,
     "emptyShare": 0.18530326642693146,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -8385,9 +9477,15 @@
       "egress": 6.700319999999999,
       "total": 6.716329104528948
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 43386950,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 528199680,
+    "cpuPerTileUs": 28.536755816788563,
     "emptyShare": 0.014973098923956958,
     "emptyStatus": null,
     "catalogFirstMs": 4028,
@@ -8420,9 +9518,15 @@
       "originStorage": 0.000028159509156221117,
       "total": 7.328313107232746
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 66237985,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 261906432,
+    "cpuPerTileUs": 20.556640846120654,
     "emptyShare": 0.1849186639554652,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -8472,8 +9576,14 @@
       }
     ],
     "cost": null,
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 2916265984,
     "cpuPerTileUs": null,
     "emptyShare": null,
     "emptyStatus": null,
@@ -8507,9 +9617,15 @@
       "originStorage": 0.00019218254627353948,
       "total": 5.366033042706304
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 66957312,
+    "cpuPerTileUs": 1457.6630213067226,
     "emptyShare": 0.12709490997999556,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -8559,8 +9675,14 @@
       }
     ],
     "cost": null,
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 1556504576,
     "cpuPerTileUs": null,
     "emptyShare": null,
     "emptyStatus": null,
@@ -8594,9 +9716,15 @@
       "originStorage": 0.0001330494551124504,
       "total": 5.904220146694367
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 60334080,
+    "cpuPerTileUs": 1003.2859886256751,
     "emptyShare": 0.12635984551231746,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -8651,9 +9779,15 @@
       "egress": 6.712109999999999,
       "total": 6.730613353361988
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 22757405,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 1299312640,
+    "cpuPerTileUs": 36.463114744891776,
     "emptyShare": 0.015085527993479772,
     "emptyStatus": null,
     "catalogFirstMs": 1681,
@@ -8686,9 +9820,15 @@
       "originStorage": 0.000028104160582894344,
       "total": 7.339483423891633
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 61525683,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 283115520,
+    "cpuPerTileUs": 23.703147814809224,
     "emptyShare": 0.18564793860798162,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -8743,9 +9883,15 @@
       "egress": 6.6876299999999995,
       "total": 6.70360878425522
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 43333923,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 540823552,
+    "cpuPerTileUs": 26.455546556581996,
     "emptyShare": 0.014736031522206554,
     "emptyStatus": null,
     "catalogFirstMs": 1921,
@@ -8778,9 +9924,15 @@
       "originStorage": 0.000028159509156221117,
       "total": 7.316328107232747
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 65653829,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 247160832,
+    "cpuPerTileUs": 20.126782883976166,
     "emptyShare": 0.1849293485082949,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -8830,8 +9982,14 @@
       }
     ],
     "cost": null,
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 2769309696,
     "cpuPerTileUs": null,
     "emptyShare": null,
     "emptyStatus": null,
@@ -8865,9 +10023,15 @@
       "originStorage": 0.0003144805302657919,
       "total": 5.3484798653375885
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 237993984,
+    "cpuPerTileUs": 2223.197674362158,
     "emptyShare": 0.12560931247726445,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -8917,8 +10081,14 @@
       }
     ],
     "cost": null,
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 1803755520,
     "cpuPerTileUs": null,
     "emptyShare": null,
     "emptyStatus": null,
@@ -8952,9 +10122,15 @@
       "originStorage": 0.00019218254627353948,
       "total": 5.762122156336307
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 238059520,
+    "cpuPerTileUs": 1448.7958598333173,
     "emptyShare": 0.12413317923186344,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -9009,9 +10185,15 @@
       "egress": 7.42284,
       "total": 7.443302631194886
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 139739136,
+    "cpuPerTileUs": 526.1669208090501,
     "emptyShare": 0.014661759411129335,
     "emptyStatus": 500,
     "catalogFirstMs": 9531,
@@ -9044,9 +10226,15 @@
       "originStorage": 0.00003088648065110456,
       "total": 8.010754997934942
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 68046848,
+    "cpuPerTileUs": 168.44391545203317,
     "emptyShare": 0.1846768173554634,
     "emptyStatus": 500,
     "catalogFirstMs": null,
@@ -9101,9 +10289,15 @@
       "egress": 7.39683,
       "total": 7.414503278985611
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 142815232,
+    "cpuPerTileUs": 515.3164941731216,
     "emptyShare": 0.015457273030336704,
     "emptyStatus": 500,
     "catalogFirstMs": 8760,
@@ -9136,9 +10330,15 @@
       "originStorage": 0.00003603422742628865,
       "total": 7.986193294938057
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 63848448,
+    "cpuPerTileUs": 178.75513690542397,
     "emptyShare": 0.18653588125974016,
     "emptyStatus": 500,
     "catalogFirstMs": null,
@@ -9193,9 +10393,15 @@
       "egress": 7.43022,
       "total": 7.450702975728544
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 95019008,
+    "cpuPerTileUs": 488.4994433805057,
     "emptyShare": 0.014963034765014963,
     "emptyStatus": 500,
     "catalogFirstMs": null,
@@ -9228,9 +10434,15 @@
       "originStorage": 0.00003011331379465643,
       "total": 8.017717613389303
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 41926656,
+    "cpuPerTileUs": 111.2595412962512,
     "emptyShare": 0.1851665945478148,
     "emptyStatus": 500,
     "catalogFirstMs": null,
@@ -9285,9 +10497,15 @@
       "egress": 7.418519999999999,
       "total": 7.436245102999573
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 95072256,
+    "cpuPerTileUs": 419.57476279608295,
     "emptyShare": 0.015114389298662333,
     "emptyStatus": 500,
     "catalogFirstMs": null,
@@ -9320,9 +10538,15 @@
       "originStorage": 0.000030122538556877558,
       "total": 8.006629357386428
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 42016768,
+    "cpuPerTileUs": 105.1740949561318,
     "emptyShare": 0.18449317763163378,
     "emptyStatus": 500,
     "catalogFirstMs": null,
@@ -9377,9 +10601,15 @@
       "egress": 6.14061,
       "total": 6.176394240721227
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 97193984,
+    "cpuPerTileUs": 901.6122359966218,
     "emptyShare": 0.018646727591618204,
     "emptyStatus": 500,
     "catalogFirstMs": null,
@@ -9412,9 +10642,15 @@
       "originStorage": 0.0001153095277641237,
       "total": 6.800566325623783
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 19070976,
+    "cpuPerTileUs": 656.6535821163951,
     "emptyShare": 0.12619015868782504,
     "emptyStatus": 500,
     "catalogFirstMs": null,
@@ -9469,9 +10705,15 @@
       "egress": 6.163829999999999,
       "total": 6.194845009951996
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 98934784,
+    "cpuPerTileUs": 889.8712844828269,
     "emptyShare": 0.019017725258493354,
     "emptyStatus": 500,
     "catalogFirstMs": null,
@@ -9504,9 +10746,15 @@
       "originStorage": 0.00009609127313676974,
       "total": 6.822190453168154
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 19423232,
+    "cpuPerTileUs": 574.3939282607145,
     "emptyShare": 0.1261625645869215,
     "emptyStatus": 500,
     "catalogFirstMs": null,
@@ -9561,9 +10809,15 @@
       "egress": 7.411769999999999,
       "total": 7.432202114394397
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 52338688,
+    "cpuPerTileUs": 369.7284934777886,
     "emptyShare": 0.01516268953361917,
     "emptyStatus": null,
     "catalogFirstMs": 1149,
@@ -9596,9 +10850,15 @@
       "originStorage": 0.000030015531315112457,
       "total": 8.000291679465173
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 37441536,
+    "cpuPerTileUs": 124.38194518737478,
     "emptyShare": 0.18540674342722124,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -9653,9 +10913,15 @@
       "egress": 7.422479999999999,
       "total": 7.4402145646452755
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 146,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 44924928,
+    "cpuPerTileUs": 312.87640616925626,
     "emptyShare": 0.014605517639997333,
     "emptyStatus": null,
     "catalogFirstMs": 830,
@@ -9688,9 +10954,15 @@
       "originStorage": 0.00003010039912754685,
       "total": 8.010369174114018
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 36753408,
+    "cpuPerTileUs": 123.22481913977411,
     "emptyShare": 0.18497226768503364,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -9745,9 +11017,15 @@
       "egress": 6.08094,
       "total": 6.097703399526088
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 189517824,
+    "cpuPerTileUs": 749.628681132268,
     "emptyShare": 0.02053552378920418,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -9780,9 +11058,15 @@
       "originStorage": 0.0001330494551124504,
       "total": 6.744380760335135
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 172609536,
+    "cpuPerTileUs": 903.5754010378159,
     "emptyShare": 0.12840592642737358,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -9837,9 +11121,15 @@
       "egress": 6.06843,
       "total": 6.0829293269271645
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 184811520,
+    "cpuPerTileUs": 672.901128811507,
     "emptyShare": 0.019150718151930698,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -9872,9 +11162,15 @@
       "originStorage": 0.0001153095277641237,
       "total": 6.732249543801785
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 172232704,
+    "cpuPerTileUs": 799.0368070268643,
     "emptyShare": 0.12483330666239932,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -9929,9 +11225,15 @@
       "egress": 7.399169999999999,
       "total": 7.419567379824738
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 39299555,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 166621184,
+    "cpuPerTileUs": 162.4206776407198,
     "emptyShare": 0.014758907290839089,
     "emptyStatus": null,
     "catalogFirstMs": 2230,
@@ -9964,9 +11266,15 @@
       "originStorage": 0.00003011700369954488,
       "total": 7.988392648631723
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 85868544,
+    "cpuPerTileUs": 114.94857115590287,
     "emptyShare": 0.18523559145917481,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -10021,9 +11329,15 @@
       "egress": 7.4017800000000005,
       "total": 7.419465106042741
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 41058495,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 169103360,
+    "cpuPerTileUs": 138.09757461804202,
     "emptyShare": 0.014977902593632724,
     "emptyStatus": null,
     "catalogFirstMs": 2002,
@@ -10056,9 +11370,15 @@
       "originStorage": 0.0000300616551262181,
       "total": 7.990818853387301
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 85233664,
+    "cpuPerTileUs": 101.99248676333745,
     "emptyShare": 0.18545165645330652,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -10113,9 +11433,15 @@
       "egress": 6.088049999999999,
       "total": 6.121278223526852
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 451846144,
+    "cpuPerTileUs": 576.2569749578859,
     "emptyShare": 0.01977312341057805,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -10148,9 +11474,15 @@
       "originStorage": 0.00007862013256644797,
       "total": 6.750575903834398
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 649166848,
+    "cpuPerTileUs": 592.6520249326478,
     "emptyShare": 0.1263297630521358,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -10205,9 +11537,15 @@
       "egress": 6.108389999999999,
       "total": 6.135269675291729
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 455241728,
+    "cpuPerTileUs": 636.9866282162235,
     "emptyShare": 0.018748166519988264,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -10240,9 +11578,15 @@
       "originStorage": 0.00007862013256644797,
       "total": 6.7696858253193986
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 635506688,
+    "cpuPerTileUs": 489.823232915822,
     "emptyShare": 0.12503409276869648,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -10297,9 +11641,15 @@
       "egress": 7.40511,
       "total": 7.425523754693292
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 38888582,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 173035520,
+    "cpuPerTileUs": 165.8435169453989,
     "emptyShare": 0.014439049322770252,
     "emptyStatus": null,
     "catalogFirstMs": 1345,
@@ -10332,9 +11682,15 @@
       "originStorage": 0.000030192646749758154,
       "total": 7.994003371101331
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 82468864,
+    "cpuPerTileUs": 114.33472885372464,
     "emptyShare": 0.1854113507204165,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -10389,9 +11745,15 @@
       "egress": 7.382879999999999,
       "total": 7.400519948188249
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 40931802,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 169590784,
+    "cpuPerTileUs": 140.53526781114033,
     "emptyShare": 0.014780925078682523,
     "emptyStatus": null,
     "catalogFirstMs": 963,
@@ -10424,9 +11786,15 @@
       "originStorage": 0.000030004461600447098,
       "total": 7.972968379933574
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 80834560,
+    "cpuPerTileUs": 108.28789738121088,
     "emptyShare": 0.18445929898247457,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -10481,9 +11849,15 @@
       "egress": 6.199739999999999,
       "total": 6.216830896897168
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 578895872,
+    "cpuPerTileUs": 781.411277332881,
     "emptyShare": 0.02021807511476175,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -10516,9 +11890,15 @@
       "originStorage": 0.00010810268227886598,
       "total": 6.8563424927722965
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 781234176,
+    "cpuPerTileUs": 775.4402365365381,
     "emptyShare": 0.12535473627623797,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -10573,9 +11953,15 @@
       "egress": 6.11226,
       "total": 6.126864050142101
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 584847360,
+    "cpuPerTileUs": 729.0121154856816,
     "emptyShare": 0.01913482159723534,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -10608,9 +11994,15 @@
       "originStorage": 0.00009609127313676974,
       "total": 6.7734854531681545
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 783437824,
+    "cpuPerTileUs": 640.3767345192344,
     "emptyShare": 0.1255222686461019,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -10665,9 +12057,15 @@
       "egress": 7.39107,
       "total": 7.4114450504585285
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 42698712,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 163528704,
+    "cpuPerTileUs": 45.05403871794782,
     "emptyShare": 0.014892121703718725,
     "emptyStatus": null,
     "catalogFirstMs": 1706,
@@ -10700,9 +12098,15 @@
       "originStorage": 0.00003011884865198911,
       "total": 7.980742666252932
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 42238393,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 130375680,
+    "cpuPerTileUs": 20.59163862003644,
     "emptyShare": 0.1853763335772827,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -10757,9 +12161,15 @@
       "egress": 7.42905,
       "total": 7.446800262375647
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 42997772,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 162332672,
+    "cpuPerTileUs": 42.578955256220205,
     "emptyShare": 0.015044653397963861,
     "emptyStatus": null,
     "catalogFirstMs": 2217,
@@ -10792,9 +12202,15 @@
       "originStorage": 0.000030093019317769946,
       "total": 8.016574113023216
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 43244040,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 131063808,
+    "cpuPerTileUs": 23.970386431656962,
     "emptyShare": 0.1848344032938647,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -10849,9 +12265,15 @@
       "egress": 6.05655,
       "total": 6.087563008625063
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 440991744,
+    "cpuPerTileUs": 168.3942156477921,
     "emptyShare": 0.019522082355451248,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -10884,9 +12306,15 @@
       "originStorage": 0.00005765476388206185,
       "total": 6.720625662811892
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 825462784,
+    "cpuPerTileUs": 82.50599281955124,
     "emptyShare": 0.12746098099219286,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -10941,9 +12369,15 @@
       "egress": 6.088500000000001,
       "total": 6.115379675291731
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 434286592,
+    "cpuPerTileUs": 135.41754204917322,
     "emptyShare": 0.02080166413313065,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -10976,9 +12410,15 @@
       "originStorage": 0.00005765476388206185,
       "total": 6.750727271900893
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 817369088,
+    "cpuPerTileUs": 73.19492394956863,
     "emptyShare": 0.12584335582282194,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -11033,9 +12473,15 @@
       "egress": 7.44588,
       "total": 7.46640614583655
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 42887720,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 151633920,
+    "cpuPerTileUs": 43.82768421062309,
     "emptyShare": 0.014489573118730607,
     "emptyStatus": null,
     "catalogFirstMs": 975,
@@ -11068,9 +12514,15 @@
       "originStorage": 0.0000300967092226584,
       "total": 8.032507454798413
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 42086161,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 123904000,
+    "cpuPerTileUs": 21.07940560399122,
     "emptyShare": 0.18488256802020506,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -11125,9 +12577,15 @@
       "egress": 7.40304,
       "total": 7.420728116566372
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 42913471,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 149020672,
+    "cpuPerTileUs": 42.09697774795965,
     "emptyShare": 0.01503707181292138,
     "emptyStatus": null,
     "catalogFirstMs": 1686,
@@ -11160,9 +12618,15 @@
       "originStorage": 0.00003010962388976798,
       "total": 7.992009250477523
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 43346232,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 123404288,
+    "cpuPerTileUs": 24.219725621627056,
     "emptyShare": 0.18478252840384457,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -11217,9 +12681,15 @@
       "egress": 6.08301,
       "total": 6.118794240721227
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 529248256,
+    "cpuPerTileUs": 193.38597510886922,
     "emptyShare": 0.02015942876488874,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -11252,9 +12722,15 @@
       "originStorage": 0.0000720684548525773,
       "total": 6.745753328514865
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 760315904,
+    "cpuPerTileUs": 181.6397667522133,
     "emptyShare": 0.12754591819727323,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -11309,9 +12785,15 @@
       "egress": 5.96943,
       "total": 6.000445009951997
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 527904768,
+    "cpuPerTileUs": 183.89254895171678,
     "emptyShare": 0.020400627711621894,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -11344,9 +12826,15 @@
       "originStorage": 0.0000665247275562252,
       "total": 6.638345698347184
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 756305920,
+    "cpuPerTileUs": 157.08461498209493,
     "emptyShare": 0.1260269546755285,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -11401,9 +12889,15 @@
       "egress": 7.42284,
       "total": 7.443302631194886
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 48410624,
+    "cpuPerTileUs": 254.6401088900065,
     "emptyShare": 0.015292021237908212,
     "emptyStatus": null,
     "catalogFirstMs": 3697,
@@ -11436,9 +12930,15 @@
       "originStorage": 0.00003000077169555865,
       "total": 8.010746538495495
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 46084096,
+    "cpuPerTileUs": 92.52584362988685,
     "emptyShare": 0.18444343051436465,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -11493,9 +12993,15 @@
       "egress": 7.401689999999999,
       "total": 7.4193748910053365
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 80,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 48201728,
+    "cpuPerTileUs": 203.4954455798029,
     "emptyShare": 0.014992538346743797,
     "emptyStatus": null,
     "catalogFirstMs": 3228,
@@ -11528,9 +13034,15 @@
       "originStorage": 0.000030087484460437263,
       "total": 7.990734067205112
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 46379008,
+    "cpuPerTileUs": 86.95038659613405,
     "emptyShare": 0.18465201963146471,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -11585,9 +13097,15 @@
       "egress": 6.18246,
       "total": 6.213473008625063
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 50503680,
+    "cpuPerTileUs": 282.1519817514678,
     "emptyShare": 0.019334364499439972,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -11620,9 +13138,15 @@
       "originStorage": 0.00005765476388206185,
       "total": 6.839540662811892
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 32477184,
+    "cpuPerTileUs": 70.24935208518377,
     "emptyShare": 0.12505250245011434,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -11677,9 +13201,15 @@
       "egress": 6.09786,
       "total": 6.12473967529173
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 52277248,
+    "cpuPerTileUs": 226.91784284447456,
     "emptyShare": 0.019228204923060512,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -11712,9 +13242,15 @@
       "originStorage": 0.00005765476388206185,
       "total": 6.759567271900893
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 32518144,
+    "cpuPerTileUs": 65.67719214716321,
     "emptyShare": 0.12600924067764968,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -11769,9 +13305,15 @@
       "egress": 7.40691,
       "total": 7.427328716774673
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 43195278,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 75890688,
+    "cpuPerTileUs": 24.21948433172464,
     "emptyShare": 0,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -11804,9 +13346,15 @@
       "originStorage": 0.00003010962388976798,
       "total": 7.995702578146884
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 43756188,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 74305536,
+    "cpuPerTileUs": 13.814897142133152,
     "emptyShare": 0,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -11861,9 +13409,15 @@
       "egress": 7.4099699999999995,
       "total": 7.427674674446352
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 43228154,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 75780096,
+    "cpuPerTileUs": 21.389057350693506,
     "emptyShare": 0,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -11896,9 +13450,15 @@
       "originStorage": 0.000030085639507993047,
       "total": 7.998554051932411
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 45079348,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 74182656,
+    "cpuPerTileUs": 12.42312290454713,
     "emptyShare": 0,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -11953,9 +13513,15 @@
       "egress": 5.99895,
       "total": 6.050638347708439
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 70,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 117071872,
+    "cpuPerTileUs": 65.90803280699433,
     "emptyShare": 0,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -11988,9 +13554,15 @@
       "originStorage": 0.00034592858329237107,
       "total": 6.668978976871347
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 130801664,
+    "cpuPerTileUs": 45.32041545631896,
     "emptyShare": 0,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -12045,9 +13617,15 @@
       "egress": 6.055649999999999,
       "total": 6.095969512937594
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 119296000,
+    "cpuPerTileUs": 67.08195992856555,
     "emptyShare": 0,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -12080,9 +13658,15 @@
       "originStorage": 0.00034592858329237107,
       "total": 6.722088631405352
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 132571136,
+    "cpuPerTileUs": 53.65914075148922,
     "emptyShare": 0,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -12137,9 +13721,15 @@
       "egress": 7.42077,
       "total": 7.441226924801299
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 216072192,
+    "cpuPerTileUs": 269.11408612400896,
     "emptyShare": 0.015287337922202658,
     "emptyStatus": null,
     "catalogFirstMs": 2459,
@@ -12172,9 +13762,15 @@
       "originStorage": 0.000043241072911546383,
       "total": 8.008917997108917
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 220487680,
+    "cpuPerTileUs": 128.4485712355272,
     "emptyShare": 0.18380849031599897,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -12229,9 +13825,15 @@
       "egress": 7.41708,
       "total": 7.434801662401137
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 218013696,
+    "cpuPerTileUs": 295.5755903871616,
     "emptyShare": 0.01507631917792807,
     "emptyStatus": null,
     "catalogFirstMs": 2071,
@@ -12264,9 +13866,15 @@
       "originStorage": 0.00005765476388206185,
       "total": 8.005497271900895
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 206295040,
+    "cpuPerTileUs": 159.41762913102633,
     "emptyShare": 0.18462636014508213,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -12316,8 +13924,14 @@
       }
     ],
     "cost": null,
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 228503552,
     "cpuPerTileUs": null,
     "emptyShare": null,
     "emptyStatus": null,
@@ -12351,9 +13965,15 @@
       "originStorage": 0.0005318705155171756,
       "total": 6.690113665238849
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 107266048,
+    "cpuPerTileUs": 215.34271842139836,
     "emptyShare": 0.12952029520295202,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -12408,9 +14028,15 @@
       "egress": 6.102539999999999,
       "total": 6.175794929029061
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 219815936,
+    "cpuPerTileUs": 355.27517904745105,
     "emptyShare": 0.02245802747292681,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -12443,9 +14069,15 @@
       "originStorage": 0.0003144805302657919,
       "total": 6.766113301277593
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 122171392,
+    "cpuPerTileUs": 183.49290993374973,
     "emptyShare": 0.1260137469542132,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -12500,9 +14132,15 @@
       "egress": 7.365689999999999,
       "total": 7.571893514794303
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 308965376,
+    "cpuPerTileUs": 7751.574027787425,
     "emptyShare": 0.011881539280014187,
     "emptyStatus": null,
     "catalogFirstMs": 2686,
@@ -12535,9 +14173,15 @@
       "originStorage": 0.00019218254627353948,
       "total": 7.9583205427063035
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 285995008,
+    "cpuPerTileUs": 1181.5138135337431,
     "emptyShare": 0.18485825458588104,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -12592,9 +14236,15 @@
       "egress": 7.477469999999999,
       "total": 7.611868376458649
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 314351616,
+    "cpuPerTileUs": 5968.848892721581,
     "emptyShare": 0.014539148992930505,
     "emptyStatus": null,
     "catalogFirstMs": 2061,
@@ -12627,9 +14277,15 @@
       "originStorage": 0.00021620536455773195,
       "total": 8.063844769628346
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 253988864,
+    "cpuPerTileUs": 1235.9553327221583,
     "emptyShare": 0.18526026026026027,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -12679,8 +14335,14 @@
       }
     ],
     "cost": null,
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 616927232,
     "cpuPerTileUs": null,
     "emptyShare": null,
     "emptyStatus": null,
@@ -12714,9 +14376,15 @@
       "originStorage": 0.0010624342238709187,
       "total": 6.830458599113475
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 937877504,
+    "cpuPerTileUs": 2124.29381520057,
     "emptyShare": 0.13034398034398034,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -12766,8 +14434,14 @@
       }
     ],
     "cost": null,
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 624041984,
     "cpuPerTileUs": null,
     "emptyShare": null,
     "emptyStatus": null,
@@ -12801,9 +14475,15 @@
       "originStorage": 0.0009219844970478975,
       "total": 6.910074779865012
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 933195776,
+    "cpuPerTileUs": 1848.582873933015,
     "emptyShare": 0.12164179104477611,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -12858,9 +14538,15 @@
       "egress": 6.70338,
       "total": 6.7218592872672955
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 40928140,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 511729664,
+    "cpuPerTileUs": 30.77769596335478,
     "emptyShare": 0.014893691495319626,
     "emptyStatus": null,
     "catalogFirstMs": 4239,
@@ -12893,9 +14579,15 @@
       "originStorage": 0.00002809124591578476,
       "total": 7.3312383005431645
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 61459244,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 265134080,
+    "cpuPerTileUs": 23.1311613858215,
     "emptyShare": 0.1851100289070028,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -12950,9 +14642,15 @@
       "egress": 6.7158,
       "total": 6.731846090962151
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 43420708,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 516685824,
+    "cpuPerTileUs": 28.92563738677581,
     "emptyShare": 0.01503526311710455,
     "emptyStatus": null,
     "catalogFirstMs": 10946,
@@ -12985,9 +14683,15 @@
       "originStorage": 0.00002816319906110957,
       "total": 7.342933137778148
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 65864150,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 205565952,
+    "cpuPerTileUs": 21.771083975745157,
     "emptyShare": 0.18498491115970003,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -13037,8 +14741,14 @@
       }
     ],
     "cost": null,
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 2786119680,
     "cpuPerTileUs": null,
     "emptyShare": null,
     "emptyStatus": null,
@@ -13072,9 +14782,15 @@
       "originStorage": 0.00019218254627353948,
       "total": 5.534503042706304
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 78430208,
+    "cpuPerTileUs": 1480.2746654842097,
     "emptyShare": 0.12399635239429728,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -13124,8 +14840,14 @@
       }
     ],
     "cost": null,
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 1611800576,
     "cpuPerTileUs": null,
     "emptyShare": null,
     "emptyStatus": null,
@@ -13159,9 +14881,15 @@
       "originStorage": 0.00015724026513289595,
       "total": 5.625875400638797
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 75829248,
+    "cpuPerTileUs": 1088.4218334757793,
     "emptyShare": 0.1253250413689015,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -13216,9 +14944,15 @@
       "egress": 6.701759999999999,
       "total": 6.720234821394053
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 40762360,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 557654016,
+    "cpuPerTileUs": 33.64364295881444,
     "emptyShare": 0.014925410448787342,
     "emptyStatus": null,
     "catalogFirstMs": 1849,
@@ -13251,9 +14985,15 @@
       "originStorage": 0.00002813736972689041,
       "total": 7.3297087410734125
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 61812727,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 233721856,
+    "cpuPerTileUs": 23.324824371397256,
     "emptyShare": 0.18505153645783146,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -13308,9 +15048,15 @@
       "egress": 6.7311000000000005,
       "total": 6.747182647320549
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 43568018,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 569864192,
+    "cpuPerTileUs": 29.550948788615067,
     "emptyShare": 0.014367643676436764,
     "emptyStatus": null,
     "catalogFirstMs": 1676,
@@ -13343,9 +15089,15 @@
       "originStorage": 0.000028089400963340538,
       "total": 7.357382526870116
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 65990063,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 185257984,
+    "cpuPerTileUs": 22.55063561479736,
     "emptyShare": 0.1851210820349407,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -13395,8 +15147,14 @@
       }
     ],
     "cost": null,
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 3338813440,
     "cpuPerTileUs": null,
     "emptyShare": null,
     "emptyStatus": null,
@@ -13430,9 +15188,15 @@
       "originStorage": 0.0003144805302657919,
       "total": 5.4338411153375885
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 239521792,
+    "cpuPerTileUs": 2107.858245167463,
     "emptyShare": 0.12613202400436443,
     "emptyStatus": null,
     "catalogFirstMs": null,
@@ -13482,8 +15246,14 @@
       }
     ],
     "cost": null,
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 1780813824,
     "cpuPerTileUs": null,
     "emptyShare": null,
     "emptyStatus": null,
@@ -13517,9 +15287,15 @@
       "originStorage": 0.0002306190555282474,
       "total": 5.7520915876035685
     },
-    "allowanceExceeded": {},
-    "peakAnonBytes": null,
-    "cpuPerTileUs": null,
+    "allowanceExceeded": {
+      "bw_in_allowance_exceeded": 0,
+      "bw_out_allowance_exceeded": 0,
+      "pps_allowance_exceeded": 0,
+      "conntrack_allowance_exceeded": 0,
+      "linklocal_allowance_exceeded": 0
+    },
+    "peakAnonBytes": 237559808,
+    "cpuPerTileUs": 1633.7371703421675,
     "emptyShare": 0.12332568440151556,
     "emptyStatus": null,
     "catalogFirstMs": null,
