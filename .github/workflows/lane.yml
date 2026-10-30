@@ -138,6 +138,11 @@ jobs:
           for g in $(aws ec2 describe-placement-groups --filters "Name=group-name,Values=lane-$RUN-*" --query 'PlacementGroups[].GroupName' --output text); do
             aws ec2 delete-placement-group --group-name "$g" || echo "::warning::placement group $g stays"
           done
+          # and any lane groups an earlier run left behind (a cancelled run's cleanup can be cut short); a group that
+          # still holds an instance refuses the delete
+          for g in $(aws ec2 describe-placement-groups --filters "Name=group-name,Values=lane-*" --query 'PlacementGroups[].GroupName' --output text); do
+            aws ec2 delete-placement-group --group-name "$g" >/dev/null 2>&1 && echo "removed $g, left by an earlier run"
+          done
 
       - name: Fetch the records
         if: always()
