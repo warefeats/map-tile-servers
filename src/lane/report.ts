@@ -34,7 +34,9 @@ export interface ScenarioRecord {
   scenario: Scenario;
   firstView: { wallMs: number; statuses: Record<string, number> };
   users: UsersResult[];
-  capacity: { capacityRps: number | null; atCeiling: boolean; steps?: { offeredRps: number; achievedRps: number; held: boolean; fromS?: number; toS?: number }[] };
+  capacity: { capacityRps: number | null; atCeiling: boolean; steps?: { offeredRps: number; achievedRps: number; held: boolean; fromS?: number; toS?: number; statusCodes?: Record<string, number> }[] };
+  /** The status the server declares for a tile its archive lacks, where it is not 204 or 404. */
+  emptyStatus?: number | null;
   clientBoundAtRps: number | null;
   bytesPerTile: number | null;
   p99AtCapacityMs: number | null;
@@ -68,6 +70,9 @@ export interface Measurement {
   peakAnonBytes: number | null;
   /** The server container's CPU time per tile over the capacity step; null where fewer than two samples fell in it. */
   cpuPerTileUs: number | null;
+  /** The share of the capacity step's answers that were empty tiles, and the status the server declares for one. */
+  emptyShare: number | null;
+  emptyStatus: number | null;
   /** The unit's catalog start, on its alone measurement only: to the dataset's first tile and to the last source's. */
   catalogFirstMs: number | null;
   catalogLastMs: number | null;
@@ -103,6 +108,18 @@ export function parseSamples(text: string): Sample[] {
       }
       return { at: Number(at), anon, usageUsec, counters };
     });
+}
+
+/** The share of a step's answers that were empty tiles: 204, 404, or the status the server declares for one. */
+export function emptyShare(codes: Record<string, number> | undefined, emptyStatus: number | null | undefined): number | null {
+  if (!codes) return null;
+  let empty = 0;
+  let all = 0;
+  for (const [code, n] of Object.entries(codes)) {
+    all += n;
+    if (code === "204" || code === "404" || code === String(emptyStatus)) empty += n;
+  }
+  return all ? empty / all : null;
 }
 
 /** The server container's CPU time per tile at a step's rate: its counter's growth over the step, per tile served. */
@@ -173,6 +190,8 @@ export function measurementOf(rec: UnitRecord, s: ScenarioRecord, prices: Prices
     cost,
     ...stats,
     cpuPerTileUs: cpuPerTile(samples, atCapacity),
+    emptyShare: emptyShare(atCapacity?.statusCodes, s.emptyStatus),
+    emptyStatus: s.emptyStatus ?? null,
     catalogFirstMs: s.scenario === "alone" ? (rec.catalog?.firstMs ?? null) : null,
     catalogLastMs: s.scenario === "alone" ? (rec.catalog?.lastMs ?? null) : null,
   };
@@ -209,12 +228,15 @@ export interface Entry {
   server: string;
   version: string;
   stable: boolean;
-  rank: number;
-  costPerMillion: Interval;
+  /** null for a server that held no rate within the target, which gets no price and ranks after every priced one. */
+  rank: number | null;
+  costPerMillion: Interval | null;
   capacityRps: Interval | null;
   /** Measured before the network cap, and the server's CPU per tile at it: reported, not ranked. */
   measuredRps: Interval | null;
   cpuPerTileUs: Interval | null;
+  emptyStatus: number | null;
+  emptyShare: Interval | null;
   bytesPerTile: Interval | null;
   p99AtCapacityMs: Interval | null;
   networkBound: number;
@@ -249,17 +271,19 @@ export function rankings(ms: readonly Measurement[]): Ranking[] {
         if (c) costs.set(server, c);
       }
       const rank = ranks(costs);
-      const entries = [...costs.entries()].map(([server, costPerMillion]): Entry => {
+      const entries = [...byServer.keys()].map((server): Entry => {
         const list = byServer.get(server)!;
         return {
           server,
           version: list[0]!.version,
           stable: list[0]!.stable,
-          rank: rank.get(server)!,
-          costPerMillion,
+          rank: rank.get(server) ?? null,
+          costPerMillion: costs.get(server) ?? null,
           capacityRps: interval(num(list.map((m) => m.capacityRps))),
           measuredRps: interval(num(list.map((m) => m.measuredRps))),
           cpuPerTileUs: interval(num(list.map((m) => m.cpuPerTileUs))),
+          emptyStatus: list[0]!.emptyStatus,
+          emptyShare: interval(num(list.map((m) => m.emptyShare))),
           bytesPerTile: interval(num(list.map((m) => m.bytesPerTile))),
           p99AtCapacityMs: interval(num(list.map((m) => m.p99AtCapacityMs))),
           networkBound: list.filter((m) => m.networkBound).length,
@@ -267,7 +291,7 @@ export function rankings(ms: readonly Measurement[]): Ranking[] {
           passes: list.filter((m) => m.cost).map((m) => m.pass),
         };
       });
-      entries.sort((a, b) => a.rank - b.rank || a.costPerMillion.mean - b.costPerMillion.mean);
+      entries.sort((a, b) => (a.rank ?? Infinity) - (b.rank ?? Infinity) || (a.costPerMillion?.mean ?? Infinity) - (b.costPerMillion?.mean ?? Infinity) || a.server.localeCompare(b.server));
       const m = group[0]!;
       return { dataset: m.dataset, format: m.format, scenario: m.scenario, arch: m.arch, entries };
     });
@@ -310,14 +334,40 @@ export function catalogRows(ms: readonly Measurement[]): CatalogRow[] {
     }));
 }
 
-export function markdown(rs: readonly Ranking[], prices: Prices, catalog: readonly CatalogRow[] = []): string {
+export interface NotMeasured {
+  unit: string;
+  reason: string;
+  /** Passes it failed in; none when the plan skipped it. */
+  passes: number[];
+}
+
+/** Units the plan skipped, with its reason, and units that ended without a scenario's result, with their error. */
+export function notMeasured(dir: string): NotMeasured[] {
+  const out = new Map<string, NotMeasured>();
+  const plan = join(dir, "plan.json");
+  if (existsSync(plan)) for (const s of (JSON.parse(readFileSync(plan, "utf8")) as { skipped?: { id: string; reason: string }[] }).skipped ?? []) out.set(s.id, { unit: s.id, reason: s.reason, passes: [] });
+  for (const pass of readdirSync(dir).filter((d) => /^p\d+$/.test(d)).sort()) {
+    for (const unit of readdirSync(join(dir, pass)).sort()) {
+      const at = (f: string) => join(dir, pass, unit, f);
+      if (!existsSync(at("unit.json")) || existsSync(at("alone.json")) || existsSync(at("cdn.json"))) continue;
+      const rec = JSON.parse(readFileSync(at("unit.json"), "utf8")) as UnitRecord;
+      if (!rec.error) continue;
+      const e = out.get(unit) ?? { unit, reason: rec.error.split("\n")[0]!, passes: [] };
+      e.passes.push(rec.pass);
+      out.set(unit, e);
+    }
+  }
+  return [...out.values()].sort((a, b) => a.unit.localeCompare(b.unit));
+}
+
+export function markdown(rs: readonly Ranking[], prices: Prices, catalog: readonly CatalogRow[] = [], missing: readonly NotMeasured[] = []): string {
   const out = [`# Archive lane`, "", `Dollars per million tiles at AWS list prices of ${prices.date} (${prices.region}); lower is better. A rank is shared unless the 95% confidence intervals over the passes do not overlap. The price takes each server's capacity capped at the instance's sustained network rate (${BASELINE_GBPS["c8g.xlarge"]} Gbps); the measured capacity and the server container's CPU per tile at it stand beside each ranking, unranked.`, ""];
   const label = (e: Entry) => `${e.server} ${e.version}${e.stable ? "" : " (pre-release)"}`;
   for (const r of rs) {
     out.push(`## ${r.dataset}, ${r.format}, ${r.scenario === "alone" ? "server alone" : "behind a CDN"}, ${r.arch}`, "");
     // the ranked question: what a million tiles cost
     out.push("| rank | server | $ per M tiles | 95% CI | passes |", "| --: | :-- | --: | --: | --: |");
-    for (const e of r.entries) out.push(`| ${e.rank} | ${label(e)} | ${fmt(e.costPerMillion.mean, 3)} | ${ci(e.costPerMillion, 3)} | ${e.passes.length} |`);
+    for (const e of r.entries) out.push(e.costPerMillion ? `| ${e.rank} | ${label(e)} | ${fmt(e.costPerMillion.mean, 3)} | ${ci(e.costPerMillion, 3)} | ${e.passes.length} |` : `| – | ${label(e)} (held no rate within the target) | – | – | 0 |`);
     // reported beside it, not ranked: how hard each server worked for that price
     out.push("", "| server | measured (tiles/s) | priced at (tiles/s) | CPU per tile (µs) | tile (KB) | p99 at capacity (ms) |", "| :-- | --: | --: | --: | --: | --: |");
     for (const e of r.entries) {
@@ -325,10 +375,21 @@ export function markdown(rs: readonly Ranking[], prices: Prices, catalog: readon
       out.push(`| ${label(e)}${flags ? ` (${flags})` : ""} | ${fmt(e.measuredRps?.mean, 0)} | ${fmt(e.capacityRps?.mean, 0)} | ${fmt(e.cpuPerTileUs?.mean, 0)} | ${fmt(e.bytesPerTile ? e.bytesPerTile.mean / 1000 : null, 1)} | ${fmt(e.p99AtCapacityMs?.mean, 1)} |`);
     }
     out.push("");
+    // a server that answers a missing tile with something other than 204 or 404, set beside the others' empty answers
+    for (const e of r.entries.filter((x) => x.emptyStatus && x.emptyShare)) {
+      const others = r.entries.filter((x) => !x.emptyStatus && x.emptyShare).map((x) => x.emptyShare!.mean * 100);
+      const range = others.length ? `, where the others' empty answers are ${fmt(Math.min(...others), 1)}–${fmt(Math.max(...others), 1)}%` : "";
+      out.push(`${label(e)} answers a tile its archive lacks with ${e.emptyStatus}, counted as that empty tile: ${fmt(e.emptyShare!.mean * 100, 1)}% of its answers at capacity${range}.`, "");
+    }
   }
   if (catalog.length) {
     out.push("## Start with 1,000 more sources (Berlin, reported)", "", "| format | arch | server | first tile (ms) | last source's tile (ms) | never served | passes |", "| :-- | :-- | :-- | --: | --: | --: | --: |");
     for (const c of catalog) out.push(`| ${c.format} | ${c.arch} | ${c.server} ${c.version} | ${fmt(c.firstMs?.mean, 0)} | ${fmt(c.lastMs?.mean, 0)} | ${c.neverServed} | ${c.passes} |`);
+    out.push("");
+  }
+  if (missing.length) {
+    out.push("## Not measured", "", "| unit | why | passes |", "| :-- | :-- | :-- |");
+    for (const m of missing) out.push(`| ${m.unit} | ${m.reason.replaceAll("|", "\\|")} | ${m.passes.length ? m.passes.join(", ") : "skipped"} |`);
     out.push("");
   }
   return out.join("\n");
@@ -368,6 +429,6 @@ if (import.meta.main) {
   mkdirSync(out, { recursive: true });
   writeFileSync(join(out, "measurements.json"), `${JSON.stringify(ms, null, 2)}\n`);
   writeFileSync(join(out, "rankings.json"), `${JSON.stringify(rs, null, 2)}\n`);
-  writeFileSync(join(out, "report.md"), markdown(rs, prices, catalogRows(ms)));
+  writeFileSync(join(out, "report.md"), markdown(rs, prices, catalogRows(ms), notMeasured(records)));
   console.log(`${ms.length} measurements, ${rs.length} rankings`);
 }

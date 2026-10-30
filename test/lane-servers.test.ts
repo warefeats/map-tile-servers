@@ -33,6 +33,20 @@ describe("the lane's servers", () => {
     expect(server("bbox").config!(["berlin"], "mbtiles")["bbox.toml"]).toContain('[tileset.mbtiles]\npath = "/data/berlin.mbtiles"');
   });
 
+  test("VersaTiles runs as its production image: nginx's cache in front, plain HTTP, archives in a writable /data/tiles", () => {
+    const run = dockerRun(server("versatiles"), "arm64", ["planet"], "pmtiles");
+    expect(run).toContain("versatiles/versatiles-nginx:v5.4.1");
+    expect(run).toContain("/opt/lane/data:/data");
+    expect(run).not.toContain("/opt/lane/data:/data:ro");
+    for (const e of ["HTTP_ONLY=1", "FRONTEND=none", "TILE_SOURCES=planet.pmtiles", "DOMAIN=localhost"]) expect(run).toContain(e);
+    expect(server("versatiles").port).toBe(80);
+    // the 60%-of-RAM cache its startup script sizes, not Docker's 64 MB /dev/shm
+    expect(run.join(" ")).toContain("--shm-size 5g");
+    expect(dockerRun(server("martin-2"), "arm64", ["planet"], "pmtiles")).not.toContain("--shm-size");
+    expect(server("bbox").emptyStatus).toBe(500);
+    expect(server("martin-2").emptyStatus).toBeUndefined();
+  });
+
   test("nginx serves tile files with OpenFreeMap's production settings", () => {
     const conf = openFreeMapNginx(["planet"]);
     for (const line of ["worker_connections 40000;", "open_file_cache max=200000 inactive=60m;", "location ^~ /planet/ {", "alias /data/planet/tiles/;", "try_files $uri @empty_tile;", "add_header Content-Encoding gzip;", "return 200 '';", "access_log /var/log/nginx/access.jsonl access_json buffer=128k;"]) {
@@ -44,7 +58,7 @@ describe("the lane's servers", () => {
   test("a catalog is every archive in one start: arguments or config entries, one per tileset", () => {
     const ts = ["berlin", "t0000", "t0001"];
     expect(server("martin-2").args(ts, "pmtiles")).toEqual(["/data/berlin.pmtiles", "/data/t0000.pmtiles", "/data/t0001.pmtiles"]);
-    expect(server("versatiles").args(ts, "mbtiles").slice(3)).toEqual(["[berlin]/data/berlin.mbtiles", "[t0000]/data/t0000.mbtiles", "[t0001]/data/t0001.mbtiles"]);
+    expect(server("versatiles").env!(ts, "mbtiles").TILE_SOURCES).toBe("berlin.mbtiles,t0000.mbtiles,t0001.mbtiles");
     expect(Object.keys(JSON.parse(server("tileserver-gl").config!(ts, "mbtiles")["config.json"]!).data)).toEqual(ts);
     expect(server("bbox").config!(ts, "pmtiles")["bbox.toml"]!.match(/\[\[tileset\]\]/g)).toHaveLength(3);
     expect(dockerRun(server("go-pmtiles"), "arm64", ts, "pmtiles", undefined, "/opt/lane/catalog")).toContain("/opt/lane/catalog:/data:ro");

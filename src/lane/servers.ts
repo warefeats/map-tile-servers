@@ -32,6 +32,18 @@ export interface LaneServer {
   config?: (tilesets: readonly string[], format: Format) => Record<string, string>;
   /** Where the image expects a file from /data, when it is not /data itself: name → path in the container. */
   mounts?: Record<string, string>;
+  /** The container's environment. */
+  env?: (tilesets: readonly string[], format: Format) => Record<string, string>;
+  /** Archives in /data/tiles/ of a /data the image may write to, rather than beside the config in a read-only /data. */
+  layout?: "tiles-dir";
+  /** The status the server answers a tile its archive lacks with, where it is not 204 or 404: counted as that empty tile. */
+  emptyStatus?: number;
+  /** A cache in front of the server answers repeats, so a start probe asks for a fresh URL every time. */
+  cachedFront?: boolean;
+  /** The container's /dev/shm, where the image keeps a cache Docker's 64 MB default would cut short. */
+  shmSize?: string;
+  /** Archives the server cannot open, with why: the units are skipped and the reason reported. */
+  unsupported?: Partial<Record<Dataset, Partial<Record<Format, string>>>>;
 }
 
 const xyz = (t: TileCoord) => `${t.z}/${t.x}/${t.y}`;
@@ -40,7 +52,19 @@ export const LANE_SERVERS: readonly LaneServer[] = [
   { id: "martin-2", name: "Martin", version: "2.0.0-beta.4", stable: false, formats: ["pmtiles", "mbtiles"], image: { arm64: "ghcr.io/maplibre/martin:2.0.0-beta.4", amd64: "ghcr.io/maplibre/martin:2.0.0-beta.4" }, port: 3000, path: (s, t) => `/${s}/${xyz(t)}`, args: (ts, f) => ts.map((t) => `/data/${t}.${f}`) },
   { id: "martin-1", name: "Martin", version: "1.16.1", stable: true, formats: ["pmtiles", "mbtiles"], image: { arm64: "ghcr.io/maplibre/martin:1.16.1", amd64: "ghcr.io/maplibre/martin:1.16.1" }, port: 3000, path: (s, t) => `/${s}/${xyz(t)}`, args: (ts, f) => ts.map((t) => `/data/${t}.${f}`) },
   { id: "go-pmtiles", name: "go-pmtiles", version: "1.31.2", stable: true, formats: ["pmtiles"], image: { arm64: "protomaps/go-pmtiles:v1.31.2", amd64: "protomaps/go-pmtiles:v1.31.2" }, port: 8080, path: (s, t) => `/${s}/${xyz(t)}.mvt`, args: () => ["serve", "/data", "--port=8080"] },
-  { id: "versatiles", name: "VersaTiles", version: "5.4.1", stable: true, formats: ["pmtiles", "mbtiles"], image: { arm64: "versatiles/versatiles:v5.4.1", amd64: "versatiles/versatiles:v5.4.1" }, port: 8080, path: (s, t) => `/tiles/${s}/${xyz(t)}`, args: (ts, f) => ["serve", "--port", "8080", ...ts.map((t) => `[${t}]/data/${t}.${f}`)] },
+  // VersaTiles' deploy guides run it as its versatiles-nginx image: `versatiles serve` behind an in-memory nginx tile
+  // cache in one container. Bare `serve` re-encodes every tile to Brotli for a browser and held no rate within the
+  // target in the coverage smoke. HTTP_ONLY serves plain HTTP on port 80, as its README says for a private network.
+  {
+    id: "versatiles", name: "VersaTiles", version: "5.4.1", stable: true, formats: ["pmtiles", "mbtiles"], image: { arm64: "versatiles/versatiles-nginx:v5.4.1", amd64: "versatiles/versatiles-nginx:v5.4.1" }, port: 80, path: (s, t) => `/tiles/${s}/${xyz(t)}`, args: () => [],
+    layout: "tiles-dir",
+    // its nginx keeps every response five minutes, errors included (proxy_cache_valid any 5m)
+    cachedFront: true,
+    // its startup script sizes that cache at 60% of RAM (4.7 GB on these 8 GiB instances) in /dev/shm, which Docker
+    // caps at 64 MB unless told; past that every cache write failed with ENOSPC (smoke 40993337300)
+    shmSize: "5g",
+    env: (ts, f) => ({ DOMAIN: "localhost", HTTP_ONLY: "1", FRONTEND: "none", TILE_SOURCES: ts.map((t) => `${t}.${f}`).join(",") }),
+  },
   {
     id: "tileserver-gl", name: "tileserver-gl-light", version: "5.7.0", stable: true, formats: ["pmtiles", "mbtiles"], image: { arm64: "maptiler/tileserver-gl-light:v5.7.0", amd64: "maptiler/tileserver-gl-light:v5.7.0" }, port: 8080, path: (s, t) => `/data/${s}/${xyz(t)}.pbf`, args: () => ["--config", "/data/config.json"],
     config: (ts, f) => ({ "config.json": JSON.stringify({ options: { paths: { root: "/data", mbtiles: "/data", pmtiles: "/data" } }, styles: {}, data: Object.fromEntries(ts.map((t) => [t, { [f]: `${t}.${f}` }])) }, null, 2) }),
@@ -49,6 +73,10 @@ export const LANE_SERVERS: readonly LaneServer[] = [
   // The project publishes an amd64 image only; on Graviton the lane wraps its official aarch64 release binary.
   {
     id: "bbox", name: "BBOX", version: "0.6.2", stable: true, unmaintained: true, formats: ["pmtiles", "mbtiles"], image: { arm64: null, amd64: "sourcepole/bbox-tile-server:v0.6.2" }, release: { arm64: "wf-bbox-release:0.6.2" }, port: 8080, path: (s, t) => `/xyz/${s}/${xyz(t)}.mvt`, args: () => ["bbox-tile-server", "-c", "/data/bbox.toml", "serve"],
+    // a tile the archive lacks gets 500 where the others answer 204; the report shows that share beside theirs
+    emptyStatus: 500,
+    // its mbtiles reader predates Planetiler's deduplicated schema, which OpenFreeMap's planet uses (smoke 40990904006)
+    unsupported: { planet: { mbtiles: "BBOX 0.6.2 cannot open Planetiler's deduplicated MBTiles schema (tiles_shallow and tiles_data under a tiles view): \"Invalid data format for MBTile file\"" } },
     // its documented defaults: worker threads one per core, loglevel Info, no tile cache
     config: (ts, f) => ({ "bbox.toml": `[webserver]\nserver_addr = "0.0.0.0:8080"\n\n${ts.map((t) => `[[tileset]]\nname = "${t}"\n[tileset.${f}]\npath = "/data/${t}.${f}"\n`).join("\n")}` }),
   },
@@ -140,10 +168,16 @@ export function units(datasets: readonly Dataset[], archs: readonly Arch[]): { s
   return LANE_SERVERS.flatMap((server) => server.formats.flatMap((format) => datasets.flatMap((dataset) => archs.map((arch) => ({ server, format, dataset, arch })))));
 }
 
+/** Where a server's archives go under a data directory on the instance. */
+export const archiveDir = (server: LaneServer, dir: string) => (server.layout === "tiles-dir" ? `${dir}/tiles` : dir);
+
 /** The `docker run` that starts a server on its instance, with the archives and config files of `dir` at /data. */
 export function dockerRun(server: LaneServer, arch: Arch, tilesets: readonly string[], format: Format, localImage?: string, dir = "/opt/lane/data"): string[] {
   const image = server.image[arch] ?? localImage;
   if (!image) throw new Error(`${server.id} publishes no ${arch} image and none was built from its release binary`);
   const mounts = Object.entries(server.mounts ?? {}).flatMap(([name, at]) => ["-v", `${dir}/${name}:${at}:ro`]);
-  return ["docker", "run", "-d", "--name", "lane-server", "--network", "host", "-v", `${dir}:/data:ro`, ...mounts, image, ...server.args(tilesets, format)];
+  const env = Object.entries(server.env?.(tilesets, format) ?? {}).flatMap(([k, v]) => ["-e", `${k}=${v}`]);
+  const data = server.layout === "tiles-dir" ? `${dir}:/data` : `${dir}:/data:ro`;
+  const shm = server.shmSize ? ["--shm-size", server.shmSize] : [];
+  return ["docker", "run", "-d", "--name", "lane-server", "--network", "host", ...shm, "-v", data, ...mounts, ...env, image, ...server.args(tilesets, format)];
 }

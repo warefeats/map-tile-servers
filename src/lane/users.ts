@@ -74,7 +74,7 @@ export interface UsersResult {
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
-async function runUser(target: (t: TileCoord) => string, headers: Record<string, string>, start: View, rand: () => number, untilMs: number): Promise<ViewRecord[]> {
+async function runUser(target: (t: TileCoord) => string, headers: Record<string, string>, start: View, rand: () => number, untilMs: number, emptyStatus?: number): Promise<ViewRecord[]> {
   const agent = new Agent({ keepAlive: true, maxSockets: CONNECTIONS_PER_USER });
   const loaded = new Set<string>();
   const records: ViewRecord[] = [];
@@ -87,7 +87,7 @@ async function runUser(target: (t: TileCoord) => string, headers: Record<string,
       for (const t of tiles) loaded.add(tileKey(t));
       const started = performance.now();
       const fetched = await Promise.allSettled(tiles.map((t) => get(target(t), headers, { agent, timeoutMs: 10_000 })));
-      const ok = fetched.flatMap((f) => (f.status === "fulfilled" && (f.value.status < 300 || f.value.status === 404) ? [f.value] : []));
+      const ok = fetched.flatMap((f) => (f.status === "fulfilled" && (f.value.status < 300 || f.value.status === 404 || f.value.status === emptyStatus) ? [f.value] : []));
       records.push({ zoom: view.zoom, tiles: tiles.length, wallMs: performance.now() - started, bytes: ok.reduce((a, f) => a + f.bytes, 0), failures: tiles.length - ok.length });
     }
     // think, but not past the end
@@ -103,7 +103,7 @@ export async function runUsers(server: LaneServer, host: string, tileset: string
   const untilMs = performance.now() + durationS * 1000;
   const runs = Array.from({ length: users }, (_, u) => {
     const rand = mulberry32(seed + u * 7919);
-    return runUser((t) => tileUrl(server, host, tileset, t), headers, viewAt(lines[Math.floor(rand() * lines.length)]!), rand, untilMs);
+    return runUser((t) => tileUrl(server, host, tileset, t), headers, viewAt(lines[Math.floor(rand() * lines.length)]!), rand, untilMs, server.emptyStatus);
   });
   const views = (await Promise.all(runs)).flat();
   const ms = views.map((v) => v.wallMs);

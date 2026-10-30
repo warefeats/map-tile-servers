@@ -4,7 +4,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { parsePrices } from "../src/cost";
 import type { UnitRecord } from "../src/lane/orchestrate";
-import { catalogRows, cpuPerTile, interval, markdown, measurementOf, networkCap, parseSamples, rankings, ranks, readRun, type ScenarioRecord, scenarioWindow, windowStats } from "../src/lane/report";
+import { catalogRows, cpuPerTile, emptyShare, interval, markdown, measurementOf, networkCap, notMeasured, parseSamples, rankings, ranks, readRun, type ScenarioRecord, scenarioWindow, windowStats } from "../src/lane/report";
 import { MISS_SHARE } from "../src/replay";
 
 const prices = parsePrices(JSON.parse(readFileSync("prices/aws-us-east-1-2026-10-29.json", "utf8")));
@@ -58,6 +58,43 @@ describe("the lane's report", () => {
     expect(cpuPerTile(samples, { achievedRps: 1000 })).toBeNull();
     const steps = [{ offeredRps: 1000, achievedRps: 1000, held: true, fromS: 1761818399, toS: 1761818405 }, { offeredRps: 2000, achievedRps: 1500, held: false, fromS: 1761818405, toS: 1761818410 }];
     expect(measurementOf(record(), { ...scenario("alone", 1000, 30_000), capacity: { capacityRps: 1000, atCeiling: false, steps } }, prices, samples, null).cpuPerTileUs).toBeCloseTo(200, 6);
+  });
+
+  test("sets a server's declared empty status beside the others' empty answers", () => {
+    expect(emptyShare({ "200": 98, "500": 2 }, 500)).toBeCloseTo(0.02, 9);
+    expect(emptyShare({ "200": 97, "204": 3 }, null)).toBeCloseTo(0.03, 9);
+    const steps = (codes: Record<string, number>) => [{ offeredRps: 1000, achievedRps: 1000, held: true, statusCodes: codes }];
+    const bbox = measurementOf(record({ server: "bbox", version: "0.6.2", stable: true }), { ...scenario("alone", 1000, 80_000, { server: "bbox" }), emptyStatus: 500, capacity: { capacityRps: 1000, atCeiling: false, steps: steps({ "200": 986, "500": 14 }) } }, prices, [], null);
+    const martin = measurementOf(record(), { ...scenario("alone", 1000, 80_000), capacity: { capacityRps: 1000, atCeiling: false, steps: steps({ "200": 985, "204": 15 }) } }, prices, [], null);
+    expect(bbox.emptyShare).toBeCloseTo(0.014, 9);
+    const md = markdown(rankings([bbox, martin]), prices);
+    expect(md).toContain("bbox 0.6.2 answers a tile its archive lacks with 500, counted as that empty tile: 1.4% of its answers at capacity, where the others' empty answers are 1.5–1.5%.");
+  });
+
+  test("a server that held no rate within the target ranks after the priced ones, marked, with no price", () => {
+    const held = measurementOf(record(), scenario("alone", 1000, 80_000), prices, [], null);
+    const none = measurementOf(record({ server: "versatiles", version: "5.4.1", stable: true }), { ...scenario("alone", 0, 80_000, { server: "versatiles" }), capacity: { capacityRps: null, atCeiling: false } }, prices, [], null);
+    const [r] = rankings([none, held]);
+    expect(r!.entries.map((e) => [e.server, e.rank])).toEqual([["martin-2", 1], ["versatiles", null]]);
+    expect(markdown([r!], prices)).toContain("| – | versatiles 5.4.1 (held no rate within the target) | – | – | 0 |");
+  });
+
+  test("lists what was not measured: units the plan skipped, and units that ended without a result", () => {
+    const dir = mkdtempSync(join(tmpdir(), "lane-missing-"));
+    writeFileSync(join(dir, "plan.json"), JSON.stringify({ skipped: [{ id: "bbox-mbtiles-planet-amd64", reason: "cannot open the archive" }] }));
+    mkdirSync(join(dir, "p1", "versatiles-pmtiles-planet-arm64"), { recursive: true });
+    writeFileSync(join(dir, "p1", "versatiles-pmtiles-planet-arm64", "unit.json"), JSON.stringify(record({ id: "versatiles-pmtiles-planet-arm64", error: "setup on i-1: Failed\nno 200 within a minute" })));
+    mkdirSync(join(dir, "p1", "martin-2-pmtiles-berlin-arm64"), { recursive: true });
+    writeFileSync(join(dir, "p1", "martin-2-pmtiles-berlin-arm64", "unit.json"), JSON.stringify(record()));
+    writeFileSync(join(dir, "p1", "martin-2-pmtiles-berlin-arm64", "alone.json"), JSON.stringify(scenario("alone", 1000, 80_000)));
+    const missing = notMeasured(dir);
+    expect(missing).toEqual([
+      { unit: "bbox-mbtiles-planet-amd64", reason: "cannot open the archive", passes: [] },
+      { unit: "versatiles-pmtiles-planet-arm64", reason: "setup on i-1: Failed", passes: [1] },
+    ]);
+    const md = markdown([], prices, [], missing);
+    expect(md).toContain("| bbox-mbtiles-planet-amd64 | cannot open the archive | skipped |");
+    expect(md).toContain("| versatiles-pmtiles-planet-arm64 | setup on i-1: Failed | 1 |");
   });
 
   test("intervals over passes, and ranks that tie where they overlap", () => {

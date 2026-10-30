@@ -9,6 +9,13 @@ describe("the lane's client", () => {
     expect(answered({ "200": 90, "204": 5, "404": 4, "500": 1 })).toBe(99);
   });
 
+  test("counts the status a server declares for a tile its archive lacks as that empty tile", () => {
+    expect(answered({ "200": 98, "500": 2 }, 500)).toBe(100);
+    expect(answered({ "200": 98, "500": 2 })).toBe(98);
+    expect(stepOf(1000, pass({ "200": 19_700, "500": 300 }, 12), 20, 50, null, 500).held).toBe(true);
+    expect(stepOf(1000, pass({ "200": 19_700, "500": 300 }, 12), 20, 50).held).toBe(false);
+  });
+
   test("a step is held when p99, errors and the delivered rate all pass", () => {
     const s = stepOf(1000, pass({ "200": 19_990, "404": 10 }, 12), 20, 50);
     expect(s.achievedRps).toBe(1000);

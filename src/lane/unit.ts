@@ -32,9 +32,12 @@ export const connections = (rps: number) => Math.min(1024, Math.max(32, Math.cei
 /** A step whose client was this busy may have measured the client; the report says so. */
 export const CLIENT_BUSY = 0.9;
 
-/** Answers that are not errors: every 2xx, and 404, which some servers send for a tile the archive lacks. */
-export function answered(statusCodes: Record<string, number>): number {
-  return Object.entries(statusCodes).reduce((s, [code, n]) => (code.startsWith("2") || code === "404" ? s + n : s), 0);
+/**
+ * Answers that are not errors: every 2xx, and 404, which some servers send for a tile the archive lacks, and the
+ * status a server declares for that empty tile when it is something else (BBOX's 500).
+ */
+export function answered(statusCodes: Record<string, number>, emptyStatus?: number): number {
+  return Object.entries(statusCodes).reduce((s, [code, n]) => (code.startsWith("2") || code === "404" || code === String(emptyStatus) ? s + n : s), 0);
 }
 
 export interface Step extends StepOutcome {
@@ -48,9 +51,9 @@ export interface Step extends StepOutcome {
   toS?: number;
 }
 
-export function stepOf(rps: number, pass: OhaPass, seconds: number, targetMs: number, clientCpu: number | null = null): Step {
+export function stepOf(rps: number, pass: OhaPass, seconds: number, targetMs: number, clientCpu: number | null = null, emptyStatus?: number): Step {
   const total = pass.completed + pass.transportErrors;
-  const ok = answered(pass.statusCodes);
+  const ok = answered(pass.statusCodes, emptyStatus);
   const errorRate = total > 0 ? (total - ok) / total : 1;
   const achievedRps = ok / seconds;
   return { offeredRps: rps, achievedRps, p50Ms: pass.p50Ms, p99Ms: pass.p99Ms, errorRate, held: held(rps, achievedRps, pass.p99Ms, errorRate, targetMs), bytesPerRequest: pass.bytesPerRequest, statusCodes: pass.statusCodes, clientCpu };
@@ -160,13 +163,13 @@ if (import.meta.main) {
       oha({ ...base, connections: connections(rps), rate: rps, durationSeconds: t.stepWarmupS });
       const before = cpuTimes();
       const pass = oha({ ...base, connections: connections(rps), rate: rps, durationSeconds: t.stepS });
-      const s: Step = { ...stepOf(rps, pass, t.stepS, TARGET_MS, busyShare(before, cpuTimes())), fromS, toS: Date.now() / 1000 };
+      const s: Step = { ...stepOf(rps, pass, t.stepS, TARGET_MS, busyShare(before, cpuTimes()), server.emptyStatus), fromS, toS: Date.now() / 1000 };
       console.log(`  offered ${rps}/s: delivered ${s.achievedRps.toFixed(1)}/s, p99 ${s.p99Ms ?? "n/a"} ms, errors ${(s.errorRate * 100).toFixed(2)}%, client CPU ${s.clientCpu === null ? "n/a" : `${(s.clientCpu * 100).toFixed(0)}%`} ${s.held ? "held" : "NOT held"}`);
       return s;
     },
     { startRps: 1000, maxRps: 256_000, minRps: 125, bisections: 3 },
   );
   const atCapacity = (capacity.steps as Step[]).filter((s) => s.held && s.offeredRps === capacity.capacityRps).at(-1) ?? null;
-  writeFileSync(out, JSON.stringify({ server: server.id, version: server.version, tileset, format: arg("format"), scenario, timing: t, targetMs: TARGET_MS, replayLines: lines.length, firstView: first, warmup: { rps: warmup.requestsPerSec, p99Ms: warmup.p99Ms, statusCodes: warmup.statusCodes }, users, capacity, clientBoundAtRps: clientBoundAt(capacity.steps as Step[]), bytesPerTile: atCapacity?.bytesPerRequest ?? null, p99AtCapacityMs: atCapacity?.p99Ms ?? null }, null, 2) + "\n");
+  writeFileSync(out, JSON.stringify({ server: server.id, version: server.version, emptyStatus: server.emptyStatus ?? null, tileset, format: arg("format"), scenario, timing: t, targetMs: TARGET_MS, replayLines: lines.length, firstView: first, warmup: { rps: warmup.requestsPerSec, p99Ms: warmup.p99Ms, statusCodes: warmup.statusCodes }, users, capacity, clientBoundAtRps: clientBoundAt(capacity.steps as Step[]), bytesPerTile: atCapacity?.bytesPerRequest ?? null, p99AtCapacityMs: atCapacity?.p99Ms ?? null }, null, 2) + "\n");
   console.log(`capacity ${capacity.capacityRps}/s${capacity.atCeiling ? " (at the ceiling)" : ""}, ${atCapacity?.bytesPerRequest ?? "?"} bytes a tile`);
 }
