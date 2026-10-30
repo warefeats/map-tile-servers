@@ -4,7 +4,9 @@
  * at the dated list prices and ranks the servers by that price, per dataset, format, scenario and architecture.
  * A difference counts only where the 95% confidence intervals over the passes do not overlap: a server's rank is
  * one more than the number of servers whose interval lies wholly below its own. Behind a CDN, CloudFront sends
- * every tile, so its bytes are the whole replay's, measured from the same server alone. The start with 1,000 more
+ * every tile, so its bytes are the whole replay's, measured from the same server alone. Beside each ranking, unranked,
+ * stand the capacity measured before the cap and the server's CPU per tile at it, from the container's own CPU
+ * counter over the capacity step. The start with 1,000 more
  * sources is reported beside the rankings, not ranked.
  *   bun run src/lane/report.ts --records=<dir> --prices=prices/aws-us-east-1-2026-10-29.json --out=<dir>
  */
@@ -32,7 +34,7 @@ export interface ScenarioRecord {
   scenario: Scenario;
   firstView: { wallMs: number; statuses: Record<string, number> };
   users: UsersResult[];
-  capacity: { capacityRps: number | null; atCeiling: boolean };
+  capacity: { capacityRps: number | null; atCeiling: boolean; steps?: { offeredRps: number; achievedRps: number; held: boolean; fromS?: number; toS?: number }[] };
   clientBoundAtRps: number | null;
   bytesPerTile: number | null;
   p99AtCapacityMs: number | null;
@@ -64,6 +66,8 @@ export interface Measurement {
   /** The network card's allowance counters over the scenario, and the server's peak memory. */
   allowanceExceeded: Record<string, number>;
   peakAnonBytes: number | null;
+  /** The server container's CPU time per tile over the capacity step; null where fewer than two samples fell in it. */
+  cpuPerTileUs: number | null;
   /** The unit's catalog start, on its alone measurement only: to the dataset's first tile and to the last source's. */
   catalogFirstMs: number | null;
   catalogLastMs: number | null;
@@ -75,26 +79,39 @@ export const networkCap = (gbps: number, bytesPerTile: number) => (gbps * 1e9) /
 export interface Sample {
   at: number;
   anon: number | null;
+  /** The server container's cumulative CPU time. */
+  usageUsec: number | null;
   counters: Record<string, number>;
 }
 
-/** The server's sampler: `<epoch> anon=<b> file=<b> cpu=<busy>/<total> <counter>:<n> ...`. */
+/** The server's sampler: `<epoch> anon=<b> file=<b> usage_usec=<µs> cpu=<busy>/<total> <counter>:<n> ...`. */
 export function parseSamples(text: string): Sample[] {
   return text
     .split("\n")
-    .filter((l) => /^\d+ /.test(l))
+    .filter((l) => /^\d+(\.\d+)? /.test(l))
     .map((l) => {
       const [at, ...fields] = l.trim().split(/\s+/);
       const counters: Record<string, number> = {};
       let anon: number | null = null;
+      let usageUsec: number | null = null;
       for (const f of fields) {
         const kv = /^(\w+)[=:](\d+)$/.exec(f);
         if (!kv) continue;
         if (kv[1] === "anon") anon = Number(kv[2]);
+        else if (kv[1] === "usage_usec") usageUsec = Number(kv[2]);
         else if (kv[1]!.endsWith("allowance_exceeded")) counters[kv[1]!] = Number(kv[2]);
       }
-      return { at: Number(at), anon, counters };
+      return { at: Number(at), anon, usageUsec, counters };
     });
+}
+
+/** The server container's CPU time per tile at a step's rate: its counter's growth over the step, per tile served. */
+export function cpuPerTile(samples: readonly Sample[], step: { achievedRps: number; fromS?: number; toS?: number } | undefined): number | null {
+  if (!step?.fromS || !step.toS || !(step.achievedRps > 0)) return null;
+  const inside = samples.filter((s) => s.at >= step.fromS! && s.at <= step.toS! && s.usageUsec !== null);
+  const [a, b] = [inside[0], inside.at(-1)];
+  if (!a || !b || b.at <= a.at) return null;
+  return (b.usageUsec! - a.usageUsec!) / (step.achievedRps * (b.at - a.at));
 }
 
 /** Over a window of epoch seconds: each counter's growth, and the peak anonymous memory. */
@@ -132,6 +149,7 @@ export function measurementOf(rec: UnitRecord, s: ScenarioRecord, prices: Prices
   }
   const window = scenarioWindow(rec, s.scenario);
   const stats = window ? windowStats(samples, window[0], window[1]) : { allowanceExceeded: {}, peakAnonBytes: null };
+  const atCapacity = s.capacity.steps?.filter((st) => st.held && st.offeredRps === measured).at(-1);
   return {
     unit: rec.id,
     pass: rec.pass,
@@ -154,6 +172,7 @@ export function measurementOf(rec: UnitRecord, s: ScenarioRecord, prices: Prices
     users: s.users ?? [],
     cost,
     ...stats,
+    cpuPerTileUs: cpuPerTile(samples, atCapacity),
     catalogFirstMs: s.scenario === "alone" ? (rec.catalog?.firstMs ?? null) : null,
     catalogLastMs: s.scenario === "alone" ? (rec.catalog?.lastMs ?? null) : null,
   };
@@ -193,6 +212,9 @@ export interface Entry {
   rank: number;
   costPerMillion: Interval;
   capacityRps: Interval | null;
+  /** Measured before the network cap, and the server's CPU per tile at it: reported, not ranked. */
+  measuredRps: Interval | null;
+  cpuPerTileUs: Interval | null;
   bytesPerTile: Interval | null;
   p99AtCapacityMs: Interval | null;
   networkBound: number;
@@ -236,6 +258,8 @@ export function rankings(ms: readonly Measurement[]): Ranking[] {
           rank: rank.get(server)!,
           costPerMillion,
           capacityRps: interval(num(list.map((m) => m.capacityRps))),
+          measuredRps: interval(num(list.map((m) => m.measuredRps))),
+          cpuPerTileUs: interval(num(list.map((m) => m.cpuPerTileUs))),
           bytesPerTile: interval(num(list.map((m) => m.bytesPerTile))),
           p99AtCapacityMs: interval(num(list.map((m) => m.p99AtCapacityMs))),
           networkBound: list.filter((m) => m.networkBound).length,
@@ -287,13 +311,18 @@ export function catalogRows(ms: readonly Measurement[]): CatalogRow[] {
 }
 
 export function markdown(rs: readonly Ranking[], prices: Prices, catalog: readonly CatalogRow[] = []): string {
-  const out = [`# Archive lane`, "", `Dollars per million tiles at AWS list prices of ${prices.date} (${prices.region}); lower is better. A rank is shared unless the 95% confidence intervals over the passes do not overlap. Capacity is capped at the instance's sustained network rate (${BASELINE_GBPS["c8g.xlarge"]} Gbps).`, ""];
+  const out = [`# Archive lane`, "", `Dollars per million tiles at AWS list prices of ${prices.date} (${prices.region}); lower is better. A rank is shared unless the 95% confidence intervals over the passes do not overlap. The price takes each server's capacity capped at the instance's sustained network rate (${BASELINE_GBPS["c8g.xlarge"]} Gbps); the measured capacity and the server container's CPU per tile at it stand beside each ranking, unranked.`, ""];
+  const label = (e: Entry) => `${e.server} ${e.version}${e.stable ? "" : " (pre-release)"}`;
   for (const r of rs) {
     out.push(`## ${r.dataset}, ${r.format}, ${r.scenario === "alone" ? "server alone" : "behind a CDN"}, ${r.arch}`, "");
-    out.push("| rank | server | $ per M tiles | 95% CI | capacity (tiles/s) | bytes per tile | p99 at capacity (ms) | passes |", "| --: | :-- | --: | --: | --: | --: | --: | --: |");
+    // the ranked question: what a million tiles cost
+    out.push("| rank | server | $ per M tiles | 95% CI | passes |", "| --: | :-- | --: | --: | --: |");
+    for (const e of r.entries) out.push(`| ${e.rank} | ${label(e)} | ${fmt(e.costPerMillion.mean, 3)} | ${ci(e.costPerMillion, 3)} | ${e.passes.length} |`);
+    // reported beside it, not ranked: how hard each server worked for that price
+    out.push("", "| server | measured (tiles/s) | priced at (tiles/s) | CPU per tile (µs) | tile (KB) | p99 at capacity (ms) |", "| :-- | --: | --: | --: | --: | --: |");
     for (const e of r.entries) {
       const flags = [e.networkBound ? "network-bound" : "", e.clientBound ? "client-bound" : ""].filter(Boolean).join(", ");
-      out.push(`| ${e.rank} | ${e.server} ${e.version}${e.stable ? "" : " (pre-release)"}${flags ? ` (${flags})` : ""} | ${fmt(e.costPerMillion.mean, 3)} | ${ci(e.costPerMillion, 3)} | ${fmt(e.capacityRps?.mean, 0)} | ${fmt(e.bytesPerTile?.mean, 0)} | ${fmt(e.p99AtCapacityMs?.mean, 1)} | ${e.passes.length} |`);
+      out.push(`| ${label(e)}${flags ? ` (${flags})` : ""} | ${fmt(e.measuredRps?.mean, 0)} | ${fmt(e.capacityRps?.mean, 0)} | ${fmt(e.cpuPerTileUs?.mean, 0)} | ${fmt(e.bytesPerTile ? e.bytesPerTile.mean / 1000 : null, 1)} | ${fmt(e.p99AtCapacityMs?.mean, 1)} |`);
     }
     out.push("");
   }

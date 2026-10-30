@@ -14,6 +14,9 @@ describe("the server scripts", () => {
     expect(s.indexOf("systemctl restart docker")).toBeLessThan(s.indexOf("docker pull"));
     expect(s).toContain("docker pull -q 'ghcr.io/maplibre/martin:2.0.0-beta.4'");
     expect(s).toContain("allowance_exceeded");
+    expect(s).toContain("while sleep 2; do");
+    expect(s).toContain('$1 == "usage_usec"');
+    expect(s).not.toContain("docker inspect");
     expect(s).toContain("nohup setsid bash /opt/lane/sampler.sh");
     // the server starts once and goes again, so no measured start carries the instance's first container start
     expect(s.indexOf("docker pull")).toBeLessThan(s.indexOf("'docker' 'run'"));
