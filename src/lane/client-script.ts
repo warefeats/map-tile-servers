@@ -34,6 +34,8 @@ export function clientSetupScript(c: ClientUnit): string {
 
 export interface ScenarioRun {
   server: string;
+  /** What the result records as the server's version, where it differs from the server table's (a Martin build). */
+  version?: string;
   /** The server's private address. */
   host: string;
   format: Format;
@@ -47,6 +49,7 @@ export function clientScenarioScript(c: ClientUnit, r: ScenarioRun): string {
   const out = `/opt/lane/${r.scenario}.json`;
   const unit = ["bun", "/opt/lane/lane-unit.js", `--server=${r.server}`, `--host=${r.host}`, `--tileset=${c.dataset}`, `--format=${r.format}`, `--scenario=${r.scenario}`, `--replay=/opt/lane/${c.dataset}-${r.scenario}.txt`, `--out=${out}`];
   if (r.quick) unit.push("--quick");
+  if (r.version) unit.push(`--version=${r.version}`);
   return [
     ...scriptHead(`${r.scenario}: ${r.server} ${r.format} ${c.dataset} at ${r.host}`),
     // a thousand connections, and oha's own files

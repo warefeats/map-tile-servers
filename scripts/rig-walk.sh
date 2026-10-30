@@ -72,6 +72,7 @@ echo "6. the archive lane's scripts"
 lane=$(mktemp -d)
 LANE="$lane" bun -e "
 import { readFileSync, writeFileSync } from 'node:fs';
+import { buildScript, parseBuild } from './src/lane/build';
 import { clientScenarioScript, clientSetupScript } from './src/lane/client-script';
 import { ssmCommands } from './src/lane/cloud';
 import { parseInputs, planUnits, serverUnitOf } from './src/lane/orchestrate';
@@ -89,6 +90,11 @@ for (const u of planUnits('all').run) {
   out('client-setup', clientSetupScript(cu));
   out('alone', clientScenarioScript(cu, { server: u.server.id, host: '10.0.0.1', format: u.format, scenario: 'alone', quick: false, resultKey: 'results/lane/RUN/p1/' + u.id + '/alone.json' }));
 }
+// a Martin build: the builder's script, and the martin-2 arm64 units loading its image
+const build = parseBuild('owner/name@' + '0'.repeat(40));
+const built = planUnits('martin-2-*', build).run;
+writeFileSync(dir + '/build.sh', buildScript(build, built[0].server, 'BUCKET', 'RUN'));
+for (const u of built) writeFileSync(dir + '/' + u.id + '.built-setup.sh', setupScript(serverUnitOf(u, 'BUCKET', 'RUN', inputs)));
 writeFileSync(dir + '/ssm.txt', ssmCommands('BUCKET', 'bundles/lane-RUN/p1/u/setup.sh').join('\\n') + '\\n');
 "
 shellcheck -s bash "$lane"/*.sh

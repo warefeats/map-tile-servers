@@ -1,7 +1,9 @@
 import { describe, expect, test } from "bun:test";
+import { buildMartin, parseBuild } from "../src/lane/build";
 import { CapacityError, type Cloud, type CommandResult, type Host, type LaunchRequest, type RunOptions } from "../src/lane/cloud";
 import { dataKey, FIRST_TILE, parseInputs, planUnits, type RunContext, runUnit, serverUnitOf } from "../src/lane/orchestrate";
 import { setupScript, startScript } from "../src/lane/server-script";
+import { MARTIN_2_BUILD } from "../src/matrix";
 
 /** Records what the orchestrator asks for, and answers the way the scripts would. */
 class FakeCloud implements Cloud {
@@ -25,7 +27,7 @@ class FakeCloud implements Cloud {
     for (const subnet of r.subnets) {
       if (this.opts.capacity?.(r.tags.Role!, subnet) === false) continue;
       const h = { id: `i-${++this.hosts}`, ip: `10.0.0.${this.hosts}`, az: `zone-${subnet}`, subnet };
-      this.calls.push(`launch ${r.tags.Role} ${h.id} ${subnet} ${r.placementGroup}`);
+      this.calls.push(`launch ${r.tags.Role} ${h.id} ${subnet} ${r.placementGroup}${r.instanceType ? ` ${r.instanceType}` : ""}`);
       return h;
     }
     throw new CapacityError(`no capacity for ${r.template}`);
@@ -173,5 +175,48 @@ describe("a unit's flow", () => {
     expect(rec.error).toContain("no zone had room");
     expect(cloud.calls.filter((c) => c.startsWith("launch"))).toEqual([]);
     expect(cloud.calls.at(-1)).toBe("terminate ");
+  });
+});
+
+describe("a Martin build", () => {
+  const commit = "0123456789abcdef0123456789abcdef01234567";
+  const build = parseBuild(`johncarmack1984/martin@${commit}`)!;
+
+  test("names a repository and a whole commit", () => {
+    expect(build).toEqual({ repo: "johncarmack1984/martin", commit });
+    expect(parseBuild("johncarmack1984/martin@0123456")).toBeNull();
+    expect(parseBuild(commit)).toBeNull();
+  });
+
+  test("runs as martin-2 on arm64 from the run's bundle, labelled with its commit, and leaves the x86 units out", async () => {
+    const { run, skipped } = planUnits("martin-*-pmtiles-planet-*", build);
+    expect(run.map((u) => `${u.id} ${u.server.version}`)).toEqual(["martin-2-pmtiles-planet-arm64 build 0123456", "martin-1-pmtiles-planet-arm64 1.16.1", "martin-1-pmtiles-planet-amd64 1.16.1"]);
+    expect(skipped).toEqual([{ id: "martin-2-pmtiles-planet-amd64", reason: "no amd64 image, and the run builds none" }]);
+    const unit = run[0]!;
+    expect(serverUnitOf(unit, "b", "7", inputs).localImage).toEqual({ tag: "wf-martin:build-0123456", key: "bundles/lane-7/images/martin-2-arm64.tar.zst" });
+    const cloud = new FakeCloud();
+    const rec = await runUnit(cloud, ctx, unit, 1);
+    expect(rec.version).toBe("build 0123456");
+    expect(cloud.texts.get("bundles/lane-7/p1/martin-2-pmtiles-planet-arm64/setup.sh")).toContain("aws s3 cp 's3://b/bundles/lane-7/images/martin-2-arm64.tar.zst' - --only-show-errors | zstd -dc | docker load -q");
+    expect(cloud.texts.get("bundles/lane-7/p1/martin-2-pmtiles-planet-arm64/alone.sh")).toContain("'--version=build 0123456'");
+  });
+
+  test("builds on one bigger arm64 instance, puts the image where the units load it, and terminates the builder", async () => {
+    const cloud = new FakeCloud();
+    const server = planUnits("martin-2-pmtiles-planet-arm64", build).run[0]!.server;
+    await buildMartin(cloud, build, server, { bucket: "b", run: "7", template: "lt-arm", subnets: ["s-a", "s-b"] });
+    expect(cloud.calls).toEqual(["placement lane-7-build", "launch build i-1 s-a lane-7-build c8g.8xlarge", "online i-1", "run i-1 build", "terminate i-1"]);
+    const script = cloud.texts.get("bundles/lane-7/build/build.sh")!;
+    expect(script).toContain(`MARTIN_REPO='https://github.com/johncarmack1984/martin' bash /opt/lane/build-martin-pgo.sh '${commit}' '${MARTIN_2_BUILD.rustc}' 'wf-martin:build-0123456'`);
+    expect(script).toContain("aws s3 cp - 's3://b/bundles/lane-7/images/martin-2-arm64.tar.zst'");
+    expect(script.indexOf("/usr/local/bin/oha")).toBeLessThan(script.indexOf("build-martin-pgo.sh '"));
+    expect(cloud.texts.get("bundles/lane-7/build/build-martin-pgo.sh")).toContain("${MARTIN_REPO:-https://github.com/maplibre/martin}");
+  });
+
+  test("a failed build fails the run and still terminates the builder", async () => {
+    const cloud = new FakeCloud({ failScript: "build" });
+    const server = planUnits("martin-2-pmtiles-planet-arm64", build).run[0]!.server;
+    await expect(buildMartin(cloud, build, server, { bucket: "b", run: "7", template: "lt-arm", subnets: ["s-a"] })).rejects.toThrow(/build of johncarmack1984\/martin@0123456789abcdef0123456789abcdef01234567 on i-1: Failed/);
+    expect(cloud.calls.at(-1)).toBe("terminate i-1");
   });
 });

@@ -15,6 +15,10 @@ on:
         description: "Unit ids, comma-separated, * as a wildcard (empty: the mode's own)"
         required: false
         default: ""
+      martin_build:
+        description: "A Martin commit to build and run as martin-2, arm64 only: owner/name@<full commit> (empty: the published beta)"
+        required: false
+        default: ""
 
 concurrency:
   group: martin-2-lane
@@ -115,12 +119,13 @@ jobs:
         env:
           MODE: ${{ inputs.mode }}
           UNITS: ${{ inputs.units }}
+          MARTIN_BUILD: ${{ inputs.martin_build }}
         run: |
           set -euo pipefail
           if [ "$MODE" = smoke ]; then
-            bun run src/lane/orchestrate.ts --run="$RUN" --units="${UNITS:-$SMOKE_UNITS}" --passes=1 --quick
+            bun run src/lane/orchestrate.ts --run="$RUN" --units="${UNITS:-$SMOKE_UNITS}" --passes=1 --quick ${MARTIN_BUILD:+"--martin-build=$MARTIN_BUILD"}
           else
-            bun run src/lane/orchestrate.ts --run="$RUN" --units="${UNITS:-all}" --passes=3
+            bun run src/lane/orchestrate.ts --run="$RUN" --units="${UNITS:-all}" --passes=3 ${MARTIN_BUILD:+"--martin-build=$MARTIN_BUILD"}
           fi
 
       - name: Clean up

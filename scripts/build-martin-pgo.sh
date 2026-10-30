@@ -4,6 +4,8 @@
 # `just bench-http` against the test fixtures and a PostGIS loaded by tests/fixtures/initdb.sh, as
 # build-binary.yml runs it on ubuntu-24.04-arm. Then the commit's own Dockerfile packages the binaries.
 #   build-martin-pgo.sh <commit> <rustc> <image tag> [<work dir>]
+# MARTIN_REPO fetches the commit from another repository than https://github.com/maplibre/martin, such as
+# a fork whose branch has no pull request yet.
 # Runs as root on an Ubuntu 24.04 arm64 host with Docker; installs its own toolchain. oha (the release
 # build-binary.yml installs, 1.16.0) must be on PATH for the training run.
 set -euo pipefail
@@ -43,7 +45,7 @@ rustc -vV
 echo "node $(node --version), npm $(npm --version), $(just --version)"
 
 rm -rf "$WORK" && mkdir -p "$WORK" && cd "$WORK"
-git init -q && git fetch -q --depth 1 https://github.com/maplibre/martin "$SHA" && git checkout -q FETCH_HEAD
+git init -q && git fetch -q --depth 1 "${MARTIN_REPO:-https://github.com/maplibre/martin}" "$SHA" && git checkout -q FETCH_HEAD
 git log -1 --format='commit %H %cd %s'
 
 # build-binary.yml: `just pgo-install`, then the profiling database, then `just build-release <target> true`.
