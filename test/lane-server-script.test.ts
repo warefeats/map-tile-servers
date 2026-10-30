@@ -13,6 +13,9 @@ describe("the server scripts", () => {
     expect(s.indexOf("systemctl restart docker")).toBeLessThan(s.indexOf("docker pull"));
     expect(s).toContain("docker pull -q 'ghcr.io/maplibre/martin:2.0.0-beta.4'");
     expect(s).toContain("allowance_exceeded");
+    expect(s).toContain("while sleep 2; do");
+    expect(s).toContain('$1 == "usage_usec"');
+    expect(s).not.toContain("docker inspect");
     expect(s).toContain("nohup setsid bash /opt/lane/sampler.sh");
   });
 

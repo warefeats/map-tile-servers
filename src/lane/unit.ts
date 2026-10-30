@@ -43,6 +43,9 @@ export interface Step extends StepOutcome {
   statusCodes: Record<string, number>;
   /** The client's busy share of its CPU over the recorded pass; null off Linux. */
   clientCpu: number | null;
+  /** When the step's rate was offered, warm-up included, in epoch seconds: the report reads the server's CPU over it. */
+  fromS?: number;
+  toS?: number;
 }
 
 export function stepOf(rps: number, pass: OhaPass, seconds: number, targetMs: number, clientCpu: number | null = null): Step {
@@ -153,10 +156,11 @@ if (import.meta.main) {
   }
   const capacity = await findCapacity(
     async (rps) => {
+      const fromS = Date.now() / 1000;
       oha({ ...base, connections: connections(rps), rate: rps, durationSeconds: t.stepWarmupS });
       const before = cpuTimes();
       const pass = oha({ ...base, connections: connections(rps), rate: rps, durationSeconds: t.stepS });
-      const s = stepOf(rps, pass, t.stepS, TARGET_MS, busyShare(before, cpuTimes()));
+      const s: Step = { ...stepOf(rps, pass, t.stepS, TARGET_MS, busyShare(before, cpuTimes())), fromS, toS: Date.now() / 1000 };
       console.log(`  offered ${rps}/s: delivered ${s.achievedRps.toFixed(1)}/s, p99 ${s.p99Ms ?? "n/a"} ms, errors ${(s.errorRate * 100).toFixed(2)}%, client CPU ${s.clientCpu === null ? "n/a" : `${(s.clientCpu * 100).toFixed(0)}%`} ${s.held ? "held" : "NOT held"}`);
       return s;
     },

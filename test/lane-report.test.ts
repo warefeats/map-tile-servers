@@ -4,7 +4,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { parsePrices } from "../src/cost";
 import type { UnitRecord } from "../src/lane/orchestrate";
-import { catalogRows, interval, markdown, measurementOf, networkCap, parseSamples, rankings, ranks, readRun, type ScenarioRecord, scenarioWindow, windowStats } from "../src/lane/report";
+import { catalogRows, cpuPerTile, interval, markdown, measurementOf, networkCap, parseSamples, rankings, ranks, readRun, type ScenarioRecord, scenarioWindow, windowStats } from "../src/lane/report";
 import { MISS_SHARE } from "../src/replay";
 
 const prices = parsePrices(JSON.parse(readFileSync("prices/aws-us-east-1-2026-10-29.json", "utf8")));
@@ -48,6 +48,18 @@ describe("the lane's report", () => {
     expect(scenarioWindow(record({ log: [] }), "alone")).toBeNull();
   });
 
+  test("prices the server container's CPU per tile from its own counter over the capacity step", () => {
+    const samples = parseSamples(["1761818400.000000000 anon=100 usage_usec=1000000 cpu=1/2", "1761818402.000000000 anon=100 usage_usec=1400000 cpu=1/2", "1761818404.500000000 anon=100 usage_usec=1900000 cpu=1/2"].join("\n"));
+    expect(samples.map((x) => x.usageUsec)).toEqual([1_000_000, 1_400_000, 1_900_000]);
+    // 900,000 µs over 4.5 s at 1,000 tiles a second
+    expect(cpuPerTile(samples, { achievedRps: 1000, fromS: 1761818399, toS: 1761818405 })).toBeCloseTo(200, 6);
+    // one sample inside the step is not enough, and a step without a window has none
+    expect(cpuPerTile(samples, { achievedRps: 1000, fromS: 1761818401, toS: 1761818403 })).toBeNull();
+    expect(cpuPerTile(samples, { achievedRps: 1000 })).toBeNull();
+    const steps = [{ offeredRps: 1000, achievedRps: 1000, held: true, fromS: 1761818399, toS: 1761818405 }, { offeredRps: 2000, achievedRps: 1500, held: false, fromS: 1761818405, toS: 1761818410 }];
+    expect(measurementOf(record(), { ...scenario("alone", 1000, 30_000), capacity: { capacityRps: 1000, atCeiling: false, steps } }, prices, samples, null).cpuPerTileUs).toBeCloseTo(200, 6);
+  });
+
   test("intervals over passes, and ranks that tie where they overlap", () => {
     const i = interval([1, 2, 3])!;
     expect(i.mean).toBe(2);
@@ -74,7 +86,9 @@ describe("the lane's report", () => {
     expect(rs[0]!.entries.map((e) => [e.server, e.rank])).toEqual([["martin-2", 1], ["go-pmtiles", 2]]);
     const md = markdown(rs, prices, catalog);
     expect(md).toContain("| pmtiles | arm64 | go-pmtiles 1.31.2 | 102 | 200 | 1 | 2 |");
-    expect(md).toContain("| 1 | martin-2 2.0.0-beta.4 (pre-release) (network-bound) |");
+    expect(md).toContain("| 1 | martin-2 2.0.0-beta.4 (pre-release) | ");
+    // the efficiency table beside the ranking: measured before the cap, then priced at the cap
+    expect(md).toContain("| martin-2 2.0.0-beta.4 (pre-release) (network-bound) | 20,000 | ");
     expect(md).toContain("## berlin, pmtiles, behind a CDN, arm64");
   });
 });

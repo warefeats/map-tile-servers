@@ -26,17 +26,16 @@ export interface ServerUnit {
   localImage?: { tag: string; key: string };
 }
 
-// every 10 s for the whole unit: the server's memory (anonymous and page cache charged to its container), the
-// host's busy and total CPU time, and the network card's allowance counters
+// every 2 s for the whole unit: the server container's memory (anonymous and page cache charged to it) and its own
+// CPU time, read from its cgroup (one container runs at a time), the host's busy and total CPU time, and the
+// network card's allowance counters; the report prices CPU per tile from the container's counter
 const SAMPLER = [
   "iface=$(ip -o -4 route show to default | awk '{ print $5 }')",
-  "while sleep 10; do",
-  "  mem=",
-  "  id=$(docker inspect -f '{{.Id}}' lane-server 2>/dev/null || true)",
-  '  stat="/sys/fs/cgroup/system.slice/docker-$id.scope/memory.stat"',
-  `  if [ -n "$id" ] && [ -r "$stat" ]; then mem=$(awk '$1 == "anon" || $1 == "file" { printf "%s=%s ", $1, $2 }' "$stat"); fi`,
+  "while sleep 2; do",
+  "  box=",
+  "  for d in /sys/fs/cgroup/system.slice/docker-*.scope; do [ -r \"$d/cpu.stat\" ] && box=$(awk '$1 == \"anon\" || $1 == \"file\" { printf \"%s=%s \", $1, $2 }' \"$d/memory.stat\"; awk '$1 == \"usage_usec\" { printf \"%s=%s \", $1, $2 }' \"$d/cpu.stat\"); done",
   `  cpu=$(awk 'NR == 1 { busy = $2 + $3 + $4 + $7 + $8 + $9; printf "cpu=%d/%d ", busy, busy + $5 + $6 }' /proc/stat)`,
-  `  echo "$(date +%s) $mem$cpu$(ethtool -S "$iface" | awk '/allowance_exceeded/ { printf "%s%s ", $1, $2 }')"`,
+  `  echo "$(date +%s.%N) $box$cpu$(ethtool -S "$iface" | awk '/allowance_exceeded/ { printf "%s%s ", $1, $2 }')"`,
   "done",
 ];
 
