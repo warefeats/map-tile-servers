@@ -21,6 +21,8 @@ export interface LaunchRequest {
   /** Tried in order until one has capacity. */
   subnets: readonly string[];
   tags: Record<string, string>;
+  /** In place of the template's own. */
+  instanceType?: string;
 }
 
 export interface CommandResult {
@@ -199,6 +201,7 @@ export class AwsCloud implements Cloud {
             // CloudFormation never moves a template's default version
             "--launch-template", `LaunchTemplateId=${r.template},Version=$Latest`,
             "--subnet-id", subnet,
+            ...(r.instanceType ? ["--instance-type", r.instanceType] : []),
             "--placement", JSON.stringify({ GroupName: r.placementGroup }),
             "--tag-specifications", JSON.stringify(["instance", "volume"].map((ResourceType) => ({ ResourceType, Tags: tagList(r.tags) }))),
             "--query", "Instances[0].[InstanceId,PrivateIpAddress,Placement.AvailabilityZone]",

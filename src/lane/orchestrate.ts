@@ -5,12 +5,14 @@
  * before the client measures it. A unit's record lands in the
  * bucket when it ends; one that fails is recorded and the others go on. A Berlin unit of an archive server ends
  * with the catalog start (1,000 more sources). A unit whose data is not in the bucket is skipped before the first
- * pass. Passes run one after another.
- *   bun run src/lane/orchestrate.ts --run=<id> [--units=all|<pattern>,...] [--passes=3] [--quick]
+ * pass. Passes run one after another. With --martin-build the martin-2 units run that commit instead of the
+ * published beta, built first on one instance (src/lane/build.ts).
+ *   bun run src/lane/orchestrate.ts --run=<id> [--units=all|<pattern>,...] [--passes=3] [--quick] [--martin-build=<owner/name>@<commit>]
  */
 import { readFileSync } from "node:fs";
 import { BERLIN } from "../session-plan";
 import { lonLatToTile } from "../tiles";
+import { BUILDER_TYPE, buildMartin, builtServer, type MartinBuild, parseBuild } from "./build";
 import { type ClientUnit, clientScenarioScript, clientSetupScript, type Scenario, SCENARIOS } from "./client-script";
 import { aws, AwsCloud, CapacityError, type Cloud, type Host } from "./cloud";
 import { catalogScript, collectScript, type ServerUnit, setupScript, startScript } from "./server-script";
@@ -40,18 +42,22 @@ export const unitId = (u: Omit<LaneUnit, "id">) => `${u.server.id}-${u.format}-$
 
 /** Why a unit cannot run, or null. */
 export function blocked(u: Omit<LaneUnit, "id">): string | null {
-  if (!u.server.image[u.arch] && !u.server.release?.[u.arch]) return `no ${u.arch} image, and none built from a release binary`;
+  if (!u.server.image[u.arch] && !u.server.release?.[u.arch]) return `no ${u.arch} image, and the run builds none`;
   return u.server.unsupported?.[u.dataset]?.[u.format] ?? null;
 }
 
 const matches = (pattern: string, id: string) => new RegExp(`^${pattern.split("*").map((p) => p.replace(/[.+?^${}()|[\]\\]/g, "\\$&")).join(".*")}$`).test(id);
 
-/** The units a filter names (`all`, or comma-separated ids with `*` wildcards), and those that cannot run yet. */
-export function planUnits(filter: string): { run: LaneUnit[]; skipped: { id: string; reason: string }[] } {
+/**
+ * The units a filter names (`all`, or comma-separated ids with `*` wildcards), and those that cannot run yet; with
+ * a Martin build, martin-2 is that build.
+ */
+export function planUnits(filter: string, build?: MartinBuild): { run: LaneUnit[]; skipped: { id: string; reason: string }[] } {
   const patterns = filter === "all" ? ["*"] : filter.split(",").map((p) => p.trim()).filter(Boolean);
   const run: LaneUnit[] = [];
   const skipped: { id: string; reason: string }[] = [];
-  for (const u of units(DATASETS, ARCHS)) {
+  for (const unit of units(DATASETS, ARCHS)) {
+    const u = build && unit.server.id === "martin-2" ? { ...unit, server: builtServer(unit.server, build) } : unit;
     const id = unitId(u);
     if (!patterns.some((p) => matches(p, id))) continue;
     const reason = blocked(u);
@@ -80,7 +86,7 @@ export function dataKey(u: Pick<LaneUnit, "dataset" | "format">, inputs: Readonl
   return key;
 }
 
-/** What a unit's server scripts need; an image lane.yml built from a release binary comes from the run's bundle. */
+/** What a unit's server scripts need; an image the run built (around a release binary, or a Martin build) comes from the run's bundle. */
 export function serverUnitOf(u: LaneUnit, bucket: string, run: string, inputs: ReadonlyMap<string, string>): ServerUnit {
   const tag = u.server.image[u.arch] ? undefined : u.server.release?.[u.arch];
   return { server: u.server, arch: u.arch, tileset: u.dataset, format: u.format, bucket, dataKey: dataKey(u, inputs, run), firstTile: FIRST_TILE, ...(tag ? { localImage: { tag, key: `bundles/lane-${run}/images/${u.server.id}-${u.arch}.tar.zst` } } : {}) };
@@ -193,7 +199,7 @@ export async function runUnit(cloud: Cloud, ctx: RunContext, u: LaneUnit, pass: 
       const started = await step(server, `start-${scenario}`, startScript(su, scenario), TIMEOUT_S.start);
       rec.readyMs[scenario] = Number(/READY (\d+) ms/.exec(started)?.[1] ?? Number.NaN);
       const resultKey = `${results}${scenario}.json`;
-      const out = await step(client, scenario, clientScenarioScript(cu, { server: u.server.id, host: server.ip, format: u.format, scenario, quick: ctx.quick, resultKey }), ctx.quick ? TIMEOUT_S.quickScenario : TIMEOUT_S.scenario);
+      const out = await step(client, scenario, clientScenarioScript(cu, { server: u.server.id, version: u.server.version, host: server.ip, format: u.format, scenario, quick: ctx.quick, resultKey }), ctx.quick ? TIMEOUT_S.quickScenario : TIMEOUT_S.scenario);
       rec.results[scenario] = resultKey;
       note(/capacity .*/.exec(out)?.[0] ?? `${scenario} done`);
     }
@@ -246,12 +252,14 @@ if (import.meta.main) {
   const arg = (n: string) => process.argv.find((a) => a.startsWith(`--${n}=`))?.slice(n.length + 3);
   const run = arg("run");
   const passes = Number(arg("passes") ?? 3);
-  if (!run || !/^[\w-]+$/.test(run) || !(passes >= 1)) {
-    console.error("usage: orchestrate.ts --run=<id> [--units=all|<pattern>,...] [--passes=3] [--quick]");
+  const martinBuild = arg("martin-build");
+  const build = martinBuild ? parseBuild(martinBuild) : undefined;
+  if (!run || !/^[\w-]+$/.test(run) || !(passes >= 1) || build === null) {
+    console.error("usage: orchestrate.ts --run=<id> [--units=all|<pattern>,...] [--passes=3] [--quick] [--martin-build=<owner/name>@<commit>]");
     process.exit(2);
   }
   const quick = process.argv.includes("--quick");
-  const plan = planUnits(arg("units") ?? "all");
+  const plan = planUnits(arg("units") ?? "all", build);
   const outputs = new Map(await aws<[string, string][]>(["cloudformation", "describe-stacks", "--stack-name", "WarefeatsMartin2Bench", "--query", "Stacks[0].Outputs[].[OutputKey,OutputValue]"]));
   const need = (k: string) => outputs.get(k) ?? (console.error(`the stack has no ${k} output`), process.exit(1));
   const bucket = need("RigBucketName");
@@ -270,7 +278,19 @@ if (import.meta.main) {
   const cloud = new AwsCloud(bucket, new Date(Date.now() - 60_000));
   console.log(`run ${run}: ${plan.run.length} units, ${passes} pass(es)${quick ? ", quick" : ""}; zones' subnets ${subnets.join(" ")}`);
   for (const s of plan.skipped) console.log(`  skipped ${s.id}: ${s.reason}`);
-  await cloud.putText(`results/lane/${run}/plan.json`, `${JSON.stringify({ run, passes, quick, planetBuild: PLANET_BUILD, units: plan.run.map((u) => u.id), skipped: plan.skipped, startedAt: new Date().toISOString() }, null, 2)}\n`);
+  await cloud.putText(`results/lane/${run}/plan.json`, `${JSON.stringify({ run, passes, quick, planetBuild: PLANET_BUILD, martinBuild: build ?? null, units: plan.run.map((u) => u.id), skipped: plan.skipped, startedAt: new Date().toISOString() }, null, 2)}\n`);
+  // a Martin build comes first: every martin-2 unit loads its image
+  const built = plan.run.find((u) => u.server.id === "martin-2")?.server;
+  if (build && built) {
+    console.log(`building ${build.repo}@${build.commit} on a ${BUILDER_TYPE}`);
+    try {
+      await buildMartin(cloud, build, built, { bucket, run, template: templates.arm64, subnets });
+    } catch (e) {
+      console.error((e as Error).message);
+      process.exit(1);
+    }
+    console.log("build done");
+  }
   let failed = 0;
   for (let pass = 1; pass <= passes; pass++) {
     // launches spread over a minute or so, under EC2's request rate, and over the zones: each unit starts from its own

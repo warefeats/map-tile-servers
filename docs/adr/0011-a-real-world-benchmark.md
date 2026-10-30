@@ -65,6 +65,8 @@ Facts the design rests on, gathered on 2026-10-29, with sources in the runner's 
   - static tile files behind nginx.
 
   Martin appears as 1.16.1, the stable release, and as the newest published 2.0 beta, labelled a pre-release; 2.0.0 replaces the beta when it ships. BBOX and mbtileserver are marked unmaintained. Every server runs as the image or binary its project tells users to install, at its latest release, configured as its docs recommend for production.
+
+  Amended 2026-10-30: a run can build a Martin commit and run it as martin-2 on arm64 (lane.yml's `martin_build`, built the way Martin's release builds its arm64 image, as in ADR 0010), to measure a change before it ships. Such a run tests a change; it is never published.
 - **Two scenarios, reported separately.**
   - **Server alone:** each server takes the whole replay with its own cache on.
   - **Behind a CDN:** the server receives only what a CDN would pass on. The modelled CDN holds the most popular tiles until 92.9% of the replay's requests hit it, so the origin gets the least popular 7.1%, the share OSM's CDN measured.

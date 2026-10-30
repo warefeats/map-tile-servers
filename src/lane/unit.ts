@@ -170,6 +170,6 @@ if (import.meta.main) {
     { startRps: 1000, maxRps: 256_000, minRps: 125, bisections: 3 },
   );
   const atCapacity = (capacity.steps as Step[]).filter((s) => s.held && s.offeredRps === capacity.capacityRps).at(-1) ?? null;
-  writeFileSync(out, JSON.stringify({ server: server.id, version: server.version, emptyStatus: server.emptyStatus ?? null, tileset, format: arg("format"), scenario, timing: t, targetMs: TARGET_MS, replayLines: lines.length, firstView: first, warmup: { rps: warmup.requestsPerSec, p99Ms: warmup.p99Ms, statusCodes: warmup.statusCodes }, users, capacity, clientBoundAtRps: clientBoundAt(capacity.steps as Step[]), bytesPerTile: atCapacity?.bytesPerRequest ?? null, p99AtCapacityMs: atCapacity?.p99Ms ?? null }, null, 2) + "\n");
+  writeFileSync(out, JSON.stringify({ server: server.id, version: arg("version") ?? server.version, emptyStatus: server.emptyStatus ?? null, tileset, format: arg("format"), scenario, timing: t, targetMs: TARGET_MS, replayLines: lines.length, firstView: first, warmup: { rps: warmup.requestsPerSec, p99Ms: warmup.p99Ms, statusCodes: warmup.statusCodes }, users, capacity, clientBoundAtRps: clientBoundAt(capacity.steps as Step[]), bytesPerTile: atCapacity?.bytesPerRequest ?? null, p99AtCapacityMs: atCapacity?.p99Ms ?? null }, null, 2) + "\n");
   console.log(`capacity ${capacity.capacityRps}/s${capacity.atCeiling ? " (at the ceiling)" : ""}, ${atCapacity?.bytesPerRequest ?? "?"} bytes a tile`);
 }

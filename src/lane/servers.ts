@@ -22,7 +22,7 @@ export interface LaneServer {
   formats: readonly Format[];
   /** The official image per architecture; null where the project publishes none for it. */
   image: Record<Arch, string | null>;
-  /** Where it publishes none: the tag of the image lane.yml builds around the project's release binary. */
+  /** Where it publishes none: the tag of the image the run builds, around the project's release binary (lane.yml) or from source (src/lane/build.ts). */
   release?: Partial<Record<Arch, string>>;
   port: number;
   path: (tileset: string, t: TileCoord) => string;
@@ -174,7 +174,7 @@ export const archiveDir = (server: LaneServer, dir: string) => (server.layout ==
 /** The `docker run` that starts a server on its instance, with the archives and config files of `dir` at /data. */
 export function dockerRun(server: LaneServer, arch: Arch, tilesets: readonly string[], format: Format, localImage?: string, dir = "/opt/lane/data"): string[] {
   const image = server.image[arch] ?? localImage;
-  if (!image) throw new Error(`${server.id} publishes no ${arch} image and none was built from its release binary`);
+  if (!image) throw new Error(`${server.id} publishes no ${arch} image and the run built none`);
   const mounts = Object.entries(server.mounts ?? {}).flatMap(([name, at]) => ["-v", `${dir}/${name}:${at}:ro`]);
   const env = Object.entries(server.env?.(tilesets, format) ?? {}).flatMap(([k, v]) => ["-e", `${k}=${v}`]);
   const data = server.layout === "tiles-dir" ? `${dir}:/data` : `${dir}:/data:ro`;
