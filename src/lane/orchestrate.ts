@@ -199,10 +199,16 @@ export async function runUnit(cloud: Cloud, ctx: RunContext, u: LaneUnit, pass: 
     }
     await step(server, "collect", collectScript(su, `s3://${ctx.bucket}/${results}`), TIMEOUT_S.collect);
     if (u.dataset === "berlin" && u.format !== "files") {
-      const out = await step(server, "catalog", catalogScript(su, `bundles/lane-${ctx.run}/catalog/small.${u.format}`), TIMEOUT_S.catalog);
-      const m = /CATALOG first (\d+|none) ms, last (\d+|none) ms/.exec(out);
-      const ms = (v: string | undefined) => (v && v !== "none" ? Number(v) : null);
-      rec.catalog = { firstMs: ms(m?.[1]), lastMs: ms(m?.[2]) };
+      // reported, not ranked: a start that never comes is recorded as never served, and the unit's scenarios stand
+      try {
+        const out = await step(server, "catalog", catalogScript(su, `bundles/lane-${ctx.run}/catalog/small.${u.format}`), TIMEOUT_S.catalog);
+        const m = /CATALOG first (\d+|none) ms, last (\d+|none) ms/.exec(out);
+        const ms = (v: string | undefined) => (v && v !== "none" ? Number(v) : null);
+        rec.catalog = { firstMs: ms(m?.[1]), lastMs: ms(m?.[2]) };
+      } catch (e) {
+        rec.catalog = { firstMs: null, lastMs: null };
+        note(`catalog did not finish: ${(e as Error).message.split("\n")[0]}`);
+      }
       note(`catalog: first ${rec.catalog.firstMs ?? "none"} ms, last ${rec.catalog.lastMs ?? "none"} ms`);
     }
   } catch (e) {

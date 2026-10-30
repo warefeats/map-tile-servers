@@ -70,6 +70,9 @@ describe("the server scripts", () => {
     expect(s).toContain("'/data/t0999.pmtiles'");
     expect(s).toContain("until200 'http://127.0.0.1:3000/berlin/14/8802/5372'");
     expect(s).toContain("until200 'http://127.0.0.1:3000/t0999/8/137/83'");
+    // a server that takes the connection and never answers cannot stall the wait
+    expect(s).toContain("curl -s --max-time 2");
+    expect(startScript(u, "alone")).toContain("curl -s --max-time 2");
     expect(s.indexOf("drop_caches")).toBeLessThan(s.indexOf("'docker' 'run'"));
   });
 

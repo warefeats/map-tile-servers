@@ -135,6 +135,15 @@ describe("a unit's flow", () => {
     expect(cloud.texts.get("bundles/lane-7/p1/nginx-files-berlin-arm64/setup.sh")).toContain("aws s3 cp 's3://b/bundles/lane-7/files/berlin.btrfs' '/opt/lane/data/berlin.btrfs'");
   });
 
+  test("a catalog start that never finishes is recorded as never served, and the unit's scenarios stand", async () => {
+    const cloud = new FakeCloud({ failScript: "catalog" });
+    const rec = await runUnit(cloud, ctx, planUnits("bbox-pmtiles-berlin-arm64").run[0]!, 1);
+    expect(rec.error).toBeNull();
+    expect(rec.catalog).toEqual({ firstMs: null, lastMs: null });
+    expect(rec.results.cdn).toBe("results/lane/7/p1/bbox-pmtiles-berlin-arm64/cdn.json");
+    expect(cloud.calls.at(-1)).toBe("terminate i-2 i-1");
+  });
+
   test("moves the pair on from a zone with no client, and from one that takes the client but not the server", async () => {
     // no clients in s-a; s-b takes the client but never the server; s-c takes both
     const cloud = new FakeCloud({ capacity: (role, subnet) => (role === "client" ? subnet !== "s-a" : subnet === "s-c") });
