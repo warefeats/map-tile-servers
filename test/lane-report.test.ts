@@ -71,6 +71,14 @@ describe("the lane's report", () => {
     expect(md).toContain("bbox 0.6.2 answers a tile its archive lacks with 500, counted as that empty tile: 1.4% of its answers at capacity, where the others' empty answers are 1.5–1.5%.");
   });
 
+  test("a server that held no rate within the target ranks after the priced ones, marked, with no price", () => {
+    const held = measurementOf(record(), scenario("alone", 1000, 80_000), prices, [], null);
+    const none = measurementOf(record({ server: "versatiles", version: "5.4.1", stable: true }), { ...scenario("alone", 0, 80_000, { server: "versatiles" }), capacity: { capacityRps: null, atCeiling: false } }, prices, [], null);
+    const [r] = rankings([none, held]);
+    expect(r!.entries.map((e) => [e.server, e.rank])).toEqual([["martin-2", 1], ["versatiles", null]]);
+    expect(markdown([r!], prices)).toContain("| – | versatiles 5.4.1 (held no rate within the target) | – | – | 0 |");
+  });
+
   test("lists what was not measured: units the plan skipped, and units that ended without a result", () => {
     const dir = mkdtempSync(join(tmpdir(), "lane-missing-"));
     writeFileSync(join(dir, "plan.json"), JSON.stringify({ skipped: [{ id: "bbox-mbtiles-planet-amd64", reason: "cannot open the archive" }] }));

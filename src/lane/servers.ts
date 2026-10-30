@@ -40,6 +40,8 @@ export interface LaneServer {
   emptyStatus?: number;
   /** A cache in front of the server answers repeats, so a start probe asks for a fresh URL every time. */
   cachedFront?: boolean;
+  /** The container's /dev/shm, where the image keeps a cache Docker's 64 MB default would cut short. */
+  shmSize?: string;
   /** Archives the server cannot open, with why: the units are skipped and the reason reported. */
   unsupported?: Partial<Record<Dataset, Partial<Record<Format, string>>>>;
 }
@@ -58,6 +60,9 @@ export const LANE_SERVERS: readonly LaneServer[] = [
     layout: "tiles-dir",
     // its nginx keeps every response five minutes, errors included (proxy_cache_valid any 5m)
     cachedFront: true,
+    // its startup script sizes that cache at 60% of RAM (4.7 GB on these 8 GiB instances) in /dev/shm, which Docker
+    // caps at 64 MB unless told; past that every cache write failed with ENOSPC (smoke 40993337300)
+    shmSize: "5g",
     env: (ts, f) => ({ DOMAIN: "localhost", HTTP_ONLY: "1", FRONTEND: "none", TILE_SOURCES: ts.map((t) => `${t}.${f}`).join(",") }),
   },
   {
@@ -173,5 +178,6 @@ export function dockerRun(server: LaneServer, arch: Arch, tilesets: readonly str
   const mounts = Object.entries(server.mounts ?? {}).flatMap(([name, at]) => ["-v", `${dir}/${name}:${at}:ro`]);
   const env = Object.entries(server.env?.(tilesets, format) ?? {}).flatMap(([k, v]) => ["-e", `${k}=${v}`]);
   const data = server.layout === "tiles-dir" ? `${dir}:/data` : `${dir}:/data:ro`;
-  return ["docker", "run", "-d", "--name", "lane-server", "--network", "host", "-v", data, ...mounts, ...env, image, ...server.args(tilesets, format)];
+  const shm = server.shmSize ? ["--shm-size", server.shmSize] : [];
+  return ["docker", "run", "-d", "--name", "lane-server", "--network", "host", ...shm, "-v", data, ...mounts, ...env, image, ...server.args(tilesets, format)];
 }

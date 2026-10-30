@@ -40,6 +40,9 @@ describe("the lane's servers", () => {
     expect(run).not.toContain("/opt/lane/data:/data:ro");
     for (const e of ["HTTP_ONLY=1", "FRONTEND=none", "TILE_SOURCES=planet.pmtiles", "DOMAIN=localhost"]) expect(run).toContain(e);
     expect(server("versatiles").port).toBe(80);
+    // the 60%-of-RAM cache its startup script sizes, not Docker's 64 MB /dev/shm
+    expect(run.join(" ")).toContain("--shm-size 5g");
+    expect(dockerRun(server("martin-2"), "arm64", ["planet"], "pmtiles")).not.toContain("--shm-size");
     expect(server("bbox").emptyStatus).toBe(500);
     expect(server("martin-2").emptyStatus).toBeUndefined();
   });

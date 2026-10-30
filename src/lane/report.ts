@@ -228,8 +228,9 @@ export interface Entry {
   server: string;
   version: string;
   stable: boolean;
-  rank: number;
-  costPerMillion: Interval;
+  /** null for a server that held no rate within the target, which gets no price and ranks after every priced one. */
+  rank: number | null;
+  costPerMillion: Interval | null;
   capacityRps: Interval | null;
   /** Measured before the network cap, and the server's CPU per tile at it: reported, not ranked. */
   measuredRps: Interval | null;
@@ -270,14 +271,14 @@ export function rankings(ms: readonly Measurement[]): Ranking[] {
         if (c) costs.set(server, c);
       }
       const rank = ranks(costs);
-      const entries = [...costs.entries()].map(([server, costPerMillion]): Entry => {
+      const entries = [...byServer.keys()].map((server): Entry => {
         const list = byServer.get(server)!;
         return {
           server,
           version: list[0]!.version,
           stable: list[0]!.stable,
-          rank: rank.get(server)!,
-          costPerMillion,
+          rank: rank.get(server) ?? null,
+          costPerMillion: costs.get(server) ?? null,
           capacityRps: interval(num(list.map((m) => m.capacityRps))),
           measuredRps: interval(num(list.map((m) => m.measuredRps))),
           cpuPerTileUs: interval(num(list.map((m) => m.cpuPerTileUs))),
@@ -290,7 +291,7 @@ export function rankings(ms: readonly Measurement[]): Ranking[] {
           passes: list.filter((m) => m.cost).map((m) => m.pass),
         };
       });
-      entries.sort((a, b) => a.rank - b.rank || a.costPerMillion.mean - b.costPerMillion.mean);
+      entries.sort((a, b) => (a.rank ?? Infinity) - (b.rank ?? Infinity) || (a.costPerMillion?.mean ?? Infinity) - (b.costPerMillion?.mean ?? Infinity) || a.server.localeCompare(b.server));
       const m = group[0]!;
       return { dataset: m.dataset, format: m.format, scenario: m.scenario, arch: m.arch, entries };
     });
@@ -366,7 +367,7 @@ export function markdown(rs: readonly Ranking[], prices: Prices, catalog: readon
     out.push(`## ${r.dataset}, ${r.format}, ${r.scenario === "alone" ? "server alone" : "behind a CDN"}, ${r.arch}`, "");
     // the ranked question: what a million tiles cost
     out.push("| rank | server | $ per M tiles | 95% CI | passes |", "| --: | :-- | --: | --: | --: |");
-    for (const e of r.entries) out.push(`| ${e.rank} | ${label(e)} | ${fmt(e.costPerMillion.mean, 3)} | ${ci(e.costPerMillion, 3)} | ${e.passes.length} |`);
+    for (const e of r.entries) out.push(e.costPerMillion ? `| ${e.rank} | ${label(e)} | ${fmt(e.costPerMillion.mean, 3)} | ${ci(e.costPerMillion, 3)} | ${e.passes.length} |` : `| – | ${label(e)} (held no rate within the target) | – | – | 0 |`);
     // reported beside it, not ranked: how hard each server worked for that price
     out.push("", "| server | measured (tiles/s) | priced at (tiles/s) | CPU per tile (µs) | tile (KB) | p99 at capacity (ms) |", "| :-- | --: | --: | --: | --: | --: |");
     for (const e of r.entries) {
