@@ -212,7 +212,8 @@ export async function runUnit(cloud: Cloud, ctx: RunContext, u: LaneUnit, pass: 
       note(`catalog: first ${rec.catalog.firstMs ?? "none"} ms, last ${rec.catalog.lastMs ?? "none"} ms`);
     }
   } catch (e) {
-    rec.error = (e as Error).message;
+    // AWS errors name the account; the records may go public with the runner
+    rec.error = (e as Error).message.replace(/Account \d+ /g, "The account ");
     note(`failed: ${rec.error.split("\n")[0]}`);
     // the server's own log says most about a failure
     if (rec.serverHost && !rec.log.some((l) => l.endsWith("collect Success"))) {

@@ -93,8 +93,36 @@ describe("the lane's report", () => {
       { unit: "versatiles-pmtiles-planet-arm64", reason: "setup on i-1: Failed", passes: [1] },
     ]);
     const md = markdown([], prices, [], missing);
-    expect(md).toContain("| bbox-mbtiles-planet-amd64 | cannot open the archive | skipped |");
-    expect(md).toContain("| versatiles-pmtiles-planet-arm64 | setup on i-1: Failed | 1 |");
+    expect(md).toContain("| bbox-mbtiles-planet-amd64 | every pass (skipped) | cannot open the archive |");
+    expect(md).toContain("| versatiles-pmtiles-planet-arm64 | pass 1 | setup on i-1: Failed |");
+  });
+
+  test("prices CloudFront from the alone scenario's steps where no rate held there", () => {
+    const dir = mkdtempSync(join(tmpdir(), "lane-bytes-"));
+    const unit = join(dir, "p1", "versatiles-pmtiles-planet-arm64");
+    mkdirSync(unit, { recursive: true });
+    writeFileSync(join(unit, "unit.json"), JSON.stringify(record({ id: "versatiles-pmtiles-planet-arm64", server: "versatiles", dataset: "planet" })));
+    const steps = [{ offeredRps: 125, achievedRps: 40, held: false, bytesPerRequest: 66_000 }, { offeredRps: 250, achievedRps: 45, held: false, bytesPerRequest: 68_000 }];
+    writeFileSync(join(unit, "alone.json"), JSON.stringify({ ...scenario("alone", 0, 0, { server: "versatiles" }), capacity: { capacityRps: null, atCeiling: false, steps }, bytesPerTile: null }));
+    writeFileSync(join(unit, "cdn.json"), JSON.stringify(scenario("cdn", 1500, 500, { server: "versatiles" })));
+    const cdn = readRun(dir, prices).find((m) => m.scenario === "cdn")!;
+    expect(cdn.cost!.cdnEgress).toBeCloseTo(67 * 0.085, 6);
+  });
+
+  test("a server priced in one pass where the others have three is shown but not ranked", () => {
+    const at = (server: string, pass: number, bytes: number) => measurementOf(record({ server, pass }), scenario("alone", 1000, bytes, { server }), prices, [], null);
+    const ms = [1, 2, 3].flatMap((p) => [at("martin-2", p, 80_000 + p), at("go-pmtiles", p, 81_000 + p)]).concat(at("tileserver-gl", 1, 60_000));
+    const [r] = rankings(ms);
+    expect(r!.entries.find((e) => e.server === "tileserver-gl")!.rank).toBeNull();
+    expect(markdown([r!], prices)).toContain("tileserver-gl 2.0.0-beta.4 (pre-release) (priced in 1 of 3 passes) |");
+    // with one pass each, as in a smoke, every difference counts
+    expect(rankings([at("martin-2", 1, 80_000), at("go-pmtiles", 1, 81_000)])[0]!.entries.map((e) => e.rank)).toEqual([1, 2]);
+  });
+
+  test("the start with 1,000 more sources lists archive servers only", () => {
+    const nginx = measurementOf(record({ server: "nginx", format: "files", catalog: null }), scenario("alone", 1000, 80_000, { server: "nginx" }), prices, [], null);
+    const martin = measurementOf(record({ catalog: { firstMs: 900, lastMs: 910 } }), scenario("alone", 1000, 80_000), prices, [], null);
+    expect(catalogRows([nginx, martin]).map((c) => c.server)).toEqual(["martin-2"]);
   });
 
   test("intervals over passes, and ranks that tie where they overlap", () => {
