@@ -1,0 +1,51 @@
+{
+  "id": "versatiles-pmtiles-planet-amd64",
+  "pass": 2,
+  "server": "versatiles",
+  "version": "5.4.1",
+  "stable": true,
+  "format": "pmtiles",
+  "dataset": "planet",
+  "arch": "amd64",
+  "placementGroup": "lane-40998162997-p2-versatiles-pmtiles-planet-amd64-2",
+  "serverHost": {
+    "id": "i-0507ecfa6b95f6003",
+    "ip": "172.31.29.19",
+    "az": "us-east-1b",
+    "subnet": "subnet-0a17ca6edfc559485"
+  },
+  "clientHost": {
+    "id": "i-0d0b6808952246d70",
+    "ip": "172.31.31.204",
+    "az": "us-east-1b",
+    "subnet": "subnet-0a17ca6edfc559485"
+  },
+  "dataSeconds": 699,
+  "readyMs": {
+    "alone": 1233,
+    "cdn": 1176
+  },
+  "results": {
+    "alone": "results/lane/40998162997/p2/versatiles-pmtiles-planet-amd64/alone.json",
+    "cdn": "results/lane/40998162997/p2/versatiles-pmtiles-planet-amd64/cdn.json"
+  },
+  "catalog": null,
+  "log": [
+    "2026-10-30T04:27:39.486Z no client capacity in subnet-02c157cadc5e12a02",
+    "2026-10-30T04:29:45.794Z no server capacity in us-east-1a, attempt 1",
+    "2026-10-30T04:31:36.350Z no server capacity in us-east-1a, attempt 2",
+    "2026-10-30T04:31:50.643Z server i-0507ecfa6b95f6003 and client i-0d0b6808952246d70 in us-east-1b",
+    "2026-10-30T04:32:35.827Z client-setup Success",
+    "2026-10-30T04:44:40.898Z setup Success",
+    "2026-10-30T04:45:01.021Z start-alone Success",
+    "2026-10-30T04:51:45.224Z alone Success",
+    "2026-10-30T04:51:45.225Z capacity 0/s, ? bytes a tile",
+    "2026-10-30T04:52:04.512Z start-cdn Success",
+    "2026-10-30T04:57:15.347Z cdn Success",
+    "2026-10-30T04:57:15.348Z capacity 1375/s, 480 bytes a tile",
+    "2026-10-30T04:57:32.838Z collect Success"
+  ],
+  "error": null,
+  "startedAt": "2026-10-30T04:25:57.724Z",
+  "finishedAt": "2026-10-30T04:57:34.723Z"
+}

@@ -1,0 +1,53 @@
+{
+  "id": "versatiles-mbtiles-berlin-amd64",
+  "pass": 3,
+  "server": "versatiles",
+  "version": "5.4.1",
+  "stable": true,
+  "format": "mbtiles",
+  "dataset": "berlin",
+  "arch": "amd64",
+  "placementGroup": "lane-40998162997-p3-versatiles-mbtiles-berlin-amd64-0",
+  "serverHost": {
+    "id": "i-0238a3eb55a395add",
+    "ip": "172.31.47.153",
+    "az": "us-east-1c",
+    "subnet": "subnet-09cd73e59c55312c3"
+  },
+  "clientHost": {
+    "id": "i-0a19a5a47f0d6288f",
+    "ip": "172.31.43.99",
+    "az": "us-east-1c",
+    "subnet": "subnet-09cd73e59c55312c3"
+  },
+  "dataSeconds": 1,
+  "readyMs": {
+    "alone": 7634,
+    "cdn": 710
+  },
+  "results": {
+    "alone": "results/lane/40998162997/p3/versatiles-mbtiles-berlin-amd64/alone.json",
+    "cdn": "results/lane/40998162997/p3/versatiles-mbtiles-berlin-amd64/cdn.json"
+  },
+  "catalog": {
+    "firstMs": 4239,
+    "lastMs": 4247
+  },
+  "log": [
+    "2026-10-30T05:10:38.215Z server i-0238a3eb55a395add and client i-0a19a5a47f0d6288f in us-east-1c",
+    "2026-10-30T05:13:08.964Z setup Success",
+    "2026-10-30T05:13:08.964Z client-setup Success",
+    "2026-10-30T05:14:10.825Z start-alone Success",
+    "2026-10-30T05:23:56.199Z alone Success",
+    "2026-10-30T05:23:56.208Z capacity 20000/s, 74482 bytes a tile",
+    "2026-10-30T05:24:40.139Z start-cdn Success",
+    "2026-10-30T05:33:08.550Z cdn Success",
+    "2026-10-30T05:33:08.551Z capacity 96000/s, 15226 bytes a tile",
+    "2026-10-30T05:33:38.796Z collect Success",
+    "2026-10-30T05:34:29.021Z catalog Success",
+    "2026-10-30T05:34:29.027Z catalog: first 4239 ms, last 4247 ms"
+  ],
+  "error": null,
+  "startedAt": "2026-10-30T05:09:11.189Z",
+  "finishedAt": "2026-10-30T05:34:39.197Z"
+}

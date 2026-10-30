@@ -1,0 +1,51 @@
+{
+  "id": "nginx-files-planet-amd64",
+  "pass": 1,
+  "server": "nginx",
+  "version": "1.30.4",
+  "stable": true,
+  "format": "files",
+  "dataset": "planet",
+  "arch": "amd64",
+  "placementGroup": "lane-40998162997-p1-nginx-files-planet-amd64-2",
+  "serverHost": {
+    "id": "i-0130b08f3298eb5e0",
+    "ip": "172.31.21.36",
+    "az": "us-east-1b",
+    "subnet": "subnet-0a17ca6edfc559485"
+  },
+  "clientHost": {
+    "id": "i-08515a3fedcebe03e",
+    "ip": "172.31.16.101",
+    "az": "us-east-1b",
+    "subnet": "subnet-0a17ca6edfc559485"
+  },
+  "dataSeconds": 1292,
+  "readyMs": {
+    "alone": 912,
+    "cdn": 989
+  },
+  "results": {
+    "alone": "results/lane/40998162997/p1/nginx-files-planet-amd64/alone.json",
+    "cdn": "results/lane/40998162997/p1/nginx-files-planet-amd64/cdn.json"
+  },
+  "catalog": null,
+  "log": [
+    "2026-10-30T03:42:29.067Z no client capacity in subnet-02c157cadc5e12a02",
+    "2026-10-30T03:43:35.513Z no server capacity in us-east-1a, attempt 1",
+    "2026-10-30T03:45:47.231Z no server capacity in us-east-1a, attempt 2",
+    "2026-10-30T03:46:03.364Z server i-0130b08f3298eb5e0 and client i-08515a3fedcebe03e in us-east-1b",
+    "2026-10-30T03:46:49.471Z client-setup Success",
+    "2026-10-30T04:08:50.664Z setup Success",
+    "2026-10-30T04:09:08.212Z start-alone Success",
+    "2026-10-30T04:15:58.779Z alone Success",
+    "2026-10-30T04:15:58.779Z capacity 813/s, 67895 bytes a tile",
+    "2026-10-30T04:16:15.461Z start-cdn Success",
+    "2026-10-30T04:21:18.863Z cdn Success",
+    "2026-10-30T04:21:18.863Z capacity 813/s, 503 bytes a tile",
+    "2026-10-30T04:21:35.532Z collect Success"
+  ],
+  "error": null,
+  "startedAt": "2026-10-30T03:39:55.631Z",
+  "finishedAt": "2026-10-30T04:21:37.046Z"
+}

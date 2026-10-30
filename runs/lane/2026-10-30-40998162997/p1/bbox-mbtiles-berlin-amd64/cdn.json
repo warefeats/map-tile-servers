@@ -1,0 +1,171 @@
+{
+  "server": "bbox",
+  "version": "0.6.2",
+  "emptyStatus": 500,
+  "tileset": "berlin",
+  "format": "mbtiles",
+  "scenario": "cdn",
+  "timing": {
+    "warmupS": 120,
+    "stepWarmupS": 10,
+    "stepS": 20,
+    "usersS": 60
+  },
+  "targetMs": 50,
+  "replayLines": 2000000,
+  "firstView": {
+    "tiles": 12,
+    "wallMs": 26.21005600000001,
+    "slowestMs": 21.517980999999963,
+    "bytes": 2507059,
+    "statuses": {
+      "200": 12
+    }
+  },
+  "warmup": {
+    "rps": 13906.489491181439,
+    "p99Ms": 6.351,
+    "statusCodes": {
+      "200": 1359928,
+      "500": 308814
+    }
+  },
+  "users": [],
+  "capacity": {
+    "capacityRps": 13000,
+    "atCeiling": false,
+    "steps": [
+      {
+        "offeredRps": 1000,
+        "achievedRps": 999.95,
+        "p50Ms": 0.25,
+        "p99Ms": 0.908,
+        "errorRate": 0,
+        "held": true,
+        "bytesPerRequest": 16227,
+        "statusCodes": {
+          "200": 16235,
+          "500": 3764
+        },
+        "clientCpu": 0.025365738555922605,
+        "fromS": 1793332499.378,
+        "toS": 1793332531.841
+      },
+      {
+        "offeredRps": 2000,
+        "achievedRps": 1999.85,
+        "p50Ms": 0.268,
+        "p99Ms": 0.93,
+        "errorRate": 0,
+        "held": true,
+        "bytesPerRequest": 16385,
+        "statusCodes": {
+          "200": 32533,
+          "500": 7464
+        },
+        "clientCpu": 0.036385115180153575,
+        "fromS": 1793332531.841,
+        "toS": 1793332564.311
+      },
+      {
+        "offeredRps": 4000,
+        "achievedRps": 3999.9,
+        "p50Ms": 0.344,
+        "p99Ms": 1.087,
+        "errorRate": 0,
+        "held": true,
+        "bytesPerRequest": 16315,
+        "statusCodes": {
+          "200": 65188,
+          "500": 14810
+        },
+        "clientCpu": 0.05056980056980057,
+        "fromS": 1793332564.311,
+        "toS": 1793332596.791
+      },
+      {
+        "offeredRps": 8000,
+        "achievedRps": 7999.85,
+        "p50Ms": 0.543,
+        "p99Ms": 1.609,
+        "errorRate": 0,
+        "held": true,
+        "bytesPerRequest": 16213,
+        "statusCodes": {
+          "200": 130341,
+          "500": 29656
+        },
+        "clientCpu": 0.08008091385054736,
+        "fromS": 1793332596.792,
+        "toS": 1793332629.294
+      },
+      {
+        "offeredRps": 16000,
+        "achievedRps": 13915.75,
+        "p50Ms": 1290.891,
+        "p99Ms": 2584.052,
+        "errorRate": 0,
+        "held": false,
+        "bytesPerRequest": 16374,
+        "statusCodes": {
+          "200": 227026,
+          "500": 51289
+        },
+        "clientCpu": 0.13103778096604496,
+        "fromS": 1793332629.294,
+        "toS": 1793332661.85
+      },
+      {
+        "offeredRps": 12000,
+        "achievedRps": 11999.85,
+        "p50Ms": 0.776,
+        "p99Ms": 2.738,
+        "errorRate": 0,
+        "held": true,
+        "bytesPerRequest": 16221,
+        "statusCodes": {
+          "200": 195079,
+          "500": 44918
+        },
+        "clientCpu": 0.0954920019389239,
+        "fromS": 1793332661.85,
+        "toS": 1793332694.383
+      },
+      {
+        "offeredRps": 14000,
+        "achievedRps": 13922.5,
+        "p50Ms": 76.723,
+        "p99Ms": 107.729,
+        "errorRate": 0,
+        "held": false,
+        "bytesPerRequest": 16389,
+        "statusCodes": {
+          "200": 227074,
+          "500": 51376
+        },
+        "clientCpu": 0.13030991982768936,
+        "fromS": 1793332694.383,
+        "toS": 1793332726.94
+      },
+      {
+        "offeredRps": 13000,
+        "achievedRps": 12999.3,
+        "p50Ms": 0.905,
+        "p99Ms": 3.796,
+        "errorRate": 0,
+        "held": true,
+        "bytesPerRequest": 16426,
+        "statusCodes": {
+          "200": 211852,
+          "500": 48134
+        },
+        "clientCpu": 0.15950432014552068,
+        "fromS": 1793332726.94,
+        "toS": 1793332759.488
+      }
+    ]
+  },
+  "clientBoundAtRps": null,
+  "bytesPerTile": 16426,
+  "p99AtCapacityMs": 3.796
+}

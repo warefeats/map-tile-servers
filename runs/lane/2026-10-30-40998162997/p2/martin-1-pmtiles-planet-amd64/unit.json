@@ -1,0 +1,54 @@
+{
+  "id": "martin-1-pmtiles-planet-amd64",
+  "pass": 2,
+  "server": "martin-1",
+  "version": "1.16.1",
+  "stable": true,
+  "format": "pmtiles",
+  "dataset": "planet",
+  "arch": "amd64",
+  "placementGroup": "lane-40998162997-p2-martin-1-pmtiles-planet-amd64-4",
+  "serverHost": {
+    "id": "i-05d36c9766a5f5e64",
+    "ip": "172.31.16.232",
+    "az": "us-east-1b",
+    "subnet": "subnet-0a17ca6edfc559485"
+  },
+  "clientHost": {
+    "id": "i-06ea3754dbc0d9835",
+    "ip": "172.31.30.12",
+    "az": "us-east-1b",
+    "subnet": "subnet-0a17ca6edfc559485"
+  },
+  "dataSeconds": 699,
+  "readyMs": {
+    "alone": 1062,
+    "cdn": 1058
+  },
+  "results": {
+    "alone": "results/lane/40998162997/p2/martin-1-pmtiles-planet-amd64/alone.json",
+    "cdn": "results/lane/40998162997/p2/martin-1-pmtiles-planet-amd64/cdn.json"
+  },
+  "catalog": null,
+  "log": [
+    "2026-10-30T04:27:30.510Z no server capacity in us-east-1c, attempt 1",
+    "2026-10-30T04:29:19.679Z no server capacity in us-east-1c, attempt 2",
+    "2026-10-30T04:30:31.369Z no client capacity in subnet-099a403aa8952f07d",
+    "2026-10-30T04:31:40.105Z no client capacity in subnet-02c157cadc5e12a02",
+    "2026-10-30T04:33:21.300Z no server capacity in us-east-1a, attempt 1",
+    "2026-10-30T04:35:32.981Z no server capacity in us-east-1a, attempt 2",
+    "2026-10-30T04:35:41.361Z server i-05d36c9766a5f5e64 and client i-06ea3754dbc0d9835 in us-east-1b",
+    "2026-10-30T04:36:22.315Z client-setup Success",
+    "2026-10-30T04:48:35.204Z setup Success",
+    "2026-10-30T04:49:01.185Z start-alone Success",
+    "2026-10-30T04:57:15.347Z alone Success",
+    "2026-10-30T04:57:15.347Z capacity 4500/s, 67860 bytes a tile",
+    "2026-10-30T04:57:32.838Z start-cdn Success",
+    "2026-10-30T05:03:39.467Z cdn Success",
+    "2026-10-30T05:03:39.467Z capacity 4000/s, 503 bytes a tile",
+    "2026-10-30T05:03:56.172Z collect Success"
+  ],
+  "error": null,
+  "startedAt": "2026-10-30T04:25:39.727Z",
+  "finishedAt": "2026-10-30T05:03:57.695Z"
+}

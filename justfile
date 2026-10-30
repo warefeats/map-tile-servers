@@ -98,6 +98,21 @@ rig-watch:
     gh run list --repo warefeats/map-tile-servers --workflow=rig.yml --limit=1 --json databaseId --jq '.[0].databaseId' | xargs gh run watch --repo warefeats/map-tile-servers
 
 # One dispatch's artifacts: results and the verdict into the repo, all of it (logs, the build record) in .work/rig/gh-<id>/.
+# the archive lane's JSON records and report of a lane.yml run into runs/lane/<date>-<id>/ (logs stay in the artifact)
+lane-fetch ID:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    tmp=$(mktemp -d)
+    gh run download {{ID}} --repo warefeats/map-tile-servers --dir "$tmp"
+    src="$tmp/lane-{{ID}}"
+    [ -f "$src/plan.json" ] || { echo "run {{ID}} has no lane records" >&2; exit 1; }
+    dst="runs/lane/$(jq -r '.startedAt[0:10]' "$src/plan.json")-{{ID}}"
+    rm -rf "$dst"
+    mkdir -p "$dst"
+    rsync -a --prune-empty-dirs --exclude 'ssm/' --include '*/' --include '*.json' --include '*.md' --exclude '*' "$src/" "$dst/"
+    rm -rf "$tmp"
+    echo "$dst: $(find "$dst" -type f | wc -l) files, $(du -sh "$dst" | cut -f1)"
+
 rig-fetch ID:
     #!/usr/bin/env bash
     set -euo pipefail

@@ -1,0 +1,51 @@
+{
+  "id": "martin-2-pmtiles-planet-amd64",
+  "pass": 2,
+  "server": "martin-2",
+  "version": "2.0.0-beta.4",
+  "stable": false,
+  "format": "pmtiles",
+  "dataset": "planet",
+  "arch": "amd64",
+  "placementGroup": "lane-40998162997-p2-martin-2-pmtiles-planet-amd64-2",
+  "serverHost": {
+    "id": "i-01d41bc709866a475",
+    "ip": "172.31.20.233",
+    "az": "us-east-1b",
+    "subnet": "subnet-0a17ca6edfc559485"
+  },
+  "clientHost": {
+    "id": "i-0aa4ad148797b043c",
+    "ip": "172.31.23.241",
+    "az": "us-east-1b",
+    "subnet": "subnet-0a17ca6edfc559485"
+  },
+  "dataSeconds": 698,
+  "readyMs": {
+    "alone": 976,
+    "cdn": 867
+  },
+  "results": {
+    "alone": "results/lane/40998162997/p2/martin-2-pmtiles-planet-amd64/alone.json",
+    "cdn": "results/lane/40998162997/p2/martin-2-pmtiles-planet-amd64/cdn.json"
+  },
+  "catalog": null,
+  "log": [
+    "2026-10-30T04:26:50.242Z no client capacity in subnet-02c157cadc5e12a02",
+    "2026-10-30T04:29:02.055Z no server capacity in us-east-1a, attempt 1",
+    "2026-10-30T04:31:28.558Z no server capacity in us-east-1a, attempt 2",
+    "2026-10-30T04:31:38.469Z server i-01d41bc709866a475 and client i-0aa4ad148797b043c in us-east-1b",
+    "2026-10-30T04:32:35.827Z client-setup Success",
+    "2026-10-30T04:44:21.558Z setup Success",
+    "2026-10-30T04:44:40.898Z start-alone Success",
+    "2026-10-30T04:51:45.224Z alone Success",
+    "2026-10-30T04:51:45.224Z capacity 1625/s, 67873 bytes a tile",
+    "2026-10-30T04:52:04.512Z start-cdn Success",
+    "2026-10-30T04:58:05.378Z cdn Success",
+    "2026-10-30T04:58:05.378Z capacity 6000/s, 517 bytes a tile",
+    "2026-10-30T04:58:22.910Z collect Success"
+  ],
+  "error": null,
+  "startedAt": "2026-10-30T04:25:27.726Z",
+  "finishedAt": "2026-10-30T04:58:24.790Z"
+}

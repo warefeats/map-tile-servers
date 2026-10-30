@@ -1,0 +1,48 @@
+{
+  "id": "versatiles-mbtiles-planet-arm64",
+  "pass": 2,
+  "server": "versatiles",
+  "version": "5.4.1",
+  "stable": true,
+  "format": "mbtiles",
+  "dataset": "planet",
+  "arch": "arm64",
+  "placementGroup": "lane-40998162997-p2-versatiles-mbtiles-planet-arm64-0",
+  "serverHost": {
+    "id": "i-091b9c9338460d87f",
+    "ip": "172.31.44.255",
+    "az": "us-east-1c",
+    "subnet": "subnet-09cd73e59c55312c3"
+  },
+  "clientHost": {
+    "id": "i-09e712a99310b9b32",
+    "ip": "172.31.38.57",
+    "az": "us-east-1c",
+    "subnet": "subnet-09cd73e59c55312c3"
+  },
+  "dataSeconds": 804,
+  "readyMs": {
+    "alone": 536,
+    "cdn": 716
+  },
+  "results": {
+    "alone": "results/lane/40998162997/p2/versatiles-mbtiles-planet-arm64/alone.json",
+    "cdn": "results/lane/40998162997/p2/versatiles-mbtiles-planet-arm64/cdn.json"
+  },
+  "catalog": null,
+  "log": [
+    "2026-10-30T04:27:22.704Z server i-091b9c9338460d87f and client i-09e712a99310b9b32 in us-east-1c",
+    "2026-10-30T04:29:57.173Z client-setup Success",
+    "2026-10-30T04:42:01.847Z setup Success",
+    "2026-10-30T04:42:22.892Z start-alone Success",
+    "2026-10-30T04:49:01.185Z alone Success",
+    "2026-10-30T04:49:01.192Z capacity 0/s, ? bytes a tile",
+    "2026-10-30T04:49:21.339Z start-cdn Success",
+    "2026-10-30T04:54:53.519Z cdn Success",
+    "2026-10-30T04:54:53.523Z capacity 3250/s, 479 bytes a tile",
+    "2026-10-30T04:55:12.712Z collect Success"
+  ],
+  "error": null,
+  "startedAt": "2026-10-30T04:26:02.225Z",
+  "finishedAt": "2026-10-30T04:55:15.991Z"
+}

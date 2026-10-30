@@ -1,0 +1,53 @@
+{
+  "id": "bbox-mbtiles-berlin-amd64",
+  "pass": 1,
+  "server": "bbox",
+  "version": "0.6.2",
+  "stable": true,
+  "format": "mbtiles",
+  "dataset": "berlin",
+  "arch": "amd64",
+  "placementGroup": "lane-40998162997-p1-bbox-mbtiles-berlin-amd64-0",
+  "serverHost": {
+    "id": "i-0e87049a9a0073422",
+    "ip": "172.31.83.244",
+    "az": "us-east-1a",
+    "subnet": "subnet-075b8107a2a2814ab"
+  },
+  "clientHost": {
+    "id": "i-09d6692ec764c4caa",
+    "ip": "172.31.81.25",
+    "az": "us-east-1a",
+    "subnet": "subnet-075b8107a2a2814ab"
+  },
+  "dataSeconds": 1,
+  "readyMs": {
+    "alone": 2751,
+    "cdn": 2770
+  },
+  "results": {
+    "alone": "results/lane/40998162997/p1/bbox-mbtiles-berlin-amd64/alone.json",
+    "cdn": "results/lane/40998162997/p1/bbox-mbtiles-berlin-amd64/cdn.json"
+  },
+  "catalog": {
+    "firstMs": 7986,
+    "lastMs": 7995
+  },
+  "log": [
+    "2026-10-30T03:41:24.368Z server i-0e87049a9a0073422 and client i-09d6692ec764c4caa in us-east-1a",
+    "2026-10-30T03:43:10.737Z setup Success",
+    "2026-10-30T03:43:10.737Z client-setup Success",
+    "2026-10-30T03:44:07.344Z start-alone Success",
+    "2026-10-30T03:52:23.623Z alone Success",
+    "2026-10-30T03:52:23.624Z capacity 5000/s, 82708 bytes a tile",
+    "2026-10-30T03:52:47.149Z start-cdn Success",
+    "2026-10-30T03:59:27.269Z cdn Success",
+    "2026-10-30T03:59:27.269Z capacity 13000/s, 16426 bytes a tile",
+    "2026-10-30T03:59:46.691Z collect Success",
+    "2026-10-30T04:00:06.884Z catalog Success",
+    "2026-10-30T04:00:06.888Z catalog: first 7986 ms, last 7995 ms"
+  ],
+  "error": null,
+  "startedAt": "2026-10-30T03:39:49.603Z",
+  "finishedAt": "2026-10-30T04:00:10.483Z"
+}
