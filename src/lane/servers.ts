@@ -38,6 +38,10 @@ export interface LaneServer {
   layout?: "tiles-dir";
   /** The status the server answers a tile its archive lacks with, where it is not 204 or 404: counted as that empty tile. */
   emptyStatus?: number;
+  /** A cache in front of the server answers repeats, so a start probe asks for a fresh URL every time. */
+  cachedFront?: boolean;
+  /** Archives the server cannot open, with why: the units are skipped and the reason reported. */
+  unsupported?: Partial<Record<Dataset, Partial<Record<Format, string>>>>;
 }
 
 const xyz = (t: TileCoord) => `${t.z}/${t.x}/${t.y}`;
@@ -52,6 +56,8 @@ export const LANE_SERVERS: readonly LaneServer[] = [
   {
     id: "versatiles", name: "VersaTiles", version: "5.4.1", stable: true, formats: ["pmtiles", "mbtiles"], image: { arm64: "versatiles/versatiles-nginx:v5.4.1", amd64: "versatiles/versatiles-nginx:v5.4.1" }, port: 80, path: (s, t) => `/tiles/${s}/${xyz(t)}`, args: () => [],
     layout: "tiles-dir",
+    // its nginx keeps every response five minutes, errors included (proxy_cache_valid any 5m)
+    cachedFront: true,
     env: (ts, f) => ({ DOMAIN: "localhost", HTTP_ONLY: "1", FRONTEND: "none", TILE_SOURCES: ts.map((t) => `${t}.${f}`).join(",") }),
   },
   {
@@ -64,6 +70,8 @@ export const LANE_SERVERS: readonly LaneServer[] = [
     id: "bbox", name: "BBOX", version: "0.6.2", stable: true, unmaintained: true, formats: ["pmtiles", "mbtiles"], image: { arm64: null, amd64: "sourcepole/bbox-tile-server:v0.6.2" }, release: { arm64: "wf-bbox-release:0.6.2" }, port: 8080, path: (s, t) => `/xyz/${s}/${xyz(t)}.mvt`, args: () => ["bbox-tile-server", "-c", "/data/bbox.toml", "serve"],
     // a tile the archive lacks gets 500 where the others answer 204; the report shows that share beside theirs
     emptyStatus: 500,
+    // its mbtiles reader predates Planetiler's deduplicated schema, which OpenFreeMap's planet uses (smoke 40990904006)
+    unsupported: { planet: { mbtiles: "BBOX 0.6.2 cannot open Planetiler's deduplicated MBTiles schema (tiles_shallow and tiles_data under a tiles view): \"Invalid data format for MBTile file\"" } },
     // its documented defaults: worker threads one per core, loglevel Info, no tile cache
     config: (ts, f) => ({ "bbox.toml": `[webserver]\nserver_addr = "0.0.0.0:8080"\n\n${ts.map((t) => `[[tileset]]\nname = "${t}"\n[tileset.${f}]\npath = "/data/${t}.${f}"\n`).join("\n")}` }),
   },

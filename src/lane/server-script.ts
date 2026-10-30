@@ -85,14 +85,16 @@ export function setupScript(u: ServerUnit): string {
 /** Starts the server and waits up to a minute for its first tile, leaving `start` and `end` in nanoseconds. */
 function startToFirstTile(u: ServerUnit): string[] {
   const run = dockerRun(u.server, u.arch, [u.tileset], u.format, u.localImage?.tag).map(q).join(" ");
-  const url = `http://127.0.0.1:${u.server.port}${u.server.path(u.tileset, u.firstTile)}`;
+  // behind a cache each try asks for a fresh URL, or the cache could answer a try made before the server listened
+  const url = `${q(`http://127.0.0.1:${u.server.port}${u.server.path(u.tileset, u.firstTile)}`)}${u.server.cachedFront ? '"?start=$n"' : ""}`;
   return [
     "start=$(date +%s%N)",
     run,
     // a server that takes the connection and never answers must not stall the wait, so each try has its own limit
     "code=000",
+    "n=0",
     "deadline=$(( $(date +%s) + 60 ))",
-    `while [ "$(date +%s)" -lt "$deadline" ]; do code=$(curl -s --max-time 2 -o /dev/null -w '%{http_code}' ${q(url)} || true); [ "$code" = 200 ] && break; sleep 0.01; done`,
+    `while [ "$(date +%s)" -lt "$deadline" ]; do n=$((n + 1)); code=$(curl -s --max-time 2 -o /dev/null -w '%{http_code}' ${url} || true); [ "$code" = 200 ] && break; sleep 0.01; done`,
     "end=$(date +%s%N)",
     '[ "$code" = 200 ] || { echo "no 200 from the server within a minute (last $code)"; docker logs --tail 40 lane-server; exit 1; }',
   ];
@@ -116,6 +118,8 @@ export function collectScript(u: ServerUnit, prefix: string): string {
     "docker logs --tail 2000 lane-server > /opt/lane/server.log 2>&1 || true",
     `aws s3 cp /opt/lane/samples.log ${q(`${prefix}samples.log`)} --only-show-errors`,
     `aws s3 cp /opt/lane/server.log ${q(`${prefix}server.log`)} --only-show-errors`,
+    // a server whose image runs nginx in front of it keeps that nginx's own error log in its data directory
+    `if [ -f /opt/lane/data/log/error.log ]; then tail -n 2000 /opt/lane/data/log/error.log | aws s3 cp - ${q(`${prefix}nginx-error.log`)} --only-show-errors; fi`,
   ].join("\n") + "\n";
 }
 
@@ -144,10 +148,11 @@ export function catalogScript(u: ServerUnit, smallKey: string): string {
     ...files.flatMap(([name, content]) => writeFile(`${dir}/${name}`, content)),
     // milliseconds from the start to a URL's first 200, or "none" when the wait runs out
     "until200() {",
-    "  local deadline",
+    "  local deadline n=0",
     `  deadline=$(( $(date +%s) + ${CATALOG_WAIT_S} ))`,
     '  while [ "$(date +%s)" -lt "$deadline" ]; do',
-    `    if [ "$(curl -s --max-time 2 -o /dev/null -w '%{http_code}' "$1" || true)" = 200 ]; then echo $(( ($(date +%s%N) - start) / 1000000 )); return; fi`,
+    "    n=$((n + 1))",
+    `    if [ "$(curl -s --max-time 2 -o /dev/null -w '%{http_code}' "$1${u.server.cachedFront ? "?start=$n" : ""}" || true)" = 200 ]; then echo $(( ($(date +%s%N) - start) / 1000000 )); return; fi`,
     "    sleep 0.01",
     "  done",
     "  echo none",

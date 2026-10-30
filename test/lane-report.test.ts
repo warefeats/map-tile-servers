@@ -4,7 +4,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { parsePrices } from "../src/cost";
 import type { UnitRecord } from "../src/lane/orchestrate";
-import { catalogRows, cpuPerTile, emptyShare, interval, markdown, measurementOf, networkCap, parseSamples, rankings, ranks, readRun, type ScenarioRecord, scenarioWindow, windowStats } from "../src/lane/report";
+import { catalogRows, cpuPerTile, emptyShare, interval, markdown, measurementOf, networkCap, notMeasured, parseSamples, rankings, ranks, readRun, type ScenarioRecord, scenarioWindow, windowStats } from "../src/lane/report";
 import { MISS_SHARE } from "../src/replay";
 
 const prices = parsePrices(JSON.parse(readFileSync("prices/aws-us-east-1-2026-10-29.json", "utf8")));
@@ -69,6 +69,24 @@ describe("the lane's report", () => {
     expect(bbox.emptyShare).toBeCloseTo(0.014, 9);
     const md = markdown(rankings([bbox, martin]), prices);
     expect(md).toContain("bbox 0.6.2 answers a tile its archive lacks with 500, counted as that empty tile: 1.4% of its answers at capacity, where the others' empty answers are 1.5–1.5%.");
+  });
+
+  test("lists what was not measured: units the plan skipped, and units that ended without a result", () => {
+    const dir = mkdtempSync(join(tmpdir(), "lane-missing-"));
+    writeFileSync(join(dir, "plan.json"), JSON.stringify({ skipped: [{ id: "bbox-mbtiles-planet-amd64", reason: "cannot open the archive" }] }));
+    mkdirSync(join(dir, "p1", "versatiles-pmtiles-planet-arm64"), { recursive: true });
+    writeFileSync(join(dir, "p1", "versatiles-pmtiles-planet-arm64", "unit.json"), JSON.stringify(record({ id: "versatiles-pmtiles-planet-arm64", error: "setup on i-1: Failed\nno 200 within a minute" })));
+    mkdirSync(join(dir, "p1", "martin-2-pmtiles-berlin-arm64"), { recursive: true });
+    writeFileSync(join(dir, "p1", "martin-2-pmtiles-berlin-arm64", "unit.json"), JSON.stringify(record()));
+    writeFileSync(join(dir, "p1", "martin-2-pmtiles-berlin-arm64", "alone.json"), JSON.stringify(scenario("alone", 1000, 80_000)));
+    const missing = notMeasured(dir);
+    expect(missing).toEqual([
+      { unit: "bbox-mbtiles-planet-amd64", reason: "cannot open the archive", passes: [] },
+      { unit: "versatiles-pmtiles-planet-arm64", reason: "setup on i-1: Failed", passes: [1] },
+    ]);
+    const md = markdown([], prices, [], missing);
+    expect(md).toContain("| bbox-mbtiles-planet-amd64 | cannot open the archive | skipped |");
+    expect(md).toContain("| versatiles-pmtiles-planet-arm64 | setup on i-1: Failed | 1 |");
   });
 
   test("intervals over passes, and ranks that tie where they overlap", () => {

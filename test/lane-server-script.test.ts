@@ -87,6 +87,14 @@ describe("the server scripts", () => {
     expect(catalog).toContain("'-v' '/opt/lane/catalog:/data'");
   });
 
+  test("behind a cache, each start probe asks for a fresh URL; elsewhere it asks for the tile itself", () => {
+    const vt: ServerUnit = { ...unit, tileset: "berlin", dataKey: "k", server: server("versatiles"), format: "pmtiles" };
+    expect(startScript(vt, "alone")).toContain(`'http://127.0.0.1:80/tiles/berlin/14/8802/5372'"?start=$n"`);
+    expect(catalogScript(vt, "bundles/lane-7/catalog/small.pmtiles")).toContain('"$1?start=$n"');
+    expect(startScript({ ...unit, server: server("martin-2"), format: "pmtiles" }, "alone")).not.toContain("?start=");
+    expect(collectScript(vt, "s3://b/p/")).toContain("'s3://b/p/nginx-error.log'");
+  });
+
   test("writes config files verbatim, and refuses content holding the heredoc's delimiter", () => {
     expect(writeFile("/x", "a $b 'c'\n")).toEqual(["cat > '/x' <<'WF_FILE'", "a $b 'c'", "WF_FILE"]);
     expect(() => writeFile("/x", "WF_FILE\n")).toThrow(/delimiter/);

@@ -333,7 +333,33 @@ export function catalogRows(ms: readonly Measurement[]): CatalogRow[] {
     }));
 }
 
-export function markdown(rs: readonly Ranking[], prices: Prices, catalog: readonly CatalogRow[] = []): string {
+export interface NotMeasured {
+  unit: string;
+  reason: string;
+  /** Passes it failed in; none when the plan skipped it. */
+  passes: number[];
+}
+
+/** Units the plan skipped, with its reason, and units that ended without a scenario's result, with their error. */
+export function notMeasured(dir: string): NotMeasured[] {
+  const out = new Map<string, NotMeasured>();
+  const plan = join(dir, "plan.json");
+  if (existsSync(plan)) for (const s of (JSON.parse(readFileSync(plan, "utf8")) as { skipped?: { id: string; reason: string }[] }).skipped ?? []) out.set(s.id, { unit: s.id, reason: s.reason, passes: [] });
+  for (const pass of readdirSync(dir).filter((d) => /^p\d+$/.test(d)).sort()) {
+    for (const unit of readdirSync(join(dir, pass)).sort()) {
+      const at = (f: string) => join(dir, pass, unit, f);
+      if (!existsSync(at("unit.json")) || existsSync(at("alone.json")) || existsSync(at("cdn.json"))) continue;
+      const rec = JSON.parse(readFileSync(at("unit.json"), "utf8")) as UnitRecord;
+      if (!rec.error) continue;
+      const e = out.get(unit) ?? { unit, reason: rec.error.split("\n")[0]!, passes: [] };
+      e.passes.push(rec.pass);
+      out.set(unit, e);
+    }
+  }
+  return [...out.values()].sort((a, b) => a.unit.localeCompare(b.unit));
+}
+
+export function markdown(rs: readonly Ranking[], prices: Prices, catalog: readonly CatalogRow[] = [], missing: readonly NotMeasured[] = []): string {
   const out = [`# Archive lane`, "", `Dollars per million tiles at AWS list prices of ${prices.date} (${prices.region}); lower is better. A rank is shared unless the 95% confidence intervals over the passes do not overlap. The price takes each server's capacity capped at the instance's sustained network rate (${BASELINE_GBPS["c8g.xlarge"]} Gbps); the measured capacity and the server container's CPU per tile at it stand beside each ranking, unranked.`, ""];
   const label = (e: Entry) => `${e.server} ${e.version}${e.stable ? "" : " (pre-release)"}`;
   for (const r of rs) {
@@ -358,6 +384,11 @@ export function markdown(rs: readonly Ranking[], prices: Prices, catalog: readon
   if (catalog.length) {
     out.push("## Start with 1,000 more sources (Berlin, reported)", "", "| format | arch | server | first tile (ms) | last source's tile (ms) | never served | passes |", "| :-- | :-- | :-- | --: | --: | --: | --: |");
     for (const c of catalog) out.push(`| ${c.format} | ${c.arch} | ${c.server} ${c.version} | ${fmt(c.firstMs?.mean, 0)} | ${fmt(c.lastMs?.mean, 0)} | ${c.neverServed} | ${c.passes} |`);
+    out.push("");
+  }
+  if (missing.length) {
+    out.push("## Not measured", "", "| unit | why | passes |", "| :-- | :-- | :-- |");
+    for (const m of missing) out.push(`| ${m.unit} | ${m.reason.replaceAll("|", "\\|")} | ${m.passes.length ? m.passes.join(", ") : "skipped"} |`);
     out.push("");
   }
   return out.join("\n");
@@ -397,6 +428,6 @@ if (import.meta.main) {
   mkdirSync(out, { recursive: true });
   writeFileSync(join(out, "measurements.json"), `${JSON.stringify(ms, null, 2)}\n`);
   writeFileSync(join(out, "rankings.json"), `${JSON.stringify(rs, null, 2)}\n`);
-  writeFileSync(join(out, "report.md"), markdown(rs, prices, catalogRows(ms)));
+  writeFileSync(join(out, "report.md"), markdown(rs, prices, catalogRows(ms), notMeasured(records)));
   console.log(`${ms.length} measurements, ${rs.length} rankings`);
 }

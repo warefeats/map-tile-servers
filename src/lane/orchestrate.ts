@@ -41,7 +41,7 @@ export const unitId = (u: Omit<LaneUnit, "id">) => `${u.server.id}-${u.format}-$
 /** Why a unit cannot run, or null. */
 export function blocked(u: Omit<LaneUnit, "id">): string | null {
   if (!u.server.image[u.arch] && !u.server.release?.[u.arch]) return `no ${u.arch} image, and none built from a release binary`;
-  return null;
+  return u.server.unsupported?.[u.dataset]?.[u.format] ?? null;
 }
 
 const matches = (pattern: string, id: string) => new RegExp(`^${pattern.split("*").map((p) => p.replace(/[.+?^${}()|[\]\\]/g, "\\$&")).join(".*")}$`).test(id);

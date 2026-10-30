@@ -57,10 +57,11 @@ const ctx: RunContext = { run: "7", bucket: "b", templates: { arm64: "lt-arm", a
 const martin = planUnits("martin-2-pmtiles-planet-arm64").run[0]!;
 
 describe("the lane's plan", () => {
-  test("runs every server on every format, dataset and architecture", () => {
+  test("runs every server on every format, dataset and architecture it can open, and says why not the rest", () => {
     const { run, skipped } = planUnits("all");
-    expect(run).toHaveLength(52);
-    expect(skipped).toEqual([]);
+    expect(run).toHaveLength(50);
+    expect(skipped.map((x) => x.id)).toEqual(["bbox-mbtiles-planet-arm64", "bbox-mbtiles-planet-amd64"]);
+    expect(skipped[0]!.reason).toContain("deduplicated MBTiles schema");
   });
 
   test("filters by id, with wildcards", () => {
