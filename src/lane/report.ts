@@ -34,7 +34,7 @@ export interface ScenarioRecord {
   scenario: Scenario;
   firstView: { wallMs: number; statuses: Record<string, number> };
   users: UsersResult[];
-  capacity: { capacityRps: number | null; atCeiling: boolean; steps?: { offeredRps: number; achievedRps: number; held: boolean; fromS?: number; toS?: number; statusCodes?: Record<string, number> }[] };
+  capacity: { capacityRps: number | null; atCeiling: boolean; steps?: { offeredRps: number; achievedRps: number; held: boolean; fromS?: number; toS?: number; statusCodes?: Record<string, number>; bytesPerRequest?: number | null }[] };
   /** The status the server declares for a tile its archive lacks, where it is not 204 or 404. */
   emptyStatus?: number | null;
   clientBoundAtRps: number | null;
@@ -270,7 +270,9 @@ export function rankings(ms: readonly Measurement[]): Ranking[] {
         const c = interval(num(list.map((m) => m.cost?.total ?? null)));
         if (c) costs.set(server, c);
       }
-      const rank = ranks(costs);
+      // one priced pass has no interval to tell a difference by, so where the others have two or more it is not ranked
+      const most = Math.max(0, ...[...costs.values()].map((c) => c.n));
+      const rank = ranks(new Map([...costs].filter(([, c]) => c.n >= 2 || most < 2)));
       const entries = [...byServer.keys()].map((server): Entry => {
         const list = byServer.get(server)!;
         return {
@@ -316,7 +318,7 @@ export interface CatalogRow {
 export function catalogRows(ms: readonly Measurement[]): CatalogRow[] {
   const groups = new Map<string, Measurement[]>();
   for (const m of ms) {
-    if (m.scenario !== "alone" || m.dataset !== "berlin") continue;
+    if (m.scenario !== "alone" || m.dataset !== "berlin" || m.format === "files") continue;
     const key = [m.format, m.arch, m.server].join("/");
     groups.set(key, [...(groups.get(key) ?? []), m]);
   }
@@ -352,7 +354,7 @@ export function notMeasured(dir: string): NotMeasured[] {
       if (!existsSync(at("unit.json")) || existsSync(at("alone.json")) || existsSync(at("cdn.json"))) continue;
       const rec = JSON.parse(readFileSync(at("unit.json"), "utf8")) as UnitRecord;
       if (!rec.error) continue;
-      const e = out.get(unit) ?? { unit, reason: rec.error.split("\n")[0]!, passes: [] };
+      const e = out.get(unit) ?? { unit, reason: rec.error.split("\n")[0]!.replace(/Account \d+ /g, "The account "), passes: [] };
       e.passes.push(rec.pass);
       out.set(unit, e);
     }
@@ -367,7 +369,12 @@ export function markdown(rs: readonly Ranking[], prices: Prices, catalog: readon
     out.push(`## ${r.dataset}, ${r.format}, ${r.scenario === "alone" ? "server alone" : "behind a CDN"}, ${r.arch}`, "");
     // the ranked question: what a million tiles cost
     out.push("| rank | server | $ per M tiles | 95% CI | passes |", "| --: | :-- | --: | --: | --: |");
-    for (const e of r.entries) out.push(e.costPerMillion ? `| ${e.rank} | ${label(e)} | ${fmt(e.costPerMillion.mean, 3)} | ${ci(e.costPerMillion, 3)} | ${e.passes.length} |` : `| – | ${label(e)} (held no rate within the target) | – | – | 0 |`);
+    const most = Math.max(0, ...r.entries.map((e) => e.costPerMillion?.n ?? 0));
+    for (const e of r.entries) {
+      if (!e.costPerMillion) out.push(`| – | ${label(e)} (held no rate within the target) | – | – | 0 |`);
+      else if (e.rank === null) out.push(`| – | ${label(e)} (priced in ${e.costPerMillion.n} of ${most} passes) | ${fmt(e.costPerMillion.mean, 3)} | ${ci(e.costPerMillion, 3)} | ${e.passes.length} |`);
+      else out.push(`| ${e.rank} | ${label(e)} | ${fmt(e.costPerMillion.mean, 3)} | ${ci(e.costPerMillion, 3)} | ${e.passes.length} |`);
+    }
     // reported beside it, not ranked: how hard each server worked for that price
     out.push("", "| server | measured (tiles/s) | priced at (tiles/s) | CPU per tile (µs) | tile (KB) | p99 at capacity (ms) |", "| :-- | --: | --: | --: | --: | --: |");
     for (const e of r.entries) {
@@ -388,8 +395,8 @@ export function markdown(rs: readonly Ranking[], prices: Prices, catalog: readon
     out.push("");
   }
   if (missing.length) {
-    out.push("## Not measured", "", "| unit | why | passes |", "| :-- | :-- | :-- |");
-    for (const m of missing) out.push(`| ${m.unit} | ${m.reason.replaceAll("|", "\\|")} | ${m.passes.length ? m.passes.join(", ") : "skipped"} |`);
+    out.push("## Not measured", "", "| unit | not measured in | why |", "| :-- | :-- | :-- |");
+    for (const m of missing) out.push(`| ${m.unit} | ${m.passes.length ? `pass ${m.passes.join(", ")}` : "every pass (skipped)"} | ${m.reason.replaceAll("|", "\\|")} |`);
     out.push("");
   }
   return out.join("\n");
@@ -406,9 +413,13 @@ export function readRun(dir: string, prices: Prices): Measurement[] {
       const samples = existsSync(at("samples.log")) ? parseSamples(readFileSync(at("samples.log"), "utf8")) : [];
       const scenario = (s: Scenario) => (existsSync(at(`${s}.json`)) ? (JSON.parse(readFileSync(at(`${s}.json`), "utf8")) as ScenarioRecord) : null);
       const alone = scenario("alone");
+      // CloudFront sends the whole replay's bytes: the alone scenario's at capacity, or, where no rate held there,
+      // what its steps sent, which is the same replay
+      const stepBytes = num((alone?.capacity.steps ?? []).map((st) => st.bytesPerRequest ?? null));
+      const aloneBytes = alone?.bytesPerTile ?? (stepBytes.length ? stepBytes.reduce((a, b) => a + b, 0) / stepBytes.length : null);
       const cdn = scenario("cdn");
       if (alone) ms.push(measurementOf(rec, alone, prices, samples, null));
-      if (cdn) ms.push(measurementOf(rec, cdn, prices, samples, alone?.bytesPerTile ?? null));
+      if (cdn) ms.push(measurementOf(rec, cdn, prices, samples, aloneBytes));
     }
   }
   return ms;
