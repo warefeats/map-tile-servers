@@ -34,7 +34,9 @@ export interface ScenarioRecord {
   scenario: Scenario;
   firstView: { wallMs: number; statuses: Record<string, number> };
   users: UsersResult[];
-  capacity: { capacityRps: number | null; atCeiling: boolean; steps?: { offeredRps: number; achievedRps: number; held: boolean; fromS?: number; toS?: number }[] };
+  capacity: { capacityRps: number | null; atCeiling: boolean; steps?: { offeredRps: number; achievedRps: number; held: boolean; fromS?: number; toS?: number; statusCodes?: Record<string, number> }[] };
+  /** The status the server declares for a tile its archive lacks, where it is not 204 or 404. */
+  emptyStatus?: number | null;
   clientBoundAtRps: number | null;
   bytesPerTile: number | null;
   p99AtCapacityMs: number | null;
@@ -68,6 +70,9 @@ export interface Measurement {
   peakAnonBytes: number | null;
   /** The server container's CPU time per tile over the capacity step; null where fewer than two samples fell in it. */
   cpuPerTileUs: number | null;
+  /** The share of the capacity step's answers that were empty tiles, and the status the server declares for one. */
+  emptyShare: number | null;
+  emptyStatus: number | null;
   /** The unit's catalog start, on its alone measurement only: to the dataset's first tile and to the last source's. */
   catalogFirstMs: number | null;
   catalogLastMs: number | null;
@@ -103,6 +108,18 @@ export function parseSamples(text: string): Sample[] {
       }
       return { at: Number(at), anon, usageUsec, counters };
     });
+}
+
+/** The share of a step's answers that were empty tiles: 204, 404, or the status the server declares for one. */
+export function emptyShare(codes: Record<string, number> | undefined, emptyStatus: number | null | undefined): number | null {
+  if (!codes) return null;
+  let empty = 0;
+  let all = 0;
+  for (const [code, n] of Object.entries(codes)) {
+    all += n;
+    if (code === "204" || code === "404" || code === String(emptyStatus)) empty += n;
+  }
+  return all ? empty / all : null;
 }
 
 /** The server container's CPU time per tile at a step's rate: its counter's growth over the step, per tile served. */
@@ -173,6 +190,8 @@ export function measurementOf(rec: UnitRecord, s: ScenarioRecord, prices: Prices
     cost,
     ...stats,
     cpuPerTileUs: cpuPerTile(samples, atCapacity),
+    emptyShare: emptyShare(atCapacity?.statusCodes, s.emptyStatus),
+    emptyStatus: s.emptyStatus ?? null,
     catalogFirstMs: s.scenario === "alone" ? (rec.catalog?.firstMs ?? null) : null,
     catalogLastMs: s.scenario === "alone" ? (rec.catalog?.lastMs ?? null) : null,
   };
@@ -215,6 +234,8 @@ export interface Entry {
   /** Measured before the network cap, and the server's CPU per tile at it: reported, not ranked. */
   measuredRps: Interval | null;
   cpuPerTileUs: Interval | null;
+  emptyStatus: number | null;
+  emptyShare: Interval | null;
   bytesPerTile: Interval | null;
   p99AtCapacityMs: Interval | null;
   networkBound: number;
@@ -260,6 +281,8 @@ export function rankings(ms: readonly Measurement[]): Ranking[] {
           capacityRps: interval(num(list.map((m) => m.capacityRps))),
           measuredRps: interval(num(list.map((m) => m.measuredRps))),
           cpuPerTileUs: interval(num(list.map((m) => m.cpuPerTileUs))),
+          emptyStatus: list[0]!.emptyStatus,
+          emptyShare: interval(num(list.map((m) => m.emptyShare))),
           bytesPerTile: interval(num(list.map((m) => m.bytesPerTile))),
           p99AtCapacityMs: interval(num(list.map((m) => m.p99AtCapacityMs))),
           networkBound: list.filter((m) => m.networkBound).length,
@@ -325,6 +348,12 @@ export function markdown(rs: readonly Ranking[], prices: Prices, catalog: readon
       out.push(`| ${label(e)}${flags ? ` (${flags})` : ""} | ${fmt(e.measuredRps?.mean, 0)} | ${fmt(e.capacityRps?.mean, 0)} | ${fmt(e.cpuPerTileUs?.mean, 0)} | ${fmt(e.bytesPerTile ? e.bytesPerTile.mean / 1000 : null, 1)} | ${fmt(e.p99AtCapacityMs?.mean, 1)} |`);
     }
     out.push("");
+    // a server that answers a missing tile with something other than 204 or 404, set beside the others' empty answers
+    for (const e of r.entries.filter((x) => x.emptyStatus && x.emptyShare)) {
+      const others = r.entries.filter((x) => !x.emptyStatus && x.emptyShare).map((x) => x.emptyShare!.mean * 100);
+      const range = others.length ? `, where the others' empty answers are ${fmt(Math.min(...others), 1)}–${fmt(Math.max(...others), 1)}%` : "";
+      out.push(`${label(e)} answers a tile its archive lacks with ${e.emptyStatus}, counted as that empty tile: ${fmt(e.emptyShare!.mean * 100, 1)}% of its answers at capacity${range}.`, "");
+    }
   }
   if (catalog.length) {
     out.push("## Start with 1,000 more sources (Berlin, reported)", "", "| format | arch | server | first tile (ms) | last source's tile (ms) | never served | passes |", "| :-- | :-- | :-- | --: | --: | --: | --: |");

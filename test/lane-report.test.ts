@@ -4,7 +4,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { parsePrices } from "../src/cost";
 import type { UnitRecord } from "../src/lane/orchestrate";
-import { catalogRows, cpuPerTile, interval, markdown, measurementOf, networkCap, parseSamples, rankings, ranks, readRun, type ScenarioRecord, scenarioWindow, windowStats } from "../src/lane/report";
+import { catalogRows, cpuPerTile, emptyShare, interval, markdown, measurementOf, networkCap, parseSamples, rankings, ranks, readRun, type ScenarioRecord, scenarioWindow, windowStats } from "../src/lane/report";
 import { MISS_SHARE } from "../src/replay";
 
 const prices = parsePrices(JSON.parse(readFileSync("prices/aws-us-east-1-2026-10-29.json", "utf8")));
@@ -58,6 +58,17 @@ describe("the lane's report", () => {
     expect(cpuPerTile(samples, { achievedRps: 1000 })).toBeNull();
     const steps = [{ offeredRps: 1000, achievedRps: 1000, held: true, fromS: 1761818399, toS: 1761818405 }, { offeredRps: 2000, achievedRps: 1500, held: false, fromS: 1761818405, toS: 1761818410 }];
     expect(measurementOf(record(), { ...scenario("alone", 1000, 30_000), capacity: { capacityRps: 1000, atCeiling: false, steps } }, prices, samples, null).cpuPerTileUs).toBeCloseTo(200, 6);
+  });
+
+  test("sets a server's declared empty status beside the others' empty answers", () => {
+    expect(emptyShare({ "200": 98, "500": 2 }, 500)).toBeCloseTo(0.02, 9);
+    expect(emptyShare({ "200": 97, "204": 3 }, null)).toBeCloseTo(0.03, 9);
+    const steps = (codes: Record<string, number>) => [{ offeredRps: 1000, achievedRps: 1000, held: true, statusCodes: codes }];
+    const bbox = measurementOf(record({ server: "bbox", version: "0.6.2", stable: true }), { ...scenario("alone", 1000, 80_000, { server: "bbox" }), emptyStatus: 500, capacity: { capacityRps: 1000, atCeiling: false, steps: steps({ "200": 986, "500": 14 }) } }, prices, [], null);
+    const martin = measurementOf(record(), { ...scenario("alone", 1000, 80_000), capacity: { capacityRps: 1000, atCeiling: false, steps: steps({ "200": 985, "204": 15 }) } }, prices, [], null);
+    expect(bbox.emptyShare).toBeCloseTo(0.014, 9);
+    const md = markdown(rankings([bbox, martin]), prices);
+    expect(md).toContain("bbox 0.6.2 answers a tile its archive lacks with 500, counted as that empty tile: 1.4% of its answers at capacity, where the others' empty answers are 1.5–1.5%.");
   });
 
   test("intervals over passes, and ranks that tie where they overlap", () => {

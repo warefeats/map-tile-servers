@@ -10,7 +10,7 @@
  * and a tile of the last source, as the diagnostic lane does.
  */
 import { lonLatToTile } from "../tiles";
-import { type Arch, dockerRun, type Format, type LaneServer } from "./servers";
+import { type Arch, archiveDir, dockerRun, type Format, type LaneServer } from "./servers";
 import { q, scriptHead, waitReady, writeFile } from "./shell";
 
 export interface ServerUnit {
@@ -41,7 +41,7 @@ const SAMPLER = [
 ];
 
 /** Where the dataset lands on the server: an archive, or for tile files the Btrfs image that holds them. */
-export const archivePath = (u: Pick<ServerUnit, "tileset" | "format">) => `/opt/lane/data/${u.tileset}.${u.format === "files" ? "btrfs" : u.format}`;
+export const archivePath = (u: Pick<ServerUnit, "server" | "tileset" | "format">) => `${archiveDir(u.server, "/opt/lane/data")}/${u.tileset}.${u.format === "files" ? "btrfs" : u.format}`;
 
 export function setupScript(u: ServerUnit): string {
   const files = Object.entries(u.server.config?.([u.tileset], u.format) ?? {});
@@ -63,7 +63,7 @@ export function setupScript(u: ServerUnit): string {
     // raises it for a server that holds a thousand connections, so every container gets one high limit
     `echo '{ "default-ulimits": { "nofile": { "Name": "nofile", "Soft": 1048576, "Hard": 1048576 } } }' > /etc/docker/daemon.json`,
     "systemctl restart docker",
-    "mkdir -p /opt/lane/data",
+    `mkdir -p ${q(archiveDir(u.server, "/opt/lane/data"))}`,
     "t0=$(date +%s)",
     `aws s3 cp ${q(`s3://${u.bucket}/${u.dataKey}`)} ${q(archivePath(u))} --only-show-errors`,
     'echo "data in $(( $(date +%s) - t0 )) s"',
@@ -137,10 +137,10 @@ export function catalogScript(u: ServerUnit, smallKey: string): string {
     ...scriptHead(`catalog ${u.server.id} ${u.format} ${u.tileset} ${u.arch}: ${CATALOG_SIZE} more sources`),
     "docker rm -f lane-server >/dev/null 2>&1 || true",
     `rm -rf ${dir}`,
-    `mkdir -p ${dir}`,
-    `ln ${q(`/opt/lane/data/${u.tileset}.${u.format}`)} ${q(`${dir}/${u.tileset}.${u.format}`)}`,
+    `mkdir -p ${q(archiveDir(u.server, dir))}`,
+    `ln ${q(archivePath(u))} ${q(`${archiveDir(u.server, dir)}/${u.tileset}.${u.format}`)}`,
     `aws s3 cp ${q(`s3://${u.bucket}/${smallKey}`)} ${q(`/opt/lane/small.${u.format}`)} --only-show-errors`,
-    `for i in $(seq 0 ${CATALOG_SIZE - 1}); do cp ${q(`/opt/lane/small.${u.format}`)} "${dir}/t$(printf %04d "$i").${u.format}"; done`,
+    `for i in $(seq 0 ${CATALOG_SIZE - 1}); do cp ${q(`/opt/lane/small.${u.format}`)} "${archiveDir(u.server, dir)}/t$(printf %04d "$i").${u.format}"; done`,
     ...files.flatMap(([name, content]) => writeFile(`${dir}/${name}`, content)),
     // milliseconds from the start to a URL's first 200, or "none" when the wait runs out
     "until200() {",

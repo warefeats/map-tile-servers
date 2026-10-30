@@ -76,6 +76,17 @@ describe("the server scripts", () => {
     expect(s.indexOf("drop_caches")).toBeLessThan(s.indexOf("'docker' 'run'"));
   });
 
+  test("puts a tiles-dir server's archive in /data/tiles, for setup and for the catalog start", () => {
+    const u: ServerUnit = { ...unit, tileset: "berlin", dataKey: "inputs/x-berlin.mbtiles", server: server("versatiles"), format: "mbtiles" };
+    const setup = setupScript(u);
+    expect(setup).toContain("mkdir -p '/opt/lane/data/tiles'");
+    expect(setup).toContain("aws s3 cp 's3://b/inputs/x-berlin.mbtiles' '/opt/lane/data/tiles/berlin.mbtiles'");
+    const catalog = catalogScript(u, "bundles/lane-7/catalog/small.mbtiles");
+    expect(catalog).toContain("ln '/opt/lane/data/tiles/berlin.mbtiles' '/opt/lane/catalog/tiles/berlin.mbtiles'");
+    expect(catalog).toContain('"/opt/lane/catalog/tiles/t$(printf %04d "$i").mbtiles"');
+    expect(catalog).toContain("'-v' '/opt/lane/catalog:/data'");
+  });
+
   test("writes config files verbatim, and refuses content holding the heredoc's delimiter", () => {
     expect(writeFile("/x", "a $b 'c'\n")).toEqual(["cat > '/x' <<'WF_FILE'", "a $b 'c'", "WF_FILE"]);
     expect(() => writeFile("/x", "WF_FILE\n")).toThrow(/delimiter/);
