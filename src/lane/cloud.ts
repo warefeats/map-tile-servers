@@ -3,6 +3,7 @@
  * it. The implementation drives the AWS CLI. Two watchers poll for every unit at once, so the API calls a cycle
  * makes stay level however many units run: one DescribeInstanceInformation per 50 instances waiting for SSM, and
  * one ListCommands for every command still executing, with a GetCommandInvocation only for those that finished.
+ * Launches go out one at a time, a second apart.
  */
 import { basename } from "node:path";
 import { q, waitReady } from "./shell";
@@ -54,6 +55,37 @@ export class AwsError extends Error {
   ) {
     super(`aws ${op}: ${stderr.trim().split("\n").at(-1) ?? ""}`);
   }
+}
+
+/**
+ * Starts calls at least `spacingMs` apart, whoever makes them. The CLI's adaptive retries pace each process on its
+ * own: run 40998162997 made about 160 RunInstances calls a pass, capacity misses included, most of them in the
+ * pass's first minutes, and two launches were throttled past all ten attempts.
+ */
+export class Pacer {
+  private next = 0;
+
+  constructor(private readonly spacingMs: number) {}
+
+  async wait(): Promise<void> {
+    const now = Date.now();
+    const at = Math.max(now, this.next);
+    this.next = at + this.spacingMs;
+    if (at > now) await Bun.sleep(at - now);
+  }
+}
+
+/** Makes a call again after each wait while the account's request rate refuses it, past the CLI's own retries. */
+export async function whileThrottled<T>(call: () => Promise<T>, waitsMs: readonly number[]): Promise<T> {
+  for (const ms of waitsMs) {
+    try {
+      return await call();
+    } catch (e) {
+      if (!(e instanceof AwsError && e.stderr.includes("RequestLimitExceeded"))) throw e;
+      await Bun.sleep(ms);
+    }
+  }
+  return call();
 }
 
 /** One AWS CLI call: JSON out, adaptive retries for throttling, the CLI's own message on failure. */
@@ -130,6 +162,8 @@ export class AwsCloud implements Cloud {
 
   private readonly instanceOf = new Map<string, string>();
 
+  private readonly launches = new Pacer(1_000);
+
   private readonly commands = new Watcher<CommandResult>(15_000, async (ids) => {
     const executing = new Set(await aws<string[]>(["ssm", "list-commands", "--filters", `key=InvokedAfter,value=${this.since.toISOString()}`, "key=ExecutionStage,value=Executing", "--query", "Commands[].CommandId"]));
     const done = new Map<string, CommandResult>();
@@ -158,15 +192,18 @@ export class AwsCloud implements Cloud {
   async launch(r: LaunchRequest): Promise<Host> {
     for (const subnet of r.subnets) {
       try {
-        const [id, ip, az] = await aws<[string, string, string]>([
-          "ec2", "run-instances",
-          // CloudFormation never moves a template's default version
-          "--launch-template", `LaunchTemplateId=${r.template},Version=$Latest`,
-          "--subnet-id", subnet,
-          "--placement", JSON.stringify({ GroupName: r.placementGroup }),
-          "--tag-specifications", JSON.stringify(["instance", "volume"].map((ResourceType) => ({ ResourceType, Tags: tagList(r.tags) }))),
-          "--query", "Instances[0].[InstanceId,PrivateIpAddress,Placement.AvailabilityZone]",
-        ]);
+        const [id, ip, az] = await whileThrottled(async () => {
+          await this.launches.wait();
+          return aws<[string, string, string]>([
+            "ec2", "run-instances",
+            // CloudFormation never moves a template's default version
+            "--launch-template", `LaunchTemplateId=${r.template},Version=$Latest`,
+            "--subnet-id", subnet,
+            "--placement", JSON.stringify({ GroupName: r.placementGroup }),
+            "--tag-specifications", JSON.stringify(["instance", "volume"].map((ResourceType) => ({ ResourceType, Tags: tagList(r.tags) }))),
+            "--query", "Instances[0].[InstanceId,PrivateIpAddress,Placement.AvailabilityZone]",
+          ]);
+        }, [30_000, 60_000, 120_000]);
         return { id, ip, az, subnet };
       } catch (e) {
         if (!(e instanceof AwsError && /InsufficientInstanceCapacity|Unsupported/.test(e.stderr))) throw e;
