@@ -1,0 +1,31 @@
+{
+  "id": "bbox-mbtiles-berlin-amd64",
+  "pass": 2,
+  "server": "bbox",
+  "version": "0.6.2",
+  "stable": true,
+  "format": "mbtiles",
+  "dataset": "berlin",
+  "arch": "amd64",
+  "placementGroup": "",
+  "serverHost": null,
+  "clientHost": null,
+  "dataSeconds": null,
+  "readyMs": {},
+  "results": {},
+  "catalog": null,
+  "log": [
+    "2026-11-10T08:19:01.660Z no server capacity in us-east-1c, attempt 1",
+    "2026-11-10T08:21:13.085Z no server capacity in us-east-1c, attempt 2",
+    "2026-11-10T08:22:05.866Z no client capacity in subnet-099a403aa8952f07d",
+    "2026-11-10T08:23:33.744Z no server capacity in us-east-1f, attempt 1",
+    "2026-11-10T08:25:43.507Z no server capacity in us-east-1f, attempt 2",
+    "2026-11-10T08:26:58.415Z no client capacity in subnet-075b8107a2a2814ab",
+    "2026-11-10T08:28:11.920Z no server capacity in us-east-1b, attempt 1",
+    "2026-11-10T08:30:47.790Z no server capacity in us-east-1b, attempt 2",
+    "2026-11-10T08:30:49.275Z failed: no zone had room for both of bbox-mbtiles-berlin-amd64's instances"
+  ],
+  "error": "no zone had room for both of bbox-mbtiles-berlin-amd64's instances",
+  "startedAt": "2026-11-10T08:17:39.333Z",
+  "finishedAt": "2026-11-10T08:30:49.275Z"
+}

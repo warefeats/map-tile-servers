@@ -1,0 +1,32 @@
+{
+  "id": "go-pmtiles-pmtiles-planet-amd64",
+  "pass": 3,
+  "server": "go-pmtiles",
+  "version": "1.31.2",
+  "stable": true,
+  "format": "pmtiles",
+  "dataset": "planet",
+  "arch": "amd64",
+  "placementGroup": "",
+  "serverHost": null,
+  "clientHost": null,
+  "dataSeconds": null,
+  "readyMs": {},
+  "results": {},
+  "catalog": null,
+  "log": [
+    "2026-11-10T08:55:37.792Z no server capacity in us-east-1c, attempt 1",
+    "2026-11-10T09:01:45.424Z no server capacity in us-east-1c, attempt 2",
+    "2026-11-10T09:03:20.788Z no client capacity in subnet-099a403aa8952f07d",
+    "2026-11-10T09:04:22.734Z no server capacity in us-east-1f, attempt 1",
+    "2026-11-10T09:06:28.028Z no server capacity in us-east-1f, attempt 2",
+    "2026-11-10T09:07:52.798Z no server capacity in us-east-1a, attempt 1",
+    "2026-11-10T09:09:38.043Z no server capacity in us-east-1a, attempt 2",
+    "2026-11-10T09:10:36.499Z no server capacity in us-east-1b, attempt 1",
+    "2026-11-10T09:12:37.380Z no server capacity in us-east-1b, attempt 2",
+    "2026-11-10T09:12:39.000Z failed: no zone had room for both of go-pmtiles-pmtiles-planet-amd64's instances"
+  ],
+  "error": "no zone had room for both of go-pmtiles-pmtiles-planet-amd64's instances",
+  "startedAt": "2026-11-10T08:54:08.685Z",
+  "finishedAt": "2026-11-10T09:12:39.000Z"
+}

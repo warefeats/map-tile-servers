@@ -1,0 +1,54 @@
+{
+  "id": "martin-1-pmtiles-planet-arm64",
+  "pass": 2,
+  "server": "martin-1",
+  "version": "1.16.1",
+  "stable": true,
+  "format": "pmtiles",
+  "dataset": "planet",
+  "arch": "arm64",
+  "placementGroup": "lane-42772802734-p2-martin-1-pmtiles-planet-arm64-4",
+  "serverHost": {
+    "id": "i-0d7b18bd67ba5601e",
+    "ip": "172.31.26.197",
+    "az": "us-east-1b",
+    "subnet": "subnet-0a17ca6edfc559485"
+  },
+  "clientHost": {
+    "id": "i-03cff6710b16614b5",
+    "ip": "172.31.19.238",
+    "az": "us-east-1b",
+    "subnet": "subnet-0a17ca6edfc559485"
+  },
+  "dataSeconds": 687,
+  "readyMs": {
+    "alone": 1137,
+    "cdn": 801
+  },
+  "results": {
+    "alone": "results/lane/42772802734/p2/martin-1-pmtiles-planet-arm64/alone.json",
+    "cdn": "results/lane/42772802734/p2/martin-1-pmtiles-planet-arm64/cdn.json"
+  },
+  "catalog": null,
+  "log": [
+    "2026-11-10T08:18:02.373Z no server capacity in us-east-1c, attempt 1",
+    "2026-11-10T08:20:11.857Z no server capacity in us-east-1c, attempt 2",
+    "2026-11-10T08:21:32.941Z no client capacity in subnet-099a403aa8952f07d",
+    "2026-11-10T08:22:45.742Z no server capacity in us-east-1f, attempt 1",
+    "2026-11-10T08:25:22.464Z no server capacity in us-east-1f, attempt 2",
+    "2026-11-10T08:26:29.775Z no client capacity in subnet-075b8107a2a2814ab",
+    "2026-11-10T08:26:36.232Z server i-0d7b18bd67ba5601e and client i-03cff6710b16614b5 in us-east-1b",
+    "2026-11-10T08:27:26.690Z client-setup Success",
+    "2026-11-10T08:39:36.478Z setup Success",
+    "2026-11-10T08:40:00.013Z start-alone Success",
+    "2026-11-10T08:47:34.926Z alone Success",
+    "2026-11-10T08:47:34.926Z capacity 3500/s, 68050 bytes a tile",
+    "2026-11-10T08:47:53.804Z start-cdn Success",
+    "2026-11-10T08:53:23.693Z cdn Success",
+    "2026-11-10T08:53:23.693Z capacity 3750/s, 513 bytes a tile",
+    "2026-11-10T08:53:43.496Z collect Success"
+  ],
+  "error": null,
+  "startedAt": "2026-11-10T08:16:46.833Z",
+  "finishedAt": "2026-11-10T08:53:45.071Z"
+}

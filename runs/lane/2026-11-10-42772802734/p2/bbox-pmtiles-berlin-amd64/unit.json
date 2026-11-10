@@ -1,0 +1,55 @@
+{
+  "id": "bbox-pmtiles-berlin-amd64",
+  "pass": 2,
+  "server": "bbox",
+  "version": "0.6.2",
+  "stable": true,
+  "format": "pmtiles",
+  "dataset": "berlin",
+  "arch": "amd64",
+  "placementGroup": "lane-42772802734-p2-bbox-pmtiles-berlin-amd64-2",
+  "serverHost": {
+    "id": "i-0fc758e735392c528",
+    "ip": "172.31.84.55",
+    "az": "us-east-1a",
+    "subnet": "subnet-075b8107a2a2814ab"
+  },
+  "clientHost": {
+    "id": "i-0ffd75035c4acc330",
+    "ip": "172.31.86.182",
+    "az": "us-east-1a",
+    "subnet": "subnet-075b8107a2a2814ab"
+  },
+  "dataSeconds": 2,
+  "readyMs": {
+    "alone": 3866,
+    "cdn": 2675
+  },
+  "results": {
+    "alone": "results/lane/42772802734/p2/bbox-pmtiles-berlin-amd64/alone.json",
+    "cdn": "results/lane/42772802734/p2/bbox-pmtiles-berlin-amd64/cdn.json"
+  },
+  "catalog": {
+    "firstMs": null,
+    "lastMs": null
+  },
+  "log": [
+    "2026-11-10T08:18:52.873Z no client capacity in subnet-099a403aa8952f07d",
+    "2026-11-10T08:20:17.085Z no client capacity in subnet-02c157cadc5e12a02",
+    "2026-11-10T08:20:23.247Z server i-0fc758e735392c528 and client i-0ffd75035c4acc330 in us-east-1a",
+    "2026-11-10T08:21:21.290Z setup Success",
+    "2026-11-10T08:21:21.290Z client-setup Success",
+    "2026-11-10T08:21:41.493Z start-alone Success",
+    "2026-11-10T08:29:42.223Z alone Success",
+    "2026-11-10T08:29:42.223Z capacity 6500/s, 82910 bytes a tile",
+    "2026-11-10T08:30:00.244Z start-cdn Success",
+    "2026-11-10T08:37:16.074Z cdn Success",
+    "2026-11-10T08:37:16.075Z capacity 26000/s, 16381 bytes a tile",
+    "2026-11-10T08:37:36.757Z collect Success",
+    "2026-11-10T08:43:05.644Z catalog Success",
+    "2026-11-10T08:43:05.645Z catalog: first none ms, last none ms"
+  ],
+  "error": null,
+  "startedAt": "2026-11-10T08:17:33.336Z",
+  "finishedAt": "2026-11-10T08:43:07.669Z"
+}

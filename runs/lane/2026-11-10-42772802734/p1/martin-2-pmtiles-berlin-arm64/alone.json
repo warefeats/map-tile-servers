@@ -1,0 +1,210 @@
+{
+  "server": "martin-2",
+  "version": "build ff76524",
+  "emptyStatus": null,
+  "tileset": "berlin",
+  "format": "pmtiles",
+  "scenario": "alone",
+  "timing": {
+    "warmupS": 120,
+    "stepWarmupS": 10,
+    "stepS": 20,
+    "usersS": 60
+  },
+  "targetMs": 50,
+  "replayLines": 2000000,
+  "firstView": {
+    "tiles": 12,
+    "wallMs": 19.695646000000124,
+    "slowestMs": 14.804135999999971,
+    "bytes": 2507059,
+    "statuses": {
+      "200": 12
+    }
+  },
+  "warmup": {
+    "rps": 18789.97903369405,
+    "p99Ms": 12.143,
+    "statusCodes": {
+      "200": 2221143,
+      "204": 33634
+    }
+  },
+  "users": [
+    {
+      "users": 10,
+      "durationS": 60,
+      "views": 201,
+      "tiles": 1443,
+      "failures": 0,
+      "p50Ms": 0.7020649999903981,
+      "p95Ms": 2.6723650000058115,
+      "p99Ms": 4.2836349999997765,
+      "maxMs": 9.995144000000437
+    },
+    {
+      "users": 100,
+      "durationS": 60,
+      "views": 1886,
+      "tiles": 14383,
+      "failures": 0,
+      "p50Ms": 0.5647339999995893,
+      "p95Ms": 2.115495000020019,
+      "p99Ms": 4.467348149995087,
+      "maxMs": 27.38311700001941
+    }
+  ],
+  "capacity": {
+    "capacityRps": 18000,
+    "atCeiling": false,
+    "steps": [
+      {
+        "offeredRps": 1000,
+        "achievedRps": 999.95,
+        "p50Ms": 0.181,
+        "p99Ms": 0.441,
+        "errorRate": 0,
+        "held": true,
+        "bytesPerRequest": 82151,
+        "statusCodes": {
+          "200": 19708,
+          "204": 291
+        },
+        "clientCpu": 0.026927639383155396,
+        "fromS": 1794296452.292,
+        "toS": 1794296484.689
+      },
+      {
+        "offeredRps": 2000,
+        "achievedRps": 1999.9,
+        "p50Ms": 0.209,
+        "p99Ms": 0.458,
+        "errorRate": 0,
+        "held": true,
+        "bytesPerRequest": 82357,
+        "statusCodes": {
+          "200": 39397,
+          "204": 601
+        },
+        "clientCpu": 0.04038117927337701,
+        "fromS": 1794296484.689,
+        "toS": 1794296517.093
+      },
+      {
+        "offeredRps": 4000,
+        "achievedRps": 3999.8,
+        "p50Ms": 0.253,
+        "p99Ms": 0.525,
+        "errorRate": 0,
+        "held": true,
+        "bytesPerRequest": 82088,
+        "statusCodes": {
+          "200": 78808,
+          "204": 1188
+        },
+        "clientCpu": 0.06657105294609776,
+        "fromS": 1794296517.093,
+        "toS": 1794296549.511
+      },
+      {
+        "offeredRps": 8000,
+        "achievedRps": 7999.65,
+        "p50Ms": 0.293,
+        "p99Ms": 0.559,
+        "errorRate": 0,
+        "held": true,
+        "bytesPerRequest": 82358,
+        "statusCodes": {
+          "200": 157580,
+          "204": 2413
+        },
+        "clientCpu": 0.09751945525291829,
+        "fromS": 1794296549.511,
+        "toS": 1794296581.957
+      },
+      {
+        "offeredRps": 16000,
+        "achievedRps": 15998.45,
+        "p50Ms": 0.389,
+        "p99Ms": 1.444,
+        "errorRate": 0,
+        "held": true,
+        "bytesPerRequest": 82088,
+        "statusCodes": {
+          "200": 315239,
+          "204": 4730
+        },
+        "clientCpu": 0.2000248015873016,
+        "fromS": 1794296581.957,
+        "toS": 1794296614.468
+      },
+      {
+        "offeredRps": 32000,
+        "achievedRps": 18808.8,
+        "p50Ms": 4110.117,
+        "p99Ms": 8163.962,
+        "errorRate": 0,
+        "held": false,
+        "bytesPerRequest": 82114,
+        "statusCodes": {
+          "200": 370550,
+          "204": 5626
+        },
+        "clientCpu": 0.4101410505836576,
+        "fromS": 1794296614.468,
+        "toS": 1794296647.011
+      },
+      {
+        "offeredRps": 24000,
+        "achievedRps": 18777.15,
+        "p50Ms": 2177.205,
+        "p99Ms": 4312.804,
+        "errorRate": 0,
+        "held": false,
+        "bytesPerRequest": 82251,
+        "statusCodes": {
+          "200": 369818,
+          "204": 5725
+        },
+        "clientCpu": 0.4102063240141619,
+        "fromS": 1794296647.011,
+        "toS": 1794296679.543
+      },
+      {
+        "offeredRps": 20000,
+        "achievedRps": 18799.25,
+        "p50Ms": 587.945,
+        "p99Ms": 1190.646,
+        "errorRate": 0,
+        "held": false,
+        "bytesPerRequest": 82148,
+        "statusCodes": {
+          "200": 370364,
+          "204": 5621
+        },
+        "clientCpu": 0.4120213281628696,
+        "fromS": 1794296679.543,
+        "toS": 1794296712.066
+      },
+      {
+        "offeredRps": 18000,
+        "achievedRps": 17999.5,
+        "p50Ms": 0.67,
+        "p99Ms": 5.613,
+        "errorRate": 0,
+        "held": true,
+        "bytesPerRequest": 82466,
+        "statusCodes": {
+          "200": 354679,
+          "204": 5311
+        },
+        "clientCpu": 0.3620247259155587,
+        "fromS": 1794296712.066,
+        "toS": 1794296744.587
+      }
+    ]
+  },
+  "clientBoundAtRps": null,
+  "bytesPerTile": 82466,
+  "p99AtCapacityMs": 5.613
+}

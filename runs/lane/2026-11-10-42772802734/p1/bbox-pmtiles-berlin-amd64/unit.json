@@ -1,0 +1,58 @@
+{
+  "id": "bbox-pmtiles-berlin-amd64",
+  "pass": 1,
+  "server": "bbox",
+  "version": "0.6.2",
+  "stable": true,
+  "format": "pmtiles",
+  "dataset": "berlin",
+  "arch": "amd64",
+  "placementGroup": "lane-42772802734-p1-bbox-pmtiles-berlin-amd64-3",
+  "serverHost": {
+    "id": "i-058802155c6bd940b",
+    "ip": "172.31.92.26",
+    "az": "us-east-1a",
+    "subnet": "subnet-075b8107a2a2814ab"
+  },
+  "clientHost": {
+    "id": "i-0fc0b821fae5691a9",
+    "ip": "172.31.83.162",
+    "az": "us-east-1a",
+    "subnet": "subnet-075b8107a2a2814ab"
+  },
+  "dataSeconds": 1,
+  "readyMs": {
+    "alone": 3102,
+    "cdn": 2662
+  },
+  "results": {
+    "alone": "results/lane/42772802734/p1/bbox-pmtiles-berlin-amd64/alone.json",
+    "cdn": "results/lane/42772802734/p1/bbox-pmtiles-berlin-amd64/cdn.json"
+  },
+  "catalog": {
+    "firstMs": null,
+    "lastMs": null
+  },
+  "log": [
+    "2026-11-10T07:37:23.242Z no server capacity in us-east-1c, attempt 1",
+    "2026-11-10T07:39:38.154Z no server capacity in us-east-1c, attempt 2",
+    "2026-11-10T07:40:47.992Z no client capacity in subnet-099a403aa8952f07d",
+    "2026-11-10T07:41:35.564Z no server capacity in us-east-1f, attempt 1",
+    "2026-11-10T07:44:01.511Z no server capacity in us-east-1f, attempt 2",
+    "2026-11-10T07:44:08.925Z server i-058802155c6bd940b and client i-0fc0b821fae5691a9 in us-east-1a",
+    "2026-11-10T07:45:12.944Z client-setup Success",
+    "2026-11-10T07:45:12.944Z setup Success",
+    "2026-11-10T07:45:31.898Z start-alone Success",
+    "2026-11-10T07:53:28.956Z alone Success",
+    "2026-11-10T07:53:28.956Z capacity 6500/s, 82451 bytes a tile",
+    "2026-11-10T07:53:48.672Z start-cdn Success",
+    "2026-11-10T08:00:52.283Z cdn Success",
+    "2026-11-10T08:00:52.284Z capacity 26000/s, 16323 bytes a tile",
+    "2026-11-10T08:01:13.061Z collect Success",
+    "2026-11-10T08:06:35.845Z catalog Success",
+    "2026-11-10T08:06:35.846Z catalog: first none ms, last none ms"
+  ],
+  "error": null,
+  "startedAt": "2026-11-10T07:35:41.839Z",
+  "finishedAt": "2026-11-10T08:06:37.833Z"
+}

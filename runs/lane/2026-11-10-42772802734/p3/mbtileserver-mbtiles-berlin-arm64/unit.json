@@ -1,0 +1,57 @@
+{
+  "id": "mbtileserver-mbtiles-berlin-arm64",
+  "pass": 3,
+  "server": "mbtileserver",
+  "version": "0.11.0",
+  "stable": true,
+  "format": "mbtiles",
+  "dataset": "berlin",
+  "arch": "arm64",
+  "placementGroup": "lane-42772802734-p3-mbtileserver-mbtiles-berlin-arm64-2",
+  "serverHost": {
+    "id": "i-0a0093c926bb7e389",
+    "ip": "172.31.16.112",
+    "az": "us-east-1b",
+    "subnet": "subnet-0a17ca6edfc559485"
+  },
+  "clientHost": {
+    "id": "i-06b7c26c98d0cea86",
+    "ip": "172.31.22.47",
+    "az": "us-east-1b",
+    "subnet": "subnet-0a17ca6edfc559485"
+  },
+  "dataSeconds": 1,
+  "readyMs": {
+    "alone": 616,
+    "cdn": 588
+  },
+  "results": {
+    "alone": "results/lane/42772802734/p3/mbtileserver-mbtiles-berlin-arm64/alone.json",
+    "cdn": "results/lane/42772802734/p3/mbtileserver-mbtiles-berlin-arm64/cdn.json"
+  },
+  "catalog": {
+    "firstMs": 3090,
+    "lastMs": 3101
+  },
+  "log": [
+    "2026-11-10T08:55:54.959Z no server capacity in us-east-1f, attempt 1",
+    "2026-11-10T08:58:03.785Z no server capacity in us-east-1f, attempt 2",
+    "2026-11-10T08:59:24.527Z no server capacity in us-east-1a, attempt 1",
+    "2026-11-10T09:01:43.243Z no server capacity in us-east-1a, attempt 2",
+    "2026-11-10T09:01:51.769Z server i-0a0093c926bb7e389 and client i-06b7c26c98d0cea86 in us-east-1b",
+    "2026-11-10T09:02:53.580Z setup Success",
+    "2026-11-10T09:02:53.580Z client-setup Success",
+    "2026-11-10T09:03:14.199Z start-alone Success",
+    "2026-11-10T09:11:59.622Z alone Success",
+    "2026-11-10T09:11:59.623Z capacity 14000/s, 82292 bytes a tile",
+    "2026-11-10T09:12:18.512Z start-cdn Success",
+    "2026-11-10T09:20:07.242Z cdn Success",
+    "2026-11-10T09:20:07.243Z capacity 36000/s, 16347 bytes a tile",
+    "2026-11-10T09:20:25.129Z collect Success",
+    "2026-11-10T09:20:42.070Z catalog Success",
+    "2026-11-10T09:20:42.070Z catalog: first 3090 ms, last 3101 ms"
+  ],
+  "error": null,
+  "startedAt": "2026-11-10T08:54:34.187Z",
+  "finishedAt": "2026-11-10T09:20:43.662Z"
+}

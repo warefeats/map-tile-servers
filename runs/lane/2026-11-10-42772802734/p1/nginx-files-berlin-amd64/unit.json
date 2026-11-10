@@ -1,0 +1,49 @@
+{
+  "id": "nginx-files-berlin-amd64",
+  "pass": 1,
+  "server": "nginx",
+  "version": "1.30.4",
+  "stable": true,
+  "format": "files",
+  "dataset": "berlin",
+  "arch": "amd64",
+  "placementGroup": "lane-42772802734-p1-nginx-files-berlin-amd64-1",
+  "serverHost": {
+    "id": "i-078c364e5d7aef6e7",
+    "ip": "172.31.78.183",
+    "az": "us-east-1f",
+    "subnet": "subnet-02c157cadc5e12a02"
+  },
+  "clientHost": {
+    "id": "i-0dcd8c14a159239fe",
+    "ip": "172.31.68.198",
+    "az": "us-east-1f",
+    "subnet": "subnet-02c157cadc5e12a02"
+  },
+  "dataSeconds": 3,
+  "readyMs": {
+    "alone": 825,
+    "cdn": 812
+  },
+  "results": {
+    "alone": "results/lane/42772802734/p1/nginx-files-berlin-amd64/alone.json",
+    "cdn": "results/lane/42772802734/p1/nginx-files-berlin-amd64/cdn.json"
+  },
+  "catalog": null,
+  "log": [
+    "2026-11-10T07:37:27.695Z no client capacity in subnet-099a403aa8952f07d",
+    "2026-11-10T07:38:05.876Z server i-078c364e5d7aef6e7 and client i-0dcd8c14a159239fe in us-east-1f",
+    "2026-11-10T07:38:58.811Z client-setup Success",
+    "2026-11-10T07:39:16.931Z setup Success",
+    "2026-11-10T07:39:36.417Z start-alone Success",
+    "2026-11-10T07:48:49.485Z alone Success",
+    "2026-11-10T07:48:49.485Z capacity 18000/s, 82469 bytes a tile",
+    "2026-11-10T07:49:10.983Z start-cdn Success",
+    "2026-11-10T07:57:43.321Z cdn Success",
+    "2026-11-10T07:57:43.323Z capacity 88000/s, 16332 bytes a tile",
+    "2026-11-10T07:58:09.773Z collect Success"
+  ],
+  "error": null,
+  "startedAt": "2026-11-10T07:35:50.838Z",
+  "finishedAt": "2026-11-10T07:58:13.545Z"
+}

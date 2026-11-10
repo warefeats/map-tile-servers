@@ -1,0 +1,55 @@
+{
+  "id": "go-pmtiles-pmtiles-berlin-amd64",
+  "pass": 2,
+  "server": "go-pmtiles",
+  "version": "1.31.2",
+  "stable": true,
+  "format": "pmtiles",
+  "dataset": "berlin",
+  "arch": "amd64",
+  "placementGroup": "lane-42772802734-p2-go-pmtiles-pmtiles-berlin-amd64-1",
+  "serverHost": {
+    "id": "i-060fe91c642853161",
+    "ip": "172.31.81.189",
+    "az": "us-east-1a",
+    "subnet": "subnet-075b8107a2a2814ab"
+  },
+  "clientHost": {
+    "id": "i-0ad2c4d4025cc345b",
+    "ip": "172.31.88.156",
+    "az": "us-east-1a",
+    "subnet": "subnet-075b8107a2a2814ab"
+  },
+  "dataSeconds": 2,
+  "readyMs": {
+    "alone": 3274,
+    "cdn": 845
+  },
+  "results": {
+    "alone": "results/lane/42772802734/p2/go-pmtiles-pmtiles-berlin-amd64/alone.json",
+    "cdn": "results/lane/42772802734/p2/go-pmtiles-pmtiles-berlin-amd64/cdn.json"
+  },
+  "catalog": {
+    "firstMs": 877,
+    "lastMs": 885
+  },
+  "log": [
+    "2026-11-10T08:18:05.189Z no server capacity in us-east-1f, attempt 1",
+    "2026-11-10T08:20:16.193Z no server capacity in us-east-1f, attempt 2",
+    "2026-11-10T08:20:25.344Z server i-060fe91c642853161 and client i-0ad2c4d4025cc345b in us-east-1a",
+    "2026-11-10T08:21:21.290Z setup Success",
+    "2026-11-10T08:21:41.493Z client-setup Success",
+    "2026-11-10T08:21:58.693Z start-alone Success",
+    "2026-11-10T08:30:39.104Z alone Success",
+    "2026-11-10T08:30:39.104Z capacity 9000/s, 82380 bytes a tile",
+    "2026-11-10T08:30:58.904Z start-cdn Success",
+    "2026-11-10T08:38:14.421Z cdn Success",
+    "2026-11-10T08:38:14.422Z capacity 24000/s, 16281 bytes a tile",
+    "2026-11-10T08:38:35.100Z collect Success",
+    "2026-11-10T08:38:54.898Z catalog Success",
+    "2026-11-10T08:38:54.900Z catalog: first 877 ms, last 885 ms"
+  ],
+  "error": null,
+  "startedAt": "2026-11-10T08:16:57.333Z",
+  "finishedAt": "2026-11-10T08:38:57.095Z"
+}

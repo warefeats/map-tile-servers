@@ -1,0 +1,60 @@
+{
+  "id": "martin-2-pmtiles-berlin-arm64",
+  "pass": 3,
+  "server": "martin-2",
+  "version": "build ff76524",
+  "stable": false,
+  "format": "pmtiles",
+  "dataset": "berlin",
+  "arch": "arm64",
+  "placementGroup": "lane-42772802734-p3-martin-2-pmtiles-berlin-arm64-4",
+  "serverHost": {
+    "id": "i-0526991ccc2cb6bf2",
+    "ip": "172.31.21.94",
+    "az": "us-east-1b",
+    "subnet": "subnet-0a17ca6edfc559485"
+  },
+  "clientHost": {
+    "id": "i-0d6fd43185c8e7f94",
+    "ip": "172.31.17.105",
+    "az": "us-east-1b",
+    "subnet": "subnet-0a17ca6edfc559485"
+  },
+  "dataSeconds": 1,
+  "readyMs": {
+    "alone": 722,
+    "cdn": 601
+  },
+  "results": {
+    "alone": "results/lane/42772802734/p3/martin-2-pmtiles-berlin-arm64/alone.json",
+    "cdn": "results/lane/42772802734/p3/martin-2-pmtiles-berlin-arm64/cdn.json"
+  },
+  "catalog": {
+    "firstMs": 748,
+    "lastMs": 757
+  },
+  "log": [
+    "2026-11-10T08:54:55.511Z no server capacity in us-east-1c, attempt 1",
+    "2026-11-10T08:57:06.200Z no server capacity in us-east-1c, attempt 2",
+    "2026-11-10T09:02:20.195Z no client capacity in subnet-099a403aa8952f07d",
+    "2026-11-10T09:03:35.098Z no server capacity in us-east-1f, attempt 1",
+    "2026-11-10T09:05:45.085Z no server capacity in us-east-1f, attempt 2",
+    "2026-11-10T09:07:10.142Z no server capacity in us-east-1a, attempt 1",
+    "2026-11-10T09:09:03.762Z no server capacity in us-east-1a, attempt 2",
+    "2026-11-10T09:09:11.367Z server i-0526991ccc2cb6bf2 and client i-0d6fd43185c8e7f94 in us-east-1b",
+    "2026-11-10T09:10:12.957Z setup Success",
+    "2026-11-10T09:10:12.957Z client-setup Success",
+    "2026-11-10T09:10:29.876Z start-alone Success",
+    "2026-11-10T09:19:48.395Z alone Success",
+    "2026-11-10T09:19:48.395Z capacity 18000/s, 82329 bytes a tile",
+    "2026-11-10T09:20:07.242Z start-cdn Success",
+    "2026-11-10T09:28:39.067Z cdn Success",
+    "2026-11-10T09:28:39.068Z capacity 88000/s, 16338 bytes a tile",
+    "2026-11-10T09:28:57.852Z collect Success",
+    "2026-11-10T09:29:14.682Z catalog Success",
+    "2026-11-10T09:29:14.682Z catalog: first 748 ms, last 757 ms"
+  ],
+  "error": null,
+  "startedAt": "2026-11-10T08:53:46.186Z",
+  "finishedAt": "2026-11-10T09:29:16.169Z"
+}

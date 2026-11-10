@@ -1,0 +1,48 @@
+{
+  "id": "bbox-pmtiles-planet-arm64",
+  "pass": 3,
+  "server": "bbox",
+  "version": "0.6.2",
+  "stable": true,
+  "format": "pmtiles",
+  "dataset": "planet",
+  "arch": "arm64",
+  "placementGroup": "lane-42772802734-p3-bbox-pmtiles-planet-arm64-0",
+  "serverHost": {
+    "id": "i-063d967f3c76d22ab",
+    "ip": "172.31.81.229",
+    "az": "us-east-1a",
+    "subnet": "subnet-075b8107a2a2814ab"
+  },
+  "clientHost": {
+    "id": "i-0ed86761c33f14039",
+    "ip": "172.31.80.104",
+    "az": "us-east-1a",
+    "subnet": "subnet-075b8107a2a2814ab"
+  },
+  "dataSeconds": 695,
+  "readyMs": {
+    "alone": 2419,
+    "cdn": 2707
+  },
+  "results": {
+    "alone": "results/lane/42772802734/p3/bbox-pmtiles-planet-arm64/alone.json",
+    "cdn": "results/lane/42772802734/p3/bbox-pmtiles-planet-arm64/cdn.json"
+  },
+  "catalog": null,
+  "log": [
+    "2026-11-10T08:55:09.672Z server i-063d967f3c76d22ab and client i-0ed86761c33f14039 in us-east-1a",
+    "2026-11-10T08:56:03.272Z client-setup Success",
+    "2026-11-10T09:07:50.970Z setup Success",
+    "2026-11-10T09:08:08.806Z start-alone Success",
+    "2026-11-10T09:15:16.842Z alone Success",
+    "2026-11-10T09:15:16.842Z capacity 1625/s, 67746 bytes a tile",
+    "2026-11-10T09:15:35.776Z start-cdn Success",
+    "2026-11-10T09:21:38.631Z cdn Success",
+    "2026-11-10T09:21:38.631Z capacity 4500/s, 516 bytes a tile",
+    "2026-11-10T09:21:56.553Z collect Success"
+  ],
+  "error": null,
+  "startedAt": "2026-11-10T08:54:43.194Z",
+  "finishedAt": "2026-11-10T09:21:58.171Z"
+}

@@ -1,0 +1,53 @@
+{
+  "id": "martin-1-pmtiles-berlin-amd64",
+  "pass": 1,
+  "server": "martin-1",
+  "version": "1.16.1",
+  "stable": true,
+  "format": "pmtiles",
+  "dataset": "berlin",
+  "arch": "amd64",
+  "placementGroup": "lane-42772802734-p1-martin-1-pmtiles-berlin-amd64-0",
+  "serverHost": {
+    "id": "i-0d26a392c8cf9fb5a",
+    "ip": "172.31.89.41",
+    "az": "us-east-1a",
+    "subnet": "subnet-075b8107a2a2814ab"
+  },
+  "clientHost": {
+    "id": "i-00b5105608ea0f854",
+    "ip": "172.31.91.126",
+    "az": "us-east-1a",
+    "subnet": "subnet-075b8107a2a2814ab"
+  },
+  "dataSeconds": 1,
+  "readyMs": {
+    "alone": 948,
+    "cdn": 979
+  },
+  "results": {
+    "alone": "results/lane/42772802734/p1/martin-1-pmtiles-berlin-amd64/alone.json",
+    "cdn": "results/lane/42772802734/p1/martin-1-pmtiles-berlin-amd64/cdn.json"
+  },
+  "catalog": {
+    "firstMs": 1079,
+    "lastMs": 1086
+  },
+  "log": [
+    "2026-11-10T07:35:03.619Z server i-0d26a392c8cf9fb5a and client i-00b5105608ea0f854 in us-east-1a",
+    "2026-11-10T07:36:13.337Z client-setup Success",
+    "2026-11-10T07:36:44.936Z setup Success",
+    "2026-11-10T07:37:15.643Z start-alone Success",
+    "2026-11-10T07:46:30.501Z alone Success",
+    "2026-11-10T07:46:30.503Z capacity 18000/s, 82216 bytes a tile",
+    "2026-11-10T07:46:53.232Z start-cdn Success",
+    "2026-11-10T07:54:49.129Z cdn Success",
+    "2026-11-10T07:54:49.129Z capacity 32000/s, 16317 bytes a tile",
+    "2026-11-10T07:55:11.924Z collect Success",
+    "2026-11-10T07:55:33.841Z catalog Success",
+    "2026-11-10T07:55:33.843Z catalog: first 1079 ms, last 1086 ms"
+  ],
+  "error": null,
+  "startedAt": "2026-11-10T07:34:53.836Z",
+  "finishedAt": "2026-11-10T07:55:36.269Z"
+}

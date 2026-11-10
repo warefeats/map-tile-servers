@@ -1,0 +1,57 @@
+{
+  "id": "go-pmtiles-pmtiles-berlin-arm64",
+  "pass": 3,
+  "server": "go-pmtiles",
+  "version": "1.31.2",
+  "stable": true,
+  "format": "pmtiles",
+  "dataset": "berlin",
+  "arch": "arm64",
+  "placementGroup": "lane-42772802734-p3-go-pmtiles-pmtiles-berlin-arm64-2",
+  "serverHost": {
+    "id": "i-04536c7220be54f0c",
+    "ip": "172.31.27.117",
+    "az": "us-east-1b",
+    "subnet": "subnet-0a17ca6edfc559485"
+  },
+  "clientHost": {
+    "id": "i-0e418a5fdc3be2ff0",
+    "ip": "172.31.27.77",
+    "az": "us-east-1b",
+    "subnet": "subnet-0a17ca6edfc559485"
+  },
+  "dataSeconds": 1,
+  "readyMs": {
+    "alone": 1037,
+    "cdn": 845
+  },
+  "results": {
+    "alone": "results/lane/42772802734/p3/go-pmtiles-pmtiles-berlin-arm64/alone.json",
+    "cdn": "results/lane/42772802734/p3/go-pmtiles-pmtiles-berlin-arm64/cdn.json"
+  },
+  "catalog": {
+    "firstMs": 830,
+    "lastMs": 838
+  },
+  "log": [
+    "2026-11-10T08:55:22.737Z no server capacity in us-east-1f, attempt 1",
+    "2026-11-10T08:57:47.728Z no server capacity in us-east-1f, attempt 2",
+    "2026-11-10T09:00:51.231Z no server capacity in us-east-1a, attempt 1",
+    "2026-11-10T09:03:10.997Z no server capacity in us-east-1a, attempt 2",
+    "2026-11-10T09:03:19.816Z server i-04536c7220be54f0c and client i-0e418a5fdc3be2ff0 in us-east-1b",
+    "2026-11-10T09:04:28.283Z client-setup Success",
+    "2026-11-10T09:04:28.283Z setup Success",
+    "2026-11-10T09:04:50.057Z start-alone Success",
+    "2026-11-10T09:13:31.140Z alone Success",
+    "2026-11-10T09:13:31.140Z capacity 9000/s, 82559 bytes a tile",
+    "2026-11-10T09:13:49.102Z start-cdn Success",
+    "2026-11-10T09:20:59.956Z cdn Success",
+    "2026-11-10T09:20:59.956Z capacity 24000/s, 16262 bytes a tile",
+    "2026-11-10T09:21:18.851Z collect Success",
+    "2026-11-10T09:21:38.631Z catalog Success",
+    "2026-11-10T09:21:38.633Z catalog: first 830 ms, last 838 ms"
+  ],
+  "error": null,
+  "startedAt": "2026-11-10T08:54:04.185Z",
+  "finishedAt": "2026-11-10T09:21:40.635Z"
+}
