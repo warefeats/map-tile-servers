@@ -1,0 +1,50 @@
+{
+  "id": "versatiles-mbtiles-planet-amd64",
+  "pass": 2,
+  "server": "versatiles",
+  "version": "5.4.1",
+  "stable": true,
+  "format": "mbtiles",
+  "dataset": "planet",
+  "arch": "amd64",
+  "placementGroup": "lane-42772802734-p2-versatiles-mbtiles-planet-amd64-1",
+  "serverHost": {
+    "id": "i-0078c82d17cd471ba",
+    "ip": "172.31.82.24",
+    "az": "us-east-1a",
+    "subnet": "subnet-075b8107a2a2814ab"
+  },
+  "clientHost": {
+    "id": "i-0558a761981be3f09",
+    "ip": "172.31.88.153",
+    "az": "us-east-1a",
+    "subnet": "subnet-075b8107a2a2814ab"
+  },
+  "dataSeconds": 814,
+  "readyMs": {
+    "alone": 899,
+    "cdn": 875
+  },
+  "results": {
+    "alone": "results/lane/42772802734/p2/versatiles-mbtiles-planet-amd64/alone.json",
+    "cdn": "results/lane/42772802734/p2/versatiles-mbtiles-planet-amd64/cdn.json"
+  },
+  "catalog": null,
+  "log": [
+    "2026-11-10T08:19:00.273Z no server capacity in us-east-1f, attempt 1",
+    "2026-11-10T08:21:02.389Z no server capacity in us-east-1f, attempt 2",
+    "2026-11-10T08:21:10.861Z server i-0078c82d17cd471ba and client i-0558a761981be3f09 in us-east-1a",
+    "2026-11-10T08:22:19.134Z client-setup Success",
+    "2026-11-10T08:35:40.753Z setup Success",
+    "2026-11-10T08:35:58.658Z start-alone Success",
+    "2026-11-10T08:42:45.562Z alone Success",
+    "2026-11-10T08:42:45.562Z capacity 0/s, ? bytes a tile",
+    "2026-11-10T08:43:05.644Z start-cdn Success",
+    "2026-11-10T08:48:45.443Z cdn Success",
+    "2026-11-10T08:48:45.443Z capacity 2250/s, 466 bytes a tile",
+    "2026-11-10T08:49:02.324Z collect Success"
+  ],
+  "error": null,
+  "startedAt": "2026-11-10T08:17:12.333Z",
+  "finishedAt": "2026-11-10T08:49:03.893Z"
+}

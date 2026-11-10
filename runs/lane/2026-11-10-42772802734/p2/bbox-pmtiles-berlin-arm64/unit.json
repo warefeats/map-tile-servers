@@ -1,0 +1,59 @@
+{
+  "id": "bbox-pmtiles-berlin-arm64",
+  "pass": 2,
+  "server": "bbox",
+  "version": "0.6.2",
+  "stable": true,
+  "format": "pmtiles",
+  "dataset": "berlin",
+  "arch": "arm64",
+  "placementGroup": "lane-42772802734-p2-bbox-pmtiles-berlin-arm64-4",
+  "serverHost": {
+    "id": "i-05ac7a287571355b1",
+    "ip": "172.31.30.177",
+    "az": "us-east-1b",
+    "subnet": "subnet-0a17ca6edfc559485"
+  },
+  "clientHost": {
+    "id": "i-02e27a83b7db40f36",
+    "ip": "172.31.21.252",
+    "az": "us-east-1b",
+    "subnet": "subnet-0a17ca6edfc559485"
+  },
+  "dataSeconds": 1,
+  "readyMs": {
+    "alone": 2831,
+    "cdn": 2628
+  },
+  "results": {
+    "alone": "results/lane/42772802734/p2/bbox-pmtiles-berlin-arm64/alone.json",
+    "cdn": "results/lane/42772802734/p2/bbox-pmtiles-berlin-arm64/cdn.json"
+  },
+  "catalog": {
+    "firstMs": null,
+    "lastMs": null
+  },
+  "log": [
+    "2026-11-10T08:18:55.302Z no server capacity in us-east-1c, attempt 1",
+    "2026-11-10T08:21:14.971Z no server capacity in us-east-1c, attempt 2",
+    "2026-11-10T08:22:13.599Z no client capacity in subnet-099a403aa8952f07d",
+    "2026-11-10T08:23:25.475Z no server capacity in us-east-1f, attempt 1",
+    "2026-11-10T08:25:24.926Z no server capacity in us-east-1f, attempt 2",
+    "2026-11-10T08:26:26.821Z no client capacity in subnet-075b8107a2a2814ab",
+    "2026-11-10T08:26:32.916Z server i-05ac7a287571355b1 and client i-02e27a83b7db40f36 in us-east-1b",
+    "2026-11-10T08:27:26.690Z client-setup Success",
+    "2026-11-10T08:27:46.576Z setup Success",
+    "2026-11-10T08:28:08.382Z start-alone Success",
+    "2026-11-10T08:36:56.171Z alone Success",
+    "2026-11-10T08:36:56.171Z capacity 8000/s, 82089 bytes a tile",
+    "2026-11-10T08:37:16.074Z start-cdn Success",
+    "2026-11-10T08:44:31.610Z cdn Success",
+    "2026-11-10T08:44:31.610Z capacity 30000/s, 16297 bytes a tile",
+    "2026-11-10T08:44:50.492Z collect Success",
+    "2026-11-10T08:50:08.986Z catalog Success",
+    "2026-11-10T08:50:08.986Z catalog: first none ms, last none ms"
+  ],
+  "error": null,
+  "startedAt": "2026-11-10T08:17:31.833Z",
+  "finishedAt": "2026-11-10T08:50:10.598Z"
+}

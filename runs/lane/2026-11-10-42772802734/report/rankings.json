@@ -1,0 +1,5156 @@
+[
+  {
+    "dataset": "berlin",
+    "format": "files",
+    "scenario": "alone",
+    "arch": "amd64",
+    "entries": [
+      {
+        "server": "nginx",
+        "version": "1.30.4",
+        "stable": true,
+        "rank": 1,
+        "costPerMillion": {
+          "n": 3,
+          "mean": 7.432863933824237,
+          "lo": 7.411143241858517,
+          "hi": 7.454584625789956
+        },
+        "capacityRps": {
+          "n": 3,
+          "mean": 2845.729328586238,
+          "lo": 2837.4176385182263,
+          "hi": 2854.0410186542495
+        },
+        "measuredRps": {
+          "n": 3,
+          "mean": 18000,
+          "lo": 18000,
+          "hi": 18000
+        },
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 28.088870112533687,
+          "lo": 25.921495161417273,
+          "hi": 30.256245063650102
+        },
+        "emptyStatus": null,
+        "emptyShare": {
+          "n": 3,
+          "mean": 0,
+          "lo": 0,
+          "hi": 0
+        },
+        "bytesPerTile": {
+          "n": 3,
+          "mean": 82360.33333333333,
+          "lo": 82119.65579013404,
+          "hi": 82601.01087653261
+        },
+        "p99AtCapacityMs": {
+          "n": 3,
+          "mean": 6.631666666666667,
+          "lo": 5.1569731880142005,
+          "hi": 8.106360145319133
+        },
+        "networkBound": 3,
+        "clientBound": 0,
+        "passes": [
+          1,
+          2,
+          3
+        ]
+      }
+    ]
+  },
+  {
+    "dataset": "berlin",
+    "format": "files",
+    "scenario": "alone",
+    "arch": "arm64",
+    "entries": [
+      {
+        "server": "nginx",
+        "version": "1.30.4",
+        "stable": true,
+        "rank": 1,
+        "costPerMillion": {
+          "n": 3,
+          "mean": 7.428486609782973,
+          "lo": 7.404536710648533,
+          "hi": 7.452436508917413
+        },
+        "capacityRps": {
+          "n": 3,
+          "mean": 2846.363500317766,
+          "lo": 2837.179962900043,
+          "hi": 2855.547037735489
+        },
+        "measuredRps": {
+          "n": 3,
+          "mean": 18000,
+          "lo": 18000,
+          "hi": 18000
+        },
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 19.43104188193303,
+          "lo": 18.612974791176434,
+          "hi": 20.249108972689626
+        },
+        "emptyStatus": null,
+        "emptyShare": {
+          "n": 3,
+          "mean": 0,
+          "lo": 0,
+          "hi": 0
+        },
+        "bytesPerTile": {
+          "n": 3,
+          "mean": 82342,
+          "lo": 82076.52431186578,
+          "hi": 82607.47568813422
+        },
+        "p99AtCapacityMs": {
+          "n": 3,
+          "mean": 5.589666666666666,
+          "lo": 4.82991260715084,
+          "hi": 6.349420726182492
+        },
+        "networkBound": 3,
+        "clientBound": 0,
+        "passes": [
+          1,
+          2,
+          3
+        ]
+      }
+    ]
+  },
+  {
+    "dataset": "berlin",
+    "format": "files",
+    "scenario": "cdn",
+    "arch": "amd64",
+    "entries": [
+      {
+        "server": "nginx",
+        "version": "1.30.4",
+        "stable": true,
+        "rank": 1,
+        "costPerMillion": {
+          "n": 3,
+          "mean": 8.000916023081212,
+          "lo": 7.980458082901826,
+          "hi": 8.021373963260597
+        },
+        "capacityRps": {
+          "n": 3,
+          "mean": 14355.649625655877,
+          "lo": 14324.257508266235,
+          "hi": 14387.041743045518
+        },
+        "measuredRps": {
+          "n": 3,
+          "mean": 88000,
+          "lo": 88000,
+          "hi": 88000
+        },
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 14.824341290935664,
+          "lo": 13.568818823693967,
+          "hi": 16.07986375817736
+        },
+        "emptyStatus": null,
+        "emptyShare": {
+          "n": 3,
+          "mean": 0,
+          "lo": 0,
+          "hi": 0
+        },
+        "bytesPerTile": {
+          "n": 3,
+          "mean": 16326.333333333334,
+          "lo": 16290.6475350828,
+          "hi": 16362.019131583867
+        },
+        "p99AtCapacityMs": {
+          "n": 3,
+          "mean": 26.642666666666667,
+          "lo": 23.902378182527247,
+          "hi": 29.382955150806087
+        },
+        "networkBound": 3,
+        "clientBound": 0,
+        "passes": [
+          1,
+          2,
+          3
+        ]
+      }
+    ]
+  },
+  {
+    "dataset": "berlin",
+    "format": "files",
+    "scenario": "cdn",
+    "arch": "arm64",
+    "entries": [
+      {
+        "server": "nginx",
+        "version": "1.30.4",
+        "stable": true,
+        "rank": 1,
+        "costPerMillion": {
+          "n": 3,
+          "mean": 7.999319163932218,
+          "lo": 7.976753019592844,
+          "hi": 8.02188530827159
+        },
+        "capacityRps": {
+          "n": 3,
+          "mean": 14366.214364981794,
+          "lo": 14324.837864569621,
+          "hi": 14407.590865393966
+        },
+        "measuredRps": {
+          "n": 3,
+          "mean": 88000,
+          "lo": 88000,
+          "hi": 88000
+        },
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 11.570794596377581,
+          "lo": 10.75280784964526,
+          "hi": 12.388781343109903
+        },
+        "emptyStatus": null,
+        "emptyShare": {
+          "n": 3,
+          "mean": 0,
+          "lo": 0,
+          "hi": 0
+        },
+        "bytesPerTile": {
+          "n": 3,
+          "mean": 16314.333333333334,
+          "lo": 16267.371236030178,
+          "hi": 16361.29543063649
+        },
+        "p99AtCapacityMs": {
+          "n": 3,
+          "mean": 26.615666666666666,
+          "lo": 21.54582664996672,
+          "hi": 31.68550668336661
+        },
+        "networkBound": 3,
+        "clientBound": 0,
+        "passes": [
+          1,
+          2,
+          3
+        ]
+      }
+    ]
+  },
+  {
+    "dataset": "berlin",
+    "format": "mbtiles",
+    "scenario": "alone",
+    "arch": "amd64",
+    "entries": [
+      {
+        "server": "tileserver-gl",
+        "version": "5.7.0",
+        "stable": true,
+        "rank": 1,
+        "costPerMillion": {
+          "n": 2,
+          "mean": 7.407970498451872,
+          "lo": 7.3443290696801835,
+          "hi": 7.471611927223561
+        },
+        "capacityRps": {
+          "n": 2,
+          "mean": 2855.2906717564947,
+          "lo": 2830.7610414148185,
+          "hi": 2879.820302098171
+        },
+        "measuredRps": {
+          "n": 2,
+          "mean": 4750,
+          "lo": 1573.5,
+          "hi": 7926.5
+        },
+        "cpuPerTileUs": {
+          "n": 2,
+          "mean": 282.3178213125969,
+          "lo": -25.325629067109162,
+          "hi": 589.961271692303
+        },
+        "emptyStatus": null,
+        "emptyShare": {
+          "n": 2,
+          "mean": 0.0146829366381615,
+          "lo": 0.011904102137624753,
+          "hi": 0.017461771138698248
+        },
+        "bytesPerTile": {
+          "n": 2,
+          "mean": 82084.5,
+          "lo": 81379.317,
+          "hi": 82789.683
+        },
+        "p99AtCapacityMs": {
+          "n": 2,
+          "mean": 15.1425,
+          "lo": -28.559787000000007,
+          "hi": 58.844787000000004
+        },
+        "networkBound": 2,
+        "clientBound": 0,
+        "passes": [
+          1,
+          2
+        ]
+      },
+      {
+        "server": "mbtileserver",
+        "version": "0.11.0",
+        "stable": true,
+        "rank": 1,
+        "costPerMillion": {
+          "n": 3,
+          "mean": 7.425042431471591,
+          "lo": 7.419530712315615,
+          "hi": 7.430554150627567
+        },
+        "capacityRps": {
+          "n": 3,
+          "mean": 2848.72454876948,
+          "lo": 2846.609809031484,
+          "hi": 2850.839288507476
+        },
+        "measuredRps": {
+          "n": 3,
+          "mean": 11333.333333333334,
+          "lo": 9899,
+          "hi": 12767.666666666668
+        },
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 252.4883461786569,
+          "lo": 238.32411963923673,
+          "hi": 266.65257271807707
+        },
+        "emptyStatus": null,
+        "emptyShare": {
+          "n": 3,
+          "mean": 0.015077522683964256,
+          "lo": 0.01450821563752888,
+          "hi": 0.015646829730399634
+        },
+        "bytesPerTile": {
+          "n": 3,
+          "mean": 82273.66666666667,
+          "lo": 82212.59370327496,
+          "hi": 82334.73963005838
+        },
+        "p99AtCapacityMs": {
+          "n": 3,
+          "mean": 10.729999999999999,
+          "lo": -5.496137164065361,
+          "hi": 26.95613716406536
+        },
+        "networkBound": 3,
+        "clientBound": 0,
+        "passes": [
+          1,
+          2,
+          3
+        ]
+      },
+      {
+        "server": "martin-1",
+        "version": "1.16.1",
+        "stable": true,
+        "rank": 1,
+        "costPerMillion": {
+          "n": 2,
+          "mean": 7.4283214459194316,
+          "lo": 7.405387597713419,
+          "hi": 7.451255294125444
+        },
+        "capacityRps": {
+          "n": 2,
+          "mean": 2847.4670615693076,
+          "lo": 2838.6759264741054,
+          "hi": 2856.25819666451
+        },
+        "measuredRps": {
+          "n": 2,
+          "mean": 18000,
+          "lo": 18000,
+          "hi": 18000
+        },
+        "cpuPerTileUs": {
+          "n": 2,
+          "mean": 158.84201187866057,
+          "lo": 128.8568335817791,
+          "hi": 188.82719017554203
+        },
+        "emptyStatus": null,
+        "emptyShare": {
+          "n": 2,
+          "mean": 0.014960617377244308,
+          "lo": 0.014231493441103266,
+          "hi": 0.01568974131338535
+        },
+        "bytesPerTile": {
+          "n": 2,
+          "mean": 82310,
+          "lo": 82055.88,
+          "hi": 82564.12
+        },
+        "p99AtCapacityMs": {
+          "n": 2,
+          "mean": 5.143000000000001,
+          "lo": 2.462034000000003,
+          "hi": 7.823965999999999
+        },
+        "networkBound": 2,
+        "clientBound": 0,
+        "passes": [
+          1,
+          2
+        ]
+      },
+      {
+        "server": "versatiles",
+        "version": "5.4.1",
+        "stable": true,
+        "rank": null,
+        "costPerMillion": {
+          "n": 1,
+          "mean": 6.729259631800953,
+          "lo": null,
+          "hi": null
+        },
+        "capacityRps": {
+          "n": 1,
+          "mean": 3143.272893085135,
+          "lo": null,
+          "hi": null
+        },
+        "measuredRps": {
+          "n": 1,
+          "mean": 20000,
+          "lo": null,
+          "hi": null
+        },
+        "cpuPerTileUs": {
+          "n": 1,
+          "mean": 31.442283216093998,
+          "lo": null,
+          "hi": null
+        },
+        "emptyStatus": null,
+        "emptyShare": {
+          "n": 1,
+          "mean": 0.015208222390563552,
+          "lo": null,
+          "hi": null
+        },
+        "bytesPerTile": {
+          "n": 1,
+          "mean": 74564,
+          "lo": null,
+          "hi": null
+        },
+        "p99AtCapacityMs": {
+          "n": 1,
+          "mean": 7.85,
+          "lo": null,
+          "hi": null
+        },
+        "networkBound": 1,
+        "clientBound": 0,
+        "passes": [
+          1
+        ]
+      },
+      {
+        "server": "bbox",
+        "version": "0.6.2",
+        "stable": true,
+        "rank": null,
+        "costPerMillion": {
+          "n": 1,
+          "mean": 7.424260281236326,
+          "lo": null,
+          "hi": null
+        },
+        "capacityRps": {
+          "n": 1,
+          "mean": 2849.0244940132498,
+          "lo": null,
+          "hi": null
+        },
+        "measuredRps": {
+          "n": 1,
+          "mean": 4500,
+          "lo": null,
+          "hi": null
+        },
+        "cpuPerTileUs": {
+          "n": 1,
+          "mean": 543.2407189240935,
+          "lo": null,
+          "hi": null
+        },
+        "emptyStatus": 500,
+        "emptyShare": {
+          "n": 1,
+          "mean": 0.014767651176745117,
+          "lo": null,
+          "hi": null
+        },
+        "bytesPerTile": {
+          "n": 1,
+          "mean": 82265,
+          "lo": null,
+          "hi": null
+        },
+        "p99AtCapacityMs": {
+          "n": 1,
+          "mean": 6.096,
+          "lo": null,
+          "hi": null
+        },
+        "networkBound": 1,
+        "clientBound": 0,
+        "passes": [
+          1
+        ]
+      }
+    ]
+  },
+  {
+    "dataset": "berlin",
+    "format": "mbtiles",
+    "scenario": "alone",
+    "arch": "arm64",
+    "entries": [
+      {
+        "server": "versatiles",
+        "version": "5.4.1",
+        "stable": true,
+        "rank": 1,
+        "costPerMillion": {
+          "n": 3,
+          "mean": 6.729560643347959,
+          "lo": 6.712169185552963,
+          "hi": 6.746952101142956
+        },
+        "capacityRps": {
+          "n": 3,
+          "mean": 3141.9829252752766,
+          "lo": 3133.867722978557,
+          "hi": 3150.098127571996
+        },
+        "measuredRps": {
+          "n": 3,
+          "mean": 20000,
+          "lo": 20000,
+          "hi": 20000
+        },
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 27.917626679255317,
+          "lo": 26.84929123797411,
+          "hi": 28.985962120536524
+        },
+        "emptyStatus": null,
+        "emptyShare": {
+          "n": 3,
+          "mean": 0.014967264452521792,
+          "lo": 0.014648266040865993,
+          "hi": 0.01528626286417759
+        },
+        "bytesPerTile": {
+          "n": 3,
+          "mean": 74594.66666666667,
+          "lo": 74401.88885161755,
+          "hi": 74787.4444817158
+        },
+        "p99AtCapacityMs": {
+          "n": 3,
+          "mean": 7.260999999999999,
+          "lo": 6.042328915651834,
+          "hi": 8.479671084348166
+        },
+        "networkBound": 3,
+        "clientBound": 0,
+        "passes": [
+          1,
+          2,
+          3
+        ]
+      },
+      {
+        "server": "martin-2",
+        "version": "build ff76524",
+        "stable": false,
+        "rank": 2,
+        "costPerMillion": {
+          "n": 3,
+          "mean": 7.414834067456087,
+          "lo": 7.392846611611961,
+          "hi": 7.436821523300213
+        },
+        "capacityRps": {
+          "n": 3,
+          "mean": 2851.6038645945223,
+          "lo": 2843.144505611957,
+          "hi": 2860.0632235770877
+        },
+        "measuredRps": {
+          "n": 3,
+          "mean": 18000,
+          "lo": 18000,
+          "hi": 18000
+        },
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 41.16346792174742,
+          "lo": 35.726672770772936,
+          "hi": 46.6002630727219
+        },
+        "emptyStatus": null,
+        "emptyShare": {
+          "n": 3,
+          "mean": 0.014826352002720486,
+          "lo": 0.014598798151928535,
+          "hi": 0.015053905853512437
+        },
+        "bytesPerTile": {
+          "n": 3,
+          "mean": 82190.66666666667,
+          "lo": 81946.94392955724,
+          "hi": 82434.3894037761
+        },
+        "p99AtCapacityMs": {
+          "n": 3,
+          "mean": 5.998666666666668,
+          "lo": 3.9197634088488726,
+          "hi": 8.077569924484463
+        },
+        "networkBound": 3,
+        "clientBound": 0,
+        "passes": [
+          1,
+          2,
+          3
+        ]
+      },
+      {
+        "server": "mbtileserver",
+        "version": "0.11.0",
+        "stable": true,
+        "rank": 2,
+        "costPerMillion": {
+          "n": 3,
+          "mean": 7.415044569210025,
+          "lo": 7.391781983720871,
+          "hi": 7.438307154699179
+        },
+        "capacityRps": {
+          "n": 3,
+          "mean": 2851.5232344117544,
+          "lo": 2842.5759290174233,
+          "hi": 2860.4705398060855
+        },
+        "measuredRps": {
+          "n": 3,
+          "mean": 13666.666666666666,
+          "lo": 12232.333333333332,
+          "hi": 15101
+        },
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 196.41744757743018,
+          "lo": 193.83197749581655,
+          "hi": 199.00291765904382
+        },
+        "emptyStatus": null,
+        "emptyShare": {
+          "n": 3,
+          "mean": 0.015018001486457643,
+          "lo": 0.014593939826309178,
+          "hi": 0.015442063146606108
+        },
+        "bytesPerTile": {
+          "n": 3,
+          "mean": 82193,
+          "lo": 81935.14292695565,
+          "hi": 82450.85707304435
+        },
+        "p99AtCapacityMs": {
+          "n": 3,
+          "mean": 7.852333333333334,
+          "lo": 0.5920491283572096,
+          "hi": 15.112617538309458
+        },
+        "networkBound": 3,
+        "clientBound": 0,
+        "passes": [
+          1,
+          2,
+          3
+        ]
+      },
+      {
+        "server": "martin-1",
+        "version": "1.16.1",
+        "stable": true,
+        "rank": 2,
+        "costPerMillion": {
+          "n": 3,
+          "mean": 7.425569656906965,
+          "lo": 7.393765795799794,
+          "hi": 7.457373518014135
+        },
+        "capacityRps": {
+          "n": 3,
+          "mean": 2847.4840637458274,
+          "lo": 2835.2956438594642,
+          "hi": 2859.6724836321905
+        },
+        "measuredRps": {
+          "n": 3,
+          "mean": 18000,
+          "lo": 18000,
+          "hi": 18000
+        },
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 138.0833686553863,
+          "lo": 130.4327901203122,
+          "hi": 145.73394719046038
+        },
+        "emptyStatus": null,
+        "emptyShare": {
+          "n": 3,
+          "mean": 0.014908678878780548,
+          "lo": 0.014643230996300717,
+          "hi": 0.015174126761260379
+        },
+        "bytesPerTile": {
+          "n": 3,
+          "mean": 82309.66666666667,
+          "lo": 81957.13274302227,
+          "hi": 82662.20059031107
+        },
+        "p99AtCapacityMs": {
+          "n": 3,
+          "mean": 5.647666666666666,
+          "lo": 4.6763751483224345,
+          "hi": 6.618958185010897
+        },
+        "networkBound": 3,
+        "clientBound": 0,
+        "passes": [
+          1,
+          2,
+          3
+        ]
+      },
+      {
+        "server": "bbox",
+        "version": "0.6.2",
+        "stable": true,
+        "rank": 2,
+        "costPerMillion": {
+          "n": 3,
+          "mean": 7.430351053889287,
+          "lo": 7.421049655295314,
+          "hi": 7.4396524524832595
+        },
+        "capacityRps": {
+          "n": 3,
+          "mean": 2845.646567274223,
+          "lo": 2842.084332216997,
+          "hi": 2849.2088023314486
+        },
+        "measuredRps": {
+          "n": 3,
+          "mean": 4833.333333333333,
+          "lo": 4116.166666666666,
+          "hi": 5550.5
+        },
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 508.6095388185062,
+          "lo": 460.0097941309271,
+          "hi": 557.2092835060854
+        },
+        "emptyStatus": 500,
+        "emptyShare": {
+          "n": 3,
+          "mean": 0.014719177147132221,
+          "lo": 0.013375466861354195,
+          "hi": 0.016062887432910247
+        },
+        "bytesPerTile": {
+          "n": 3,
+          "mean": 82362.66666666667,
+          "lo": 82259.56413673596,
+          "hi": 82465.76919659738
+        },
+        "p99AtCapacityMs": {
+          "n": 3,
+          "mean": 41.435,
+          "lo": 40.910028121617614,
+          "hi": 41.95997187838239
+        },
+        "networkBound": 3,
+        "clientBound": 0,
+        "passes": [
+          1,
+          2,
+          3
+        ]
+      },
+      {
+        "server": "tileserver-gl",
+        "version": "5.7.0",
+        "stable": true,
+        "rank": 2,
+        "costPerMillion": {
+          "n": 3,
+          "mean": 7.4500179320429964,
+          "lo": 7.418397815208911,
+          "hi": 7.481638048877082
+        },
+        "capacityRps": {
+          "n": 3,
+          "mean": 2838.139551371103,
+          "lo": 2826.0884512008856,
+          "hi": 2850.1906515413207
+        },
+        "measuredRps": {
+          "n": 3,
+          "mean": 4666.666666666667,
+          "lo": 3232.333333333334,
+          "hi": 6101
+        },
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 263.64210051353206,
+          "lo": 211.6044575749204,
+          "hi": 315.6797434521437
+        },
+        "emptyStatus": null,
+        "emptyShare": {
+          "n": 3,
+          "mean": 0.014921830298887105,
+          "lo": 0.014174056241234505,
+          "hi": 0.015669604356539704
+        },
+        "bytesPerTile": {
+          "n": 3,
+          "mean": 82580.66666666667,
+          "lo": 82230.16947967256,
+          "hi": 82931.16385366078
+        },
+        "p99AtCapacityMs": {
+          "n": 3,
+          "mean": 19.278333333333336,
+          "lo": -0.365683812051401,
+          "hi": 38.92235047871807
+        },
+        "networkBound": 3,
+        "clientBound": 0,
+        "passes": [
+          1,
+          2,
+          3
+        ]
+      }
+    ]
+  },
+  {
+    "dataset": "berlin",
+    "format": "mbtiles",
+    "scenario": "cdn",
+    "arch": "amd64",
+    "entries": [
+      {
+        "server": "tileserver-gl",
+        "version": "5.7.0",
+        "stable": true,
+        "rank": 1,
+        "costPerMillion": {
+          "n": 2,
+          "mean": 7.977618441392748,
+          "lo": 7.9179694164630785,
+          "hi": 8.037267466322417
+        },
+        "capacityRps": {
+          "n": 2,
+          "mean": 9500,
+          "lo": 3147,
+          "hi": 15853
+        },
+        "measuredRps": {
+          "n": 2,
+          "mean": 9500,
+          "lo": 3147,
+          "hi": 15853
+        },
+        "cpuPerTileUs": {
+          "n": 2,
+          "mean": 134.30617808039045,
+          "lo": 57.135287918904126,
+          "hi": 211.4770682418768
+        },
+        "emptyStatus": null,
+        "emptyShare": {
+          "n": 2,
+          "mean": 0.1851782672188061,
+          "lo": 0.1823946331940183,
+          "hi": 0.18796190124359388
+        },
+        "bytesPerTile": {
+          "n": 2,
+          "mean": 16307.5,
+          "lo": 16110.557,
+          "hi": 16504.443
+        },
+        "p99AtCapacityMs": {
+          "n": 2,
+          "mean": 12.91,
+          "lo": -2.642144000000002,
+          "hi": 28.462144000000002
+        },
+        "networkBound": 0,
+        "clientBound": 0,
+        "passes": [
+          1,
+          2
+        ]
+      },
+      {
+        "server": "mbtileserver",
+        "version": "0.11.0",
+        "stable": true,
+        "rank": 1,
+        "costPerMillion": {
+          "n": 3,
+          "mean": 7.993549139086288,
+          "lo": 7.988359133792041,
+          "hi": 7.998739144380535
+        },
+        "capacityRps": {
+          "n": 3,
+          "mean": 14366.538415197438,
+          "lo": 14290.533560374426,
+          "hi": 14442.54327002045
+        },
+        "measuredRps": {
+          "n": 3,
+          "mean": 32000,
+          "lo": 32000,
+          "hi": 32000
+        },
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 93.9631189808897,
+          "lo": 92.94402014912586,
+          "hi": 94.98221781265354
+        },
+        "emptyStatus": null,
+        "emptyShare": {
+          "n": 3,
+          "mean": 0.18543218038193954,
+          "lo": 0.1837454042416736,
+          "hi": 0.18711895652220548
+        },
+        "bytesPerTile": {
+          "n": 3,
+          "mean": 16314,
+          "lo": 16227.796685995645,
+          "hi": 16400.203314004353
+        },
+        "p99AtCapacityMs": {
+          "n": 3,
+          "mean": 13.463999999999999,
+          "lo": 10.445461601789203,
+          "hi": 16.482538398210796
+        },
+        "networkBound": 3,
+        "clientBound": 0,
+        "passes": [
+          1,
+          2,
+          3
+        ]
+      },
+      {
+        "server": "martin-1",
+        "version": "1.16.1",
+        "stable": true,
+        "rank": 1,
+        "costPerMillion": {
+          "n": 2,
+          "mean": 7.996637763169588,
+          "lo": 7.975031182159411,
+          "hi": 8.018244344179765
+        },
+        "capacityRps": {
+          "n": 2,
+          "mean": 14352.023137324806,
+          "lo": 14033.773912223849,
+          "hi": 14670.272362425763
+        },
+        "measuredRps": {
+          "n": 2,
+          "mean": 32000,
+          "lo": 32000,
+          "hi": 32000
+        },
+        "cpuPerTileUs": {
+          "n": 2,
+          "mean": 114.76353506418064,
+          "lo": 109.54542739942303,
+          "hi": 119.98164272893825
+        },
+        "emptyStatus": null,
+        "emptyShare": {
+          "n": 2,
+          "mean": 0.18514505132246245,
+          "lo": 0.18215339616181414,
+          "hi": 0.18813670648311076
+        },
+        "bytesPerTile": {
+          "n": 2,
+          "mean": 16330.5,
+          "lo": 15968.379,
+          "hi": 16692.621
+        },
+        "p99AtCapacityMs": {
+          "n": 2,
+          "mean": 12.082,
+          "lo": 8.651379999999996,
+          "hi": 15.512620000000005
+        },
+        "networkBound": 2,
+        "clientBound": 0,
+        "passes": [
+          1,
+          2
+        ]
+      },
+      {
+        "server": "versatiles",
+        "version": "5.4.1",
+        "stable": true,
+        "rank": null,
+        "costPerMillion": {
+          "n": 1,
+          "mean": 7.338209181603662,
+          "lo": null,
+          "hi": null
+        },
+        "capacityRps": {
+          "n": 1,
+          "mean": 15342.694422623723,
+          "lo": null,
+          "hi": null
+        },
+        "measuredRps": {
+          "n": 1,
+          "mean": 96000,
+          "lo": null,
+          "hi": null
+        },
+        "cpuPerTileUs": {
+          "n": 1,
+          "mean": 23.4738950761081,
+          "lo": null,
+          "hi": null
+        },
+        "emptyStatus": null,
+        "emptyShare": {
+          "n": 1,
+          "mean": 0.18511429209838387,
+          "lo": null,
+          "hi": null
+        },
+        "bytesPerTile": {
+          "n": 1,
+          "mean": 15276,
+          "lo": null,
+          "hi": null
+        },
+        "p99AtCapacityMs": {
+          "n": 1,
+          "mean": 32.033,
+          "lo": null,
+          "hi": null
+        },
+        "networkBound": 1,
+        "clientBound": 0,
+        "passes": [
+          1
+        ]
+      },
+      {
+        "server": "bbox",
+        "version": "0.6.2",
+        "stable": true,
+        "rank": null,
+        "costPerMillion": {
+          "n": 1,
+          "mean": 7.9928426900837835,
+          "lo": null,
+          "hi": null
+        },
+        "capacityRps": {
+          "n": 1,
+          "mean": 13000,
+          "lo": null,
+          "hi": null
+        },
+        "measuredRps": {
+          "n": 1,
+          "mean": 13000,
+          "lo": null,
+          "hi": null
+        },
+        "cpuPerTileUs": {
+          "n": 1,
+          "mean": 171.65895556613398,
+          "lo": null,
+          "hi": null
+        },
+        "emptyStatus": 500,
+        "emptyShare": {
+          "n": 1,
+          "mean": 0.18726682512942408,
+          "lo": null,
+          "hi": null
+        },
+        "bytesPerTile": {
+          "n": 1,
+          "mean": 16283,
+          "lo": null,
+          "hi": null
+        },
+        "p99AtCapacityMs": {
+          "n": 1,
+          "mean": 4.436,
+          "lo": null,
+          "hi": null
+        },
+        "networkBound": 0,
+        "clientBound": 0,
+        "passes": [
+          1
+        ]
+      }
+    ]
+  },
+  {
+    "dataset": "berlin",
+    "format": "mbtiles",
+    "scenario": "cdn",
+    "arch": "arm64",
+    "entries": [
+      {
+        "server": "versatiles",
+        "version": "5.4.1",
+        "stable": true,
+        "rank": 1,
+        "costPerMillion": {
+          "n": 3,
+          "mean": 7.340779478627198,
+          "lo": 7.324393027286182,
+          "hi": 7.357165929968214
+        },
+        "capacityRps": {
+          "n": 3,
+          "mean": 15375.241346115903,
+          "lo": 15352.789824992402,
+          "hi": 15397.692867239404
+        },
+        "measuredRps": {
+          "n": 3,
+          "mean": 96000,
+          "lo": 96000,
+          "hi": 96000
+        },
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 21.493570958539653,
+          "lo": 18.820330189427242,
+          "hi": 24.166811727652064
+        },
+        "emptyStatus": null,
+        "emptyShare": {
+          "n": 3,
+          "mean": 0.18511790584156237,
+          "lo": 0.18424651093185654,
+          "hi": 0.1859893007512682
+        },
+        "bytesPerTile": {
+          "n": 3,
+          "mean": 15243.666666666666,
+          "lo": 15221.39982542733,
+          "hi": 15265.933507906002
+        },
+        "p99AtCapacityMs": {
+          "n": 3,
+          "mean": 40.739000000000004,
+          "lo": 16.598685118387284,
+          "hi": 64.87931488161273
+        },
+        "networkBound": 3,
+        "clientBound": 0,
+        "passes": [
+          1,
+          2,
+          3
+        ]
+      },
+      {
+        "server": "martin-2",
+        "version": "build ff76524",
+        "stable": false,
+        "rank": 2,
+        "costPerMillion": {
+          "n": 3,
+          "mean": 7.986455850962486,
+          "lo": 7.965739112252315,
+          "hi": 8.007172589672656
+        },
+        "capacityRps": {
+          "n": 3,
+          "mean": 14365.029829374684,
+          "lo": 14347.347817812775,
+          "hi": 14382.711840936592
+        },
+        "measuredRps": {
+          "n": 3,
+          "mean": 88000,
+          "lo": 88000,
+          "hi": 88000
+        },
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 25.741334477153927,
+          "lo": 24.813487591050734,
+          "hi": 26.66918136325712
+        },
+        "emptyStatus": null,
+        "emptyShare": {
+          "n": 3,
+          "mean": 0.18493616739750307,
+          "lo": 0.18348368182347538,
+          "hi": 0.18638865297153076
+        },
+        "bytesPerTile": {
+          "n": 3,
+          "mean": 16315.666666666666,
+          "lo": 16295.586,
+          "hi": 16335.747333333333
+        },
+        "p99AtCapacityMs": {
+          "n": 3,
+          "mean": 24.25233333333333,
+          "lo": 21.573937520931786,
+          "hi": 26.930729145734873
+        },
+        "networkBound": 3,
+        "clientBound": 0,
+        "passes": [
+          1,
+          2,
+          3
+        ]
+      },
+      {
+        "server": "mbtileserver",
+        "version": "0.11.0",
+        "stable": true,
+        "rank": 2,
+        "costPerMillion": {
+          "n": 3,
+          "mean": 7.98665420465942,
+          "lo": 7.964735282542966,
+          "hi": 8.008573126775874
+        },
+        "capacityRps": {
+          "n": 3,
+          "mean": 14363.883098249136,
+          "lo": 14301.313063292535,
+          "hi": 14426.453133205738
+        },
+        "measuredRps": {
+          "n": 3,
+          "mean": 34666.666666666664,
+          "lo": 28929.333333333332,
+          "hi": 40404
+        },
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 81.10732726087984,
+          "lo": 71.8882714469968,
+          "hi": 90.32638307476289
+        },
+        "emptyStatus": null,
+        "emptyShare": {
+          "n": 3,
+          "mean": 0.18537820112629977,
+          "lo": 0.18399059917189742,
+          "hi": 0.18676580308070212
+        },
+        "bytesPerTile": {
+          "n": 3,
+          "mean": 16317,
+          "lo": 16245.902771805084,
+          "hi": 16388.097228194918
+        },
+        "p99AtCapacityMs": {
+          "n": 3,
+          "mean": 9.498666666666667,
+          "lo": 2.1617394288990432,
+          "hi": 16.83559390443429
+        },
+        "networkBound": 3,
+        "clientBound": 0,
+        "passes": [
+          1,
+          2,
+          3
+        ]
+      },
+      {
+        "server": "martin-1",
+        "version": "1.16.1",
+        "stable": true,
+        "rank": 2,
+        "costPerMillion": {
+          "n": 3,
+          "mean": 7.9965708051443825,
+          "lo": 7.966604290767587,
+          "hi": 8.026537319521177
+        },
+        "capacityRps": {
+          "n": 3,
+          "mean": 14367.713938341258,
+          "lo": 14290.688996371086,
+          "hi": 14444.73888031143
+        },
+        "measuredRps": {
+          "n": 3,
+          "mean": 36000,
+          "lo": 36000,
+          "hi": 36000
+        },
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 101.1159362467107,
+          "lo": 98.38041749739749,
+          "hi": 103.85145499602392
+        },
+        "emptyStatus": null,
+        "emptyShare": {
+          "n": 3,
+          "mean": 0.1851279823116743,
+          "lo": 0.18399929117902122,
+          "hi": 0.18625667344432736
+        },
+        "bytesPerTile": {
+          "n": 3,
+          "mean": 16312.666666666666,
+          "lo": 16225.137069947741,
+          "hi": 16400.19626338559
+        },
+        "p99AtCapacityMs": {
+          "n": 3,
+          "mean": 12.172666666666666,
+          "lo": 7.30718727328526,
+          "hi": 17.03814606004807
+        },
+        "networkBound": 3,
+        "clientBound": 0,
+        "passes": [
+          1,
+          2,
+          3
+        ]
+      },
+      {
+        "server": "bbox",
+        "version": "0.6.2",
+        "stable": true,
+        "rank": 2,
+        "costPerMillion": {
+          "n": 3,
+          "mean": 8.001109664428414,
+          "lo": 7.99231754624673,
+          "hi": 8.009901782610097
+        },
+        "capacityRps": {
+          "n": 3,
+          "mean": 12666.666666666666,
+          "lo": 11232.333333333332,
+          "hi": 14101
+        },
+        "measuredRps": {
+          "n": 3,
+          "mean": 12666.666666666666,
+          "lo": 11232.333333333332,
+          "hi": 14101
+        },
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 169.15172589213412,
+          "lo": 147.8497559571583,
+          "hi": 190.45369582710995
+        },
+        "emptyStatus": 500,
+        "emptyShare": {
+          "n": 3,
+          "mean": 0.18535856140891382,
+          "lo": 0.18473758317128236,
+          "hi": 0.1859795396465453
+        },
+        "bytesPerTile": {
+          "n": 3,
+          "mean": 16333.666666666666,
+          "lo": 16174.798466641894,
+          "hi": 16492.53486669144
+        },
+        "p99AtCapacityMs": {
+          "n": 3,
+          "mean": 9.502333333333334,
+          "lo": 5.180986206673666,
+          "hi": 13.823680459993003
+        },
+        "networkBound": 0,
+        "clientBound": 0,
+        "passes": [
+          1,
+          2,
+          3
+        ]
+      },
+      {
+        "server": "tileserver-gl",
+        "version": "5.7.0",
+        "stable": true,
+        "rank": 2,
+        "costPerMillion": {
+          "n": 3,
+          "mean": 8.01978753713275,
+          "lo": 7.989928876571672,
+          "hi": 8.049646197693827
+        },
+        "capacityRps": {
+          "n": 3,
+          "mean": 8333.333333333334,
+          "lo": 6899.000000000001,
+          "hi": 9767.666666666668
+        },
+        "measuredRps": {
+          "n": 3,
+          "mean": 8333.333333333334,
+          "lo": 6899.000000000001,
+          "hi": 9767.666666666668
+        },
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 142.63272837949708,
+          "lo": 121.83061751105544,
+          "hi": 163.43483924793873
+        },
+        "emptyStatus": null,
+        "emptyShare": {
+          "n": 3,
+          "mean": 0.18569546603568243,
+          "lo": 0.18205529158556705,
+          "hi": 0.18933564048579782
+        },
+        "bytesPerTile": {
+          "n": 3,
+          "mean": 16305,
+          "lo": 16155.134472552892,
+          "hi": 16454.86552744711
+        },
+        "p99AtCapacityMs": {
+          "n": 3,
+          "mean": 18.994,
+          "lo": -3.318055414697316,
+          "hi": 41.30605541469731
+        },
+        "networkBound": 0,
+        "clientBound": 0,
+        "passes": [
+          1,
+          2,
+          3
+        ]
+      }
+    ]
+  },
+  {
+    "dataset": "berlin",
+    "format": "pmtiles",
+    "scenario": "alone",
+    "arch": "amd64",
+    "entries": [
+      {
+        "server": "versatiles",
+        "version": "5.4.1",
+        "stable": true,
+        "rank": 1,
+        "costPerMillion": {
+          "n": 2,
+          "mean": 6.7394576675607505,
+          "lo": 6.64542888991609,
+          "hi": 6.833486445205411
+        },
+        "capacityRps": {
+          "n": 2,
+          "mean": 3138.520328827555,
+          "lo": 3094.7317564097716,
+          "hi": 3182.308901245339
+        },
+        "measuredRps": {
+          "n": 2,
+          "mean": 20000,
+          "lo": 20000,
+          "hi": 20000
+        },
+        "cpuPerTileUs": {
+          "n": 2,
+          "mean": 31.995045003586597,
+          "lo": 24.861662019344802,
+          "hi": 39.128427987828395
+        },
+        "emptyStatus": null,
+        "emptyShare": {
+          "n": 2,
+          "mean": 0.014942873571839297,
+          "lo": 0.01398989974749369,
+          "hi": 0.015895847396184902
+        },
+        "bytesPerTile": {
+          "n": 2,
+          "mean": 74677,
+          "lo": 73635.108,
+          "hi": 75718.892
+        },
+        "p99AtCapacityMs": {
+          "n": 2,
+          "mean": 7.2945,
+          "lo": -2.749593000000007,
+          "hi": 17.338593000000007
+        },
+        "networkBound": 2,
+        "clientBound": 0,
+        "passes": [
+          1,
+          2
+        ]
+      },
+      {
+        "server": "go-pmtiles",
+        "version": "1.31.2",
+        "stable": true,
+        "rank": 2,
+        "costPerMillion": {
+          "n": 3,
+          "mean": 7.415596463245702,
+          "lo": 7.372509653458321,
+          "hi": 7.458683273033083
+        },
+        "capacityRps": {
+          "n": 3,
+          "mean": 2852.363470304728,
+          "lo": 2835.8034739553254,
+          "hi": 2868.92346665413
+        },
+        "measuredRps": {
+          "n": 3,
+          "mean": 8333.333333333334,
+          "lo": 6899.000000000001,
+          "hi": 9767.666666666668
+        },
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 357.2239364057004,
+          "lo": 291.42945602597644,
+          "hi": 423.01841678542434
+        },
+        "emptyStatus": null,
+        "emptyShare": {
+          "n": 3,
+          "mean": 0.01501218955825087,
+          "lo": 0.01472597105870261,
+          "hi": 0.01529840805779913
+        },
+        "bytesPerTile": {
+          "n": 3,
+          "mean": 82169,
+          "lo": 81691.57379551775,
+          "hi": 82646.42620448225
+        },
+        "p99AtCapacityMs": {
+          "n": 3,
+          "mean": 22.095333333333333,
+          "lo": 4.614555493751343,
+          "hi": 39.57611117291532
+        },
+        "networkBound": 3,
+        "clientBound": 0,
+        "passes": [
+          1,
+          2,
+          3
+        ]
+      },
+      {
+        "server": "bbox",
+        "version": "0.6.2",
+        "stable": true,
+        "rank": 2,
+        "costPerMillion": {
+          "n": 2,
+          "mean": 7.461758368476996,
+          "lo": 7.198592460312981,
+          "hi": 7.724924276641011
+        },
+        "capacityRps": {
+          "n": 2,
+          "mean": 2834.7289362951874,
+          "lo": 2734.7519632977096,
+          "hi": 2934.705909292665
+        },
+        "measuredRps": {
+          "n": 2,
+          "mean": 6500,
+          "lo": 6500,
+          "hi": 6500
+        },
+        "cpuPerTileUs": {
+          "n": 2,
+          "mean": 484.8421505297462,
+          "lo": 447.7124196978118,
+          "hi": 521.9718813616806
+        },
+        "emptyStatus": 500,
+        "emptyShare": {
+          "n": 2,
+          "mean": 0.014766689938089456,
+          "lo": 0.011590630615773836,
+          "hi": 0.017942749260405077
+        },
+        "bytesPerTile": {
+          "n": 2,
+          "mean": 82680.5,
+          "lo": 79764.473,
+          "hi": 85596.527
+        },
+        "p99AtCapacityMs": {
+          "n": 2,
+          "mean": 10.849,
+          "lo": -5.770447999999995,
+          "hi": 27.468447999999995
+        },
+        "networkBound": 2,
+        "clientBound": 0,
+        "passes": [
+          1,
+          2
+        ]
+      },
+      {
+        "server": "martin-1",
+        "version": "1.16.1",
+        "stable": true,
+        "rank": null,
+        "costPerMillion": {
+          "n": 1,
+          "mean": 7.419838124136945,
+          "lo": null,
+          "hi": null
+        },
+        "capacityRps": {
+          "n": 1,
+          "mean": 2850.7224871071326,
+          "lo": null,
+          "hi": null
+        },
+        "measuredRps": {
+          "n": 1,
+          "mean": 18000,
+          "lo": null,
+          "hi": null
+        },
+        "cpuPerTileUs": {
+          "n": 1,
+          "mean": 159.64282443284577,
+          "lo": null,
+          "hi": null
+        },
+        "emptyStatus": null,
+        "emptyShare": {
+          "n": 1,
+          "mean": 0.014772386359848443,
+          "lo": null,
+          "hi": null
+        },
+        "bytesPerTile": {
+          "n": 1,
+          "mean": 82216,
+          "lo": null,
+          "hi": null
+        },
+        "p99AtCapacityMs": {
+          "n": 1,
+          "mean": 4.956,
+          "lo": null,
+          "hi": null
+        },
+        "networkBound": 1,
+        "clientBound": 0,
+        "passes": [
+          1
+        ]
+      },
+      {
+        "server": "tileserver-gl",
+        "version": "5.7.0",
+        "stable": true,
+        "rank": null,
+        "costPerMillion": {
+          "n": 1,
+          "mean": 7.444190802466434,
+          "lo": null,
+          "hi": null
+        },
+        "capacityRps": {
+          "n": 1,
+          "mean": 313,
+          "lo": null,
+          "hi": null
+        },
+        "measuredRps": {
+          "n": 1,
+          "mean": 313,
+          "lo": null,
+          "hi": null
+        },
+        "cpuPerTileUs": {
+          "n": 1,
+          "mean": 7058.08312573022,
+          "lo": null,
+          "hi": null
+        },
+        "emptyStatus": null,
+        "emptyShare": {
+          "n": 1,
+          "mean": 0.01597954618088846,
+          "lo": null,
+          "hi": null
+        },
+        "bytesPerTile": {
+          "n": 1,
+          "mean": 80649,
+          "lo": null,
+          "hi": null
+        },
+        "p99AtCapacityMs": {
+          "n": 1,
+          "mean": 48.707,
+          "lo": null,
+          "hi": null
+        },
+        "networkBound": 0,
+        "clientBound": 0,
+        "passes": [
+          1
+        ]
+      }
+    ]
+  },
+  {
+    "dataset": "berlin",
+    "format": "pmtiles",
+    "scenario": "alone",
+    "arch": "arm64",
+    "entries": [
+      {
+        "server": "versatiles",
+        "version": "5.4.1",
+        "stable": true,
+        "rank": 1,
+        "costPerMillion": {
+          "n": 3,
+          "mean": 6.7261024002475365,
+          "lo": 6.707063233166716,
+          "hi": 6.745141567328357
+        },
+        "capacityRps": {
+          "n": 3,
+          "mean": 3143.5988395490876,
+          "lo": 3134.6960140213237,
+          "hi": 3152.5016650768516
+        },
+        "measuredRps": {
+          "n": 3,
+          "mean": 20000,
+          "lo": 20000,
+          "hi": 20000
+        },
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 27.787585129457693,
+          "lo": 24.858298571315796,
+          "hi": 30.71687168759959
+        },
+        "emptyStatus": null,
+        "emptyShare": {
+          "n": 3,
+          "mean": 0.014851143592689827,
+          "lo": 0.014658655917095085,
+          "hi": 0.015043631268284568
+        },
+        "bytesPerTile": {
+          "n": 3,
+          "mean": 74556.33333333333,
+          "lo": 74345.29127616594,
+          "hi": 74767.37539050072
+        },
+        "p99AtCapacityMs": {
+          "n": 3,
+          "mean": 6.875,
+          "lo": 5.659259709713871,
+          "hi": 8.090740290286128
+        },
+        "networkBound": 3,
+        "clientBound": 0,
+        "passes": [
+          1,
+          2,
+          3
+        ]
+      },
+      {
+        "server": "bbox",
+        "version": "0.6.2",
+        "stable": true,
+        "rank": 2,
+        "costPerMillion": {
+          "n": 3,
+          "mean": 7.406865072485547,
+          "lo": 7.39448873615751,
+          "hi": 7.419241408813584
+        },
+        "capacityRps": {
+          "n": 3,
+          "mean": 2854.6700337381467,
+          "lo": 2849.9011796416357,
+          "hi": 2859.4388878346576
+        },
+        "measuredRps": {
+          "n": 3,
+          "mean": 8000,
+          "lo": 8000,
+          "hi": 8000
+        },
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 419.2473080998737,
+          "lo": 410.3362554190426,
+          "hi": 428.1583607807048
+        },
+        "emptyStatus": 500,
+        "emptyShare": {
+          "n": 3,
+          "mean": 0.014981071759159331,
+          "lo": 0.014404671753232014,
+          "hi": 0.015557471765086648
+        },
+        "bytesPerTile": {
+          "n": 3,
+          "mean": 82102.33333333333,
+          "lo": 81965.14626691508,
+          "hi": 82239.52039975158
+        },
+        "p99AtCapacityMs": {
+          "n": 3,
+          "mean": 42.302,
+          "lo": 40.251367287321216,
+          "hi": 44.35263271267878
+        },
+        "networkBound": 3,
+        "clientBound": 0,
+        "passes": [
+          1,
+          2,
+          3
+        ]
+      },
+      {
+        "server": "martin-1",
+        "version": "1.16.1",
+        "stable": true,
+        "rank": 2,
+        "costPerMillion": {
+          "n": 3,
+          "mean": 7.419374891005337,
+          "lo": 7.3901208265499445,
+          "hi": 7.44862895546073
+        },
+        "capacityRps": {
+          "n": 3,
+          "mean": 2849.8606972868006,
+          "lo": 2838.6232717627445,
+          "hi": 2861.0981228108567
+        },
+        "measuredRps": {
+          "n": 3,
+          "mean": 18000,
+          "lo": 18000,
+          "hi": 18000
+        },
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 139.99002222006573,
+          "lo": 128.48540648674162,
+          "hi": 151.49463795338983
+        },
+        "emptyStatus": null,
+        "emptyShare": {
+          "n": 3,
+          "mean": 0.015012996414420145,
+          "lo": 0.014826329394216296,
+          "hi": 0.015199663434623993
+        },
+        "bytesPerTile": {
+          "n": 3,
+          "mean": 82241,
+          "lo": 81916.72962005295,
+          "hi": 82565.27037994705
+        },
+        "p99AtCapacityMs": {
+          "n": 3,
+          "mean": 5.516000000000001,
+          "lo": 3.890553497147015,
+          "hi": 7.141446502852987
+        },
+        "networkBound": 3,
+        "clientBound": 0,
+        "passes": [
+          1,
+          2,
+          3
+        ]
+      },
+      {
+        "server": "go-pmtiles",
+        "version": "1.31.2",
+        "stable": true,
+        "rank": 2,
+        "costPerMillion": {
+          "n": 3,
+          "mean": 7.432095211279067,
+          "lo": 7.39756473511813,
+          "hi": 7.466625687440003
+        },
+        "capacityRps": {
+          "n": 3,
+          "mean": 2844.9848987316636,
+          "lo": 2831.780339552024,
+          "hi": 2858.189457911303
+        },
+        "measuredRps": {
+          "n": 3,
+          "mean": 9000,
+          "lo": 9000,
+          "hi": 9000
+        },
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 302.06260727583094,
+          "lo": 296.2651142100828,
+          "hi": 307.8601003415791
+        },
+        "emptyStatus": null,
+        "emptyShare": {
+          "n": 3,
+          "mean": 0.014977617204175639,
+          "lo": 0.013939568197262156,
+          "hi": 0.016015666211089123
+        },
+        "bytesPerTile": {
+          "n": 3,
+          "mean": 82382,
+          "lo": 81999.2425667027,
+          "hi": 82764.7574332973
+        },
+        "p99AtCapacityMs": {
+          "n": 3,
+          "mean": 16.864666666666665,
+          "lo": 12.388565956765454,
+          "hi": 21.340767376567875
+        },
+        "networkBound": 3,
+        "clientBound": 0,
+        "passes": [
+          1,
+          2,
+          3
+        ]
+      },
+      {
+        "server": "martin-2",
+        "version": "build ff76524",
+        "stable": false,
+        "rank": 2,
+        "costPerMillion": {
+          "n": 3,
+          "mean": 7.432816931578285,
+          "lo": 7.417190764528581,
+          "hi": 7.448443098627989
+        },
+        "capacityRps": {
+          "n": 3,
+          "mean": 2844.7033846622253,
+          "lo": 2838.724460709383,
+          "hi": 2850.6823086150675
+        },
+        "measuredRps": {
+          "n": 3,
+          "mean": 18000,
+          "lo": 18000,
+          "hi": 18000
+        },
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 41.868946285955424,
+          "lo": 33.516842563243486,
+          "hi": 50.22105000866736
+        },
+        "emptyStatus": null,
+        "emptyShare": {
+          "n": 3,
+          "mean": 0.01500900145535855,
+          "lo": 0.014421221761759499,
+          "hi": 0.015596781148957602
+        },
+        "bytesPerTile": {
+          "n": 3,
+          "mean": 82390,
+          "lo": 82216.78977363813,
+          "hi": 82563.21022636187
+        },
+        "p99AtCapacityMs": {
+          "n": 3,
+          "mean": 5.544333333333334,
+          "lo": 4.980561870176695,
+          "hi": 6.1081047964899735
+        },
+        "networkBound": 3,
+        "clientBound": 0,
+        "passes": [
+          1,
+          2,
+          3
+        ]
+      },
+      {
+        "server": "tileserver-gl",
+        "version": "5.7.0",
+        "stable": true,
+        "rank": 3,
+        "costPerMillion": {
+          "n": 3,
+          "mean": 7.541823220819263,
+          "lo": 7.435905144929134,
+          "hi": 7.647741296709393
+        },
+        "capacityRps": {
+          "n": 3,
+          "mean": 375.3333333333333,
+          "lo": 297.0733936785024,
+          "hi": 453.59327298816424
+        },
+        "measuredRps": {
+          "n": 3,
+          "mean": 375.3333333333333,
+          "lo": 297.0733936785024,
+          "hi": 453.59327298816424
+        },
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 5829.372604688466,
+          "lo": 4350.006032992278,
+          "hi": 7308.739176384654
+        },
+        "emptyStatus": null,
+        "emptyShare": {
+          "n": 3,
+          "mean": 0.0159962802878158,
+          "lo": 0.01230723784605186,
+          "hi": 0.019685322729579742
+        },
+        "bytesPerTile": {
+          "n": 3,
+          "mean": 82299,
+          "lo": 81278.89551831916,
+          "hi": 83319.10448168084
+        },
+        "p99AtCapacityMs": {
+          "n": 3,
+          "mean": 43.273,
+          "lo": 41.940178598837676,
+          "hi": 44.60582140116233
+        },
+        "networkBound": 0,
+        "clientBound": 0,
+        "passes": [
+          1,
+          2,
+          3
+        ]
+      }
+    ]
+  },
+  {
+    "dataset": "berlin",
+    "format": "pmtiles",
+    "scenario": "cdn",
+    "arch": "amd64",
+    "entries": [
+      {
+        "server": "versatiles",
+        "version": "5.4.1",
+        "stable": true,
+        "rank": 1,
+        "costPerMillion": {
+          "n": 2,
+          "mean": 7.347813785126438,
+          "lo": 7.259249718647574,
+          "hi": 7.436377851605302
+        },
+        "capacityRps": {
+          "n": 2,
+          "mean": 15365.339875541333,
+          "lo": 15179.752035199761,
+          "hi": 15550.927715882905
+        },
+        "measuredRps": {
+          "n": 2,
+          "mean": 96000,
+          "lo": 96000,
+          "hi": 96000
+        },
+        "cpuPerTileUs": {
+          "n": 2,
+          "mean": 23.208980934351104,
+          "lo": 20.686868052406947,
+          "hi": 25.73109381629526
+        },
+        "emptyStatus": null,
+        "emptyShare": {
+          "n": 2,
+          "mean": 0.18499881252312972,
+          "lo": 0.17862148241280318,
+          "hi": 0.19137614263345626
+        },
+        "bytesPerTile": {
+          "n": 2,
+          "mean": 15253.5,
+          "lo": 15069.263,
+          "hi": 15437.737
+        },
+        "p99AtCapacityMs": {
+          "n": 2,
+          "mean": 34.6365,
+          "lo": 4.974343000000019,
+          "hi": 64.29865699999998
+        },
+        "networkBound": 2,
+        "clientBound": 0,
+        "passes": [
+          1,
+          2
+        ]
+      },
+      {
+        "server": "go-pmtiles",
+        "version": "1.31.2",
+        "stable": true,
+        "rank": 2,
+        "costPerMillion": {
+          "n": 3,
+          "mean": 7.984652166985317,
+          "lo": 7.944071362051944,
+          "hi": 8.02523297191869
+        },
+        "capacityRps": {
+          "n": 3,
+          "mean": 14381.786037498268,
+          "lo": 14344.181463083614,
+          "hi": 14419.390611912922
+        },
+        "measuredRps": {
+          "n": 3,
+          "mean": 22666.666666666668,
+          "lo": 19798,
+          "hi": 25535.333333333336
+        },
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 126.35949962390231,
+          "lo": 118.57998029519123,
+          "hi": 134.13901895261338
+        },
+        "emptyStatus": null,
+        "emptyShare": {
+          "n": 3,
+          "mean": 0.1852759371750877,
+          "lo": 0.18436750809313193,
+          "hi": 0.18618436625704346
+        },
+        "bytesPerTile": {
+          "n": 3,
+          "mean": 16296.666666666666,
+          "lo": 16254.04499853752,
+          "hi": 16339.288334795812
+        },
+        "p99AtCapacityMs": {
+          "n": 3,
+          "mean": 12.990333333333332,
+          "lo": -3.2693936476516825,
+          "hi": 29.250060314318347
+        },
+        "networkBound": 3,
+        "clientBound": 0,
+        "passes": [
+          1,
+          2,
+          3
+        ]
+      },
+      {
+        "server": "bbox",
+        "version": "0.6.2",
+        "stable": true,
+        "rank": 2,
+        "costPerMillion": {
+          "n": 2,
+          "mean": 8.028130642025602,
+          "lo": 7.780261854067865,
+          "hi": 8.275999429983338
+        },
+        "capacityRps": {
+          "n": 2,
+          "mean": 14333.154181060734,
+          "lo": 14010.172609772075,
+          "hi": 14656.135752349393
+        },
+        "measuredRps": {
+          "n": 2,
+          "mean": 26000,
+          "lo": 26000,
+          "hi": 26000
+        },
+        "cpuPerTileUs": {
+          "n": 2,
+          "mean": 113.63031079562094,
+          "lo": 104.32973082636923,
+          "hi": 122.93089076487266
+        },
+        "emptyStatus": 500,
+        "emptyShare": {
+          "n": 2,
+          "mean": 0.18466545322876587,
+          "lo": 0.18003751667183202,
+          "hi": 0.18929338978569973
+        },
+        "bytesPerTile": {
+          "n": 2,
+          "mean": 16352,
+          "lo": 15983.526,
+          "hi": 16720.474
+        },
+        "p99AtCapacityMs": {
+          "n": 2,
+          "mean": 7.783,
+          "lo": -5.710772000000003,
+          "hi": 21.276772000000005
+        },
+        "networkBound": 2,
+        "clientBound": 0,
+        "passes": [
+          1,
+          2
+        ]
+      },
+      {
+        "server": "tileserver-gl",
+        "version": "5.7.0",
+        "stable": true,
+        "rank": null,
+        "costPerMillion": {
+          "n": 1,
+          "mean": 7.857000542706304,
+          "lo": null,
+          "hi": null
+        },
+        "capacityRps": {
+          "n": 1,
+          "mean": 2250,
+          "lo": null,
+          "hi": null
+        },
+        "measuredRps": {
+          "n": 1,
+          "mean": 2250,
+          "lo": null,
+          "hi": null
+        },
+        "cpuPerTileUs": {
+          "n": 1,
+          "mean": 1140.0845274392052,
+          "lo": null,
+          "hi": null
+        },
+        "emptyStatus": null,
+        "emptyShare": {
+          "n": 1,
+          "mean": 0.18118970346329968,
+          "lo": null,
+          "hi": null
+        },
+        "bytesPerTile": {
+          "n": 1,
+          "mean": 16498,
+          "lo": null,
+          "hi": null
+        },
+        "p99AtCapacityMs": {
+          "n": 1,
+          "mean": 31.969,
+          "lo": null,
+          "hi": null
+        },
+        "networkBound": 0,
+        "clientBound": 0,
+        "passes": [
+          1
+        ]
+      },
+      {
+        "server": "martin-1",
+        "version": "1.16.1",
+        "stable": true,
+        "rank": null,
+        "costPerMillion": {
+          "n": 1,
+          "mean": 7.988647525283252,
+          "lo": null,
+          "hi": null
+        },
+        "capacityRps": {
+          "n": 1,
+          "mean": 14363.853649567935,
+          "lo": null,
+          "hi": null
+        },
+        "measuredRps": {
+          "n": 1,
+          "mean": 32000,
+          "lo": null,
+          "hi": null
+        },
+        "cpuPerTileUs": {
+          "n": 1,
+          "mean": 113.71155152585642,
+          "lo": null,
+          "hi": null
+        },
+        "emptyStatus": null,
+        "emptyShare": {
+          "n": 1,
+          "mean": 0.18472481128287022,
+          "lo": null,
+          "hi": null
+        },
+        "bytesPerTile": {
+          "n": 1,
+          "mean": 16317,
+          "lo": null,
+          "hi": null
+        },
+        "p99AtCapacityMs": {
+          "n": 1,
+          "mean": 12.194,
+          "lo": null,
+          "hi": null
+        },
+        "networkBound": 1,
+        "clientBound": 0,
+        "passes": [
+          1
+        ]
+      }
+    ]
+  },
+  {
+    "dataset": "berlin",
+    "format": "pmtiles",
+    "scenario": "cdn",
+    "arch": "arm64",
+    "entries": [
+      {
+        "server": "versatiles",
+        "version": "5.4.1",
+        "stable": true,
+        "rank": 1,
+        "costPerMillion": {
+          "n": 3,
+          "mean": 7.3375215271113845,
+          "lo": 7.319583011355801,
+          "hi": 7.355460042866968
+        },
+        "capacityRps": {
+          "n": 3,
+          "mean": 15350.066880392114,
+          "lo": 15327.54389535154,
+          "hi": 15372.589865432688
+        },
+        "measuredRps": {
+          "n": 3,
+          "mean": 96000,
+          "lo": 96000,
+          "hi": 96000
+        },
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 21.37818907368497,
+          "lo": 18.34537992397199,
+          "hi": 24.410998223397947
+        },
+        "emptyStatus": null,
+        "emptyShare": {
+          "n": 3,
+          "mean": 0.18494845947395788,
+          "lo": 0.18474810038188977,
+          "hi": 0.185148818566026
+        },
+        "bytesPerTile": {
+          "n": 3,
+          "mean": 15268.666666666666,
+          "lo": 15246.261663763049,
+          "hi": 15291.071669570283
+        },
+        "p99AtCapacityMs": {
+          "n": 3,
+          "mean": 37.309333333333335,
+          "lo": 23.709142592493926,
+          "hi": 50.909524074172744
+        },
+        "networkBound": 3,
+        "clientBound": 0,
+        "passes": [
+          1,
+          2,
+          3
+        ]
+      },
+      {
+        "server": "bbox",
+        "version": "0.6.2",
+        "stable": true,
+        "rank": 2,
+        "costPerMillion": {
+          "n": 3,
+          "mean": 7.978947624538058,
+          "lo": 7.967287271017253,
+          "hi": 7.990607978058864
+        },
+        "capacityRps": {
+          "n": 3,
+          "mean": 14358.898411064476,
+          "lo": 14294.314064455493,
+          "hi": 14423.482757673459
+        },
+        "measuredRps": {
+          "n": 3,
+          "mean": 30000,
+          "lo": 30000,
+          "hi": 30000
+        },
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 102.04287574633797,
+          "lo": 98.71502579837602,
+          "hi": 105.37072569429992
+        },
+        "emptyStatus": 500,
+        "emptyShare": {
+          "n": 3,
+          "mean": 0.1853633700600623,
+          "lo": 0.1844054741142664,
+          "hi": 0.1863212660058582
+        },
+        "bytesPerTile": {
+          "n": 3,
+          "mean": 16322.666666666666,
+          "lo": 16249.206952078026,
+          "hi": 16396.126381255304
+        },
+        "p99AtCapacityMs": {
+          "n": 3,
+          "mean": 21.891000000000002,
+          "lo": -5.76661219436852,
+          "hi": 49.54861219436852
+        },
+        "networkBound": 3,
+        "clientBound": 0,
+        "passes": [
+          1,
+          2,
+          3
+        ]
+      },
+      {
+        "server": "martin-1",
+        "version": "1.16.1",
+        "stable": true,
+        "rank": 2,
+        "costPerMillion": {
+          "n": 3,
+          "mean": 7.990734204659421,
+          "lo": 7.963172083094681,
+          "hi": 8.018296326224162
+        },
+        "capacityRps": {
+          "n": 3,
+          "mean": 14363.87510434931,
+          "lo": 14310.482729255164,
+          "hi": 14417.267479443457
+        },
+        "measuredRps": {
+          "n": 3,
+          "mean": 34666.666666666664,
+          "lo": 28929.333333333332,
+          "hi": 40404
+        },
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 104.32060923161332,
+          "lo": 97.07954637069759,
+          "hi": 111.56167209252905
+        },
+        "emptyStatus": null,
+        "emptyShare": {
+          "n": 3,
+          "mean": 0.18557041589572557,
+          "lo": 0.1846424869025408,
+          "hi": 0.18649834488891034
+        },
+        "bytesPerTile": {
+          "n": 3,
+          "mean": 16317,
+          "lo": 16256.298715079498,
+          "hi": 16377.701284920502
+        },
+        "p99AtCapacityMs": {
+          "n": 3,
+          "mean": 13.035333333333334,
+          "lo": -0.1527180338506806,
+          "hi": 26.22338470051735
+        },
+        "networkBound": 3,
+        "clientBound": 0,
+        "passes": [
+          1,
+          2,
+          3
+        ]
+      },
+      {
+        "server": "tileserver-gl",
+        "version": "5.7.0",
+        "stable": true,
+        "rank": 2,
+        "costPerMillion": {
+          "n": 3,
+          "mean": 7.99701916388911,
+          "lo": 7.910750620998183,
+          "hi": 8.083287706780037
+        },
+        "capacityRps": {
+          "n": 3,
+          "mean": 2250,
+          "lo": 1628.91544791926,
+          "hi": 2871.0845520807397
+        },
+        "measuredRps": {
+          "n": 3,
+          "mean": 2250,
+          "lo": 1628.91544791926,
+          "hi": 2871.0845520807397
+        },
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 1071.8098307415949,
+          "lo": 915.9511791327307,
+          "hi": 1227.668482350459
+        },
+        "emptyStatus": null,
+        "emptyShare": {
+          "n": 3,
+          "mean": 0.18419313483924563,
+          "lo": 0.18250801162338168,
+          "hi": 0.18587825805510957
+        },
+        "bytesPerTile": {
+          "n": 3,
+          "mean": 16507.666666666668,
+          "lo": 16171.038075498134,
+          "hi": 16844.2952578352
+        },
+        "p99AtCapacityMs": {
+          "n": 3,
+          "mean": 31.82166666666667,
+          "lo": 9.902473374845538,
+          "hi": 53.7408599584878
+        },
+        "networkBound": 0,
+        "clientBound": 0,
+        "passes": [
+          1,
+          2,
+          3
+        ]
+      },
+      {
+        "server": "go-pmtiles",
+        "version": "1.31.2",
+        "stable": true,
+        "rank": 2,
+        "costPerMillion": {
+          "n": 3,
+          "mean": 8.00271902138701,
+          "lo": 7.970186154111297,
+          "hi": 8.035251888662723
+        },
+        "capacityRps": {
+          "n": 3,
+          "mean": 14374.504238998916,
+          "lo": 14271.862597804457,
+          "hi": 14477.145880193375
+        },
+        "measuredRps": {
+          "n": 3,
+          "mean": 22666.666666666668,
+          "lo": 19798,
+          "hi": 25535.333333333336
+        },
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 120.98968285812263,
+          "lo": 112.28956272674681,
+          "hi": 129.68980298949847
+        },
+        "emptyStatus": null,
+        "emptyShare": {
+          "n": 3,
+          "mean": 0.18529297229601718,
+          "lo": 0.184322503008026,
+          "hi": 0.18626344158400837
+        },
+        "bytesPerTile": {
+          "n": 3,
+          "mean": 16305,
+          "lo": 16188.50069529392,
+          "hi": 16421.499304706078
+        },
+        "p99AtCapacityMs": {
+          "n": 3,
+          "mean": 20.014666666666667,
+          "lo": -11.273795746706377,
+          "hi": 51.30312908003971
+        },
+        "networkBound": 3,
+        "clientBound": 0,
+        "passes": [
+          1,
+          2,
+          3
+        ]
+      },
+      {
+        "server": "martin-2",
+        "version": "build ff76524",
+        "stable": false,
+        "rank": 2,
+        "costPerMillion": {
+          "n": 3,
+          "mean": 8.00339920975032,
+          "lo": 7.988676904574581,
+          "hi": 8.018121514926058
+        },
+        "capacityRps": {
+          "n": 3,
+          "mean": 14363.571879694697,
+          "lo": 14324.211577360733,
+          "hi": 14402.93218202866
+        },
+        "measuredRps": {
+          "n": 3,
+          "mean": 88000,
+          "lo": 88000,
+          "hi": 88000
+        },
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 25.37346570595423,
+          "lo": 19.79747280880816,
+          "hi": 30.949458603100304
+        },
+        "emptyStatus": null,
+        "emptyShare": {
+          "n": 3,
+          "mean": 0.18494839834302,
+          "lo": 0.18403545469343263,
+          "hi": 0.18586134199260734
+        },
+        "bytesPerTile": {
+          "n": 3,
+          "mean": 16317.333333333334,
+          "lo": 16272.592248365363,
+          "hi": 16362.074418301305
+        },
+        "p99AtCapacityMs": {
+          "n": 3,
+          "mean": 24.10433333333333,
+          "lo": 22.156757420032186,
+          "hi": 26.051909246634473
+        },
+        "networkBound": 3,
+        "clientBound": 0,
+        "passes": [
+          1,
+          2,
+          3
+        ]
+      }
+    ]
+  },
+  {
+    "dataset": "planet",
+    "format": "files",
+    "scenario": "alone",
+    "arch": "amd64",
+    "entries": [
+      {
+        "server": "nginx",
+        "version": "1.30.4",
+        "stable": true,
+        "rank": 1,
+        "costPerMillion": {
+          "n": 2,
+          "mean": 6.16637834770844,
+          "lo": 5.7581345677084395,
+          "hi": 6.57462212770844
+        },
+        "capacityRps": {
+          "n": 2,
+          "mean": 1125,
+          "lo": 1125,
+          "hi": 1125
+        },
+        "measuredRps": {
+          "n": 2,
+          "mean": 1125,
+          "lo": 1125,
+          "hi": 1125
+        },
+        "cpuPerTileUs": {
+          "n": 2,
+          "mean": 61.17786646873232,
+          "lo": 60.47368605452498,
+          "hi": 61.882046882939655
+        },
+        "emptyStatus": null,
+        "emptyShare": {
+          "n": 2,
+          "mean": 0,
+          "lo": 0,
+          "hi": 0
+        },
+        "bytesPerTile": {
+          "n": 2,
+          "mean": 67941,
+          "lo": 63404.958,
+          "hi": 72477.042
+        },
+        "p99AtCapacityMs": {
+          "n": 2,
+          "mean": 15.631,
+          "lo": 7.38480599999999,
+          "hi": 23.87719400000001
+        },
+        "networkBound": 0,
+        "clientBound": 0,
+        "passes": [
+          1,
+          3
+        ]
+      }
+    ]
+  },
+  {
+    "dataset": "planet",
+    "format": "files",
+    "scenario": "alone",
+    "arch": "arm64",
+    "entries": [
+      {
+        "server": "nginx",
+        "version": "1.30.4",
+        "stable": true,
+        "rank": 1,
+        "costPerMillion": {
+          "n": 3,
+          "mean": 6.183232828231579,
+          "lo": 6.047149753020841,
+          "hi": 6.319315903442316
+        },
+        "capacityRps": {
+          "n": 3,
+          "mean": 1208.3333333333333,
+          "lo": 1029.0416666666665,
+          "hi": 1387.625
+        },
+        "measuredRps": {
+          "n": 3,
+          "mean": 1208.3333333333333,
+          "lo": 1029.0416666666665,
+          "hi": 1387.625
+        },
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 62.16671139201704,
+          "lo": 54.17374576211229,
+          "hi": 70.1596770219218
+        },
+        "emptyStatus": null,
+        "emptyShare": {
+          "n": 3,
+          "mean": 0,
+          "lo": 0,
+          "hi": 0
+        },
+        "bytesPerTile": {
+          "n": 3,
+          "mean": 68238,
+          "lo": 66763.99166369827,
+          "hi": 69712.00833630173
+        },
+        "p99AtCapacityMs": {
+          "n": 3,
+          "mean": 26.314666666666668,
+          "lo": -9.946145440759793,
+          "hi": 62.57547877409313
+        },
+        "networkBound": 0,
+        "clientBound": 0,
+        "passes": [
+          1,
+          2,
+          3
+        ]
+      }
+    ]
+  },
+  {
+    "dataset": "planet",
+    "format": "files",
+    "scenario": "cdn",
+    "arch": "amd64",
+    "entries": [
+      {
+        "server": "nginx",
+        "version": "1.30.4",
+        "stable": true,
+        "rank": 1,
+        "costPerMillion": {
+          "n": 2,
+          "mean": 6.778472531141977,
+          "lo": 6.395241201704603,
+          "hi": 7.161703860579352
+        },
+        "capacityRps": {
+          "n": 2,
+          "mean": 1187.5,
+          "lo": 393.375,
+          "hi": 1981.625
+        },
+        "measuredRps": {
+          "n": 2,
+          "mean": 1187.5,
+          "lo": 393.375,
+          "hi": 1981.625
+        },
+        "cpuPerTileUs": {
+          "n": 2,
+          "mean": 50.47211225199652,
+          "lo": 48.96763444109421,
+          "hi": 51.97659006289883
+        },
+        "emptyStatus": null,
+        "emptyShare": {
+          "n": 2,
+          "mean": 0,
+          "lo": 0,
+          "hi": 0
+        },
+        "bytesPerTile": {
+          "n": 2,
+          "mean": 516.5,
+          "lo": 497.44100000000003,
+          "hi": 535.559
+        },
+        "p99AtCapacityMs": {
+          "n": 2,
+          "mean": 33.9605,
+          "lo": -149.60943499999996,
+          "hi": 217.53043499999995
+        },
+        "networkBound": 0,
+        "clientBound": 0,
+        "passes": [
+          1,
+          3
+        ]
+      }
+    ]
+  },
+  {
+    "dataset": "planet",
+    "format": "files",
+    "scenario": "cdn",
+    "arch": "arm64",
+    "entries": [
+      {
+        "server": "nginx",
+        "version": "1.30.4",
+        "stable": true,
+        "rank": 1,
+        "costPerMillion": {
+          "n": 3,
+          "mean": 6.8030068546961,
+          "lo": 6.677896667839486,
+          "hi": 6.928117041552713
+        },
+        "capacityRps": {
+          "n": 3,
+          "mean": 1291.6666666666667,
+          "lo": 1112.375,
+          "hi": 1470.9583333333335
+        },
+        "measuredRps": {
+          "n": 3,
+          "mean": 1291.6666666666667,
+          "lo": 1112.375,
+          "hi": 1470.9583333333335
+        },
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 48.214634328291446,
+          "lo": 42.585720133961,
+          "hi": 53.843548522621894
+        },
+        "emptyStatus": null,
+        "emptyShare": {
+          "n": 3,
+          "mean": 0,
+          "lo": 0,
+          "hi": 0
+        },
+        "bytesPerTile": {
+          "n": 3,
+          "mean": 515.6666666666666,
+          "lo": 509.9293333333333,
+          "hi": 521.404
+        },
+        "p99AtCapacityMs": {
+          "n": 3,
+          "mean": 17.864,
+          "lo": 7.960378377326203,
+          "hi": 27.7676216226738
+        },
+        "networkBound": 0,
+        "clientBound": 0,
+        "passes": [
+          1,
+          2,
+          3
+        ]
+      }
+    ]
+  },
+  {
+    "dataset": "planet",
+    "format": "mbtiles",
+    "scenario": "alone",
+    "arch": "amd64",
+    "entries": [
+      {
+        "server": "martin-1",
+        "version": "1.16.1",
+        "stable": true,
+        "rank": 1,
+        "costPerMillion": {
+          "n": 3,
+          "mean": 6.1092868744413025,
+          "lo": 6.001030759398221,
+          "hi": 6.217542989484384
+        },
+        "capacityRps": {
+          "n": 3,
+          "mean": 1541.6666666666667,
+          "lo": 365.9725845803539,
+          "hi": 2717.36074875298
+        },
+        "measuredRps": {
+          "n": 3,
+          "mean": 1541.6666666666667,
+          "lo": 365.9725845803539,
+          "hi": 2717.36074875298
+        },
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 587.6493735303796,
+          "lo": 524.0249545746829,
+          "hi": 651.2737924860764
+        },
+        "emptyStatus": null,
+        "emptyShare": {
+          "n": 3,
+          "mean": 0.019910901734939396,
+          "lo": 0.015493715481480933,
+          "hi": 0.02432808798839786
+        },
+        "bytesPerTile": {
+          "n": 3,
+          "mean": 67427.66666666667,
+          "lo": 66571.45135788889,
+          "hi": 68283.88197544446
+        },
+        "p99AtCapacityMs": {
+          "n": 3,
+          "mean": 19.682333333333336,
+          "lo": -45.5182849813954,
+          "hi": 84.88295164806206
+        },
+        "networkBound": 0,
+        "clientBound": 0,
+        "passes": [
+          1,
+          2,
+          3
+        ]
+      },
+      {
+        "server": "mbtileserver",
+        "version": "0.11.0",
+        "stable": true,
+        "rank": null,
+        "costPerMillion": {
+          "n": 1,
+          "mean": 6.155603008625063,
+          "lo": null,
+          "hi": null
+        },
+        "capacityRps": {
+          "n": 1,
+          "mean": 1875,
+          "lo": null,
+          "hi": null
+        },
+        "measuredRps": {
+          "n": 1,
+          "mean": 1875,
+          "lo": null,
+          "hi": null
+        },
+        "cpuPerTileUs": {
+          "n": 1,
+          "mean": 277.9378618929709,
+          "lo": null,
+          "hi": null
+        },
+        "emptyStatus": null,
+        "emptyShare": {
+          "n": 1,
+          "mean": 0.020027734812523335,
+          "lo": null,
+          "hi": null
+        },
+        "bytesPerTile": {
+          "n": 1,
+          "mean": 68051,
+          "lo": null,
+          "hi": null
+        },
+        "p99AtCapacityMs": {
+          "n": 1,
+          "mean": 3.843,
+          "lo": null,
+          "hi": null
+        },
+        "networkBound": 0,
+        "clientBound": 0,
+        "passes": [
+          1
+        ]
+      },
+      {
+        "server": "tileserver-gl",
+        "version": "5.7.0",
+        "stable": true,
+        "rank": null,
+        "costPerMillion": {
+          "n": 1,
+          "mean": 6.546442334118693,
+          "lo": null,
+          "hi": null
+        },
+        "capacityRps": {
+          "n": 1,
+          "mean": 219,
+          "lo": null,
+          "hi": null
+        },
+        "measuredRps": {
+          "n": 1,
+          "mean": 219,
+          "lo": null,
+          "hi": null
+        },
+        "cpuPerTileUs": {
+          "n": 1,
+          "mean": 531.478236633144,
+          "lo": null,
+          "hi": null
+        },
+        "emptyStatus": null,
+        "emptyShare": {
+          "n": 1,
+          "mean": 0.023515981735159817,
+          "lo": null,
+          "hi": null
+        },
+        "bytesPerTile": {
+          "n": 1,
+          "mean": 69788,
+          "lo": null,
+          "hi": null
+        },
+        "p99AtCapacityMs": {
+          "n": 1,
+          "mean": 35.674,
+          "lo": null,
+          "hi": null
+        },
+        "networkBound": 0,
+        "clientBound": 0,
+        "passes": [
+          1
+        ]
+      },
+      {
+        "server": "versatiles",
+        "version": "5.4.1",
+        "stable": true,
+        "rank": null,
+        "costPerMillion": null,
+        "capacityRps": {
+          "n": 2,
+          "mean": 0,
+          "lo": 0,
+          "hi": 0
+        },
+        "measuredRps": {
+          "n": 2,
+          "mean": 0,
+          "lo": 0,
+          "hi": 0
+        },
+        "cpuPerTileUs": null,
+        "emptyStatus": null,
+        "emptyShare": null,
+        "bytesPerTile": null,
+        "p99AtCapacityMs": null,
+        "networkBound": 0,
+        "clientBound": 0,
+        "passes": []
+      }
+    ]
+  },
+  {
+    "dataset": "planet",
+    "format": "mbtiles",
+    "scenario": "alone",
+    "arch": "arm64",
+    "entries": [
+      {
+        "server": "martin-1",
+        "version": "1.16.1",
+        "stable": true,
+        "rank": 1,
+        "costPerMillion": {
+          "n": 3,
+          "mean": 6.10505967529173,
+          "lo": 6.006080975308384,
+          "hi": 6.204038375275076
+        },
+        "capacityRps": {
+          "n": 3,
+          "mean": 1875,
+          "lo": 1875,
+          "hi": 1875
+        },
+        "measuredRps": {
+          "n": 3,
+          "mean": 1875,
+          "lo": 1875,
+          "hi": 1875
+        },
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 713.7327260970569,
+          "lo": 414.6696245989434,
+          "hi": 1012.7958275951704
+        },
+        "emptyStatus": null,
+        "emptyShare": {
+          "n": 3,
+          "mean": 0.019734555119549146,
+          "lo": 0.019097379813827343,
+          "hi": 0.020371730425270948
+        },
+        "bytesPerTile": {
+          "n": 3,
+          "mean": 67535.33333333333,
+          "lo": 66435.57000018503,
+          "hi": 68635.09666648162
+        },
+        "p99AtCapacityMs": {
+          "n": 3,
+          "mean": 4.768666666666667,
+          "lo": 3.9207087430964913,
+          "hi": 5.616624590236843
+        },
+        "networkBound": 0,
+        "clientBound": 0,
+        "passes": [
+          1,
+          2,
+          3
+        ]
+      },
+      {
+        "server": "mbtileserver",
+        "version": "0.11.0",
+        "stable": true,
+        "rank": 1,
+        "costPerMillion": {
+          "n": 3,
+          "mean": 6.11417967529173,
+          "lo": 6.09714810993394,
+          "hi": 6.13121124064952
+        },
+        "capacityRps": {
+          "n": 3,
+          "mean": 1875,
+          "lo": 1875,
+          "hi": 1875
+        },
+        "measuredRps": {
+          "n": 3,
+          "mean": 1875,
+          "lo": 1875,
+          "hi": 1875
+        },
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 228.20181066730296,
+          "lo": 196.89705152521995,
+          "hi": 259.50656980938595
+        },
+        "emptyStatus": null,
+        "emptyShare": {
+          "n": 3,
+          "mean": 0.01917435692296654,
+          "lo": 0.018908712819289412,
+          "hi": 0.01944000102664367
+        },
+        "bytesPerTile": {
+          "n": 3,
+          "mean": 67636.66666666667,
+          "lo": 67447.4270515801,
+          "hi": 67825.90628175324
+        },
+        "p99AtCapacityMs": {
+          "n": 3,
+          "mean": 3.736666666666667,
+          "lo": 3.528184454064621,
+          "hi": 3.9451488792687126
+        },
+        "networkBound": 0,
+        "clientBound": 0,
+        "passes": [
+          1,
+          2,
+          3
+        ]
+      },
+      {
+        "server": "martin-2",
+        "version": "build ff76524",
+        "stable": false,
+        "rank": 1,
+        "costPerMillion": {
+          "n": 3,
+          "mean": 6.158409667560581,
+          "lo": 5.95230280376598,
+          "hi": 6.364516531355181
+        },
+        "capacityRps": {
+          "n": 3,
+          "mean": 1833.3333333333333,
+          "lo": 1654.0416666666665,
+          "hi": 2012.625
+        },
+        "measuredRps": {
+          "n": 3,
+          "mean": 1833.3333333333333,
+          "lo": 1654.0416666666665,
+          "hi": 2012.625
+        },
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 149.6327085107259,
+          "lo": 110.12716486515497,
+          "hi": 189.13825215629686
+        },
+        "emptyStatus": null,
+        "emptyShare": {
+          "n": 3,
+          "mean": 0.01883842758174616,
+          "lo": 0.01683627249188828,
+          "hi": 0.02084058267160404
+        },
+        "bytesPerTile": {
+          "n": 3,
+          "mean": 68121,
+          "lo": 65822.29030537448,
+          "hi": 70419.70969462552
+        },
+        "p99AtCapacityMs": {
+          "n": 3,
+          "mean": 3.706,
+          "lo": 3.627792654396576,
+          "hi": 3.784207345603424
+        },
+        "networkBound": 0,
+        "clientBound": 0,
+        "passes": [
+          1,
+          2,
+          3
+        ]
+      },
+      {
+        "server": "tileserver-gl",
+        "version": "5.7.0",
+        "stable": true,
+        "rank": 1,
+        "costPerMillion": {
+          "n": 3,
+          "mean": 6.176279304196565,
+          "lo": 5.941621662464952,
+          "hi": 6.410936945928178
+        },
+        "capacityRps": {
+          "n": 3,
+          "mean": 875,
+          "lo": 875,
+          "hi": 875
+        },
+        "measuredRps": {
+          "n": 3,
+          "mean": 875,
+          "lo": 875,
+          "hi": 875
+        },
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 347.35966456492525,
+          "lo": 260.1807656108191,
+          "hi": 434.5385635190314
+        },
+        "emptyStatus": null,
+        "emptyShare": {
+          "n": 3,
+          "mean": 0.019800261763595946,
+          "lo": 0.018646653994775216,
+          "hi": 0.020953869532416677
+        },
+        "bytesPerTile": {
+          "n": 3,
+          "mean": 67985.33333333333,
+          "lo": 65378.02620298208,
+          "hi": 70592.64046368457
+        },
+        "p99AtCapacityMs": {
+          "n": 3,
+          "mean": 32.99033333333333,
+          "lo": -1.5600269790462846,
+          "hi": 67.54069364571295
+        },
+        "networkBound": 0,
+        "clientBound": 0,
+        "passes": [
+          1,
+          2,
+          3
+        ]
+      },
+      {
+        "server": "versatiles",
+        "version": "5.4.1",
+        "stable": true,
+        "rank": null,
+        "costPerMillion": null,
+        "capacityRps": {
+          "n": 3,
+          "mean": 0,
+          "lo": 0,
+          "hi": 0
+        },
+        "measuredRps": {
+          "n": 3,
+          "mean": 0,
+          "lo": 0,
+          "hi": 0
+        },
+        "cpuPerTileUs": null,
+        "emptyStatus": null,
+        "emptyShare": null,
+        "bytesPerTile": null,
+        "p99AtCapacityMs": null,
+        "networkBound": 0,
+        "clientBound": 0,
+        "passes": []
+      }
+    ]
+  },
+  {
+    "dataset": "planet",
+    "format": "mbtiles",
+    "scenario": "cdn",
+    "arch": "amd64",
+    "entries": [
+      {
+        "server": "versatiles",
+        "version": "5.4.1",
+        "stable": true,
+        "rank": 1,
+        "costPerMillion": {
+          "n": 2,
+          "mean": 5.383277417706304,
+          "lo": 4.153551031456304,
+          "hi": 6.613003803956303
+        },
+        "capacityRps": {
+          "n": 2,
+          "mean": 2250,
+          "lo": 2250,
+          "hi": 2250
+        },
+        "measuredRps": {
+          "n": 2,
+          "mean": 2250,
+          "lo": 2250,
+          "hi": 2250
+        },
+        "cpuPerTileUs": {
+          "n": 2,
+          "mean": 1444.5256553212598,
+          "lo": 740.2676424625345,
+          "hi": 2148.7836681799854
+        },
+        "emptyStatus": null,
+        "emptyShare": {
+          "n": 2,
+          "mean": 0.12537512905765663,
+          "lo": 0.12110292736504205,
+          "hi": 0.1296473307502712
+        },
+        "bytesPerTile": {
+          "n": 2,
+          "mean": 471.5,
+          "lo": 401.617,
+          "hi": 541.383
+        },
+        "p99AtCapacityMs": {
+          "n": 2,
+          "mean": 29.2875,
+          "lo": 2.2173670000000065,
+          "hi": 56.35763299999999
+        },
+        "networkBound": 0,
+        "clientBound": 0,
+        "passes": [
+          1,
+          2
+        ]
+      },
+      {
+        "server": "martin-1",
+        "version": "1.16.1",
+        "stable": true,
+        "rank": 2,
+        "costPerMillion": {
+          "n": 3,
+          "mean": 6.732102570501065,
+          "lo": 6.659324269254953,
+          "hi": 6.804880871747177
+        },
+        "capacityRps": {
+          "n": 3,
+          "mean": 5500,
+          "lo": 5500,
+          "hi": 5500
+        },
+        "measuredRps": {
+          "n": 3,
+          "mean": 5500,
+          "lo": 5500,
+          "hi": 5500
+        },
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 580.301839510294,
+          "lo": 565.5630837447827,
+          "hi": 595.0405952758053
+        },
+        "emptyStatus": null,
+        "emptyShare": {
+          "n": 3,
+          "mean": 0.1258619366212517,
+          "lo": 0.12353873123435183,
+          "hi": 0.12818514200815156
+        },
+        "bytesPerTile": {
+          "n": 3,
+          "mean": 511.6666666666667,
+          "lo": 506.4951042872262,
+          "hi": 516.8382290461072
+        },
+        "p99AtCapacityMs": {
+          "n": 3,
+          "mean": 20.896,
+          "lo": -26.377878257722635,
+          "hi": 68.16987825772264
+        },
+        "networkBound": 0,
+        "clientBound": 0,
+        "passes": [
+          1,
+          2,
+          3
+        ]
+      },
+      {
+        "server": "mbtileserver",
+        "version": "0.11.0",
+        "stable": true,
+        "rank": null,
+        "costPerMillion": {
+          "n": 1,
+          "mean": 6.784885662811892,
+          "lo": null,
+          "hi": null
+        },
+        "capacityRps": {
+          "n": 1,
+          "mean": 7500,
+          "lo": null,
+          "hi": null
+        },
+        "measuredRps": {
+          "n": 1,
+          "mean": 7500,
+          "lo": null,
+          "hi": null
+        },
+        "cpuPerTileUs": {
+          "n": 1,
+          "mean": 67.67866226253068,
+          "lo": null,
+          "hi": null
+        },
+        "emptyStatus": null,
+        "emptyShare": {
+          "n": 1,
+          "mean": 0.12589333333333333,
+          "lo": null,
+          "hi": null
+        },
+        "bytesPerTile": {
+          "n": 1,
+          "mean": 506,
+          "lo": null,
+          "hi": null
+        },
+        "p99AtCapacityMs": {
+          "n": 1,
+          "mean": 1.455,
+          "lo": null,
+          "hi": null
+        },
+        "networkBound": 0,
+        "clientBound": 0,
+        "passes": [
+          1
+        ]
+      },
+      {
+        "server": "tileserver-gl",
+        "version": "5.7.0",
+        "stable": true,
+        "rank": null,
+        "costPerMillion": {
+          "n": 1,
+          "mean": 6.9379828649552095,
+          "lo": null,
+          "hi": null
+        },
+        "capacityRps": {
+          "n": 1,
+          "mean": 688,
+          "lo": null,
+          "hi": null
+        },
+        "measuredRps": {
+          "n": 1,
+          "mean": 688,
+          "lo": null,
+          "hi": null
+        },
+        "cpuPerTileUs": {
+          "n": 1,
+          "mean": 264.31996102966207,
+          "lo": null,
+          "hi": null
+        },
+        "emptyStatus": null,
+        "emptyShare": {
+          "n": 1,
+          "mean": 0.12449009324009325,
+          "lo": null,
+          "hi": null
+        },
+        "bytesPerTile": {
+          "n": 1,
+          "mean": 515,
+          "lo": null,
+          "hi": null
+        },
+        "p99AtCapacityMs": {
+          "n": 1,
+          "mean": 31.909,
+          "lo": null,
+          "hi": null
+        },
+        "networkBound": 0,
+        "clientBound": 0,
+        "passes": [
+          1
+        ]
+      }
+    ]
+  },
+  {
+    "dataset": "planet",
+    "format": "mbtiles",
+    "scenario": "cdn",
+    "arch": "arm64",
+    "entries": [
+      {
+        "server": "versatiles",
+        "version": "5.4.1",
+        "stable": true,
+        "rank": 1,
+        "costPerMillion": {
+          "n": 3,
+          "mean": 5.851841898009177,
+          "lo": 5.476290525320021,
+          "hi": 6.227393270698332
+        },
+        "capacityRps": {
+          "n": 3,
+          "mean": 3083.3333333333335,
+          "lo": 2366.166666666667,
+          "hi": 3800.5
+        },
+        "measuredRps": {
+          "n": 3,
+          "mean": 3083.3333333333335,
+          "lo": 2366.166666666667,
+          "hi": 3800.5
+        },
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 1086.2486700727388,
+          "lo": 879.3289951989495,
+          "hi": 1293.1683449465281
+        },
+        "emptyStatus": null,
+        "emptyShare": {
+          "n": 3,
+          "mean": 0.1254747383917383,
+          "lo": 0.12296186102514184,
+          "hi": 0.12798761575833478
+        },
+        "bytesPerTile": {
+          "n": 3,
+          "mean": 473.6666666666667,
+          "lo": 462.4641652148579,
+          "hi": 484.86916811847544
+        },
+        "p99AtCapacityMs": {
+          "n": 3,
+          "mean": 23.689666666666668,
+          "lo": 17.924352994215525,
+          "hi": 29.45498033911781
+        },
+        "networkBound": 0,
+        "clientBound": 0,
+        "passes": [
+          1,
+          2,
+          3
+        ]
+      },
+      {
+        "server": "martin-1",
+        "version": "1.16.1",
+        "stable": true,
+        "rank": 2,
+        "costPerMillion": {
+          "n": 3,
+          "mean": 6.7412572059949705,
+          "lo": 6.648070472290187,
+          "hi": 6.834443939699754
+        },
+        "capacityRps": {
+          "n": 3,
+          "mean": 4833.333333333333,
+          "lo": 2935.888684748177,
+          "hi": 6730.777981918489
+        },
+        "measuredRps": {
+          "n": 3,
+          "mean": 4833.333333333333,
+          "lo": 2935.888684748177,
+          "hi": 6730.777981918489
+        },
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 550.1165197654404,
+          "lo": 362.57274040721194,
+          "hi": 737.6602991236689
+        },
+        "emptyStatus": null,
+        "emptyShare": {
+          "n": 3,
+          "mean": 0.1261828816808334,
+          "lo": 0.12501154957213667,
+          "hi": 0.1273542137895301
+        },
+        "bytesPerTile": {
+          "n": 3,
+          "mean": 514.3333333333334,
+          "lo": 501.58469980743035,
+          "hi": 527.0819668592363
+        },
+        "p99AtCapacityMs": {
+          "n": 3,
+          "mean": 5.973,
+          "lo": 1.5235877213860034,
+          "hi": 10.422412278613997
+        },
+        "networkBound": 0,
+        "clientBound": 0,
+        "passes": [
+          1,
+          2,
+          3
+        ]
+      },
+      {
+        "server": "mbtileserver",
+        "version": "0.11.0",
+        "stable": true,
+        "rank": 2,
+        "costPerMillion": {
+          "n": 3,
+          "mean": 6.74959393856756,
+          "lo": 6.733508571285201,
+          "hi": 6.765679305849918
+        },
+        "capacityRps": {
+          "n": 3,
+          "mean": 7500,
+          "lo": 7500,
+          "hi": 7500
+        },
+        "measuredRps": {
+          "n": 3,
+          "mean": 7500,
+          "lo": 7500,
+          "hi": 7500
+        },
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 64.89335796631443,
+          "lo": 59.78016149292367,
+          "hi": 70.00655443970518
+        },
+        "emptyStatus": null,
+        "emptyShare": {
+          "n": 3,
+          "mean": 0.12647450802137025,
+          "lo": 0.12567166171508456,
+          "hi": 0.12727735432765594
+        },
+        "bytesPerTile": {
+          "n": 3,
+          "mean": 515.3333333333334,
+          "lo": 506.6086242773756,
+          "hi": 524.0580423892911
+        },
+        "p99AtCapacityMs": {
+          "n": 3,
+          "mean": 1.4436666666666669,
+          "lo": 1.4275025509125927,
+          "hi": 1.459830782420741
+        },
+        "networkBound": 0,
+        "clientBound": 0,
+        "passes": [
+          1,
+          2,
+          3
+        ]
+      },
+      {
+        "server": "tileserver-gl",
+        "version": "5.7.0",
+        "stable": true,
+        "rank": 2,
+        "costPerMillion": {
+          "n": 3,
+          "mean": 6.780858224793678,
+          "lo": 6.559339175498227,
+          "hi": 7.002377274089129
+        },
+        "capacityRps": {
+          "n": 3,
+          "mean": 1708.3333333333333,
+          "lo": 1349.75,
+          "hi": 2066.9166666666665
+        },
+        "measuredRps": {
+          "n": 3,
+          "mean": 1708.3333333333333,
+          "lo": 1349.75,
+          "hi": 2066.9166666666665
+        },
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 172.64522330863073,
+          "lo": 122.86013195487087,
+          "hi": 222.4303146623906
+        },
+        "emptyStatus": null,
+        "emptyShare": {
+          "n": 3,
+          "mean": 0.12491862701979069,
+          "lo": 0.12146782403786363,
+          "hi": 0.12836943000171774
+        },
+        "bytesPerTile": {
+          "n": 3,
+          "mean": 507.6666666666667,
+          "lo": 480.1887929356485,
+          "hi": 535.1445403976849
+        },
+        "p99AtCapacityMs": {
+          "n": 3,
+          "mean": 18.669,
+          "lo": -16.059506144183285,
+          "hi": 53.39750614418328
+        },
+        "networkBound": 0,
+        "clientBound": 0,
+        "passes": [
+          1,
+          2,
+          3
+        ]
+      },
+      {
+        "server": "martin-2",
+        "version": "build ff76524",
+        "stable": false,
+        "rank": 2,
+        "costPerMillion": {
+          "n": 3,
+          "mean": 6.790762271900893,
+          "lo": 6.595371947857723,
+          "hi": 6.986152595944063
+        },
+        "capacityRps": {
+          "n": 3,
+          "mean": 7500,
+          "lo": 7500,
+          "hi": 7500
+        },
+        "measuredRps": {
+          "n": 3,
+          "mean": 7500,
+          "lo": 7500,
+          "hi": 7500
+        },
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 81.96616421390401,
+          "lo": 69.26647245931485,
+          "hi": 94.66585596849316
+        },
+        "emptyStatus": null,
+        "emptyShare": {
+          "n": 3,
+          "mean": 0.1252930546271865,
+          "lo": 0.12297444648573545,
+          "hi": 0.12761166276863758
+        },
+        "bytesPerTile": {
+          "n": 3,
+          "mean": 513,
+          "lo": 508.0313235833541,
+          "hi": 517.968676416646
+        },
+        "p99AtCapacityMs": {
+          "n": 3,
+          "mean": 1.6213333333333333,
+          "lo": 1.4405333550881896,
+          "hi": 1.802133311578477
+        },
+        "networkBound": 0,
+        "clientBound": 0,
+        "passes": [
+          1,
+          2,
+          3
+        ]
+      }
+    ]
+  },
+  {
+    "dataset": "planet",
+    "format": "pmtiles",
+    "scenario": "alone",
+    "arch": "amd64",
+    "entries": [
+      {
+        "server": "martin-1",
+        "version": "1.16.1",
+        "stable": true,
+        "rank": 1,
+        "costPerMillion": {
+          "n": 2,
+          "mean": 6.057182000799107,
+          "lo": 6.053741923568205,
+          "hi": 6.060622078030009
+        },
+        "capacityRps": {
+          "n": 2,
+          "mean": 3492.0363018052326,
+          "lo": 3490.053057027424,
+          "hi": 3494.019546583041
+        },
+        "measuredRps": {
+          "n": 2,
+          "mean": 4250,
+          "lo": 1073.5,
+          "hi": 7426.5
+        },
+        "cpuPerTileUs": {
+          "n": 2,
+          "mean": 809.3826573542121,
+          "lo": 420.4675668690137,
+          "hi": 1198.2977478394105
+        },
+        "emptyStatus": null,
+        "emptyShare": {
+          "n": 2,
+          "mean": 0.019547429666556544,
+          "lo": 0.01774267857058005,
+          "hi": 0.02135218076253304
+        },
+        "bytesPerTile": {
+          "n": 2,
+          "mean": 67117,
+          "lo": 67078.882,
+          "hi": 67155.118
+        },
+        "p99AtCapacityMs": {
+          "n": 2,
+          "mean": 13.4695,
+          "lo": -63.852863,
+          "hi": 90.79186299999999
+        },
+        "networkBound": 2,
+        "clientBound": 0,
+        "passes": [
+          1,
+          2
+        ]
+      },
+      {
+        "server": "bbox",
+        "version": "0.6.2",
+        "stable": true,
+        "rank": 1,
+        "costPerMillion": {
+          "n": 3,
+          "mean": 6.068904240721228,
+          "lo": 5.996345669567565,
+          "hi": 6.141462811874891
+        },
+        "capacityRps": {
+          "n": 3,
+          "mean": 1625,
+          "lo": 1625,
+          "hi": 1625
+        },
+        "measuredRps": {
+          "n": 3,
+          "mean": 1625,
+          "lo": 1625,
+          "hi": 1625
+        },
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 887.8584524879465,
+          "lo": 849.03903609854,
+          "hi": 926.6778688773529
+        },
+        "emptyStatus": 500,
+        "emptyShare": {
+          "n": 3,
+          "mean": 0.019303761190721427,
+          "lo": 0.017383656814658546,
+          "hi": 0.02122386556678431
+        },
+        "bytesPerTile": {
+          "n": 3,
+          "mean": 67034.66666666667,
+          "lo": 66228.46032051486,
+          "hi": 67840.87301281848
+        },
+        "p99AtCapacityMs": {
+          "n": 3,
+          "mean": 22.412000000000003,
+          "lo": -12.33320768199992,
+          "hi": 57.15720768199992
+        },
+        "networkBound": 0,
+        "clientBound": 0,
+        "passes": [
+          1,
+          2,
+          3
+        ]
+      },
+      {
+        "server": "go-pmtiles",
+        "version": "1.31.2",
+        "stable": true,
+        "rank": null,
+        "costPerMillion": {
+          "n": 1,
+          "mean": 6.0836246952913235,
+          "lo": null,
+          "hi": null
+        },
+        "capacityRps": {
+          "n": 1,
+          "mean": 3476.8580329327992,
+          "lo": null,
+          "hi": null
+        },
+        "measuredRps": {
+          "n": 1,
+          "mean": 3750,
+          "lo": null,
+          "hi": null
+        },
+        "cpuPerTileUs": {
+          "n": 1,
+          "mean": 760.3871329522261,
+          "lo": null,
+          "hi": null
+        },
+        "emptyStatus": null,
+        "emptyShare": {
+          "n": 1,
+          "mean": 0.019681049655981653,
+          "lo": null,
+          "hi": null
+        },
+        "bytesPerTile": {
+          "n": 1,
+          "mean": 67410,
+          "lo": null,
+          "hi": null
+        },
+        "p99AtCapacityMs": {
+          "n": 1,
+          "mean": 33.632,
+          "lo": null,
+          "hi": null
+        },
+        "networkBound": 1,
+        "clientBound": 0,
+        "passes": [
+          1
+        ]
+      },
+      {
+        "server": "tileserver-gl",
+        "version": "5.7.0",
+        "stable": true,
+        "rank": null,
+        "costPerMillion": {
+          "n": 1,
+          "mean": 6.687435129375951,
+          "lo": null,
+          "hi": null
+        },
+        "capacityRps": {
+          "n": 2,
+          "mean": 62.5,
+          "lo": -731.625,
+          "hi": 856.625
+        },
+        "measuredRps": {
+          "n": 2,
+          "mean": 62.5,
+          "lo": -731.625,
+          "hi": 856.625
+        },
+        "cpuPerTileUs": {
+          "n": 1,
+          "mean": 8210.88335283758,
+          "lo": null,
+          "hi": null
+        },
+        "emptyStatus": null,
+        "emptyShare": {
+          "n": 1,
+          "mean": 0.012,
+          "lo": null,
+          "hi": null
+        },
+        "bytesPerTile": {
+          "n": 1,
+          "mean": 69136,
+          "lo": null,
+          "hi": null
+        },
+        "p99AtCapacityMs": {
+          "n": 1,
+          "mean": 48.577,
+          "lo": null,
+          "hi": null
+        },
+        "networkBound": 0,
+        "clientBound": 0,
+        "passes": [
+          2
+        ]
+      },
+      {
+        "server": "versatiles",
+        "version": "5.4.1",
+        "stable": true,
+        "rank": null,
+        "costPerMillion": null,
+        "capacityRps": {
+          "n": 2,
+          "mean": 0,
+          "lo": 0,
+          "hi": 0
+        },
+        "measuredRps": {
+          "n": 2,
+          "mean": 0,
+          "lo": 0,
+          "hi": 0
+        },
+        "cpuPerTileUs": null,
+        "emptyStatus": null,
+        "emptyShare": null,
+        "bytesPerTile": null,
+        "p99AtCapacityMs": null,
+        "networkBound": 0,
+        "clientBound": 0,
+        "passes": []
+      }
+    ]
+  },
+  {
+    "dataset": "planet",
+    "format": "pmtiles",
+    "scenario": "alone",
+    "arch": "arm64",
+    "entries": [
+      {
+        "server": "bbox",
+        "version": "0.6.2",
+        "stable": true,
+        "rank": 1,
+        "costPerMillion": {
+          "n": 3,
+          "mean": 6.114546557334092,
+          "lo": 5.897426363059957,
+          "hi": 6.331666751608227
+        },
+        "capacityRps": {
+          "n": 3,
+          "mean": 1666.6666666666667,
+          "lo": 1487.375,
+          "hi": 1845.9583333333335
+        },
+        "measuredRps": {
+          "n": 3,
+          "mean": 1666.6666666666667,
+          "lo": 1487.375,
+          "hi": 1845.9583333333335
+        },
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 878.6947336963885,
+          "lo": 835.4105681361917,
+          "hi": 921.9788992565854
+        },
+        "emptyStatus": 500,
+        "emptyShare": {
+          "n": 3,
+          "mean": 0.020521686093630566,
+          "lo": 0.018894750054336797,
+          "hi": 0.022148622132924334
+        },
+        "bytesPerTile": {
+          "n": 3,
+          "mean": 67603,
+          "lo": 65162.54136964087,
+          "hi": 70043.45863035912
+        },
+        "p99AtCapacityMs": {
+          "n": 3,
+          "mean": 11.983333333333333,
+          "lo": -13.673615758906879,
+          "hi": 37.640282425573545
+        },
+        "networkBound": 0,
+        "clientBound": 0,
+        "passes": [
+          1,
+          2,
+          3
+        ]
+      },
+      {
+        "server": "martin-2",
+        "version": "build ff76524",
+        "stable": false,
+        "rank": 1,
+        "costPerMillion": {
+          "n": 3,
+          "mean": 6.123977168945225,
+          "lo": 6.1011032731736465,
+          "hi": 6.146851064716803
+        },
+        "capacityRps": {
+          "n": 3,
+          "mean": 3452.687795428616,
+          "lo": 3439.8011692349783,
+          "hi": 3465.574421622254
+        },
+        "measuredRps": {
+          "n": 3,
+          "mean": 9000,
+          "lo": 9000,
+          "hi": 9000
+        },
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 244.83671695470238,
+          "lo": 223.91130053435583,
+          "hi": 265.76213337504896
+        },
+        "emptyStatus": null,
+        "emptyShare": {
+          "n": 3,
+          "mean": 0.019343236421005213,
+          "lo": 0.018684827721328068,
+          "hi": 0.02000164512068236
+        },
+        "bytesPerTile": {
+          "n": 3,
+          "mean": 67882,
+          "lo": 67628.45140732396,
+          "hi": 68135.54859267604
+        },
+        "p99AtCapacityMs": {
+          "n": 3,
+          "mean": 2.7729999999999997,
+          "lo": 2.5518659873086,
+          "hi": 2.9941340126913993
+        },
+        "networkBound": 3,
+        "clientBound": 0,
+        "passes": [
+          1,
+          2,
+          3
+        ]
+      },
+      {
+        "server": "go-pmtiles",
+        "version": "1.31.2",
+        "stable": true,
+        "rank": 1,
+        "costPerMillion": {
+          "n": 3,
+          "mean": 6.135825410524066,
+          "lo": 6.06831054461795,
+          "hi": 6.203340276430182
+        },
+        "capacityRps": {
+          "n": 3,
+          "mean": 3446.0604576377023,
+          "lo": 3408.2236752016984,
+          "hi": 3483.897240073706
+        },
+        "measuredRps": {
+          "n": 3,
+          "mean": 4000,
+          "lo": 4000,
+          "hi": 4000
+        },
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 671.855483854419,
+          "lo": 655.874948241395,
+          "hi": 687.8360194674431
+        },
+        "emptyStatus": null,
+        "emptyShare": {
+          "n": 3,
+          "mean": 0.01928517557354811,
+          "lo": 0.0188414559521374,
+          "hi": 0.01972889519495882
+        },
+        "bytesPerTile": {
+          "n": 3,
+          "mean": 68013.33333333333,
+          "lo": 67264.95625729204,
+          "hi": 68761.71040937462
+        },
+        "p99AtCapacityMs": {
+          "n": 3,
+          "mean": 25.566333333333333,
+          "lo": -27.832711989737554,
+          "hi": 78.96537865640423
+        },
+        "networkBound": 3,
+        "clientBound": 0,
+        "passes": [
+          1,
+          2,
+          3
+        ]
+      },
+      {
+        "server": "martin-1",
+        "version": "1.16.1",
+        "stable": true,
+        "rank": 1,
+        "costPerMillion": {
+          "n": 3,
+          "mean": 6.139043080191416,
+          "lo": 6.055556417079861,
+          "hi": 6.222529743302972
+        },
+        "capacityRps": {
+          "n": 3,
+          "mean": 3444.2781266992824,
+          "lo": 3397.436635198108,
+          "hi": 3491.119618200457
+        },
+        "measuredRps": {
+          "n": 3,
+          "mean": 4000,
+          "lo": 2757.83089583852,
+          "hi": 5242.1691041614795
+        },
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 854.9147753621286,
+          "lo": 551.6534702203087,
+          "hi": 1158.1760805039485
+        },
+        "emptyStatus": null,
+        "emptyShare": {
+          "n": 3,
+          "mean": 0.019648700600639352,
+          "lo": 0.018711692654042808,
+          "hi": 0.020585708547235897
+        },
+        "bytesPerTile": {
+          "n": 3,
+          "mean": 68049,
+          "lo": 67123.58151639145,
+          "hi": 68974.41848360855
+        },
+        "p99AtCapacityMs": {
+          "n": 3,
+          "mean": 10.984,
+          "lo": -0.8384189559283648,
+          "hi": 22.806418955928365
+        },
+        "networkBound": 3,
+        "clientBound": 0,
+        "passes": [
+          1,
+          2,
+          3
+        ]
+      },
+      {
+        "server": "tileserver-gl",
+        "version": "5.7.0",
+        "stable": true,
+        "rank": null,
+        "costPerMillion": null,
+        "capacityRps": {
+          "n": 3,
+          "mean": 0,
+          "lo": 0,
+          "hi": 0
+        },
+        "measuredRps": {
+          "n": 3,
+          "mean": 0,
+          "lo": 0,
+          "hi": 0
+        },
+        "cpuPerTileUs": null,
+        "emptyStatus": null,
+        "emptyShare": null,
+        "bytesPerTile": null,
+        "p99AtCapacityMs": null,
+        "networkBound": 0,
+        "clientBound": 0,
+        "passes": []
+      },
+      {
+        "server": "versatiles",
+        "version": "5.4.1",
+        "stable": true,
+        "rank": null,
+        "costPerMillion": null,
+        "capacityRps": {
+          "n": 3,
+          "mean": 0,
+          "lo": 0,
+          "hi": 0
+        },
+        "measuredRps": {
+          "n": 3,
+          "mean": 0,
+          "lo": 0,
+          "hi": 0
+        },
+        "cpuPerTileUs": null,
+        "emptyStatus": null,
+        "emptyShare": null,
+        "bytesPerTile": null,
+        "p99AtCapacityMs": null,
+        "networkBound": 0,
+        "clientBound": 0,
+        "passes": []
+      }
+    ]
+  },
+  {
+    "dataset": "planet",
+    "format": "pmtiles",
+    "scenario": "cdn",
+    "arch": "amd64",
+    "entries": [
+      {
+        "server": "versatiles",
+        "version": "5.4.1",
+        "stable": true,
+        "rank": 1,
+        "costPerMillion": {
+          "n": 2,
+          "mean": 5.3412442403375895,
+          "lo": 3.006667624087589,
+          "hi": 7.67582085658759
+        },
+        "capacityRps": {
+          "n": 2,
+          "mean": 1375,
+          "lo": 1375,
+          "hi": 1375
+        },
+        "measuredRps": {
+          "n": 2,
+          "mean": 1375,
+          "lo": 1375,
+          "hi": 1375
+        },
+        "cpuPerTileUs": {
+          "n": 2,
+          "mean": 2178.993667998082,
+          "lo": 1811.2079893609662,
+          "hi": 2546.7793466351977
+        },
+        "emptyStatus": null,
+        "emptyShare": {
+          "n": 2,
+          "mean": 0.12612733156947745,
+          "lo": 0.10775975620396401,
+          "hi": 0.1444949069349909
+        },
+        "bytesPerTile": {
+          "n": 2,
+          "mean": 473.5,
+          "lo": 327.381,
+          "hi": 619.619
+        },
+        "p99AtCapacityMs": {
+          "n": 2,
+          "mean": 23.398,
+          "lo": 13.449201999999984,
+          "hi": 33.346798000000014
+        },
+        "networkBound": 0,
+        "clientBound": 0,
+        "passes": [
+          1,
+          2
+        ]
+      },
+      {
+        "server": "bbox",
+        "version": "0.6.2",
+        "stable": true,
+        "rank": 1,
+        "costPerMillion": {
+          "n": 3,
+          "mean": 6.698979159438963,
+          "lo": 6.630451620016058,
+          "hi": 6.767506698861868
+        },
+        "capacityRps": {
+          "n": 3,
+          "mean": 4000,
+          "lo": 4000,
+          "hi": 4000
+        },
+        "measuredRps": {
+          "n": 3,
+          "mean": 4000,
+          "lo": 4000,
+          "hi": 4000
+        },
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 663.6377748444015,
+          "lo": 649.0571978060337,
+          "hi": 678.2183518827693
+        },
+        "emptyStatus": 500,
+        "emptyShare": {
+          "n": 3,
+          "mean": 0.12647259275969028,
+          "lo": 0.12406427801067196,
+          "hi": 0.1288809075087086
+        },
+        "bytesPerTile": {
+          "n": 3,
+          "mean": 513,
+          "lo": 501.61533210848904,
+          "hi": 524.384667891511
+        },
+        "p99AtCapacityMs": {
+          "n": 3,
+          "mean": 14.790333333333331,
+          "lo": -9.821479100357964,
+          "hi": 39.40214576702463
+        },
+        "networkBound": 0,
+        "clientBound": 0,
+        "passes": [
+          1,
+          2,
+          3
+        ]
+      },
+      {
+        "server": "martin-1",
+        "version": "1.16.1",
+        "stable": true,
+        "rank": 1,
+        "costPerMillion": {
+          "n": 2,
+          "mean": 6.705920132062725,
+          "lo": 6.701951276886908,
+          "hi": 6.709888987238542
+        },
+        "capacityRps": {
+          "n": 2,
+          "mean": 4250,
+          "lo": 1073.5,
+          "hi": 7426.5
+        },
+        "measuredRps": {
+          "n": 2,
+          "mean": 4250,
+          "lo": 1073.5,
+          "hi": 7426.5
+        },
+        "cpuPerTileUs": {
+          "n": 2,
+          "mean": 776.2438030622236,
+          "lo": 734.3368175712325,
+          "hi": 818.1507885532147
+        },
+        "emptyStatus": null,
+        "emptyShare": {
+          "n": 2,
+          "mean": 0.12650572714959188,
+          "lo": 0.12339977253992915,
+          "hi": 0.1296116817592546
+        },
+        "bytesPerTile": {
+          "n": 2,
+          "mean": 513,
+          "lo": 487.588,
+          "hi": 538.412
+        },
+        "p99AtCapacityMs": {
+          "n": 2,
+          "mean": 22.616500000000002,
+          "lo": -151.46205299999997,
+          "hi": 196.69505299999997
+        },
+        "networkBound": 0,
+        "clientBound": 0,
+        "passes": [
+          1,
+          2
+        ]
+      },
+      {
+        "server": "tileserver-gl",
+        "version": "5.7.0",
+        "stable": true,
+        "rank": 1,
+        "costPerMillion": {
+          "n": 2,
+          "mean": 6.853922947462783,
+          "lo": 6.398643482336485,
+          "hi": 7.30920241258908
+        },
+        "capacityRps": {
+          "n": 2,
+          "mean": 360,
+          "lo": -237.1819999999999,
+          "hi": 957.1819999999999
+        },
+        "measuredRps": {
+          "n": 2,
+          "mean": 360,
+          "lo": -237.1819999999999,
+          "hi": 957.1819999999999
+        },
+        "cpuPerTileUs": {
+          "n": 2,
+          "mean": 2746.4090126994593,
+          "lo": -7115.7998162596905,
+          "hi": 12608.61784165861
+        },
+        "emptyStatus": null,
+        "emptyShare": {
+          "n": 2,
+          "mean": 0.12813051942444914,
+          "lo": 0.07352526983852875,
+          "hi": 0.18273576901036953
+        },
+        "bytesPerTile": {
+          "n": 2,
+          "mean": 510,
+          "lo": 421.058,
+          "hi": 598.942
+        },
+        "p99AtCapacityMs": {
+          "n": 2,
+          "mean": 40.575500000000005,
+          "lo": 0.2021850000000356,
+          "hi": 80.94881499999997
+        },
+        "networkBound": 0,
+        "clientBound": 0,
+        "passes": [
+          1,
+          2
+        ]
+      },
+      {
+        "server": "go-pmtiles",
+        "version": "1.31.2",
+        "stable": true,
+        "rank": null,
+        "costPerMillion": {
+          "n": 1,
+          "mean": 6.731120760335134,
+          "lo": null,
+          "hi": null
+        },
+        "capacityRps": {
+          "n": 1,
+          "mean": 3250,
+          "lo": null,
+          "hi": null
+        },
+        "measuredRps": {
+          "n": 1,
+          "mean": 3250,
+          "lo": null,
+          "hi": null
+        },
+        "cpuPerTileUs": {
+          "n": 1,
+          "mean": 887.2432764331311,
+          "lo": null,
+          "hi": null
+        },
+        "emptyStatus": null,
+        "emptyShare": {
+          "n": 1,
+          "mean": 0.12891364216810006,
+          "lo": null,
+          "hi": null
+        },
+        "bytesPerTile": {
+          "n": 1,
+          "mean": 508,
+          "lo": null,
+          "hi": null
+        },
+        "p99AtCapacityMs": {
+          "n": 1,
+          "mean": 6.881,
+          "lo": null,
+          "hi": null
+        },
+        "networkBound": 0,
+        "clientBound": 0,
+        "passes": [
+          1
+        ]
+      }
+    ]
+  },
+  {
+    "dataset": "planet",
+    "format": "pmtiles",
+    "scenario": "cdn",
+    "arch": "arm64",
+    "entries": [
+      {
+        "server": "versatiles",
+        "version": "5.4.1",
+        "stable": true,
+        "rank": 1,
+        "costPerMillion": {
+          "n": 3,
+          "mean": 5.895089920936901,
+          "lo": 5.736682371241426,
+          "hi": 6.053497470632377
+        },
+        "capacityRps": {
+          "n": 3,
+          "mean": 1875,
+          "lo": 1875,
+          "hi": 1875
+        },
+        "measuredRps": {
+          "n": 3,
+          "mean": 1875,
+          "lo": 1875,
+          "hi": 1875
+        },
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 1593.4170952107017,
+          "lo": 1492.2998645049208,
+          "hi": 1694.5343259164827
+        },
+        "emptyStatus": null,
+        "emptyShare": {
+          "n": 3,
+          "mean": 0.12452181128929167,
+          "lo": 0.11759919997098053,
+          "hi": 0.1314444226076028
+        },
+        "bytesPerTile": {
+          "n": 3,
+          "mean": 481,
+          "lo": 462.2436578459445,
+          "hi": 499.7563421540555
+        },
+        "p99AtCapacityMs": {
+          "n": 3,
+          "mean": 20.090666666666664,
+          "lo": 12.969513962403063,
+          "hi": 27.211819370930264
+        },
+        "networkBound": 0,
+        "clientBound": 0,
+        "passes": [
+          1,
+          2,
+          3
+        ]
+      },
+      {
+        "server": "tileserver-gl",
+        "version": "5.7.0",
+        "stable": true,
+        "rank": 2,
+        "costPerMillion": {
+          "n": 3,
+          "mean": 6.736050623694378,
+          "lo": 6.59165666588612,
+          "hi": 6.880444581502635
+        },
+        "capacityRps": {
+          "n": 3,
+          "mean": 479.3333333333333,
+          "lo": 390.4046666666666,
+          "hi": 568.262
+        },
+        "measuredRps": {
+          "n": 3,
+          "mean": 479.3333333333333,
+          "lo": 390.4046666666666,
+          "hi": 568.262
+        },
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 1769.849665847231,
+          "lo": 1592.0061355115554,
+          "hi": 1947.6931961829068
+        },
+        "emptyStatus": null,
+        "emptyShare": {
+          "n": 3,
+          "mean": 0.1283407440696663,
+          "lo": 0.12580514791640715,
+          "hi": 0.13087634022292546
+        },
+        "bytesPerTile": {
+          "n": 3,
+          "mean": 513.3333333333334,
+          "lo": 486.537775366055,
+          "hi": 540.1288913006118
+        },
+        "p99AtCapacityMs": {
+          "n": 3,
+          "mean": 45.278999999999996,
+          "lo": 41.04749884809232,
+          "hi": 49.510501151907675
+        },
+        "networkBound": 0,
+        "clientBound": 0,
+        "passes": [
+          1,
+          2,
+          3
+        ]
+      },
+      {
+        "server": "bbox",
+        "version": "0.6.2",
+        "stable": true,
+        "rank": 2,
+        "costPerMillion": {
+          "n": 3,
+          "mean": 6.747050453168153,
+          "lo": 6.539611469587628,
+          "hi": 6.954489436748679
+        },
+        "capacityRps": {
+          "n": 3,
+          "mean": 4500,
+          "lo": 4500,
+          "hi": 4500
+        },
+        "measuredRps": {
+          "n": 3,
+          "mean": 4500,
+          "lo": 4500,
+          "hi": 4500
+        },
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 565.3413219777126,
+          "lo": 537.1271767470446,
+          "hi": 593.5554672083806
+        },
+        "emptyStatus": 500,
+        "emptyShare": {
+          "n": 3,
+          "mean": 0.12643905175838455,
+          "lo": 0.12477277872860427,
+          "hi": 0.1281053247881648
+        },
+        "bytesPerTile": {
+          "n": 3,
+          "mean": 511.3333333333333,
+          "lo": 501.293,
+          "hi": 521.3736666666666
+        },
+        "p99AtCapacityMs": {
+          "n": 3,
+          "mean": 15.990333333333334,
+          "lo": -28.390611771044306,
+          "hi": 60.37127843771097
+        },
+        "networkBound": 0,
+        "clientBound": 0,
+        "passes": [
+          1,
+          2,
+          3
+        ]
+      },
+      {
+        "server": "martin-2",
+        "version": "build ff76524",
+        "stable": false,
+        "rank": 2,
+        "costPerMillion": {
+          "n": 3,
+          "mean": 6.770245349173592,
+          "lo": 6.748693718796129,
+          "hi": 6.791796979551056
+        },
+        "capacityRps": {
+          "n": 3,
+          "mean": 13000,
+          "lo": 13000,
+          "hi": 13000
+        },
+        "measuredRps": {
+          "n": 3,
+          "mean": 13000,
+          "lo": 13000,
+          "hi": 13000
+        },
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 248.99467083737704,
+          "lo": 242.75879350707754,
+          "hi": 255.23054816767655
+        },
+        "emptyStatus": null,
+        "emptyShare": {
+          "n": 3,
+          "mean": 0.1253488271711975,
+          "lo": 0.12409205908689958,
+          "hi": 0.12660559525549542
+        },
+        "bytesPerTile": {
+          "n": 3,
+          "mean": 511,
+          "lo": 504.4270589282017,
+          "hi": 517.5729410717984
+        },
+        "p99AtCapacityMs": {
+          "n": 3,
+          "mean": 10.442333333333332,
+          "lo": 9.231116327177906,
+          "hi": 11.653550339488758
+        },
+        "networkBound": 0,
+        "clientBound": 0,
+        "passes": [
+          1,
+          2,
+          3
+        ]
+      },
+      {
+        "server": "go-pmtiles",
+        "version": "1.31.2",
+        "stable": true,
+        "rank": 2,
+        "costPerMillion": {
+          "n": 3,
+          "mean": 6.782087877135118,
+          "lo": 6.718475825671607,
+          "hi": 6.845699928598629
+        },
+        "capacityRps": {
+          "n": 3,
+          "mean": 3750,
+          "lo": 3750,
+          "hi": 3750
+        },
+        "measuredRps": {
+          "n": 3,
+          "mean": 3750,
+          "lo": 3750,
+          "hi": 3750
+        },
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 794.8491923913331,
+          "lo": 761.7249652196773,
+          "hi": 827.9734195629889
+        },
+        "emptyStatus": null,
+        "emptyShare": {
+          "n": 3,
+          "mean": 0.12545011650639123,
+          "lo": 0.12221504934883984,
+          "hi": 0.12868518366394263
+        },
+        "bytesPerTile": {
+          "n": 3,
+          "mean": 518.6666666666666,
+          "lo": 498.58599999999996,
+          "hi": 538.7473333333332
+        },
+        "p99AtCapacityMs": {
+          "n": 3,
+          "mean": 13.381666666666666,
+          "lo": 2.3724586625386017,
+          "hi": 24.39087467079473
+        },
+        "networkBound": 0,
+        "clientBound": 0,
+        "passes": [
+          1,
+          2,
+          3
+        ]
+      },
+      {
+        "server": "martin-1",
+        "version": "1.16.1",
+        "stable": true,
+        "rank": 2,
+        "costPerMillion": {
+          "n": 3,
+          "mean": 6.78504662726137,
+          "lo": 6.706262025218805,
+          "hi": 6.863831229303935
+        },
+        "capacityRps": {
+          "n": 3,
+          "mean": 4083.3333333333335,
+          "lo": 3134.6110090407556,
+          "hi": 5032.055657625911
+        },
+        "measuredRps": {
+          "n": 3,
+          "mean": 4083.3333333333335,
+          "lo": 3134.6110090407556,
+          "hi": 5032.055657625911
+        },
+        "cpuPerTileUs": {
+          "n": 3,
+          "mean": 735.1375007323664,
+          "lo": 577.7491859384932,
+          "hi": 892.5258155262397
+        },
+        "emptyStatus": null,
+        "emptyShare": {
+          "n": 3,
+          "mean": 0.12506174526755087,
+          "lo": 0.12237524539659156,
+          "hi": 0.12774824513851019
+        },
+        "bytesPerTile": {
+          "n": 3,
+          "mean": 515,
+          "lo": 510.0313235833541,
+          "hi": 519.968676416646
+        },
+        "p99AtCapacityMs": {
+          "n": 3,
+          "mean": 6.572333333333333,
+          "lo": 3.451884548759265,
+          "hi": 9.6927821179074
+        },
+        "networkBound": 0,
+        "clientBound": 0,
+        "passes": [
+          1,
+          2,
+          3
+        ]
+      }
+    ]
+  }
+]

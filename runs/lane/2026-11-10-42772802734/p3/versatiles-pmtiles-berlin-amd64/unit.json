@@ -1,0 +1,32 @@
+{
+  "id": "versatiles-pmtiles-berlin-amd64",
+  "pass": 3,
+  "server": "versatiles",
+  "version": "5.4.1",
+  "stable": true,
+  "format": "pmtiles",
+  "dataset": "berlin",
+  "arch": "amd64",
+  "placementGroup": "",
+  "serverHost": null,
+  "clientHost": null,
+  "dataSeconds": null,
+  "readyMs": {},
+  "results": {},
+  "catalog": null,
+  "log": [
+    "2026-11-10T08:55:34.650Z no server capacity in us-east-1f, attempt 1",
+    "2026-11-10T08:59:37.235Z no server capacity in us-east-1f, attempt 2",
+    "2026-11-10T09:02:21.678Z no server capacity in us-east-1a, attempt 1",
+    "2026-11-10T09:04:20.471Z no server capacity in us-east-1a, attempt 2",
+    "2026-11-10T09:05:20.014Z no server capacity in us-east-1b, attempt 1",
+    "2026-11-10T09:07:10.993Z no server capacity in us-east-1b, attempt 2",
+    "2026-11-10T09:08:32.201Z no server capacity in us-east-1c, attempt 1",
+    "2026-11-10T09:10:32.159Z no server capacity in us-east-1c, attempt 2",
+    "2026-11-10T09:11:59.305Z no client capacity in subnet-099a403aa8952f07d",
+    "2026-11-10T09:11:59.305Z failed: no zone had room for both of versatiles-pmtiles-berlin-amd64's instances"
+  ],
+  "error": "no zone had room for both of versatiles-pmtiles-berlin-amd64's instances",
+  "startedAt": "2026-11-10T08:54:11.685Z",
+  "finishedAt": "2026-11-10T09:11:59.305Z"
+}

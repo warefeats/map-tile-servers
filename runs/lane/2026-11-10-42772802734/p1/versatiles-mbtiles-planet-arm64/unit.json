@@ -1,0 +1,53 @@
+{
+  "id": "versatiles-mbtiles-planet-arm64",
+  "pass": 1,
+  "server": "versatiles",
+  "version": "5.4.1",
+  "stable": true,
+  "format": "mbtiles",
+  "dataset": "planet",
+  "arch": "arm64",
+  "placementGroup": "lane-42772802734-p1-versatiles-mbtiles-planet-arm64-3",
+  "serverHost": {
+    "id": "i-0fc452782f6ee1368",
+    "ip": "172.31.80.253",
+    "az": "us-east-1a",
+    "subnet": "subnet-075b8107a2a2814ab"
+  },
+  "clientHost": {
+    "id": "i-0e1645f4794a31fa7",
+    "ip": "172.31.84.250",
+    "az": "us-east-1a",
+    "subnet": "subnet-075b8107a2a2814ab"
+  },
+  "dataSeconds": 803,
+  "readyMs": {
+    "alone": 603,
+    "cdn": 751
+  },
+  "results": {
+    "alone": "results/lane/42772802734/p1/versatiles-mbtiles-planet-arm64/alone.json",
+    "cdn": "results/lane/42772802734/p1/versatiles-mbtiles-planet-arm64/cdn.json"
+  },
+  "catalog": null,
+  "log": [
+    "2026-11-10T07:36:53.109Z no server capacity in us-east-1c, attempt 1",
+    "2026-11-10T07:38:54.664Z no server capacity in us-east-1c, attempt 2",
+    "2026-11-10T07:40:05.696Z no client capacity in subnet-099a403aa8952f07d",
+    "2026-11-10T07:41:10.354Z no server capacity in us-east-1f, attempt 1",
+    "2026-11-10T07:43:03.992Z no server capacity in us-east-1f, attempt 2",
+    "2026-11-10T07:43:11.717Z server i-0fc452782f6ee1368 and client i-0e1645f4794a31fa7 in us-east-1a",
+    "2026-11-10T07:44:16.068Z client-setup Success",
+    "2026-11-10T07:58:09.773Z setup Success",
+    "2026-11-10T07:58:31.476Z start-alone Success",
+    "2026-11-10T08:05:19.905Z alone Success",
+    "2026-11-10T08:05:19.905Z capacity 0/s, ? bytes a tile",
+    "2026-11-10T08:05:38.854Z start-cdn Success",
+    "2026-11-10T08:11:07.150Z cdn Success",
+    "2026-11-10T08:11:07.151Z capacity 3250/s, 478 bytes a tile",
+    "2026-11-10T08:11:24.871Z collect Success"
+  ],
+  "error": null,
+  "startedAt": "2026-11-10T07:35:19.336Z",
+  "finishedAt": "2026-11-10T08:11:26.447Z"
+}

@@ -1,0 +1,55 @@
+{
+  "id": "tileserver-gl-mbtiles-planet-arm64",
+  "pass": 3,
+  "server": "tileserver-gl",
+  "version": "5.7.0",
+  "stable": true,
+  "format": "mbtiles",
+  "dataset": "planet",
+  "arch": "arm64",
+  "placementGroup": "lane-42772802734-p3-tileserver-gl-mbtiles-planet-arm64-4",
+  "serverHost": {
+    "id": "i-0d3eb3b2610c883ed",
+    "ip": "172.31.19.165",
+    "az": "us-east-1b",
+    "subnet": "subnet-0a17ca6edfc559485"
+  },
+  "clientHost": {
+    "id": "i-07420db0f086b4f86",
+    "ip": "172.31.30.163",
+    "az": "us-east-1b",
+    "subnet": "subnet-0a17ca6edfc559485"
+  },
+  "dataSeconds": 806,
+  "readyMs": {
+    "alone": 1661,
+    "cdn": 1682
+  },
+  "results": {
+    "alone": "results/lane/42772802734/p3/tileserver-gl-mbtiles-planet-arm64/alone.json",
+    "cdn": "results/lane/42772802734/p3/tileserver-gl-mbtiles-planet-arm64/cdn.json"
+  },
+  "catalog": null,
+  "log": [
+    "2026-11-10T08:55:55.860Z no server capacity in us-east-1c, attempt 1",
+    "2026-11-10T08:58:06.354Z no server capacity in us-east-1c, attempt 2",
+    "2026-11-10T09:02:38.564Z no client capacity in subnet-099a403aa8952f07d",
+    "2026-11-10T09:03:54.493Z no server capacity in us-east-1f, attempt 1",
+    "2026-11-10T09:06:12.160Z no server capacity in us-east-1f, attempt 2",
+    "2026-11-10T09:07:55.422Z no server capacity in us-east-1a, attempt 1",
+    "2026-11-10T09:09:56.079Z no server capacity in us-east-1a, attempt 2",
+    "2026-11-10T09:10:04.600Z server i-0d3eb3b2610c883ed and client i-07420db0f086b4f86 in us-east-1b",
+    "2026-11-10T09:11:04.805Z client-setup Success",
+    "2026-11-10T09:25:09.260Z setup Success",
+    "2026-11-10T09:25:28.010Z start-alone Success",
+    "2026-11-10T09:32:21.511Z alone Success",
+    "2026-11-10T09:32:21.511Z capacity 875/s, 66820 bytes a tile",
+    "2026-11-10T09:32:38.408Z start-cdn Success",
+    "2026-11-10T09:37:34.040Z cdn Success",
+    "2026-11-10T09:37:34.040Z capacity 1625/s, 518 bytes a tile",
+    "2026-11-10T09:37:50.945Z collect Success"
+  ],
+  "error": null,
+  "startedAt": "2026-11-10T08:54:31.185Z",
+  "finishedAt": "2026-11-10T09:37:52.533Z"
+}

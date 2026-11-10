@@ -1,0 +1,31 @@
+{
+  "id": "tileserver-gl-pmtiles-berlin-amd64",
+  "pass": 2,
+  "server": "tileserver-gl",
+  "version": "5.7.0",
+  "stable": true,
+  "format": "pmtiles",
+  "dataset": "berlin",
+  "arch": "amd64",
+  "placementGroup": "",
+  "serverHost": null,
+  "clientHost": null,
+  "dataSeconds": null,
+  "readyMs": {},
+  "results": {},
+  "catalog": null,
+  "log": [
+    "2026-11-10T08:18:44.658Z no server capacity in us-east-1b, attempt 1",
+    "2026-11-10T08:20:37.105Z no server capacity in us-east-1b, attempt 2",
+    "2026-11-10T08:22:02.838Z no server capacity in us-east-1c, attempt 1",
+    "2026-11-10T08:24:05.983Z no server capacity in us-east-1c, attempt 2",
+    "2026-11-10T08:25:21.867Z no client capacity in subnet-099a403aa8952f07d",
+    "2026-11-10T08:26:36.429Z no server capacity in us-east-1f, attempt 1",
+    "2026-11-10T08:29:06.702Z no server capacity in us-east-1f, attempt 2",
+    "2026-11-10T08:30:17.087Z no client capacity in subnet-075b8107a2a2814ab",
+    "2026-11-10T08:30:17.087Z failed: no zone had room for both of tileserver-gl-pmtiles-berlin-amd64's instances"
+  ],
+  "error": "no zone had room for both of tileserver-gl-pmtiles-berlin-amd64's instances",
+  "startedAt": "2026-11-10T08:17:15.333Z",
+  "finishedAt": "2026-11-10T08:30:17.088Z"
+}

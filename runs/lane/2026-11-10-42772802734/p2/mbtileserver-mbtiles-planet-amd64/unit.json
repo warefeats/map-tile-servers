@@ -1,0 +1,31 @@
+{
+  "id": "mbtileserver-mbtiles-planet-amd64",
+  "pass": 2,
+  "server": "mbtileserver",
+  "version": "0.11.0",
+  "stable": true,
+  "format": "mbtiles",
+  "dataset": "planet",
+  "arch": "amd64",
+  "placementGroup": "",
+  "serverHost": null,
+  "clientHost": null,
+  "dataSeconds": null,
+  "readyMs": {},
+  "results": {},
+  "catalog": null,
+  "log": [
+    "2026-11-10T08:18:48.976Z no server capacity in us-east-1b, attempt 1",
+    "2026-11-10T08:21:11.413Z no server capacity in us-east-1b, attempt 2",
+    "2026-11-10T08:22:30.623Z no server capacity in us-east-1c, attempt 1",
+    "2026-11-10T08:24:47.013Z no server capacity in us-east-1c, attempt 2",
+    "2026-11-10T08:25:40.504Z no client capacity in subnet-099a403aa8952f07d",
+    "2026-11-10T08:26:45.146Z no server capacity in us-east-1f, attempt 1",
+    "2026-11-10T08:28:47.760Z no server capacity in us-east-1f, attempt 2",
+    "2026-11-10T08:30:09.842Z no client capacity in subnet-075b8107a2a2814ab",
+    "2026-11-10T08:30:09.842Z failed: no zone had room for both of mbtileserver-mbtiles-planet-amd64's instances"
+  ],
+  "error": "no zone had room for both of mbtileserver-mbtiles-planet-amd64's instances",
+  "startedAt": "2026-11-10T08:17:30.335Z",
+  "finishedAt": "2026-11-10T08:30:09.842Z"
+}

@@ -1,0 +1,48 @@
+{
+  "id": "nginx-files-planet-arm64",
+  "pass": 3,
+  "server": "nginx",
+  "version": "1.30.4",
+  "stable": true,
+  "format": "files",
+  "dataset": "planet",
+  "arch": "arm64",
+  "placementGroup": "lane-42772802734-p3-nginx-files-planet-arm64-0",
+  "serverHost": {
+    "id": "i-0bfd21d3cc0682c1b",
+    "ip": "172.31.17.37",
+    "az": "us-east-1b",
+    "subnet": "subnet-0a17ca6edfc559485"
+  },
+  "clientHost": {
+    "id": "i-0a9e391b7fadc3606",
+    "ip": "172.31.21.140",
+    "az": "us-east-1b",
+    "subnet": "subnet-0a17ca6edfc559485"
+  },
+  "dataSeconds": 1282,
+  "readyMs": {
+    "alone": 636,
+    "cdn": 729
+  },
+  "results": {
+    "alone": "results/lane/42772802734/p3/nginx-files-planet-arm64/alone.json",
+    "cdn": "results/lane/42772802734/p3/nginx-files-planet-arm64/cdn.json"
+  },
+  "catalog": null,
+  "log": [
+    "2026-11-10T08:55:14.433Z server i-0bfd21d3cc0682c1b and client i-0a9e391b7fadc3606 in us-east-1b",
+    "2026-11-10T08:56:22.706Z client-setup Success",
+    "2026-11-10T09:17:56.141Z setup Success",
+    "2026-11-10T09:18:14.076Z start-alone Success",
+    "2026-11-10T09:25:09.260Z alone Success",
+    "2026-11-10T09:25:09.260Z capacity 1250/s, 68570 bytes a tile",
+    "2026-11-10T09:25:28.010Z start-cdn Success",
+    "2026-11-10T09:30:23.242Z cdn Success",
+    "2026-11-10T09:30:23.243Z capacity 1375/s, 517 bytes a tile",
+    "2026-11-10T09:30:41.083Z collect Success"
+  ],
+  "error": null,
+  "startedAt": "2026-11-10T08:54:52.185Z",
+  "finishedAt": "2026-11-10T09:30:42.690Z"
+}

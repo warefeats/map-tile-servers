@@ -1,0 +1,60 @@
+{
+  "id": "bbox-mbtiles-berlin-amd64",
+  "pass": 1,
+  "server": "bbox",
+  "version": "0.6.2",
+  "stable": true,
+  "format": "mbtiles",
+  "dataset": "berlin",
+  "arch": "amd64",
+  "placementGroup": "lane-42772802734-p1-bbox-mbtiles-berlin-amd64-4",
+  "serverHost": {
+    "id": "i-05293452453825469",
+    "ip": "172.31.95.79",
+    "az": "us-east-1a",
+    "subnet": "subnet-075b8107a2a2814ab"
+  },
+  "clientHost": {
+    "id": "i-0829e3995c9ccc3dd",
+    "ip": "172.31.86.139",
+    "az": "us-east-1a",
+    "subnet": "subnet-075b8107a2a2814ab"
+  },
+  "dataSeconds": 1,
+  "readyMs": {
+    "alone": 3085,
+    "cdn": 2865
+  },
+  "results": {
+    "alone": "results/lane/42772802734/p1/bbox-mbtiles-berlin-amd64/alone.json",
+    "cdn": "results/lane/42772802734/p1/bbox-mbtiles-berlin-amd64/cdn.json"
+  },
+  "catalog": {
+    "firstMs": 8045,
+    "lastMs": 8054
+  },
+  "log": [
+    "2026-11-10T07:37:35.259Z no server capacity in us-east-1b, attempt 1",
+    "2026-11-10T07:39:43.094Z no server capacity in us-east-1b, attempt 2",
+    "2026-11-10T07:40:34.030Z no server capacity in us-east-1c, attempt 1",
+    "2026-11-10T07:42:35.507Z no server capacity in us-east-1c, attempt 2",
+    "2026-11-10T07:43:36.731Z no client capacity in subnet-099a403aa8952f07d",
+    "2026-11-10T07:44:55.004Z no server capacity in us-east-1f, attempt 1",
+    "2026-11-10T07:47:26.320Z no server capacity in us-east-1f, attempt 2",
+    "2026-11-10T07:47:35.272Z server i-05293452453825469 and client i-0829e3995c9ccc3dd in us-east-1a",
+    "2026-11-10T07:48:49.485Z client-setup Success",
+    "2026-11-10T07:48:49.485Z setup Success",
+    "2026-11-10T07:49:10.983Z start-alone Success",
+    "2026-11-10T07:57:16.980Z alone Success",
+    "2026-11-10T07:57:16.980Z capacity 4500/s, 82265 bytes a tile",
+    "2026-11-10T07:57:43.321Z start-cdn Success",
+    "2026-11-10T08:04:21.686Z cdn Success",
+    "2026-11-10T08:04:21.687Z capacity 13000/s, 16283 bytes a tile",
+    "2026-11-10T08:04:42.221Z collect Success",
+    "2026-11-10T08:05:00.912Z catalog Success",
+    "2026-11-10T08:05:00.913Z catalog: first 8045 ms, last 8054 ms"
+  ],
+  "error": null,
+  "startedAt": "2026-11-10T07:35:47.836Z",
+  "finishedAt": "2026-11-10T08:05:02.617Z"
+}

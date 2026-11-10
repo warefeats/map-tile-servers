@@ -1,0 +1,56 @@
+{
+  "id": "martin-2-mbtiles-berlin-arm64",
+  "pass": 2,
+  "server": "martin-2",
+  "version": "build ff76524",
+  "stable": false,
+  "format": "mbtiles",
+  "dataset": "berlin",
+  "arch": "arm64",
+  "placementGroup": "lane-42772802734-p2-martin-2-mbtiles-berlin-arm64-2",
+  "serverHost": {
+    "id": "i-085419e19b6afc6e3",
+    "ip": "172.31.90.158",
+    "az": "us-east-1a",
+    "subnet": "subnet-075b8107a2a2814ab"
+  },
+  "clientHost": {
+    "id": "i-08dc2413390f1f8ba",
+    "ip": "172.31.94.118",
+    "az": "us-east-1a",
+    "subnet": "subnet-075b8107a2a2814ab"
+  },
+  "dataSeconds": 2,
+  "readyMs": {
+    "alone": 743,
+    "cdn": 690
+  },
+  "results": {
+    "alone": "results/lane/42772802734/p2/martin-2-mbtiles-berlin-arm64/alone.json",
+    "cdn": "results/lane/42772802734/p2/martin-2-mbtiles-berlin-arm64/cdn.json"
+  },
+  "catalog": {
+    "firstMs": 2242,
+    "lastMs": 2251
+  },
+  "log": [
+    "2026-11-10T08:17:54.306Z no client capacity in subnet-099a403aa8952f07d",
+    "2026-11-10T08:19:24.583Z no server capacity in us-east-1f, attempt 1",
+    "2026-11-10T08:21:37.071Z no server capacity in us-east-1f, attempt 2",
+    "2026-11-10T08:22:00.450Z server i-085419e19b6afc6e3 and client i-08dc2413390f1f8ba in us-east-1a",
+    "2026-11-10T08:22:39.826Z client-setup Success",
+    "2026-11-10T08:23:15.853Z setup Success",
+    "2026-11-10T08:23:33.868Z start-alone Success",
+    "2026-11-10T08:32:55.450Z alone Success",
+    "2026-11-10T08:32:55.451Z capacity 18000/s, 82214 bytes a tile",
+    "2026-11-10T08:33:14.318Z start-cdn Success",
+    "2026-11-10T08:41:36.070Z cdn Success",
+    "2026-11-10T08:41:36.070Z capacity 88000/s, 16317 bytes a tile",
+    "2026-11-10T08:41:53.056Z collect Success",
+    "2026-11-10T08:42:10.899Z catalog Success",
+    "2026-11-10T08:42:10.899Z catalog: first 2242 ms, last 2251 ms"
+  ],
+  "error": null,
+  "startedAt": "2026-11-10T08:16:40.834Z",
+  "finishedAt": "2026-11-10T08:42:12.497Z"
+}

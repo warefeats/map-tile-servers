@@ -1,0 +1,57 @@
+{
+  "id": "martin-2-mbtiles-berlin-arm64",
+  "pass": 3,
+  "server": "martin-2",
+  "version": "build ff76524",
+  "stable": false,
+  "format": "mbtiles",
+  "dataset": "berlin",
+  "arch": "arm64",
+  "placementGroup": "lane-42772802734-p3-martin-2-mbtiles-berlin-arm64-2",
+  "serverHost": {
+    "id": "i-008b5094d937e2268",
+    "ip": "172.31.27.186",
+    "az": "us-east-1b",
+    "subnet": "subnet-0a17ca6edfc559485"
+  },
+  "clientHost": {
+    "id": "i-0a8a3ca582f38607a",
+    "ip": "172.31.18.213",
+    "az": "us-east-1b",
+    "subnet": "subnet-0a17ca6edfc559485"
+  },
+  "dataSeconds": 1,
+  "readyMs": {
+    "alone": 614,
+    "cdn": 710
+  },
+  "results": {
+    "alone": "results/lane/42772802734/p3/martin-2-mbtiles-berlin-arm64/alone.json",
+    "cdn": "results/lane/42772802734/p3/martin-2-mbtiles-berlin-arm64/cdn.json"
+  },
+  "catalog": {
+    "firstMs": 2473,
+    "lastMs": 2482
+  },
+  "log": [
+    "2026-11-10T08:57:13.639Z no server capacity in us-east-1f, attempt 1",
+    "2026-11-10T08:59:26.830Z no server capacity in us-east-1f, attempt 2",
+    "2026-11-10T09:02:11.257Z no server capacity in us-east-1a, attempt 1",
+    "2026-11-10T09:04:36.976Z no server capacity in us-east-1a, attempt 2",
+    "2026-11-10T09:04:44.639Z server i-008b5094d937e2268 and client i-0a8a3ca582f38607a in us-east-1b",
+    "2026-11-10T09:05:44.036Z client-setup Success",
+    "2026-11-10T09:06:01.138Z setup Success",
+    "2026-11-10T09:06:20.134Z start-alone Success",
+    "2026-11-10T09:15:35.776Z alone Success",
+    "2026-11-10T09:15:35.776Z capacity 18000/s, 82083 bytes a tile",
+    "2026-11-10T09:15:54.644Z start-cdn Success",
+    "2026-11-10T09:24:13.822Z cdn Success",
+    "2026-11-10T09:24:13.822Z capacity 88000/s, 16307 bytes a tile",
+    "2026-11-10T09:24:33.442Z collect Success",
+    "2026-11-10T09:24:51.316Z catalog Success",
+    "2026-11-10T09:24:51.317Z catalog: first 2473 ms, last 2482 ms"
+  ],
+  "error": null,
+  "startedAt": "2026-11-10T08:53:49.185Z",
+  "finishedAt": "2026-11-10T09:24:52.949Z"
+}

@@ -1,0 +1,59 @@
+{
+  "id": "versatiles-pmtiles-berlin-arm64",
+  "pass": 2,
+  "server": "versatiles",
+  "version": "5.4.1",
+  "stable": true,
+  "format": "pmtiles",
+  "dataset": "berlin",
+  "arch": "arm64",
+  "placementGroup": "lane-42772802734-p2-versatiles-pmtiles-berlin-arm64-4",
+  "serverHost": {
+    "id": "i-028afcb5291099bb3",
+    "ip": "172.31.26.178",
+    "az": "us-east-1b",
+    "subnet": "subnet-0a17ca6edfc559485"
+  },
+  "clientHost": {
+    "id": "i-0cbb68e1fbb479992",
+    "ip": "172.31.29.92",
+    "az": "us-east-1b",
+    "subnet": "subnet-0a17ca6edfc559485"
+  },
+  "dataSeconds": 1,
+  "readyMs": {
+    "alone": 672,
+    "cdn": 729
+  },
+  "results": {
+    "alone": "results/lane/42772802734/p2/versatiles-pmtiles-berlin-arm64/alone.json",
+    "cdn": "results/lane/42772802734/p2/versatiles-pmtiles-berlin-arm64/cdn.json"
+  },
+  "catalog": {
+    "firstMs": 1670,
+    "lastMs": 1678
+  },
+  "log": [
+    "2026-11-10T08:20:08.864Z no server capacity in us-east-1c, attempt 1",
+    "2026-11-10T08:22:14.785Z no server capacity in us-east-1c, attempt 2",
+    "2026-11-10T08:23:14.047Z no client capacity in subnet-099a403aa8952f07d",
+    "2026-11-10T08:24:40.654Z no server capacity in us-east-1f, attempt 1",
+    "2026-11-10T08:26:42.287Z no server capacity in us-east-1f, attempt 2",
+    "2026-11-10T08:28:11.311Z no client capacity in subnet-075b8107a2a2814ab",
+    "2026-11-10T08:28:18.989Z server i-028afcb5291099bb3 and client i-0cbb68e1fbb479992 in us-east-1b",
+    "2026-11-10T08:29:23.281Z setup Success",
+    "2026-11-10T08:29:23.281Z client-setup Success",
+    "2026-11-10T08:29:42.223Z start-alone Success",
+    "2026-11-10T08:38:54.898Z alone Success",
+    "2026-11-10T08:38:54.898Z capacity 20000/s, 74461 bytes a tile",
+    "2026-11-10T08:39:15.701Z start-cdn Success",
+    "2026-11-10T08:47:34.925Z cdn Success",
+    "2026-11-10T08:47:34.926Z capacity 96000/s, 15268 bytes a tile",
+    "2026-11-10T08:47:53.804Z collect Success",
+    "2026-11-10T08:48:11.647Z catalog Success",
+    "2026-11-10T08:48:11.648Z catalog: first 1670 ms, last 1678 ms"
+  ],
+  "error": null,
+  "startedAt": "2026-11-10T08:17:01.833Z",
+  "finishedAt": "2026-11-10T08:48:13.237Z"
+}

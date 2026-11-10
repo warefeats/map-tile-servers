@@ -1,0 +1,31 @@
+{
+  "id": "martin-1-pmtiles-berlin-amd64",
+  "pass": 2,
+  "server": "martin-1",
+  "version": "1.16.1",
+  "stable": true,
+  "format": "pmtiles",
+  "dataset": "berlin",
+  "arch": "amd64",
+  "placementGroup": "",
+  "serverHost": null,
+  "clientHost": null,
+  "dataSeconds": null,
+  "readyMs": {},
+  "results": {},
+  "catalog": null,
+  "log": [
+    "2026-11-10T08:17:52.960Z no server capacity in us-east-1b, attempt 1",
+    "2026-11-10T08:19:54.996Z no server capacity in us-east-1b, attempt 2",
+    "2026-11-10T08:20:58.711Z no server capacity in us-east-1c, attempt 1",
+    "2026-11-10T08:22:56.602Z no server capacity in us-east-1c, attempt 2",
+    "2026-11-10T08:24:28.999Z no client capacity in subnet-099a403aa8952f07d",
+    "2026-11-10T08:25:29.535Z no server capacity in us-east-1f, attempt 1",
+    "2026-11-10T08:27:35.120Z no server capacity in us-east-1f, attempt 2",
+    "2026-11-10T08:28:41.432Z no client capacity in subnet-075b8107a2a2814ab",
+    "2026-11-10T08:28:41.433Z failed: no zone had room for both of martin-1-pmtiles-berlin-amd64's instances"
+  ],
+  "error": "no zone had room for both of martin-1-pmtiles-berlin-amd64's instances",
+  "startedAt": "2026-11-10T08:16:45.333Z",
+  "finishedAt": "2026-11-10T08:28:41.433Z"
+}

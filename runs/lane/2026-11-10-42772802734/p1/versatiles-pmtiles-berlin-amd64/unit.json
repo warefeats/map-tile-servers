@@ -1,0 +1,58 @@
+{
+  "id": "versatiles-pmtiles-berlin-amd64",
+  "pass": 1,
+  "server": "versatiles",
+  "version": "5.4.1",
+  "stable": true,
+  "format": "pmtiles",
+  "dataset": "berlin",
+  "arch": "amd64",
+  "placementGroup": "lane-42772802734-p1-versatiles-pmtiles-berlin-amd64-3",
+  "serverHost": {
+    "id": "i-01f176235e582cea4",
+    "ip": "172.31.83.219",
+    "az": "us-east-1a",
+    "subnet": "subnet-075b8107a2a2814ab"
+  },
+  "clientHost": {
+    "id": "i-01e03571c59a40b01",
+    "ip": "172.31.87.48",
+    "az": "us-east-1a",
+    "subnet": "subnet-075b8107a2a2814ab"
+  },
+  "dataSeconds": 1,
+  "readyMs": {
+    "alone": 1206,
+    "cdn": 684
+  },
+  "results": {
+    "alone": "results/lane/42772802734/p1/versatiles-pmtiles-berlin-amd64/alone.json",
+    "cdn": "results/lane/42772802734/p1/versatiles-pmtiles-berlin-amd64/cdn.json"
+  },
+  "catalog": {
+    "firstMs": 1798,
+    "lastMs": 1806
+  },
+  "log": [
+    "2026-11-10T07:36:34.870Z no server capacity in us-east-1c, attempt 1",
+    "2026-11-10T07:38:57.985Z no server capacity in us-east-1c, attempt 2",
+    "2026-11-10T07:40:05.197Z no client capacity in subnet-099a403aa8952f07d",
+    "2026-11-10T07:41:07.944Z no server capacity in us-east-1f, attempt 1",
+    "2026-11-10T07:43:02.801Z no server capacity in us-east-1f, attempt 2",
+    "2026-11-10T07:43:10.888Z server i-01f176235e582cea4 and client i-01e03571c59a40b01 in us-east-1a",
+    "2026-11-10T07:44:16.068Z setup Success",
+    "2026-11-10T07:44:16.068Z client-setup Success",
+    "2026-11-10T07:44:34.050Z start-alone Success",
+    "2026-11-10T07:53:48.672Z alone Success",
+    "2026-11-10T07:53:48.672Z capacity 20000/s, 74595 bytes a tile",
+    "2026-11-10T07:54:08.295Z start-cdn Success",
+    "2026-11-10T08:02:23.917Z cdn Success",
+    "2026-11-10T08:02:23.917Z capacity 96000/s, 15239 bytes a tile",
+    "2026-11-10T08:02:45.611Z collect Success",
+    "2026-11-10T08:03:05.430Z catalog Success",
+    "2026-11-10T08:03:05.431Z catalog: first 1798 ms, last 1806 ms"
+  ],
+  "error": null,
+  "startedAt": "2026-11-10T07:35:11.836Z",
+  "finishedAt": "2026-11-10T08:03:07.434Z"
+}

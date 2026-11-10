@@ -1,0 +1,50 @@
+{
+  "id": "versatiles-pmtiles-planet-amd64",
+  "pass": 1,
+  "server": "versatiles",
+  "version": "5.4.1",
+  "stable": true,
+  "format": "pmtiles",
+  "dataset": "planet",
+  "arch": "amd64",
+  "placementGroup": "lane-42772802734-p1-versatiles-pmtiles-planet-amd64-1",
+  "serverHost": {
+    "id": "i-0f76eb7a2fc8b80f9",
+    "ip": "172.31.85.48",
+    "az": "us-east-1a",
+    "subnet": "subnet-075b8107a2a2814ab"
+  },
+  "clientHost": {
+    "id": "i-0c80c61686264039d",
+    "ip": "172.31.85.144",
+    "az": "us-east-1a",
+    "subnet": "subnet-075b8107a2a2814ab"
+  },
+  "dataSeconds": 706,
+  "readyMs": {
+    "alone": 931,
+    "cdn": 1112
+  },
+  "results": {
+    "alone": "results/lane/42772802734/p1/versatiles-pmtiles-planet-amd64/alone.json",
+    "cdn": "results/lane/42772802734/p1/versatiles-pmtiles-planet-amd64/cdn.json"
+  },
+  "catalog": null,
+  "log": [
+    "2026-11-10T07:36:49.320Z no server capacity in us-east-1f, attempt 1",
+    "2026-11-10T07:38:50.612Z no server capacity in us-east-1f, attempt 2",
+    "2026-11-10T07:38:59.173Z server i-0f76eb7a2fc8b80f9 and client i-0c80c61686264039d in us-east-1a",
+    "2026-11-10T07:39:56.173Z client-setup Success",
+    "2026-11-10T07:51:43.195Z setup Success",
+    "2026-11-10T07:52:01.184Z start-alone Success",
+    "2026-11-10T07:58:49.500Z alone Success",
+    "2026-11-10T07:58:49.501Z capacity 0/s, ? bytes a tile",
+    "2026-11-10T07:59:08.455Z start-cdn Success",
+    "2026-11-10T08:04:01.065Z cdn Success",
+    "2026-11-10T08:04:01.065Z capacity 1375/s, 462 bytes a tile",
+    "2026-11-10T08:04:21.686Z collect Success"
+  ],
+  "error": null,
+  "startedAt": "2026-11-10T07:35:14.836Z",
+  "finishedAt": "2026-11-10T08:04:23.963Z"
+}

@@ -1,0 +1,12 @@
+commit ff7652452d3c973cd5f0d6904c227adbe97b95c9
+image wf-martin:build-ff76524 sha256:3f3a04668c00ff6e6213d59369fef6f56c3ac041e00de46dabc56767e9115dd1
+version martin 2.0.0-beta.7
+binary sha256 6f459a01fe781b60e633ce05f70f52e8bbbbca3045c7ed65d7c8d1baebe1bdc1, 51802368 bytes
+  [     0]  GCC: (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0
+  [    2d]  rustc version 1.99.1 (58cf8f9c3 2026-10-13)
+trained with oha 1.16.0, cargo-pgo cargo-pgo-pgo 0.3.0
+[2m2026-11-10T07:26:40.298935Z[0m [32m INFO[0m [2mmartin::tile_source_manager[0m[2m:[0m Added source [3msource.id[0m[2m=[0mtable_source_multiple_geom.1
+[2m2026-11-10T07:26:40.298939Z[0m [32m INFO[0m [2mmartin::tile_source_manager[0m[2m:[0m Added source [3msource.id[0m[2m=[0mview_name_existing_two_schemas
+[2m2026-11-10T07:26:40.298945Z[0m [32m INFO[0m [2mmartin::tile_source_manager[0m[2m:[0m Added source [3msource.id[0m[2m=[0mview_name_existing_two_schemas.1
+[2m2026-11-10T07:26:40.299919Z[0m [32m INFO[0m [2mmartin[0m[2m:[0m Martin server is now active [3mserver.url[0m[2m=[0mhttp://0.0.0.0:3000/
+[2m2026-11-10T07:26:40.299937Z[0m [32m INFO[0m [2mmartin[0m[2m:[0m Web UI is only served to localhost connections. Use `--webui enable-for-all` in CLI or a config value to enable it for all connections.
