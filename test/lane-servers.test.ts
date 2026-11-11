@@ -35,7 +35,7 @@ describe("the lane's servers", () => {
 
   test("VersaTiles runs as its production image: nginx's cache in front, plain HTTP, archives in a writable /data/tiles", () => {
     const run = dockerRun(server("versatiles"), "arm64", ["planet"], "pmtiles");
-    expect(run).toContain("versatiles/versatiles-nginx:v5.4.1");
+    expect(run).toContain("versatiles/versatiles-nginx:v5.9.0");
     expect(run).toContain("/opt/lane/data:/data");
     expect(run).not.toContain("/opt/lane/data:/data:ro");
     for (const e of ["HTTP_ONLY=1", "FRONTEND=none", "TILE_SOURCES=planet.pmtiles", "DOMAIN=localhost"]) expect(run).toContain(e);

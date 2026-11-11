@@ -56,7 +56,7 @@ export const LANE_SERVERS: readonly LaneServer[] = [
   // cache in one container. Bare `serve` re-encodes every tile to Brotli for a browser and held no rate within the
   // target in the coverage smoke. HTTP_ONLY serves plain HTTP on port 80, as its README says for a private network.
   {
-    id: "versatiles", name: "VersaTiles", version: "5.4.1", stable: true, formats: ["pmtiles", "mbtiles"], image: { arm64: "versatiles/versatiles-nginx:v5.4.1", amd64: "versatiles/versatiles-nginx:v5.4.1" }, port: 80, path: (s, t) => `/tiles/${s}/${xyz(t)}`, args: () => [],
+    id: "versatiles", name: "VersaTiles", version: "5.9.0", stable: true, formats: ["pmtiles", "mbtiles"], image: { arm64: "versatiles/versatiles-nginx:v5.9.0", amd64: "versatiles/versatiles-nginx:v5.9.0" }, port: 80, path: (s, t) => `/tiles/${s}/${xyz(t)}`, args: () => [],
     layout: "tiles-dir",
     // its nginx keeps every response five minutes, errors included (proxy_cache_valid any 5m)
     cachedFront: true,
