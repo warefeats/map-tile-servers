@@ -31,10 +31,10 @@ export interface Candidate {
 }
 
 /** The release PR head the rig builds Martin 2.0 from, and the rustc the latest official 2.0 binary reports (docs/adr/0010). */
-export const MARTIN_2_BUILD = { commit: "08bc08fc82474e36eda5af68d5315080dcf69a83", rustc: "1.99.1" } as const;
-export const MARTIN_2 = { version: "2.0.0-beta.7", image: process.env.WF_MARTIN_2_IMAGE ?? "wf-martin:2.0.0-beta.7-08bc08f" } as const;
+export const MARTIN_2_BUILD = { commit: "f147b8db6a92e5aa19d1402dfcfb3fe13fc54108", rustc: "1.99.1" } as const;
+export const MARTIN_2 = { version: "2.0.0-beta.8", image: process.env.WF_MARTIN_2_IMAGE ?? "wf-martin:2.0.0-beta.8-f147b8d" } as const;
 export const MARTIN_2_PROVENANCE =
-  "maplibre/martin release PR #3929 at 08bc08fc (2.0.0-beta.7, not yet released), built the way Martin's release builds its arm64 Docker binary (profile-guided, trained by the recipe's own bench-http run) on rustc 1.99.1 and packaged with that commit's .github/files/multi-platform.Dockerfile (docs/adr/0010)";
+  "maplibre/martin release PR #3936 at f147b8db (2.0.0-beta.8, not yet released), built the way Martin's release builds its arm64 Docker binary (profile-guided, trained by the recipe's own bench-http run) on rustc 1.99.1 and packaged with that commit's .github/files/multi-platform.Dockerfile (docs/adr/0010)";
 export const MARTIN_1 = { version: "1.16.1", image: "ghcr.io/maplibre/martin:1.16.1" } as const;
 
 /** nginx 1.30.4, `nginx:stable` of 2026-08-25, pinned by digest: the archive family's floor control (docs/adr/0007). */

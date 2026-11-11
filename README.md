@@ -1,6 +1,6 @@
 # Martin 2.0 against 1.16.1 and every competitor
 
-The runner behind a warefeats page (slug `martin-2-tile-servers`, unpublished) that measures [Martin](https://martin.maplibre.org) 2.0, not yet released (the head of its release PR, 2.0.0-beta.7), against its most recent stable release (1.16.1) and against the most recent stable release of every server it competes with, in both of the jobs Martin does: cutting vector tiles from PostGIS on every request, and handing tiles out of a pre-built MBTiles or PMTiles archive. It repeats everything the two September tile-server pages measured ([postgis-vector-tile-servers](https://warefeats.com/benchmarks/postgis-vector-tile-servers/), [pmtiles-mbtiles-tile-servers](https://warefeats.com/benchmarks/pmtiles-mbtiles-tile-servers/)) and adds four dimensions they did not: CPU paid per tile, capacity within a latency SLO under open-loop load, a simulated busy map, and startup with a thousand sources configured.
+The runner behind a warefeats page (slug `martin-2-tile-servers`, unpublished) that measures [Martin](https://martin.maplibre.org) 2.0, not yet released (the head of its release PR, 2.0.0-beta.8), against its most recent stable release (1.16.1) and against the most recent stable release of every server it competes with, in both of the jobs Martin does: cutting vector tiles from PostGIS on every request, and handing tiles out of a pre-built MBTiles or PMTiles archive. It repeats everything the two September tile-server pages measured ([postgis-vector-tile-servers](https://warefeats.com/benchmarks/postgis-vector-tile-servers/), [pmtiles-mbtiles-tile-servers](https://warefeats.com/benchmarks/pmtiles-mbtiles-tile-servers/)) and adds four dimensions they did not: CPU paid per tile, capacity within a latency SLO under open-loop load, a simulated busy map, and startup with a thousand sources configured.
 
 Part of the [warefeats](https://warefeats.com) benchmark suite. Decisions are recorded in `docs/adr/`: the verdict rule was fixed before the first measured pass (0001), the load generator sits on the engine's Docker network because the host path has a ceiling of its own (0002), Martin 2.0 is a local build with the release recipe because the release PR's CI artifacts are debug builds (0003), a dedicated cloud host was proposed and not adopted (0004), cold starts get a warm-up and ten repetitions and every run has a second pass in reverse order (0005), the measured build is the release PR's head (0006), archive times are ranked above the harness floor (0007), and each category ends as won, tied or lost, with database-bound ties and archive memory allowed when the page is published (0008), and the four PostGIS categories that sit at the database's own cap are shown as context rather than ranked (0009). Since the Mac was sold, runs happen on dedicated c7g.metal hosts, one per family, dispatched from GitHub Actions like the kv-stores rig, with Martin 2.0 built the way its release builds the arm64 image, profile-guided (0010). PostGIS start times are ranked above a floor of their own (0012).
 
@@ -10,7 +10,7 @@ PostGIS family, all reading the same four tables through the same read-only role
 
 | Candidate | Version | Image |
 |-----------|---------|-------|
-| Martin | 2.0.0-beta.7 (release PR maplibre/martin#3929 at `08bc08fc`) | `wf-martin:2.0.0-beta.7-08bc08f`, built on the rig with the release's profile-guided recipe (ADR 0010) |
+| Martin | 2.0.0-beta.8 (release PR maplibre/martin#3936 at `f147b8db`) | `wf-martin:2.0.0-beta.8-f147b8d`, built on the rig with the release's profile-guided recipe (ADR 0010) |
 | Martin | 1.16.1 | `ghcr.io/maplibre/martin:1.16.1` |
 | Tegola | 0.21.2 | `gospatial/tegola:v0.21.2` |
 | BBOX | 0.6.2 | `wf-bbox:0.6.2`, built from `bbox-services/bbox@v0.6.2` without its map and asset servers (the published image is amd64-only; the project's aarch64 release binary has them) |
@@ -22,7 +22,7 @@ Archive family, one Planetiler build of Berlin stored as MBTiles and, converted 
 
 | Candidate | Version | Archive | Image |
 |-----------|---------|---------|-------|
-| Martin | 2.0.0-beta.7 and 1.16.1 | PMTiles and MBTiles | as above |
+| Martin | 2.0.0-beta.8 and 1.16.1 | PMTiles and MBTiles | as above |
 | go-pmtiles | 1.31.2 | PMTiles | `protomaps/go-pmtiles:v1.31.2` |
 | VersaTiles | 5.9.0 | PMTiles and MBTiles | `versatiles/versatiles:v5.9.0` |
 | BBOX | 0.6.2 | PMTiles and MBTiles | `wf-bbox:0.6.2` |

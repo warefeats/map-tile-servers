@@ -35,3 +35,7 @@ On the rig, Docker 29.1.3 from Ubuntu's archive starts every container with a so
 - Martin 2.0 is #3929 at `08bc08fc` (2.0.0-beta.7, with actix-http 3.21.0 and the PMTiles read fix #3858), built the same way as `wf-martin:2.0.0-beta.7-08bc08f`.
 - VersaTiles runs its latest stable release, 5.9.0 (2026-11-09). Every other competitor's pin is still its project's latest.
 - This is the first full run since the diagnostic-lane changes ADR 0011 made (PR #4), so its absolute numbers are not comparable with rcd176c39's.
+
+## Amendment, 2026-11-11 (evening)
+
+- Martin 2.0 is #3936 at `f147b8db` (2.0.0-beta.8: beta.7 plus #3935, table discovery without a per-table `pg_collation` join), built the same way as `wf-martin:2.0.0-beta.8-f147b8d`. Every competitor's pin is unchanged.
