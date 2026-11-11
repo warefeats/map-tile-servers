@@ -53,7 +53,7 @@ images:
     docker pull ghcr.io/developmentseed/tipg:1.6.1
     docker pull iide/ldproxy:4.8.2
     docker pull protomaps/go-pmtiles:v1.31.2
-    docker pull versatiles/versatiles:v5.4.1
+    docker pull versatiles/versatiles:v5.9.0
     docker pull maptiler/tileserver-gl-light:v5.7.0
     docker pull imresamu/postgis:18-3.6@sha256:b5766ee720aca09c61b9a868abefbf273348a4b90ad4cf146b4f8c9ac85d48e4
     docker pull nginx@sha256:09cc2702709e6388d979d8030e3ab4eb1ceb699b2dced26d7543e872a822e823

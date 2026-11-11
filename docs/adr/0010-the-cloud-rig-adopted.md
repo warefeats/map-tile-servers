@@ -29,3 +29,9 @@ On the rig, Docker 29.1.3 from Ubuntu's archive starts every container with a so
 - The page names the rig and says that the two families ran on two hosts of the same type.
 - A full run costs two c7g.metal hosts for four to five hours each. That fits inside the six hours GitHub gives a hosted job; a host that outlives its job keeps running to the end, and a collect dispatch gathers and scores its results.
 - If 2.0.0-beta.5 or 2.0.0 ships from different code, or its official image differs from this build, ADR 0003's rule applies: the page is re-run against the published image before publication.
+
+## Amendment, 2026-11-10
+
+- Martin 2.0 is #3929 at `08bc08fc` (2.0.0-beta.7, with actix-http 3.21.0 and the PMTiles read fix #3858), built the same way as `wf-martin:2.0.0-beta.7-08bc08f`.
+- VersaTiles runs its latest stable release, 5.9.0 (2026-11-09). Every other competitor's pin is still its project's latest.
+- This is the first full run since the diagnostic-lane changes ADR 0011 made (PR #4), so its absolute numbers are not comparable with rcd176c39's.
