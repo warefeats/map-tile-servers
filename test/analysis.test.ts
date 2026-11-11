@@ -117,6 +117,40 @@ describe("the harness floor (docs/adr/0007)", () => {
   });
 });
 
+describe("the PostGIS start floor (docs/adr/0012)", () => {
+  const start = (samplesMs: number[]): Partial<CandidateResult> => ({ coldStart: { samplesMs, idle: { memMb: 0, anonMb: 0, fileMb: 0 } } });
+  const passes = pass(result("floor-postgis", start(around(100, 0.004))), result("martin-2", start(around(130, 0.004))), result("tegola", start(around(140, 0.004))));
+
+  test("PostGIS time to first tile is ranked on time above the floor", () => {
+    const v = verdictFor("postgis", def("coldStart"), passes);
+    expect(v.floor?.mean).toBeCloseTo(100, 0);
+    expect(v.margin!).toBeCloseTo(40 / 30 - 1, 1);
+    expect(v.outcome).toBe("won");
+    expect(v.cells.map((c) => c.candidateId)).not.toContain("floor-postgis");
+  });
+
+  test("without the control the same numbers are a tie on full times", () => {
+    const v = verdictFor("postgis", def("coldStart"), [{ results: passes[0]!.results.filter((r) => r.id !== "floor-postgis"), catalog: [] }]);
+    expect(v.floor).toBeNull();
+    expect(v.outcome).toBe("tie");
+  });
+
+  test("PostGIS serving categories are never floored", () => {
+    for (const id of ["single", "burst", "session"]) expect(def(id).floored).not.toContain("postgis");
+    expect(def("coldStart").floored).toContain("postgis");
+    expect(def("catalog").floored).toContain("postgis");
+  });
+
+  test("the thousand-sources start is ranked above the control's own catalog start", () => {
+    const cat = (id: string, x: number) => ({ id, imageDigest: "x", coldStart: { samplesMs: around(x, 0.004), idle: { memMb: 0, anonMb: 0, fileMb: 0 } } });
+    const results = [result("floor-postgis"), result("martin-2"), result("pg-tileserv")];
+    const v = verdictFor("postgis", def("catalog"), [{ results, catalog: [cat("floor-postgis", 106), cat("martin-2", 200), cat("pg-tileserv", 214)] }]);
+    expect(v.floor?.mean).toBeCloseTo(106, 0);
+    expect(v.margin!).toBeCloseTo(108 / 94 - 1, 1);
+    expect(v.outcome).toBe("won");
+  });
+});
+
 describe("database-bound ties (docs/adr/0008)", () => {
   // The random walk: a database-bound serving category that ADR 0009 keeps ranked.
   const pg = (share: number) =>

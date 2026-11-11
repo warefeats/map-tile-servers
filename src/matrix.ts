@@ -44,7 +44,9 @@ const martinPath = (layer: string, t: TileCoord) => `/${layer}/${t.z}/${t.x}/${t
 const archiveTileset = "berlin";
 
 export const CANDIDATES: readonly Candidate[] = [
-  // PostGIS family. Martin 2.0.0 first and 1.16.1 second, so the version pair runs back to back.
+  // PostGIS family. The floor control comes first, so the reverse pass measures it last (docs/adr/0005, 0012);
+  // then Martin 2.0.0 and 1.16.1, so the version pair runs back to back.
+  { id: "floor-postgis", family: "postgis", server: "floor", name: "Floor (nginx serving the marquee tile as a file)", version: "1.30.4", image: FLOOR_IMAGE, provenance: "nginx:stable of 2026-08-25 (nginx 1.30.4) run directly, serving the marquee tile PostGIS makes from the corpus as a file from a Docker volume", homepage: "https://nginx.org", color: "#94A3B8", port: 8080, tilePath: (l, t) => `/tiles/${l}/${t.z}/${t.x}/${t.y}`, control: true },
   { id: "martin-2", family: "postgis", server: "martin", name: `Martin ${MARTIN_2.version}`, ...MARTIN_2, provenance: MARTIN_2_PROVENANCE, homepage: "https://martin.maplibre.org", color: "#1D4ED8", port: 3000, tilePath: martinPath },
   { id: "martin-1", family: "postgis", server: "martin", name: "Martin 1.16.1", ...MARTIN_1, homepage: "https://martin.maplibre.org", color: "#93C5FD", port: 3000, tilePath: martinPath },
   { id: "tegola", family: "postgis", server: "tegola", name: "Tegola", version: "0.21.2", image: "gospatial/tegola:v0.21.2", homepage: "https://tegola.io", color: "#16A34A", port: 8080, tilePath: (l, t) => `/maps/bench/${l}/${t.z}/${t.x}/${t.y}.pbf` },

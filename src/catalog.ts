@@ -8,7 +8,7 @@ import { copyFileSync, existsSync, linkSync, mkdirSync, readdirSync, readFileSyn
 import { join } from "node:path";
 import { clientUp, dbUp, ensureNetwork, engineDown, imageDigest, psql, run, stopAllEngines, WORK_DIR } from "./docker";
 import { type Candidate, CANDIDATES, CLIENT_CORES, type Family, protocol, REQUEST_HEADERS, TILES, tileUrl } from "./matrix";
-import { prepareFloor } from "./floor";
+import { prepareFloor, preparePostgisFloor } from "./floor";
 import { coldStart, type ColdStartResult } from "./measure";
 import { lonLatToTile, type TileCoord } from "./tiles";
 
@@ -152,6 +152,9 @@ buffer_size = 64
     `services:\n  engine:\n    volumes:\n      - ../../configs/catalog/postgis/ldproxy/bench-${variant}.yml:/ldproxy/data/entities/instances/providers/bench.yml:ro\n      - ../../configs/catalog/postgis/ldproxy/bench-tiles.yml:/ldproxy/data/entities/instances/providers/bench-tiles.yml:ro\n`;
   writeFile(join(cmp, "ldproxy.catalog.yml"), ldMount("plain"));
   writeFile(join(cmp, "ldproxy-pgis.catalog.yml"), ldMount("pgis"));
+
+  // The floor control has no tables to load: the same file and config as the main run (docs/adr/0012).
+  writeFile(join(cmp, "floor-postgis.catalog.yml"), `services:\n  engine:\n    labels:\n      wf.catalog: "nothing extra to load"\n`);
 }
 
 function readText(path: string): string {
@@ -321,6 +324,7 @@ if (import.meta.main) {
     dbUp();
     preparePostgisTables();
     writePostgisCatalogConfigs();
+    if (!only || only.includes("floor-postgis")) preparePostgisFloor();
   } else {
     prepareArchiveFiles();
     writeArchiveCatalogConfigs();
