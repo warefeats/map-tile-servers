@@ -19,7 +19,8 @@ export interface CategoryDef {
   kind: Kind;
   previouslyMeasured: boolean;
   /** Ranked on time above the floor in the archive family (docs/adr/0007). */
-  floored?: boolean;
+  /** The families whose control this category is ranked above (docs/adr/0007, 0012). */
+  floored?: readonly Family[];
   /** Serves tiles, so it can be database-bound in the PostGIS family (docs/adr/0008). */
   serving?: boolean;
   /** One pass's samples, grouped into strata that are resampled separately (one stratum for most categories). */
@@ -29,12 +30,12 @@ export interface CategoryDef {
 const one = (xs: number[] | undefined | null): number[][] | null => (xs && xs.length ? [xs] : null);
 
 export const CATEGORIES: CategoryDef[] = [
-  { id: "single", title: "Single tile, one client", unit: "ms", higherIsBetter: false, kind: "samples", previouslyMeasured: true, floored: true, serving: true, strata: (r) => (r.single ? Object.values(r.single).map((s) => s.samplesMs) : null) },
-  { id: "burst", title: "Viewport burst, four tiles", unit: "ms", higherIsBetter: false, kind: "samples", previouslyMeasured: true, floored: true, serving: true, strata: (r) => one(r.burst?.samplesMs) },
+  { id: "single", title: "Single tile, one client", unit: "ms", higherIsBetter: false, kind: "samples", previouslyMeasured: true, floored: ["archive"], serving: true, strata: (r) => (r.single ? Object.values(r.single).map((s) => s.samplesMs) : null) },
+  { id: "burst", title: "Viewport burst, four tiles", unit: "ms", higherIsBetter: false, kind: "samples", previouslyMeasured: true, floored: ["archive"], serving: true, strata: (r) => one(r.burst?.samplesMs) },
   { id: "c10", title: "Throughput, 10 clients, one tile", unit: "tiles/s", higherIsBetter: true, kind: "samples", previouslyMeasured: true, serving: true, strata: (r) => one(r.concurrency?.["10"]?.samplesRps) },
   { id: "c100", title: "Throughput, 100 clients, one tile", unit: "tiles/s", higherIsBetter: true, kind: "samples", previouslyMeasured: true, serving: true, strata: (r) => one(r.concurrency?.["100"]?.samplesRps) },
   { id: "walk", title: "Random walk, 10 clients, 256 tiles", unit: "tiles/s", higherIsBetter: true, kind: "samples", previouslyMeasured: true, serving: true, strata: (r) => one(r.walk?.samplesRps) },
-  { id: "coldStart", title: "Time to first tile", unit: "ms", higherIsBetter: false, kind: "samples", previouslyMeasured: true, floored: true, strata: (r) => one(r.coldStart?.samplesMs) },
+  { id: "coldStart", title: "Time to first tile", unit: "ms", higherIsBetter: false, kind: "samples", previouslyMeasured: true, floored: ["archive", "postgis"], strata: (r) => one(r.coldStart?.samplesMs) },
   {
     id: "memory",
     title: "Memory after load",
@@ -46,8 +47,8 @@ export const CATEGORIES: CategoryDef[] = [
   },
   { id: "cpu", title: "Cost per tile", unit: "µs CPU", higherIsBetter: false, kind: "samples", previouslyMeasured: false, serving: true, strata: (r) => one((r.walk as { samplesCpuUs?: number[] } | undefined)?.samplesCpuUs) },
   { id: "capacity", title: "Capacity within the SLO", unit: "tiles/s", higherIsBetter: true, kind: "ladder", previouslyMeasured: false, serving: true, strata: (r) => (r.ladder ? [[r.ladder.capacityRps]] : null) },
-  { id: "session", title: "Map session, 10 users", unit: "ms per view", higherIsBetter: false, kind: "samples", previouslyMeasured: false, floored: true, serving: true, strata: (r) => one(r.sessions?.["10"]?.samplesMs) },
-  { id: "catalog", title: "A thousand sources", unit: "ms", higherIsBetter: false, kind: "samples", previouslyMeasured: false, floored: true, strata: (_r, cat) => one(cat?.coldStart.samplesMs) },
+  { id: "session", title: "Map session, 10 users", unit: "ms per view", higherIsBetter: false, kind: "samples", previouslyMeasured: false, floored: ["archive"], serving: true, strata: (r) => one(r.sessions?.["10"]?.samplesMs) },
+  { id: "catalog", title: "A thousand sources", unit: "ms", higherIsBetter: false, kind: "samples", previouslyMeasured: false, floored: ["archive", "postgis"], strata: (_r, cat) => one(cat?.coldStart.samplesMs) },
 ];
 
 /** One pass of a run (docs/adr/0005): the main results and the thousand-sources results. */
@@ -198,7 +199,7 @@ export function verdictFor(family: Family, def: CategoryDef, passes: Pass[]): Ca
   };
   const cells = cands.filter((c) => !c.control).map(cellOf).filter((x): x is Cell => x !== null);
   const control = cands.find((c) => c.control);
-  const floor = family === "archive" && def.floored && control ? cellOf(control) : null;
+  const floor = def.floored?.includes(family) && control ? cellOf(control) : null;
 
   const better = (a: Cell, b: Cell) => (def.higherIsBetter ? a.mean > b.mean : a.mean < b.mean);
   const sorted = [...cells].sort((a, b) => (def.higherIsBetter ? b.mean - a.mean : a.mean - b.mean));

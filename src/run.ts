@@ -1,7 +1,7 @@
 import { mkdirSync, readFileSync, statSync } from "node:fs";
 import { join } from "node:path";
 import { clientExec, clientUp, DB_IMAGE, dbUp, ensureNetwork, engineDown, imageDigest, imageExists, psql, run, stopAllEngines, WORK_DIR } from "./docker";
-import { prepareFloor } from "./floor";
+import { prepareFloor, preparePostgisFloor } from "./floor";
 import { type Candidate, CANDIDATES, CLIENT_CORES, type Family, LADDER, protocol, REQUEST_HEADERS, TILES, tileUrl, VIEWPORT, WALK } from "./matrix";
 import { alternateHeaders, burst, type BurstResult, type ColdStartResult, coldStart, concurrency, type LadderResult, ladder, type MemoryReading, memory, type ParityResult, parity, type SessionResult, session, type SingleTileResult, singleTile, type ThroughputResult, walk } from "./measure";
 import { flight } from "./session-plan";
@@ -164,6 +164,11 @@ async function measureCandidate(c: Candidate): Promise<CandidateResult> {
 
   console.log("  cold start");
   r.coldStart = await coldStart(c, tileUrl(c, marquee.layer, marquee.tile), headers, plan.coldStart.reps, plan.coldStart.timeoutMs, { warmups: plan.coldStart.warmups });
+  // The PostGIS floor is a floor for starting up only: it holds no tile but the marquee (docs/adr/0012).
+  if (c.control && family === "postgis") {
+    r.durationS = Math.round((Date.now() - started) / 1000);
+    return r;
+  }
   console.log("  parity");
   r.parity = parity(c, tiles);
   if (!skip.has("single")) {
@@ -223,8 +228,13 @@ if (family === "postgis") {
 }
 clientUp(CLIENT_CORES[family]);
 if (candidates.some((c) => c.control)) {
-  const floor = prepareFloor();
-  console.log(`floor control: ${floor.files} tiles (${floor.bytes} bytes) as files, ${floor.empty} empty`);
+  if (family === "postgis") {
+    const floor = preparePostgisFloor();
+    console.log(`floor control: the marquee tile (${floor.bytes} bytes) as a file`);
+  } else {
+    const floor = prepareFloor();
+    console.log(`floor control: ${floor.files} tiles (${floor.bytes} bytes) as files, ${floor.empty} empty`);
+  }
 }
 
 const existing = resume ? await loadExisting() : undefined;
